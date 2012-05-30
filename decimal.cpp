@@ -311,7 +311,6 @@ istream& Decimal::read_parts_from_stream(istream& is)
 }
 */
 
-
 int Decimal::set_fractional_precision(unsigned short p_places, bool throwing)
 {
 	#ifndef NDEBUG
