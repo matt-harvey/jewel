@@ -576,31 +576,30 @@ Decimal& Decimal::operator/=(Decimal rhs)
 
 bool Decimal::operator<(Decimal rhs) const
 {	
+	// Take care of the easy cases first
 	if (m_places == rhs.m_places)
 	{
 		return m_intval < rhs.m_intval;
 	}
-
-	// Cover case where one or both operands is zero
+	if (m_intval < 0 && rhs.m_intval >= 0)
+	{
+		return true;
+	}
+	if (m_intval > 0 && rhs.m_intval <= 0)
+	{
+		return false;
+	}
 	if (m_intval == 0)
 	{
-		if (rhs.m_intval > 0)
-		{
-			return true;
-		}
-		assert (rhs.m_intval <= 0);
-		return false;
+		return rhs.m_intval > 0;
 	}
-	if (rhs.m_intval == 0)
-	{
-		if (m_intval < 0)
-		{
-			return true;
-		}
-		assert (m_intval >= 0);
-		return false;
-	}
+	
+	// Now we're left with the more
+	// difficult cases.
+	assert ( (m_intval < 0 && rhs.m_intval < 0) ||
+	         (m_intval > 0 && rhs.m_intval > 0) );
 
+	// Try comparing the whole parts.
 	int_type const left_whole_part = whole_part();
 	int_type const right_whole_part = rhs.whole_part();
 
@@ -615,6 +614,8 @@ bool Decimal::operator<(Decimal rhs) const
 	}
 	assert (left_whole_part == right_whole_part);
 
+	// Now we're forced to compare
+	// the fractional parts.
 	Decimal temp_left = *this;
 	ostringstream ossleft;
 	ossleft << temp_left;
@@ -624,16 +625,9 @@ bool Decimal::operator<(Decimal rhs) const
 	string leftstr = ossleft.str();
 	string rightstr = ossright.str();
 
-	bool lhs_is_negative = (leftstr[0] == '-');
-	bool rhs_is_negative = (rightstr[0] == '-');
+	assert ( (leftstr[0] == '-') == (rightstr[0] == '-') );
 
-	if (lhs_is_negative != rhs_is_negative)
-	{
-		return lhs_is_negative;
-	}
-
-	assert (lhs_is_negative == rhs_is_negative);
-	bool is_negative = lhs_is_negative;
+	bool is_negative = (leftstr[0] == '-');
 
 	bool const left_has_spot = (find(leftstr.begin(), leftstr.end(), SPOT) !=
 	  leftstr.end());
