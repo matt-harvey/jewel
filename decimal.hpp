@@ -309,9 +309,6 @@ private:
 	 * @exception jewel::UnsafeArithmeticException
 	 * thrown if p_places exceeds MAX_PLACES - but only if
 	 * \c throwing is set to \c true (see below).
-	 * @exception std::overflow_error thrown if re-scaling the underlying
-	 * integer would cause overflow - but only if \c throwing is set to \c
-	 * true (see below).
 	 *
 	 * @param throwing If set to \c true (default), the function throws
 	 * an exception if it cannot execute safely. If set to \c false,

@@ -730,10 +730,16 @@ TEST(decimal_operator_less_than)
 	CHECK(Decimal("0") < Decimal(".034"));
 	CHECK(Decimal("-.34") < Decimal("-0.000"));
 	CHECK(!(Decimal(".34") < Decimal("0.000")));
+	CHECK(!(Decimal("-0.000") < Decimal("0")));
+	CHECK(!(Decimal("0") < Decimal("-0.000")));
+	CHECK(Decimal(".18791274") < Decimal("123412134"));
+	CHECK(Decimal("-0.000000001") < Decimal("91341971"));
+	CHECK(Decimal("-0.9000098") < Decimal("-0.9"));
 }
 
 TEST(decimal_operator_greater_than)
 {
+	CHECK(Decimal("2.342809") > Decimal("2.34"));
 	CHECK(Decimal("-1") > Decimal("-1.0099"));
 	CHECK(Decimal("2.093") > Decimal("-0.12"));
 	CHECK(Decimal("789") > Decimal("788.089234"));
@@ -741,6 +747,9 @@ TEST(decimal_operator_greater_than)
 	Decimal d0("100000000");
 	Decimal d1(".00000001");
 	CHECK(d0 > d1);
+	CHECK(!(Decimal("0.000001") > Decimal("9000000")));
+	CHECK(Decimal("-.000003") > Decimal("-112341878"));
+	CHECK(Decimal("1") < Decimal("1.00000001"));
 }
 
 TEST(decimal_operator_equality)
@@ -755,6 +764,7 @@ TEST(decimal_operator_equality)
 	CHECK(Decimal("99") == Decimal("99"));
 	CHECK(!(Decimal("9") == Decimal("90")));
 	CHECK(!(Decimal("-38") == Decimal("-380")));
+	CHECK(Decimal("0.000") == Decimal("-0"));
 }
 
 TEST(decimal_operator_inequality)

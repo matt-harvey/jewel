@@ -574,10 +574,13 @@ Decimal& Decimal::operator/=(Decimal rhs)
 }
 
 
-
-// Yes this is implemented messily...
 bool Decimal::operator<(Decimal rhs) const
 {	
+	if (m_places == rhs.m_places)
+	{
+		return m_intval < rhs.m_intval;
+	}
+
 	// Cover case where one or both operands is zero
 	if (m_intval == 0)
 	{
