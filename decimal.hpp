@@ -79,6 +79,12 @@ namespace jewel
  * (Replace it everywhere with plain static_cast, providing of course that
  * the tests pass when compiled in release mode.)
  *
+ * @todo For efficiency (and cleanliness), I should put the body of
+ * set_fractional_precision in its own function that doesn't throw (but
+ * returns an int like the current implementation with "false" parameter).
+ * Then the "throwing" version should be a void-returning wrapper around
+ * this function.
+ *
  * @todo I should fix at compile-time, via a template parameter, a
  * number of decimal places, such that when Decimal::rationalize is called,
  * it does never reduces m_places below this number; and if m_places is less
