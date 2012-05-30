@@ -1,0 +1,13 @@
+/** @mainpage API Documentation
+ *
+ * @section sec_Overview Overview
+ *
+ * I created this library in 2012 as a place for various reusable code.
+ * The library is written in C++ and attempts to conform to the
+ * 2003 C++ ISO standard. I have eschewed C++11 as I would like this
+ * to compile this under OSX Snow Leopard without too much pain.
+ *
+ * The library is named after my favourite actor from \e Firefly,
+ * Jewel Staite, whom I met at a comic convention shortly before creating
+ * the library.
+ */
