@@ -581,7 +581,7 @@ bool Decimal::operator<(Decimal rhs) const
 	{
 		return m_intval < rhs.m_intval;
 	}
-	if (m_intval < 0 && rhs.m_intval >= 0)
+	if (m_intval < int_type(0) && rhs.m_intval >= int_type(0))
 	{
 		return true;
 	}
@@ -593,16 +593,15 @@ bool Decimal::operator<(Decimal rhs) const
 	{
 		return rhs.m_intval > 0;
 	}
+	assert ( (m_intval < 0 && rhs.m_intval < 0) ||
+	         (m_intval > 0 && rhs.m_intval > 0) );
 	
 	// Now we're left with the more
 	// difficult cases.
-	assert ( (m_intval < 0 && rhs.m_intval < 0) ||
-	         (m_intval > 0 && rhs.m_intval > 0) );
 
-	// Try comparing the whole parts.
+	// Try comparing the whole parts only.
 	int_type const left_whole_part = whole_part();
 	int_type const right_whole_part = rhs.whole_part();
-
 	if (left_whole_part < right_whole_part)
 	{
 		return true;
@@ -614,72 +613,51 @@ bool Decimal::operator<(Decimal rhs) const
 	}
 	assert (left_whole_part == right_whole_part);
 
-	// Now we're forced to compare
-	// the fractional parts.
-	Decimal temp_left = *this;
-	ostringstream ossleft;
-	ossleft << temp_left;
-	ostringstream ossright;
-	ossright << rhs;
+	// Record whether negative
+	bool const is_negative = (m_intval < 0);
 
-	string leftstr = ossleft.str();
-	string rightstr = ossright.str();
-
-	assert ( (leftstr[0] == '-') == (rightstr[0] == '-') );
-
-	bool is_negative = (leftstr[0] == '-');
-
-	bool const left_has_spot = (find(leftstr.begin(), leftstr.end(), SPOT) !=
-	  leftstr.end());
-	bool const right_has_spot = (find(rightstr.begin(), rightstr.end(),
-	  SPOT) != rightstr.end()); 
-	if (left_has_spot && !right_has_spot)
+	// If one has fractional places but the other doesn't, then
+	// we can compare, as we know the whole parts are equal.
+	if ( (m_places > 0) && (rhs.m_places <= 0) )
 	{
 		return is_negative;
 	}
-	if (right_has_spot && !left_has_spot)
+	if ( (rhs.m_places > 0) && (m_places <= 0) )
 	{
 		return !is_negative;
 	}
-	assert (left_has_spot == right_has_spot);
-	size_t i = 0;
-	char c = '\0';
-	for ( ; c != SPOT; ++i)
-	{
-		assert (leftstr[i] == rightstr[i]);
-		c = leftstr[i];
-	}
-	assert (c == SPOT);
-	++i;
+
+	// Now we're forced to compare
+	// the fractional parts.
+	ostringstream ossleft;
+	ossleft << *this;
+	ostringstream ossright;
+	ossright << rhs;
+	string leftstr = ossleft.str();
+	string rightstr = ossright.str();
+	assert ( (leftstr[0] == '-') == (rightstr[0] == '-') );
 	string& smallerstring = ( leftstr.size() < rightstr.size() ?
 	                          leftstr : rightstr );
-
-	#ifndef NDEBUG
-		if (leftstr.size() < rightstr.size())
-		{
-			assert (smallerstring == leftstr);
-		}
-		else
-		{
-			assert (smallerstring == rightstr);
-		}
-	#endif
-
 	size_t const greatersize = ( leftstr.size() < rightstr.size() ?
 	                             rightstr.size() : leftstr.size() );
+	
+	// Get the strings to be the same size by adding zeroes to the
+	// shorter one.
 	while (smallerstring.size() != greatersize)
 	{
 		smallerstring.push_back('0');
 	}
 	assert (leftstr.size() == rightstr.size());
 	assert (leftstr.size() == greatersize);
+
+	// Now compare digit by digit.
 	for (size_t j = 0; j != greatersize; ++j)
 	{
 		if (leftstr[j] < rightstr[j])
 		{
 			return !is_negative;
 		}
-		else if (leftstr[j] > rightstr[j])
+		if (leftstr[j] > rightstr[j])
 		{
 			return is_negative;
 		}

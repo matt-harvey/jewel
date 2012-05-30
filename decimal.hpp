@@ -260,8 +260,7 @@ public:
 	 *
 	 * These all behave as you would expect.
 	 *
-	 * @todo operator<(Decimal) is implemented very messily and inefficiently.
-	 * I should clean it up, even if I don't make it faster.
+	 * @todo operator<(Decimal) could probably be made more efficient.
 	 */
 	bool operator<(Decimal) const;
 
