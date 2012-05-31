@@ -911,6 +911,11 @@ TEST(round_decimal)
 	CHECK_EQUAL(round(d3, 1), Decimal("24.1"));
 	CHECK_EQUAL(round(d3, 3), Decimal("24.1"));
 	CHECK_EQUAL(round(d4, 2), Decimal("-42.03"));
+	CHECK_EQUAL(round(Decimal("234.2"), 0), Decimal("234"));
+	CHECK_EQUAL(round(Decimal("23.0199"), 2), Decimal("23.02"));
+	CHECK_EQUAL(round(Decimal("-2.25"), 1), Decimal("-2.3"));
+	CHECK_EQUAL(round(Decimal("2.25"), 1), Decimal("2.3"));
+	CHECK_EQUAL(round(Decimal("89.9999"), 0), Decimal("90.000"));
 }
 
 
