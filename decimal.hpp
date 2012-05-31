@@ -85,22 +85,12 @@ namespace jewel
  * Then the "throwing" version should be a void-returning wrapper around
  * this function.
  *
- * @todo I should fix at compile-time, via a template parameter, a
- * number of decimal places, such that when Decimal::rationalize is called,
- * it does never reduces m_places below this number; and if m_places is less
- * than this number, it either increases m_places to this number, or else
- * throws an exception if it cannot do so safetly.
- * (Would need review to all the functions that call
- * Decimal::rationalize, and ensure they handle this exception appropriately,
- * and are documented accordingly.) This will do two things: (i) increase the
- * speed with which large numbers of Decimals can be added, in the event that
- * they all have the same m_places (which is very likely in, say, an
- * accounting application); and (ii) with suitable exception handling, prevent
- * the creation of numbers too large to be safely added to numbers with this
- * default number of places. Note that if I incorporate this new behaviour
- * into Decimal::rationalize, this will break some other code, which assumes
- * the existing behaviour of Decimal::rationalize; so I'll need to fix that
- * code too.
+ * @todo I have now made it so that Decimal's retain whatever value of
+ * m_places they are left with after construction or arithmetic operations.
+ * I.e. they are not automatically "rationalized" by chopping off zeroes
+ * after every operation / construction. I need to fully understand the
+ * implications of this, and document these implications properly in the API,
+ * both for the class as a whole, and for all the affected public functions.
  *
  * @todo Division and multiplication do not incorporate rounding of the last
  * available digit of precision. Should they?

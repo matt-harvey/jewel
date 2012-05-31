@@ -791,9 +791,12 @@ TEST(decimal_operator_output)
 {
 	ostringstream os0;
 	ostringstream os1;
-	os0 << "3.0001";
+	ostringstream os1b;
+	os0 << Decimal("3.0001") + Decimal("0.000000");
 	os1 << Decimal("3.000100");
+	os1b << "3.000100";
 	CHECK_EQUAL(os0.str(), os1.str());
+	CHECK_EQUAL(os1b.str(), os1.str());
 	ostringstream os2;
 	os2 << "3";
 	CHECK(os1.str() != os2.str());
@@ -816,14 +819,9 @@ TEST(decimal_operator_output)
 	CHECK(os7.str() != os8.str());
 	ostringstream os9;
 	ostringstream os10;
-	os9 << "-0.00002";
-	os10 << Decimal("-.000020");
+	os9 << "-3001.09";
+	os10 << Decimal("-3001.09");
 	CHECK_EQUAL(os9.str(), os10.str());
-	ostringstream os11;
-	ostringstream os12;
-	os11 << "-3001.09";
-	os12 << Decimal("-3001.09");
-	CHECK_EQUAL(os11.str(), os12.str());
 }
 
 TEST(decimal_operator_input)

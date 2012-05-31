@@ -164,7 +164,6 @@ Decimal::Decimal(Decimal::int_type p_intval, unsigned short places):
 		throw (UnsafeArithmeticException("Decimal places passed"
 		  " to Decimal constructor exceed maximum"));
 	}
-	rationalize();
 }
 
 // Construct from an int and an unsigned short
@@ -178,7 +177,6 @@ Decimal::Decimal(int p_intval, unsigned short places):
 		throw (UnsafeArithmeticException("Decimal places passed"
 		  " to Decimal constructor exceed maximum"));
 	}
-	rationalize();
 }
 
 */
@@ -285,7 +283,6 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 		  "to a value exceeding MAX_PLACES."));
 	}
 	m_places = NUM_CAST<unsigned short>(spot_position);
-	rationalize();
 }
 
 
@@ -432,7 +429,6 @@ Decimal& Decimal::operator+=(Decimal rhs)
 		}
 	#endif
 	m_intval += rhs.m_intval;
-	rationalize();
 	return *this;
 }
 
@@ -449,7 +445,6 @@ Decimal& Decimal::operator-=(Decimal rhs)
 		}
 	#endif
 	m_intval -= rhs.m_intval;
-	rationalize();
 	return *this;
 }
 
@@ -515,7 +510,6 @@ Decimal& Decimal::operator*=(Decimal rhs)
 		set_fractional_precision(MAX_PLACES);
 	}
 
-	rationalize();
 	return *this;
 }
 
@@ -568,7 +562,6 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		}
 		doub_new_val *= NUM_CAST<double>(BASE);
 	}
-	rationalize();	
 	return *this;
 }
 
