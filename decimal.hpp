@@ -85,12 +85,10 @@ namespace jewel
  * Then the "throwing" version should be a void-returning wrapper around
  * this function.
  *
- * @todo I have now made it so that Decimal's retain whatever value of
- * m_places they are left with after construction or arithmetic operations.
- * I.e. they are not automatically "rationalized" by chopping off zeroes
- * after every operation / construction. I need to fully understand the
- * implications of this, and document these implications properly in the API,
- * both for the class as a whole, and for all the affected public functions.
+ * @todo Properly document how operations and constructors handle "trailing
+ * zeroes". Currently they cull trailing fractional zeroes in the result, but
+ * only up to point. That point is the maximm of the fractional precisions of
+ * the most precise of the two operands.
  *
  * @todo Division and multiplication do not incorporate rounding of the last
  * available digit of precision. Should they?
@@ -329,8 +327,17 @@ private:
 	 * For example: "0.3234000" rationalizes to "0.3234".
 	 *
 	 * If there are no trailing zeroes, then the function does nothing.
+	 * 
+	 * A minimum number of places can be set, so that the number of digits
+	 * of fractional precision is not reduced below this number of places.
+	 *
+	 * For example, with a minimum number places of 5, "0.2324000"
+	 * rationalizes to "0.23240".
+	 *
+	 * @parameter min_places is the minimum number of decimal places to retain
+	 * to the right of the decimal point.
 	 */
-	void rationalize();
+	void rationalize(unsigned short min_places = 0);
 
 	/**
 	 * Base of arithmetic. I can't imagine this ever being equal to

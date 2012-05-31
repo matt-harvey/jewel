@@ -41,6 +41,7 @@ using std::basic_ostream;
 using std::basic_ostringstream;
 using std::ostream;
 using std::ostringstream;
+using std::max;
 using std::pow;
 using std::string;
 using std::vector;
@@ -139,10 +140,15 @@ Decimal::whole_part() const
 
 
 void
-Decimal::rationalize()
+Decimal::rationalize(unsigned short min_places)
 {
-	while (m_places && (m_intval % BASE == 0))
+	while ((m_places > min_places) && (m_intval % BASE == 0))
 	{
+		if (m_places <= 0)
+		{
+			cerr << endl << endl << m_places << endl << endl;
+		}
+		assert (m_places > 0);
 		m_intval /= BASE;
 		--m_places;
 	}
@@ -459,6 +465,8 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	int_type const original_intval = m_intval;
 	unsigned short const original_places = m_places;
 
+	unsigned short const rh_places = rhs.m_places;
+
 	// Remember required sign of product
 	bool const diff_signs = (( m_intval > 0 && rhs.m_intval < 0 ) ||
 	                         ( m_intval < 0 && rhs.m_intval > 0 ));
@@ -486,7 +494,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	m_intval = NUM_CAST<int_type>(proxy_intval);
 	
 	// Now add the places of the multiplicands together.
-	m_places += rhs.m_places;
+	m_places += rh_places;
 
 	// If we can do so safely, reduce m_places according to the level
 	// of precision-reduction calculated above. Otherwise reset and throw.
@@ -510,12 +518,18 @@ Decimal& Decimal::operator*=(Decimal rhs)
 		set_fractional_precision(MAX_PLACES);
 	}
 
+	rationalize(max(original_places, rh_places)); 
+	
 	return *this;
 }
 
 
 Decimal& Decimal::operator/=(Decimal rhs)
 {
+	// Save original number of places for later reference
+	unsigned short original_places = m_places;
+	unsigned short const rh_places = rhs.m_places;
+
 	// Get both operands on the same footing
 	// Note, if we can't co_normalize safely, then we can't divide safely.
 	// Think about it! (Note, co_normalize throws if unsafe...)
@@ -562,6 +576,9 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		}
 		doub_new_val *= NUM_CAST<double>(BASE);
 	}
+	
+	rationalize(max(original_places, rh_places));
+
 	return *this;
 }
 
@@ -671,7 +688,15 @@ bool Decimal::operator==(Decimal rhs) const
 Decimal round(Decimal const& x, unsigned int decimal_places)
 {
 	Decimal ret = x;
-	ret.set_fractional_precision(decimal_places);
+	try
+	{	
+		ret.set_fractional_precision(decimal_places);
+	}
+	catch(UnsafeArithmeticException&)
+	{
+		throw (UnsafeArithmeticException("Decimal number cannot "
+		  "safely be rounded to this number of places."));
+	}
 	return ret;
 }
 

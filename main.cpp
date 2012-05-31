@@ -16,6 +16,7 @@
 #include <map>
 #include <sstream>
 #include <vector>
+using jewel::round;
 using jewel::Decimal;
 using jewel::NumDigits;
 using jewel::Stopwatch;
@@ -58,6 +59,36 @@ int main()
 		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
 	#endif
 
+
+
+	Decimal share_price;
+	Decimal share_quantity;
+	share_price = Decimal("0.155");
+	share_quantity = Decimal("20000");
+	Decimal share_value = share_price * share_quantity;
+	cout << "Share price: " << round(share_price, 4) << endl;
+	cout << "Share quantity: " << round(share_quantity, 0) << endl;
+	cout << "Share value: " << round(share_value, 2) << endl;
+
+	cout << endl;
+
+	cout << "1 / 3: " << Decimal("1") / Decimal("3") << endl;
+	cout << "1 / 10: " << Decimal("1") / Decimal("10") << endl;
+	cout << "0.1 * 10000: " << Decimal("0.1") * Decimal("10000") << endl;
+	cout << "0.8 * 80000 / 80000: "
+	     << Decimal("0.8") * Decimal("80000") / Decimal("80000") << endl;	
+	cout << "0.8 * 80000 / 80000 * 80000 * 800: "
+	     << Decimal("0.8") * Decimal("80000") / Decimal("80000") *
+		    Decimal("80000") * Decimal("800")
+		 << endl;
+	cout << "182847392 * 0.02134123: "
+	     << Decimal("182847392") * Decimal("0.02134123") << endl;
+	cout << round(Decimal("10.987"), 1) << endl;
+
+
+
+
+
 	/* Here's how to print currency (though this doesn't include parentheses
 	 * for negative, or thousands separators just yet).
 	cout << std::setprecision(2) << std::showpoint << std::fixed;
@@ -70,6 +101,9 @@ int main()
 		 << std::setw(10) << std::right << double(100000) << endl;
 	 */
 
+
+	/*
+	 
 	// Test processing from a csv file	
 
 	Stopwatch sw;
@@ -134,7 +168,7 @@ int main()
 	// End test processing from a csv file
 
 
-
+	*/
 
 	/*
 	cout << static_cast<bool>(cout.flags() & ios::hex) << endl;
@@ -144,6 +178,8 @@ int main()
 	cout << static_cast<bool>(cout.flags() & ios::dec) << endl;
 	*/
 
+	/*
+	 
 	// Test the speed of arithmetic operations
 
 	int lim = 1000000;
@@ -209,6 +245,8 @@ int main()
 	     << " seconds." << endl;
 	
 	// End "test the speed of arithmetic operations"
+
+	*/
 
 	return UnitTest::RunAllTests();
 }
