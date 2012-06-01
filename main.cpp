@@ -178,7 +178,6 @@ int main()
 	cout << static_cast<bool>(cout.flags() & ios::dec) << endl;
 	*/
 
-	/*
 	 
 	// Test the speed of arithmetic operations
 
@@ -186,8 +185,8 @@ int main()
 	vector<Decimal> vec;
 	for (int i = 0; i != lim; ++i)
 	{
-		vec.push_back(Decimal("3.20023"));
-		vec.push_back(Decimal("98.3"));
+		vec.push_back(Decimal("3.20"));
+		vec.push_back(Decimal("98.35"));
 	}
 
 	Stopwatch sw_base_case;
@@ -246,7 +245,6 @@ int main()
 	
 	// End "test the speed of arithmetic operations"
 
-	*/
 
 	return UnitTest::RunAllTests();
 }

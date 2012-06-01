@@ -79,16 +79,13 @@ namespace jewel
  * (Replace it everywhere with plain static_cast, providing of course that
  * the tests pass when compiled in release mode.)
  *
- * @todo For efficiency (and cleanliness), I should put the body of
- * set_fractional_precision in its own function that doesn't throw (but
- * returns an int like the current implementation with "false" parameter).
- * Then the "throwing" version should be a void-returning wrapper around
- * this function.
- *
  * @todo Properly document how operations and constructors handle "trailing
  * zeroes". Currently they cull trailing fractional zeroes in the result, but
  * only up to point. That point is the maximm of the fractional precisions of
  * the most precise of the two operands.
+ *
+ * @todo Fully test the expected behaviour w.r.t. the number of trailing
+ * fractional zeroes left behind by operations and constructors.
  *
  * @todo Division and multiplication do not incorporate rounding of the last
  * available digit of precision. Should they?
@@ -299,24 +296,20 @@ private:
 	 *
 	 * @param p_places the new number of decimal places (i.e. number
 	 * of digits of precision to the right of the decimal point)
-	 * @exception jewel::UnsafeArithmeticException
-	 * thrown if p_places exceeds MAX_PLACES - but only if
-	 * \c throwing is set to \c true (see below).
 	 *
-	 * @param throwing If set to \c true (default), the function throws
-	 * an exception if it cannot execute safely. If set to \c false,
-	 * the function instead returns a value of 1. In neither case does it
-	 * actually execute the unsafe operation. This option is allowed for
-	 * efficiency reasons in certain cases.
+	 * If p_places exceeds MAX_PLACES, or if the function cannot otherwise
+	 * execute safely, an exception is \e not thrown, but
+	 * rather a non-zero value is returned to indicate error. If this occurs
+	 * the unsafe operation is not actually executed, but rather the Decimal
+	 * is retained in its original state.
+	 *
+	 * The function is non-throwing primarily for reasons of efficiency.
 	 *
 	 * @returns an integer indicating whether the operation was successful,
-	 * viz. 0 if successful, otherwise 1; however, if \c throwing parameter
-	 * is set to true (which it is by default), the return value is undefined.
-	 * I.e. the return value should only be used if \c throwing is explicitly
-	 * set to false when the function is called.
+	 * viz. 0 if successful, otherwise a non-zero value. 
 	 */
 	int
-	set_fractional_precision(unsigned short p_places, bool throwing = true);
+	set_fractional_precision(unsigned short p_places);
 
 	/**
 	 * Where the final digit(s) of the Decimal number are '0', this

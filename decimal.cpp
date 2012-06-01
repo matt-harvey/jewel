@@ -77,12 +77,22 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 	}
 	else if (x.m_places < y.m_places)
 	{
-		x.set_fractional_precision(y.m_places);
+		if (x.set_fractional_precision(y.m_places) != 0)
+		{
+			throw (UnsafeArithmeticException("Unsafe attempt to "
+			  "set fractional precision in course of co-normalization"
+			  " attempt."));
+		}
 	}
 	else
 	{
 		assert (y.m_places < x.m_places);
-		y.set_fractional_precision(x.m_places);
+		if (y.set_fractional_precision(x.m_places) != 0)
+		{
+			throw (UnsafeArithmeticException("Unsafe attempt to "
+			  "set fractional precision in course of co-normalization"
+			  " attempt."));
+		}
 	}
 	return;
 }
@@ -129,7 +139,14 @@ Decimal::whole_part() const
 	Decimal temp = *this;
 	
 	// First set to fractional precison of 1.
-	temp.set_fractional_precision(1);
+	// This should be safe.
+	#ifndef NDEBUG
+		int check = 0;
+		check = temp.set_fractional_precision(1);
+		assert (check == 0);		// No error occurred
+	#else
+		temp.set_fractional_precision(1);
+	#endif
 	int_type ret = temp.m_intval;
 
 	// Then truncate the fractional digit.
@@ -314,7 +331,7 @@ istream& Decimal::read_parts_from_stream(istream& is)
 }
 */
 
-int Decimal::set_fractional_precision(unsigned short p_places, bool throwing)
+int Decimal::set_fractional_precision(unsigned short p_places)
 {
 	#ifndef NDEBUG
 		unsigned short const DEBUGVARIABLE_orig_places = m_places;
@@ -332,14 +349,7 @@ int Decimal::set_fractional_precision(unsigned short p_places, bool throwing)
 		{
 			assert (m_places == DEBUGVARIABLE_orig_places);
 			assert (m_intval == DEBUGVARIABLE_orig_intval);
-			if (!throwing)
-			{
-				return 1;
-			}
-			#ifndef JEWEL_DECIMAL_DISABLE_ARITHMETIC_CHECKING
-				throw UnsafeArithmeticException("Attempted to set precision "
-				 "to a value exceeding the safe maximum.");
-			#endif
+			return 1;
 		}
 		double base = BASE;  // necessary only as pow needs a double
 		int_type multiplier =
@@ -348,13 +358,9 @@ int Decimal::set_fractional_precision(unsigned short p_places, bool throwing)
 		if (CheckedArithmetic::multiplication_is_unsafe(m_intval,
 		  multiplier))
 		{
-			if (!throwing)
-			{
-				return 1;
-			}
-			#ifndef JEWEL_DECIMAL_DISABLE_ARITHMETIC_CHECKING
-				throw UnsafeArithmeticException("Unsafe multiplication.");
-			#endif
+			assert (m_places == DEBUGVARIABLE_orig_places);
+			assert (m_intval == DEBUGVARIABLE_orig_intval);
+			return 1;
 	 	}
 		m_intval *= multiplier;
 	}
@@ -515,7 +521,10 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	// Ensure we don't exceed MAX_PLACES.
 	if (m_places > MAX_PLACES)
 	{
-		set_fractional_precision(MAX_PLACES);
+		if (set_fractional_precision(MAX_PLACES) != 0)
+		{
+			throw (UnsafeArithmeticException("Unsafe multiplication."));
+		}
 	}
 
 	rationalize(max(original_places, rh_places)); 
@@ -567,7 +576,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		#ifndef NDEBUG
 			unsigned short DEBUGVARIABLE_max_known_safe = m_places;
 		#endif
-		if (set_fractional_precision(m_places + 1, false) == 1)
+		if (set_fractional_precision(m_places + 1) != 0)
 		{
 			// then it wasn't safe...
 			assert (m_places == DEBUGVARIABLE_max_known_safe);
@@ -688,12 +697,8 @@ bool Decimal::operator==(Decimal rhs) const
 Decimal round(Decimal const& x, unsigned int decimal_places)
 {
 	Decimal ret = x;
-	try
+	if (ret.set_fractional_precision(decimal_places) != 0)
 	{	
-		ret.set_fractional_precision(decimal_places);
-	}
-	catch(UnsafeArithmeticException&)
-	{
 		throw (UnsafeArithmeticException("Decimal number cannot "
 		  "safely be rounded to this number of places."));
 	}
