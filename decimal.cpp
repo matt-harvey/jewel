@@ -400,13 +400,11 @@ int Decimal::set_fractional_precision(unsigned short p_places)
 
 Decimal const& Decimal::operator++()
 {
-	#ifndef JEWEL_DECIMAL_DISABLE_ARITHMETIC_CHECKING
-		if (CheckedArithmetic::addition_is_unsafe(m_intval,
-		  implicit_divisor()))
-		{
-			throw UnsafeArithmeticException("Addition may cause overflow.");
-		}
-	#endif
+	if (CheckedArithmetic::addition_is_unsafe(m_intval,
+	  implicit_divisor()))
+	{
+		throw UnsafeArithmeticException("Addition may cause overflow.");
+	}
 	m_intval += implicit_divisor();
 	return *this;
 }
@@ -416,14 +414,12 @@ Decimal const& Decimal::operator++()
 
 Decimal const& Decimal::operator--()
 {
-	#ifndef JEWEL_DECIMAL_DISABLE_ARITHMETIC_CHECKING
-		if (CheckedArithmetic::subtraction_is_unsafe(m_intval,
-		  implicit_divisor()))
-		{
-			throw UnsafeArithmeticException("Subtraction may cause "
-			  "overflow.");
-		}
-	#endif
+	if (CheckedArithmetic::subtraction_is_unsafe(m_intval,
+	  implicit_divisor()))
+	{
+		throw UnsafeArithmeticException("Subtraction may cause "
+		  "overflow.");
+	}
 	m_intval -= implicit_divisor();
 	return *this;
 }
@@ -434,12 +430,10 @@ Decimal const& Decimal::operator--()
 Decimal& Decimal::operator+=(Decimal rhs)
 {
 	co_normalize(*this, rhs);
-	#ifndef JEWEL_DECIMAL_DISABLE_ARITHMETIC_CHECKING
-		if (CheckedArithmetic::addition_is_unsafe(m_intval, rhs.m_intval))
-		{
-			throw UnsafeArithmeticException("Addition may cause overflow.");
-		}
-	#endif
+	if (CheckedArithmetic::addition_is_unsafe(m_intval, rhs.m_intval))
+	{
+		throw UnsafeArithmeticException("Addition may cause overflow.");
+	}
 	m_intval += rhs.m_intval;
 	return *this;
 }
@@ -449,13 +443,11 @@ Decimal& Decimal::operator+=(Decimal rhs)
 Decimal& Decimal::operator-=(Decimal rhs)
 {
 	co_normalize(*this, rhs);
-	#ifndef JEWEL_DECIMAL_DISABLE_ARITHMETIC_CHECKING
-		if (CheckedArithmetic::subtraction_is_unsafe(m_intval, rhs.m_intval))
-		{
-			throw UnsafeArithmeticException("Subtraction may cause "
-			  "overflow.");
-		}
-	#endif
+	if (CheckedArithmetic::subtraction_is_unsafe(m_intval, rhs.m_intval))
+	{
+		throw UnsafeArithmeticException("Subtraction may cause "
+		  "overflow.");
+	}
 	m_intval -= rhs.m_intval;
 	return *this;
 }

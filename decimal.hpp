@@ -48,18 +48,8 @@ namespace jewel
  * division do not guarantee any particular level of precision, but do
  * guarantee that they will throw an exception rather than overflow.
  *
- * @todo It's probably cleaner to get rid of the
- * option for "JEWEL_DECIMAL_DISABLE_ARITHMETIC_CHECKING". The checking should
- * just always be one. This will clean up the code and reduce the number of
- * different possible compilation options. However the argument for keeping it
- * is that it may no longer be necessary if ever I use a "BigInteger" type
- * as the underlying integer. My gut feel, however, is to get rid of it.
- *
  * @todo Multiplication and division should offer specific guarantees about
  * precison, and the class documentation (above para.) should reflect this.
- *
- * To compile without overflow/precision loss checking, define the following
- * macro: JEWEL_DECIMAL_DISABLE_ARITHMETIC_CHECKING.
  *
  * @todo Make it work as expected with standard library stream precision
  * manipulators and formatting. To do this properly, I need to understand

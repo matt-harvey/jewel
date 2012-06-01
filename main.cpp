@@ -46,11 +46,6 @@ bool is_dagger(char c)
 
 int main()
 {
-	#ifdef JEWEL_DECIMAL_DISABLE_ARITHMETIC_CHECKING
-		cout << "Decimal arithmetic checking is disabled." << endl;
-	#else
-		cout << "Decimal arithmetic checking is enabled." << endl;
-	#endif
 
 	#ifndef NDEBUG
 		cout << "Compiled in debugging mode (NDEBUG not defined)."
