@@ -67,18 +67,17 @@ int main()
 
 	cout << endl;
 
-	cout << "1 / 3: " << Decimal("1") / Decimal("3") << endl;
-	cout << "1 / 10: " << Decimal("1") / Decimal("10") << endl;
-	cout << "0.1 * 10000: " << Decimal("0.1") * Decimal("10000") << endl;
-	cout << "0.8 * 80000 / 80000: "
+	cout << "1 / 3 = " << Decimal("1") / Decimal("3") << endl;
+	cout << "1 / 10 = " << Decimal("1") / Decimal("10") << endl;
+	cout << "0.1 * 10000 = " << Decimal("0.1") * Decimal("10000") << endl;
+	cout << "0.8 * 80000 / 80000 = "
 	     << Decimal("0.8") * Decimal("80000") / Decimal("80000") << endl;	
-	cout << "0.8 * 80000 / 80000 * 80000 * 800: "
+	cout << "0.8 * 80000 / 80000 * 80000 * 800 ="
 	     << Decimal("0.8") * Decimal("80000") / Decimal("80000") *
 		    Decimal("80000") * Decimal("800")
 		 << endl;
-	cout << "182847392 * 0.02134123: "
+	cout << "182847392 * 0.02134123 = "
 	     << Decimal("182847392") * Decimal("0.02134123") << endl;
-	cout << round(Decimal("10.987"), 1) << endl;
 
 
 
