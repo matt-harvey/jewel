@@ -574,60 +574,6 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	
 	rationalize();
 	return *this;
-
-	/*
-	// Get both operands on the same footing
-	// Note, if we can't co_normalize safely, then we can't divide safely.
-	// Note, co_normalize throws if unsafe.
-	co_normalize(*this, rhs);
-
-	// The meat of the calculation
-	long double doub_new_val = NUM_CAST<long double>(m_intval) /
-						       NUM_CAST<long double>(rhs.m_intval) *
-	                           NUM_CAST<long double>(implicit_divisor());
-
-	// Now test to reduce the level of precision that we are targeting, until
-	// we can safely fit proxy_intval into int_val. We record our "level
-	// of precision reduction" in places_to_lose.
-	long double max_as_long_double = numeric_limits<int_type>::max();
-	unsigned short places_to_lose = 0;
-	while (doub_new_val + NUM_CAST<long double>(1)
-	       > max_as_long_double)   // The "+1" protects
-	                               // for int_type MIN...
-	{
-		doub_new_val /= NUM_CAST<long double>(BASE);
-		++places_to_lose;
-	}
-
-	// Remove places if we can, otherwise throw.
-	if (places_to_lose > m_places)
-	{
-		throw (UnsafeArithmeticException("Unsafe division."));
-	}
-	m_places -= places_to_lose;
-
-	// Now get *this as precise as we safely can
-	m_intval = doub_new_val + 1;  // conservative initial value
-	                              // (which we revise later)
-	while (true)
-	{
-		#ifndef NDEBUG
-			unsigned short DEBUGVARIABLE_max_known_safe = m_places;
-		#endif
-		if (set_fractional_precision(m_places + 1) != 0)
-		{
-			// then it wasn't safe...
-			assert (m_places == DEBUGVARIABLE_max_known_safe);
-			m_intval = NUM_CAST<int_type>(doub_new_val);
-			break;
-		}
-		doub_new_val *= NUM_CAST<double>(BASE);
-	}
-	
-	rationalize();
-
-	return *this;
-	*/
 }
 
 
