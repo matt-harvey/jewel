@@ -173,37 +173,6 @@ Decimal::rationalize(unsigned short min_places)
 }
 
 
-/*
-I have commented these constructors out unless and until
-I really need them.
-// Construct from a native integer of int_type and an unsigned short
-Decimal::Decimal(Decimal::int_type p_intval, unsigned short places):
-  m_intval(p_intval), m_places(places)
-{
-	if (places > MAX_PLACES)
-	{
-		m_intval = 0;
-		m_places = 0;
-		throw (UnsafeArithmeticException("Decimal places passed"
-		  " to Decimal constructor exceed maximum"));
-	}
-}
-
-// Construct from an int and an unsigned short
-Decimal::Decimal(int p_intval, unsigned short places):
-  m_intval(p_intval), m_places(places)
-{
-	if (places > MAX_PLACES)
-	{
-		m_intval = 0;
-		m_places = 0;
-		throw (UnsafeArithmeticException("Decimal places passed"
-		  " to Decimal constructor exceed maximum"));
-	}
-}
-
-*/
-
 Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 {
 	// Writing though indexes here to try to make it as fast

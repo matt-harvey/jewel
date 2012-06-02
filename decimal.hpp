@@ -442,43 +442,6 @@ private:
 	explicit Decimal(int);
 
 
-	/* I have commented this constructor out unless and until I really
-	 * need it.
-	 *
-	 * @param p_intval initializes the underlying integer.
-	 * @param p_places initializes the number of decimal places (nil
-	 * places by default).
-	 *
-	 * @exception jewel::UnsafeArithmeticException thrown if p_places
-	 * exceeds the value returned by Decimal::maximum_precision().
-	 *
-	 * The underlying integer and the number of places to are set to nil
-	 * before throwing.
-	 */
-	// explicit Decimal(int_type p_intval, unsigned short p_places = 0);
-
-	/* I have commented this out unless and until I really need it.
-	 * @param p_intval initializes the underlying integer.
-	 * @param p_places initializes the number of decimal places (nil
-	 * places by default).
-	 *
-	 * @exception jewel::UnsafeArithmeticException thrown if p_places
-	 * exceeds the value returned by Decimal::maximum_precision().
-	 *
-	 * The underlying integer and the number of places are set to 0 before
-	 * throwing.
-	 */
-	// explicit Decimal(int p_intval, unsigned short p_places = 0);
-
-	/*
-	 * I have commented this constructor out unless and until I really need
-	 * it. Constructor to intercept and reject attempted initialization from
-	 * a double.
-	 */
-	 // explicit Decimal(double p_intval, unsigned short p_places = 0);
-	 
-
-
 	/* I have commented this out unless and until I really need it.
 	 * Read into a Decimal from a std::istream in two parts: first an int_type
 	 * representing the underlying integer; then an unsigned short being the
