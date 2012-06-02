@@ -456,6 +456,7 @@ TEST(decimal_multiply_equals)
 	CHECK(d50 < Decimal("-10686769"));
 	CHECK(d50 > Decimal("-10686770"));
 	Decimal d100 = Decimal("900001") * Decimal("0.2234");
+	cout << d100 << endl;
 	CHECK(d100 > Decimal("201060.2"));
 	CHECK(d100 < Decimal("201060.3"));
 
@@ -496,6 +497,8 @@ TEST(decimal_multiplication)
 	Decimal d7("0.0000001");
 	Decimal d8 = d6 * d7;
 	CHECK_EQUAL(d8, Decimal("0"));
+	CHECK_EQUAL(Decimal("1000001") * Decimal("0.00222"),
+	  Decimal("2220.00222"));
 
 	// Test behaviour with unsafe operations
 	

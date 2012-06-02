@@ -340,9 +340,9 @@ private:
 	 * For example:
 	 * @code
 	 * Decimal d0("90.23457");
-	 * d0.set_fractional_precision(3);
+	 * d0.rescale(3);
 	 * assert(d0 == Decimal("90.235"));
-	 * d0.set_fractional_precision(5);
+	 * d0.rescale(5);
 	 * assert(d0 == Decimal("90.23500"));
 	 * assert(d0 == Decimal("90.235"));
 	 * assert(d0.precision() == 3);
@@ -363,7 +363,7 @@ private:
 	 * viz. 0 if successful, otherwise a non-zero value. 
 	 */
 	int
-	set_fractional_precision(unsigned short p_places);
+	rescale(unsigned short p_places);
 
 	/**
 	 * Where the final digit(s) of the Decimal number are '0', this

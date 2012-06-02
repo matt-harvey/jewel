@@ -60,10 +60,18 @@ int main()
 	
 	cout << "1 / 3: \t" << Decimal("1") / Decimal("3") << endl;
 
+	cout << "100 * 0.001: \t" << Decimal("100") * Decimal("0.001") << endl;
+
+	cout << "1000001 * 0.00222: \t"
+	     << Decimal("1000001") * Decimal("0.00222")
+		 << endl;
+
+
+
 
 	// The reason this division by 10 loses precision is because
-	// the division calls set_fractional_precision, and
-	// set_fractional_precision calls the conservative multiplication
+	// the division calls rescale, and
+	// rescale calls the conservative multiplication
 	// safety check.
 	/*
 	Decimal dm = Decimal::maximum() - Decimal("1000");

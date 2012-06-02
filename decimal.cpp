@@ -77,7 +77,7 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 	}
 	else if (x.m_places < y.m_places)
 	{
-		if (x.set_fractional_precision(y.m_places) != 0)
+		if (x.rescale(y.m_places) != 0)
 		{
 			throw (UnsafeArithmeticException("Unsafe attempt to "
 			  "set fractional precision in course of co-normalization"
@@ -87,7 +87,7 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 	else
 	{
 		assert (y.m_places < x.m_places);
-		if (y.set_fractional_precision(x.m_places) != 0)
+		if (y.rescale(x.m_places) != 0)
 		{
 			throw (UnsafeArithmeticException("Unsafe attempt to "
 			  "set fractional precision in course of co-normalization"
@@ -142,10 +142,10 @@ Decimal::whole_part() const
 	// This should be safe.
 	#ifndef NDEBUG
 		int check = 0;
-		check = temp.set_fractional_precision(1);
+		check = temp.rescale(1);
 		assert (check == 0);		// No error occurred
 	#else
-		temp.set_fractional_precision(1);
+		temp.rescale(1);
 	#endif
 	int_type ret = temp.m_intval;
 
@@ -331,7 +331,7 @@ istream& Decimal::read_parts_from_stream(istream& is)
 }
 */
 
-int Decimal::set_fractional_precision(unsigned short p_places)
+int Decimal::rescale(unsigned short p_places)
 {
 	#ifndef NDEBUG
 		unsigned short const DEBUGVARIABLE_orig_places = m_places;
@@ -525,7 +525,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	// Ensure we don't exceed MAX_PLACES.
 	if (m_places > MAX_PLACES)
 	{
-		if (set_fractional_precision(MAX_PLACES) != 0)
+		if (rescale(MAX_PLACES) != 0)
 		{
 			throw (UnsafeArithmeticException("Unsafe multiplication."));
 		}
@@ -544,12 +544,12 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		throw (UnsafeArithmeticException("Division by zero"));
 	}
 	rhs.rationalize();
-	while (set_fractional_precision(m_places + 1) == 0)
+	while (rescale(m_places + 1) == 0)
 	{
 	}
 	while ( (m_intval < rhs.m_intval) && (rhs.m_places > 0) )
 	{
-		rhs.set_fractional_precision(rhs.m_places - 1);
+		rhs.rescale(rhs.m_places - 1);
 	}
 	if (rhs.m_places > m_places)
 	{
@@ -668,7 +668,7 @@ bool Decimal::operator==(Decimal rhs) const
 Decimal round(Decimal const& x, unsigned int decimal_places)
 {
 	Decimal ret = x;
-	if (ret.set_fractional_precision(decimal_places) != 0)
+	if (ret.rescale(decimal_places) != 0)
 	{	
 		throw (UnsafeArithmeticException("Decimal number cannot "
 		  "safely be rounded to this number of places."));
