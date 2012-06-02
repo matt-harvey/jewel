@@ -527,6 +527,7 @@ TEST(decimal_divide_equals)
 	Decimal d3("91");
 	Decimal d4("7.09010");
 	d3 /= d4;
+	cerr << "d3: " << d3 << endl;
 	CHECK(d3 > Decimal("12.834797"));
 	CHECK(d3 < Decimal("12.834799"));
 	Decimal d5("2");
@@ -558,6 +559,12 @@ TEST(decimal_divide_equals)
 	Decimal d104("-197787.987");
 	Decimal d104b(".9879");
 	CHECK_THROW(d104 /= d104b, UnsafeArithmeticException);
+
+	// With division by zero
+	Decimal d300;
+	CHECK_THROW(d300 /= Decimal("0"), UnsafeArithmeticException);
+	CHECK_THROW(d300 /= Decimal(".0"), UnsafeArithmeticException);
+	CHECK_THROW(d300 /= Decimal("-0.0"), UnsafeArithmeticException);
 }
 
 TEST(decimal_division)

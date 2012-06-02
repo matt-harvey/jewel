@@ -548,26 +548,34 @@ Decimal& Decimal::operator*=(Decimal rhs)
 
 Decimal& Decimal::operator/=(Decimal rhs)
 {
-	/*
-	string s = "";
-	int_type proxy = m_intval;
-	unsigned int places_to_lose = 0;
-	while (proxy < rhs.m_intval)
+	Decimal const orig = *this;
+	if (rhs.m_intval == 0)
 	{
-		proxy *= BASE;
-		++places_to_lose;
+		throw (UnsafeArithmeticException("Division by zero"));
 	}
-	int_type quotient = proxy / rhs.m_intval;
-	int_type remainder = proxy % rhs.m_intval;
-	assert (quotient < 10);
-	assert (remainder < 10);
-	s.push_back(lexical_cast<char>(quotient));
-	*/
+	int_type const orig_intval = m_intval;
+	unsigned short const orig_places = m_places;
+	rhs.rationalize();
+	while (set_fractional_precision(m_places + 1) == 0)
+	{
+	}
+	while ( (m_intval < rhs.m_intval) && (rhs.m_places > 0) )
+	{
+		rhs.set_fractional_precision(rhs.m_places - 1);
+	}
+	if (rhs.m_places > m_places)
+	{
+		m_intval = orig_intval;
+		m_places = orig_places;
+		throw (UnsafeArithmeticException("Unsafe division."));
+	}
+	m_intval /= rhs.m_intval;
+	m_places -= rhs.m_places;
+	
+	rationalize();
+	return *this;
 
-
-
-
-
+	/*
 	// Get both operands on the same footing
 	// Note, if we can't co_normalize safely, then we can't divide safely.
 	// Note, co_normalize throws if unsafe.
@@ -619,6 +627,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	rationalize();
 
 	return *this;
+	*/
 }
 
 
