@@ -185,8 +185,8 @@ public:
 
 	/**
 	 * @exception jewel::UnsafeArithmeticException thrown if addition
-	 * would cause overflow, or if precision cannot be maintained at the
-	 * same level as that of the more precise of the two numbers being
+	 * would cause overflow, or if fractional precision cannot be maintained
+	 * at the same level as that of the more precise of the two numbers being
 	 * added. This ensures that - unlike in unchecked floating point
 	 * arithmetic - the sum of two non-zero numbers is always equal to
 	 * neither of the original numbers (or else throw an exception).
@@ -200,7 +200,8 @@ public:
 
 	/**
 	 * @exception jewel::UnsafeArithmeticException thrown if
-	 * subtraction would cause overflow, or if precision cannot be maintained
+	 * subtraction would cause overflow, or if fractional precision
+	 * cannot be maintained
 	 * at the same level as that of the more precise of the two numbers
 	 * involved (the minuend and the subrahend).
 	 * This ensures that - unlike in unchecked floating point
@@ -258,11 +259,15 @@ public:
 	/**
 	 * @exception jewel::UnsafeArithmeticException is thrown if incrementing
 	 * would cause overflow.
+	 *
+	 * Incrementing a Decimal never changes its fractional precision.
 	 */
 	Decimal const& operator++();  // prefix version
 
 	/** @exception jewel::UnsafeArithmeticException is throw if decrementing
 	 * would cause overflow.
+	 *
+	 * Decrementing a Decimal never changes its fractional precision.
 	 */
 	Decimal const& operator--();  // prefix version
 

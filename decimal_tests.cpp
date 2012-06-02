@@ -204,6 +204,13 @@ TEST(decimal_plus_equals)
 	d2 += d3;
 	CHECK_EQUAL(d2, Decimal("14.590971"));
 	CHECK_EQUAL(d3, Decimal("5.7"));
+	Decimal d200("23042.12");
+	Decimal d201("0.88");
+	d200 += d201;
+	CHECK_EQUAL(d200, Decimal("23043"));
+	ostringstream oss200;
+	oss200 << d200;
+	CHECK_EQUAL(oss200.str(), "23043.00");
 
 	// Check behaviour for unsafe operations
 
@@ -254,7 +261,13 @@ TEST(decimal_addition)
 	Decimal d3("-.00000001");
 	Decimal d4("100000000");
 	CHECK_THROW(Decimal d5 = d3 + d4, UnsafeArithmeticException);
-
+	Decimal d5 = Decimal("123.00900") + Decimal("0.001");
+	CHECK_EQUAL(d5, Decimal("123.01"));
+	ostringstream oss0;
+	oss0 << d5;
+	CHECK_EQUAL(oss0.str(), "123.01000");
+	CHECK(oss0.str() != "123.01");
+	
 	// Check behaviour for unsafe operations
 
 	// With precision loss
@@ -312,6 +325,18 @@ TEST(decimal_minus_equals)
 	CHECK_EQUAL(Decimal("4231.123") - Decimal("-0"),
 	  Decimal("4231.123"));
 	CHECK_EQUAL(Decimal("-234") - Decimal(".0903"), Decimal("-234.0903"));
+	Decimal d200("988.00");
+	d200 -= Decimal("0.000");
+	CHECK_EQUAL(d200, Decimal("988.00"));
+	ostringstream oss0;
+	oss0 << d200;
+	CHECK_EQUAL(oss0.str(), "988.000");
+	CHECK(oss0.str() != "988.00");
+	Decimal d201("2.05");
+	d201 -= Decimal("0.05");
+	ostringstream oss1;
+	oss1 << d201;
+	CHECK_EQUAL(oss1.str(), "2.00");
 	
 	// Check behaviour for unsafe operations
 
@@ -361,6 +386,13 @@ TEST(decimal_subtraction)
 	CHECK_EQUAL(d2 - d1, Decimal("-39971.096"));
 	CHECK_EQUAL(Decimal("0.009") - Decimal("0.003"), Decimal("0.006"));
 	CHECK_EQUAL(Decimal("234") - Decimal("-0"), Decimal("234"));
+	Decimal d200;
+	d200 = Decimal("8123.120") - Decimal("23.0100");
+	CHECK_EQUAL(d200, Decimal("8100.11"));
+	ostringstream oss200;
+	oss200 << d200;
+	CHECK_EQUAL(oss200.str(), "8100.1100");
+	CHECK(oss200.str() != "8100.11");
 	
 	// Check behaviour for unsafe operations
 
@@ -558,6 +590,12 @@ TEST(decimal_increment)
 	++d2;
 	++d2;
 	CHECK_EQUAL(d2, Decimal("-1"));
+	Decimal d3("1.0");
+	d3++;
+	ostringstream oss;
+	oss << d3;
+	CHECK_EQUAL(oss.str(), "2.0");
+	CHECK(oss.str() != "2");
 
 	// Test behaviour with unsafe operations
 	Decimal d10 = Decimal::maximum();
@@ -590,6 +628,16 @@ TEST(decimal_decrement)
 	Decimal d4 = d3--;
 	CHECK_EQUAL(d3, Decimal("7893"));
 	CHECK_EQUAL(d4, Decimal("7894"));
+	Decimal d5("0.300");
+	--d5;
+	ostringstream oss;
+	oss << d5;
+	CHECK_EQUAL(oss.str(), "-0.700");
+	CHECK(oss.str() != "-0.70");
+	CHECK_EQUAL(d5, Decimal("-.7"));
+	CHECK_EQUAL(d5, Decimal("-0.700"));
+	CHECK_EQUAL(d5, Decimal("-0.70"));
+
 
 	// Now test behaviour with unsafe operations.
 	Decimal d10 = -Decimal::maximum();
