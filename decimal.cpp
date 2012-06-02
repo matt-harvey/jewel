@@ -400,12 +400,16 @@ int Decimal::set_fractional_precision(unsigned short p_places)
 
 Decimal const& Decimal::operator++()
 {
+	#ifndef NDEBUG
+		unsigned short const benchmark_places = m_places;
+	#endif
 	if (CheckedArithmetic::addition_is_unsafe(m_intval,
 	  implicit_divisor()))
 	{
 		throw UnsafeArithmeticException("Addition may cause overflow.");
 	}
 	m_intval += implicit_divisor();
+	assert (m_places >= benchmark_places);
 	return *this;
 }
 
@@ -414,6 +418,9 @@ Decimal const& Decimal::operator++()
 
 Decimal const& Decimal::operator--()
 {
+	#ifndef NDEBUG
+		unsigned short const benchmark_places = m_places;
+	#endif
 	if (CheckedArithmetic::subtraction_is_unsafe(m_intval,
 	  implicit_divisor()))
 	{
@@ -421,6 +428,7 @@ Decimal const& Decimal::operator--()
 		  "overflow.");
 	}
 	m_intval -= implicit_divisor();
+	assert (m_places >= benchmark_places);
 	return *this;
 }
 
@@ -429,12 +437,16 @@ Decimal const& Decimal::operator--()
 
 Decimal& Decimal::operator+=(Decimal rhs)
 {
+	#ifndef NDEBUG
+		unsigned short const benchmark_places = max(m_places, rhs.m_places);
+	#endif
 	co_normalize(*this, rhs);
 	if (CheckedArithmetic::addition_is_unsafe(m_intval, rhs.m_intval))
 	{
 		throw UnsafeArithmeticException("Addition may cause overflow.");
 	}
 	m_intval += rhs.m_intval;
+	assert (m_places >= benchmark_places);
 	return *this;
 }
 
@@ -442,6 +454,9 @@ Decimal& Decimal::operator+=(Decimal rhs)
 
 Decimal& Decimal::operator-=(Decimal rhs)
 {
+	#ifndef NDEBUG
+		unsigned short const benchmark_places = max(m_places, rhs.m_places);
+	#endif
 	co_normalize(*this, rhs);
 	if (CheckedArithmetic::subtraction_is_unsafe(m_intval, rhs.m_intval))
 	{
@@ -449,6 +464,7 @@ Decimal& Decimal::operator-=(Decimal rhs)
 		  "overflow.");
 	}
 	m_intval -= rhs.m_intval;
+	assert (m_places >= benchmark_places);
 	return *this;
 }
 
