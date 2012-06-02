@@ -468,7 +468,6 @@ Decimal& Decimal::operator-=(Decimal rhs)
 	return *this;
 }
 
-
 Decimal& Decimal::operator*=(Decimal rhs)
 {
 	// There is a fair bit of poking and prodding here to make sure
@@ -485,6 +484,14 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	bool const diff_signs = (( m_intval > 0 && rhs.m_intval < 0 ) ||
 	                         ( m_intval < 0 && rhs.m_intval > 0 ));
 	
+	// Irritating but best to prevent complications
+	if ( (m_intval == numeric_limits<int_type>::min()) ||
+	     (rhs.m_intval == numeric_limits<int_type>::min()) )
+	{
+		throw UnsafeArithmeticException("Cannot safely perform multiplication"
+		  " on the smallest possible Decimal.");
+	}
+
 	// Make absolute
 	if (m_intval < 0) m_intval *= -1;
 	if (rhs.m_intval < 0) rhs.m_intval *= -1;
@@ -499,8 +506,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	// of precision reduction" in places_to_lose.
 	long double max_as_long_double = numeric_limits<int_type>::max();
 	unsigned short places_to_lose = 0;
-	while (proxy_intval + 1 > max_as_long_double)   // The "+1" protects
-	                                                // for int_type MIN... 
+	while (proxy_intval > max_as_long_double)
 	{
 		proxy_intval /= NUM_CAST<long double>(BASE);
 		++places_to_lose;
@@ -542,23 +548,44 @@ Decimal& Decimal::operator*=(Decimal rhs)
 
 Decimal& Decimal::operator/=(Decimal rhs)
 {
+	/*
+	string s = "";
+	int_type proxy = m_intval;
+	unsigned int places_to_lose = 0;
+	while (proxy < rhs.m_intval)
+	{
+		proxy *= BASE;
+		++places_to_lose;
+	}
+	int_type quotient = proxy / rhs.m_intval;
+	int_type remainder = proxy % rhs.m_intval;
+	assert (quotient < 10);
+	assert (remainder < 10);
+	s.push_back(lexical_cast<char>(quotient));
+	*/
+
+
+
+
+
 	// Get both operands on the same footing
 	// Note, if we can't co_normalize safely, then we can't divide safely.
-	// Think about it! (Note, co_normalize throws if unsafe...)
+	// Note, co_normalize throws if unsafe.
 	co_normalize(*this, rhs);
 
 	// The meat of the calculation
-	double doub_new_val = NUM_CAST<double>(m_intval) *
-	                      NUM_CAST<double>(implicit_divisor()) /
-						  NUM_CAST<double>(rhs.m_intval);
+	long double doub_new_val = NUM_CAST<long double>(m_intval) /
+						       NUM_CAST<long double>(rhs.m_intval) *
+	                           NUM_CAST<long double>(implicit_divisor());
 
 	// Now test to reduce the level of precision that we are targeting, until
 	// we can safely fit proxy_intval into int_val. We record our "level
 	// of precision reduction" in places_to_lose.
 	long double max_as_long_double = numeric_limits<int_type>::max();
 	unsigned short places_to_lose = 0;
-	while (doub_new_val + 1 > max_as_long_double)   // The "+1" protects
-	                                                // for int_type MIN...
+	while (doub_new_val + NUM_CAST<long double>(1)
+	       > max_as_long_double)   // The "+1" protects
+	                               // for int_type MIN...
 	{
 		doub_new_val /= NUM_CAST<long double>(BASE);
 		++places_to_lose;

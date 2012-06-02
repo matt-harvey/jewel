@@ -53,7 +53,16 @@ int main()
 	#else
 		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
 	#endif
-	
+
+	// The reason this division by 10 loses precision is because
+	// the division calls set_fractional_precision, and
+	// set_fractional_precision calls the conservative multiplication
+	// safety check.
+	Decimal dm = Decimal::maximum() - Decimal("1000");
+	cout << dm << endl;
+	dm /= Decimal("10");
+	cout << dm << endl;
+
 	/*
 	cout << "round(Decimal(\"1\"), 2) = " << round(Decimal("1"), 2) << endl;
 

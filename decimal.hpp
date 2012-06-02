@@ -82,6 +82,19 @@ namespace jewel
  * number of digits of precision implied by string, then an exception is
  * thrown.
  *
+ * @todo Determine whether the behaviour of multiplication - which makes
+ * use of a conversion from int_type to long double - relies on the
+ * relative width of long double vis-a-vis int_type. If so, is this a
+ * problem? What about with division?
+ *
+ * @todo Division does not divide accurately by 1000. This is bad!
+ *
+ * @todo I should probably just implement division and multiplication
+ * as "long division" and "long multiplication". Stop leaning on the
+ * double type, which will probably import binariness at some point. Work
+ * out the algorithm for doing long division and long multiplication with
+ * a pen and paper, and implement that algorithm directly in code.
+ *
  * Multiplication and division behave slightly differently to addition and
  * subtraction. Trailing fractional zeroes in the result of these operations
  * are always "culled", even if this
@@ -113,6 +126,11 @@ namespace jewel
  *
  * @todo Fully test the expected behaviour w.r.t. the number of trailing
  * fractional zeroes left behind by operations and constructors.
+ *
+ * @todo Find out whether it's \e always the case that the smallest possible
+ * integer of every integral type on every machine has an absolute value that
+ * is one greater than the largest possible integer of that type. If not, then
+ * I may have non-portable code.
  *
  * @todo Division and multiplication do not incorporate rounding of the last
  * available digit of precision. Should they?
@@ -219,6 +237,10 @@ public:
 	/**
 	 * @exception jewel::UnsafeArithmeticException thrown if multiplication
 	 * would cause overflow.
+	 * 
+	 * Note also the smallest possible Decimal (the value returned by
+	 * Decimal::minimum()) cannot be multiplied, and an exception is thrown
+	 * if this is attempted.
 	 *
 	 * Precision is never more than a number of decimal places to the right
 	 * of the decimal point, equal to the value returned by 
@@ -527,6 +549,12 @@ Decimal operator+(Decimal const& d);
  * @param x The Decimal number to be rounded.
  * @param decimal_places The number of decimal digits after the
  * zero to which you wish to round. Should be an \e unsigned int.
+ *
+ * Note if you round to a number of decimal places greater than the current
+ * fractional precision, it will return a Decimal with the requested fractional precision
+ * (filling in the extra places effectively with zeroes).
+ * If this cannot be safely done an exception will be thrown.
+ *
  * @returns A decimal number by value (distinct from x, which is not changed).
  * @exception UnsafeArithmeticException thrown if achieving the requested
  * degree of precision would cause overflow.

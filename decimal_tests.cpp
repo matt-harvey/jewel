@@ -469,7 +469,11 @@ TEST(decimal_multiply_equals)
 	CHECK_THROW(large_num *= large_num, UnsafeArithmeticException);
 	CHECK_THROW(large_num *= Decimal("-29"), UnsafeArithmeticException);
 	CHECK_THROW(large_neg_num * large_num, UnsafeArithmeticException);
-	
+
+	// The smallest possible Decimal cannot be multiplied
+	Decimal d200 = Decimal::minimum();
+	CHECK_THROW(d200 *= Decimal("1"), UnsafeArithmeticException);
+
 	// But these should shouldn't throw
 	Decimal d101 = large_num * Decimal("0");
 	Decimal d102 = -large_num * Decimal("1");
@@ -506,6 +510,11 @@ TEST(decimal_multiplication)
 	  UnsafeArithmeticException);
 	CHECK_THROW(Decimal large_neg_num_b = large_neg_num * large_num,
 	  UnsafeArithmeticException);
+	
+	// The smallest possible Decimal cannot be multiplied
+	Decimal d10 = Decimal::minimum();
+	CHECK_THROW(Decimal d11 = d10 * Decimal("1"), UnsafeArithmeticException);
+	CHECK_THROW(Decimal d12 = Decimal("1") * d10, UnsafeArithmeticException);
 }
 
 TEST(decimal_divide_equals)
@@ -559,7 +568,14 @@ TEST(decimal_division)
 	CHECK_EQUAL(d0, Decimal("3.5"));
 	CHECK(Decimal("4.863") / Decimal("95") > Decimal("0.05118"));
 	CHECK(Decimal("4.863") / Decimal("95") < Decimal("0.05119"));
-	
+
+	// Check value preservation
+	Decimal d300("1");
+	Decimal const d300a = d300;
+	d300 /= Decimal("1000");
+	d300 *= Decimal("1000");
+	CHECK_EQUAL(d300, d300a);
+
 	// Check behaviour with unsafe operations
 	
 	// with straightforward overflow
@@ -851,6 +867,11 @@ TEST(round_decimal)
 	CHECK_EQUAL(round(Decimal("-2.25"), 1), Decimal("-2.3"));
 	CHECK_EQUAL(round(Decimal("2.25"), 1), Decimal("2.3"));
 	CHECK_EQUAL(round(Decimal("89.9999"), 0), Decimal("90.000"));
+	Decimal d5("13.49");
+	Decimal d6 = round(d5, 5);
+	ostringstream oss;
+	oss << d6;
+	CHECK_EQUAL(oss.str(), "13.49000");
 }
 
 
