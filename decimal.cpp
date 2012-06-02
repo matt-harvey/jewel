@@ -470,15 +470,7 @@ Decimal& Decimal::operator-=(Decimal rhs)
 
 Decimal& Decimal::operator*=(Decimal rhs)
 {
-	// There is a fair bit of poking and prodding here to make sure
-	// we don't overflow. Some of this is probably redundant.
-
-	// Preserve member variables in case of need to reset
-	// them later.
-	int_type const original_intval = m_intval;
-	unsigned short const original_places = m_places;
-
-	unsigned short const rh_places = rhs.m_places;
+	Decimal const orig = *this;
 
 	// Remember required sign of product
 	bool const diff_signs = (( m_intval > 0 && rhs.m_intval < 0 ) ||
@@ -496,34 +488,32 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	if (m_intval < 0) m_intval *= -1;
 	if (rhs.m_intval < 0) rhs.m_intval *= -1;
 
-	// Multiply the underlying integers of the multiplicands. Hold in
-	// a long double for now, to avoid needless overflow.
-	long double proxy_intval = NUM_CAST<long double>(m_intval) *
-	  NUM_CAST<long double>(rhs.m_intval);
+	// To record any places that we later need to cull
+	unsigned int places_to_lose = 0;
 
-	// Now test to reduce the level of precision that we are targeting, until
-	// we can safely fit proxy_intval into int_val. We record our "level
-	// of precision reduction" in places_to_lose.
-	long double max_as_long_double = numeric_limits<int_type>::max();
-	unsigned short places_to_lose = 0;
-	while (proxy_intval > max_as_long_double)
+	// Multiply the underlying integers of the multiplicands. Reduce precision
+	// until this can be done safely.
+	while (CheckedArithmetic::multiplication_is_unsafe(m_intval,
+	  rhs.m_intval))
 	{
-		proxy_intval /= NUM_CAST<long double>(BASE);
+		int_type* reducee = &m_intval;
+		if (m_intval < rhs.m_intval) reducee = &(rhs.m_intval);
+		int_type remainder = *reducee % BASE;
+		if (remainder >= ROUNDING_THRESHOLD) ++*reducee;
+		*reducee /= BASE;
 		++places_to_lose;
 	}
-	m_intval = NUM_CAST<int_type>(proxy_intval);
-	
-	// Now add the places of the multiplicands together.
-	m_places += rh_places;
+	m_intval *= rhs.m_intval;
+	m_places += rhs.m_places;
 
 	// If we can do so safely, reduce m_places according to the level
 	// of precision-reduction calculated above. Otherwise reset and throw.
 	if (m_places < places_to_lose)
 	{
-		m_intval = original_intval;
-		m_places = original_places;
+		*this = orig;
 		throw UnsafeArithmeticException("Unsafe multiplication.");
 	}
+	assert (m_places >= places_to_lose);
 	m_places -= places_to_lose;
 
 	// Make negative if required.
@@ -553,8 +543,6 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	{
 		throw (UnsafeArithmeticException("Division by zero"));
 	}
-	int_type const orig_intval = m_intval;
-	unsigned short const orig_places = m_places;
 	rhs.rationalize();
 	while (set_fractional_precision(m_places + 1) == 0)
 	{
@@ -565,13 +553,11 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	}
 	if (rhs.m_places > m_places)
 	{
-		m_intval = orig_intval;
-		m_places = orig_places;
+		*this = orig;
 		throw (UnsafeArithmeticException("Unsafe division."));
 	}
 	m_intval /= rhs.m_intval;
 	m_places -= rhs.m_places;
-	
 	rationalize();
 	return *this;
 }
