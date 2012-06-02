@@ -82,23 +82,6 @@ namespace jewel
  * number of digits of precision implied by string, then an exception is
  * thrown.
  *
- * When addition or subtraction is performed on two Decimals,
- * the result will be such that:\n
- * (a) For each of the operands \e x, the fractional precision of the result
- * is greater than or equal to the fractional precision of \e x; and\n
- * (b) Trailing fractional zeroes are not stored, but are culled, unless doing
- * so would violate (a).
- * Thus, the result of "3.01 + 4.090" is "7.100" (stored with three digits
- * of fractional precision). But the result of "3.01 + 4.09" is "7.10" (stored
- * with two digits of fractional precision).
- * Note that \c Decimal("7.100") compares as equal with
- * \c Decimal("7.10") just as one would expect. However they don't always
- * behave identically. In particular, it may be possible to add some
- * other Decimals to \c Decimal("7.10") that it is not possible to add to
- * \c Decimal("7.100"), since the latter requires that a fractional precision
- * of 3 be preserved in the result, whereas the former requires only a
- * fractional precision of 2 to be preserved.
- * 
  * Multiplication and division behave slightly differently to addition and
  * subtraction. Trailing fractional zeroes in the result of these operations
  * are always "culled", even if this
@@ -119,11 +102,6 @@ namespace jewel
  * I should probably define this in a separate file. It could include
  * currency formats and so forth, too.
  * 
- * @todo In the unit tests for operator++ and operator--, the elaborate
- * setup for these tests is no longer necessary, now that the string
- * constructor allows us to initialize anything up to
- * numeric_limits<int_type>::max();
- *
  * @todo For eventual release, tidy the naughty NUM_CAST macro in decimal.cpp.
  * (Replace it everywhere with plain static_cast, providing of course that
  * the tests pass when compiled in release mode.)

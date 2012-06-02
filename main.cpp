@@ -53,8 +53,8 @@ int main()
 	#else
 		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
 	#endif
-
-
+	
+	/*
 	cout << "round(Decimal(\"1\"), 2) = " << round(Decimal("1"), 2) << endl;
 
 	cout << "1 / 3 = " << Decimal("1") / Decimal("3") << endl;
@@ -68,7 +68,7 @@ int main()
 		 << endl;
 	cout << "182847392 * 0.02134123 = "
 	     << Decimal("182847392") * Decimal("0.02134123") << endl;
-
+	*/
 
 
 
@@ -162,7 +162,7 @@ int main()
 	cout << static_cast<bool>(cout.flags() & ios::dec) << endl;
 	*/
 
-	 
+	/*
 	// Test the speed of arithmetic operations
 
 	int lim = 1000000;
@@ -228,6 +228,7 @@ int main()
 	     << " seconds." << endl;
 	
 	// End "test the speed of arithmetic operations"
+	*/
 
 
 	return UnitTest::RunAllTests();

@@ -541,97 +541,7 @@ TEST(decimal_division)
 	  UnsafeArithmeticException);
 }
 
-
-/// @cond (to hide this from Doxygen-generated docs)
-
-// Base class for increment-testing and decrement-testing
-// test fixtures
-struct DecimalTestFixtureForIncrDecr
-{
-	// setup
-	void create(bool negs = false);
-
-	// teardown
-	~DecimalTestFixtureForIncrDecr()
-	{
-	}
-
-	// the members we need in tests
-	int_type starting_point;
-	int_type maxi;
-	int_type mini;
-	ostringstream oss;
-	Decimal multiplier;
-	Decimal x;
-};
-
-// Generic set up for testing increment and decrement operators
-void DecimalTestFixtureForIncrDecr::create(bool negs)
-{
-	maxi = numeric_limits<int_type>::max();
-	mini = numeric_limits<int_type>::min();
-	
-	int_type const& limit = (negs? mini: maxi);  // A reference!
-
-	// Start off here
-	starting_point = (negs? -1: 1);
-	
-	// And increase to the highest number with whose string translation a
-	// Decimal can be initialized.
-	while (NumDigits::num_digits(starting_point) <
-	  NumDigits::num_digits(limit) - 1)
-	{
-		starting_point *= 10;
-	}
-	assert (NumDigits::num_digits(starting_point) ==
-	  NumDigits::num_digits(limit) - 1);
-
-	// Initialize a Decimal with the help of the number we've reached.
-	oss << starting_point;
-	x = Decimal(oss.str());
-
-	if (negs) assert (x < Decimal("0"));
-	else assert (x > Decimal("0"));
-
-	// Then get the Decimal a bit higher still
-	multiplier = Decimal("1.001");
-	while (true)
-	{
-		try
-		{
-			x *= multiplier;
-		}
-		catch (UnsafeArithmeticException&)
-		{
-			break;
-		}
-	}
-
-	return;
-}
-
-// Fixture specifically for increment test
-struct DecimalTestFixtureForIncr: public DecimalTestFixtureForIncrDecr
-{
-	DecimalTestFixtureForIncr()
-	{
-		create();
-	}
-};
-
-// Fixture specifically for decrement test
-struct DecimalTestFixtureForDecr: public DecimalTestFixtureForIncrDecr
-{
-	DecimalTestFixtureForDecr()
-	{
-		create(true);
-	}
-};
-
-
-/// @endcond  // Ends "hiding from Doxygen"
-
-TEST_FIXTURE(DecimalTestFixtureForIncr, decimal_increment)
+TEST(decimal_increment)
 {
 	Decimal d0("0.007");
 	++d0;
@@ -650,34 +560,19 @@ TEST_FIXTURE(DecimalTestFixtureForIncr, decimal_increment)
 	CHECK_EQUAL(d2, Decimal("-1"));
 
 	// Test behaviour with unsafe operations
-	// This is a bit complicated due to the inability to initialize
-	// a Decimal with string that is \e very close to the maximum int_type.
-	// (Arguably this is a bug, but anyway, that's not what we're testing
-	// here.) We use the test fixture to set-up (above).
-	
-	// Create an int_type to "parallel" our progress as we increment
-	// x towards its maximum safe value.
-	ostringstream os2;
-	os2 << x;
-	int_type parallelx = lexical_cast<int_type>(os2.str());
-
-	// Now confirm that if we continue to increment, we'll throw before
-	// we exceed the equivalent of numeric_limits<int_type>::max()
-	Decimal prefixee = x;
-	int_type parallelpref = parallelx;
-	CHECK_THROW(while (parallelpref <= maxi) { ++prefixee; ++parallelpref; },
-	  UnsafeArithmeticException);
-	CHECK_EQUAL(parallelpref, maxi);
-
-	// Do the same with the suffix form
-	Decimal suffixee = x;
-	int_type parallelsuff = parallelx;
-	CHECK_THROW(while (parallelsuff <= maxi) { suffixee++; parallelsuff++; },
-	  UnsafeArithmeticException);
-	CHECK_EQUAL(parallelsuff, maxi);
+	Decimal d10 = Decimal::maximum();
+	CHECK_THROW(++d10, UnsafeArithmeticException);
+	CHECK_EQUAL(d10, Decimal::maximum());
+	CHECK_THROW(d10++, UnsafeArithmeticException);
+	CHECK_EQUAL(d10, Decimal::maximum());
+	// This should be safe
+	d10--;
+	Decimal d11 = ++d10;
+	// Then this should throw
+	CHECK_THROW(d11++, UnsafeArithmeticException);
 }
 
-TEST_FIXTURE(DecimalTestFixtureForDecr, decimal_decrement)
+TEST(decimal_decrement)
 {
 	Decimal d0("3");
 	--d0;
@@ -689,34 +584,26 @@ TEST_FIXTURE(DecimalTestFixtureForDecr, decimal_decrement)
 	CHECK_EQUAL(--d2, Decimal("7896"));
 	d2--;
 	CHECK_EQUAL(d2, Decimal("7895"));
+	Decimal d3 = --d2;
+	CHECK_EQUAL(d3, Decimal("7894"));
+	CHECK_EQUAL(d2, Decimal("7894"));
+	Decimal d4 = d3--;
+	CHECK_EQUAL(d3, Decimal("7893"));
+	CHECK_EQUAL(d4, Decimal("7894"));
 
-	// Now test behaviour with unsafe operations, using fixture as per
-	// increment test
-
-	assert (x < Decimal("0"));
-
-	// Create an int_type to "parallel" our progress as we decrement
-	// x towards its minimum safe value.
-	ostringstream os2;
-	os2 << x;
-	int_type parallelx = lexical_cast<int_type>(os2.str());
-	
-	assert (parallelx < 0);
-
-	// Now confirm that if we continue to decrement, we'll throw before
-	// we exceed the equivalent of numeric_limits<int_type>::min()
-	Decimal prefixee = x;
-	int_type parallelpref = parallelx;
-	CHECK_THROW(while (parallelpref >= mini) { --prefixee; --parallelpref; },
-	  UnsafeArithmeticException);
-	CHECK_EQUAL(parallelpref, mini);
-
-	// Do the same with the suffix form
-	Decimal suffixee = x;
-	int_type parallelsuff = parallelx;
-	CHECK_THROW(while (parallelsuff >= mini) { suffixee--; parallelsuff--; },
-	  UnsafeArithmeticException);
-	CHECK_EQUAL(parallelsuff, mini);
+	// Now test behaviour with unsafe operations.
+	Decimal d10 = -Decimal::maximum();
+	// This should be safe
+	--d10;
+	// This should throw
+	CHECK_THROW(--d10, UnsafeArithmeticException);
+	CHECK_EQUAL(d10, Decimal::minimum());
+	// This should be safe
+	++d10;
+	CHECK_EQUAL(d10, Decimal::minimum() + Decimal("1"));
+	d10--;
+	// This should throw
+	CHECK_THROW(d10--, UnsafeArithmeticException);
 }
 
 TEST(decimal_operator_less_than)
