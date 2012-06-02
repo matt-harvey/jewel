@@ -55,17 +55,7 @@ int main()
 	#endif
 
 
-
-	Decimal share_price;
-	Decimal share_quantity;
-	share_price = Decimal("0.155");
-	share_quantity = Decimal("20000");
-	Decimal share_value = share_price * share_quantity;
-	cout << "Share price: " << round(share_price, 4) << endl;
-	cout << "Share quantity: " << round(share_quantity, 0) << endl;
-	cout << "Share value: " << round(share_value, 2) << endl;
-
-	cout << endl;
+	cout << "round(Decimal(\"1\"), 2) = " << round(Decimal("1"), 2) << endl;
 
 	cout << "1 / 3 = " << Decimal("1") / Decimal("3") << endl;
 	cout << "1 / 10 = " << Decimal("1") / Decimal("10") << endl;

@@ -62,13 +62,13 @@ namespace jewel
  *
  * The maximum total precision of any given Decimal is equal to the number
  * of decimal digits in the largest possible Decimal. This
- * number is implementation-dependant, and is the number returned by the
+ * number is implementation dependent, and is the number returned by the
  * Decimal::maximum() static function. Regardless of any of the behaviour
  * outlined below, the total precision of a Decimal will never exceed this
  * level. Note we cannot end up with a number that has more than this many
  * digits in its whole part, even if all but one of these digits are zero.
  * This significantly limits the range of this Decimal class compared to
- * usual floating point implementations.
+ * typical floating point implementations.
  *
  * A single leading zero to the left of the decimal point
  * does not count towards the total precision of the Decimal.
@@ -82,15 +82,15 @@ namespace jewel
  * number of digits of precision implied by string, then an exception is
  * thrown.
  *
- * When a basic arithmetic operation (i.e. addition, subtraction,
- * multiplication or division) is performed on two Decimals,
+ * When addition or subtraction is performed on two Decimals,
  * the result will be such that:\n
  * (a) For each of the operands \e x, the fractional precision of the result
  * is greater than or equal to the fractional precision of \e x; and\n
  * (b) Trailing fractional zeroes are not stored, but are culled, unless doing
  * so would violate (a).
  * Thus, the result of "3.01 + 4.090" is "7.100" (stored with three digits
- * of fractional precision). But the result of "3.01 + 4.09" is "7.10".
+ * of fractional precision). But the result of "3.01 + 4.09" is "7.10" (stored
+ * with two digits of fractional precision).
  * Note that \c Decimal("7.100") compares as equal with
  * \c Decimal("7.10") just as one would expect. However they don't always
  * behave identically. In particular, it may be possible to add some
@@ -99,14 +99,14 @@ namespace jewel
  * of 3 be preserved in the result, whereas the former requires only a
  * fractional precision of 2 to be preserved.
  * 
- * In regards to requirement (a), the behaviour is slightly different for
- * addition and subtraction than for multiplication and division. Addition
- * and subtraction operations will throw an exception rather than violate (a).
- * However, multiplication and division will cull digits from fractional
- * precision rather than throw an exception (they will never cull whole digits
- * though).
+ * Multiplication and division behave slightly differently to addition and
+ * subtraction. Trailing fractional zeroes in the result of these operations
+ * are always "culled", even if this
+ * would reduce the fractional precision of the result below that of either of
+ * the operands. However, as with addition and subtraction, only fractional
+ * zeroes are culled, and never whole digits.
  *
- * Apart from the above restrictions, Decimals will store as many digits of
+ * Apart from the above requirements, Decimals will store as many digits of
  * precision as possible. So "1/3" will result in "0.333...." with as many
  * trailing '3's as are permitted by the implementation.
  *

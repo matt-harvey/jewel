@@ -535,18 +535,13 @@ Decimal& Decimal::operator*=(Decimal rhs)
 		}
 	}
 
-	rationalize(max(original_places, rh_places)); 
-	
+	rationalize();
 	return *this;
 }
 
 
 Decimal& Decimal::operator/=(Decimal rhs)
 {
-	// Save original number of places for later reference
-	unsigned short original_places = m_places;
-	unsigned short const rh_places = rhs.m_places;
-
 	// Get both operands on the same footing
 	// Note, if we can't co_normalize safely, then we can't divide safely.
 	// Think about it! (Note, co_normalize throws if unsafe...)
@@ -594,7 +589,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		doub_new_val *= NUM_CAST<double>(BASE);
 	}
 	
-	rationalize(max(original_places, rh_places));
+	rationalize();
 
 	return *this;
 }
