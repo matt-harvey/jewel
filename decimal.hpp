@@ -82,18 +82,8 @@ namespace jewel
  * number of digits of precision implied by string, then an exception is
  * thrown.
  *
- * @todo Determine whether the behaviour of multiplication - which makes
- * use of a conversion from int_type to long double - relies on the
- * relative width of long double vis-a-vis int_type. If so, is this a
- * problem? What about with division?
- *
- * @todo Division does not divide accurately by 1000. This is bad!
- *
- * @todo I should probably just implement division and multiplication
- * as "long division" and "long multiplication". Stop leaning on the
- * double type, which will probably import binariness at some point. Work
- * out the algorithm for doing long division and long multiplication with
- * a pen and paper, and implement that algorithm directly in code.
+ * @todo Multiplication is not accurate enough. I should probably just
+ * implement multiplication as "long multiplication".
  *
  * Multiplication and division behave slightly differently to addition and
  * subtraction. Trailing fractional zeroes in the result of these operations
@@ -132,8 +122,8 @@ namespace jewel
  * is one greater than the largest possible integer of that type. If not, then
  * I may have non-portable code.
  *
- * @todo Division and multiplication do not incorporate rounding of the last
- * available digit of precision. Should they?
+ * @todo Do division and multiplication do incorporate rounding of the last
+ * available digit of precision? Should they?
  */
 
 class Decimal:

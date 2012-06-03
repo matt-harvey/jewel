@@ -453,6 +453,7 @@ TEST(decimal_multiply_equals)
 	CHECK_EQUAL(d3, Decimal("0"));
 	Decimal d50("90.27427");
 	d50 *= Decimal("-118381.12");
+	cerr << "d50: " << d50 << endl;
 	CHECK(d50 < Decimal("-10686769"));
 	CHECK(d50 > Decimal("-10686770"));
 	Decimal d100 = Decimal("900001") * Decimal("0.2234");
