@@ -534,12 +534,8 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	if (rhs.m_intval < 0) rhs.m_intval *= -1;
 
 	rhs.rationalize();
-	while (rescale(m_places + 1) == 0)
+	while ((m_places < rhs.m_places) && (rescale(m_places + 1) == 0))
 	{
-	}
-	while (m_places < rhs.m_places)
-	{
-		rhs.rescale(rhs.m_places - 1);
 	}
 	if (rhs.m_places > m_places)
 	{

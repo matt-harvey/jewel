@@ -195,7 +195,6 @@ int main()
 	cout << static_cast<bool>(cout.flags() & ios::dec) << endl;
 	*/
 
-	/*
 	// Test the speed of arithmetic operations
 
 	int lim = 1000000;
@@ -261,7 +260,6 @@ int main()
 	     << " seconds." << endl;
 	
 	// End "test the speed of arithmetic operations"
-	*/
 
 
 	return UnitTest::RunAllTests();
