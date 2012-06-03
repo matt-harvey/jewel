@@ -157,7 +157,7 @@ Decimal::whole_part() const
 
 
 void
-Decimal::rationalize(unsigned short min_places)
+Decimal::rationalize(places_type min_places)
 {
 	while ((m_places > min_places) && (m_intval % BASE == 0))
 	{
@@ -274,7 +274,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 		throw (UnsafeArithmeticException("Attempt to set m_places "
 		  "to a value exceeding MAX_PLACES."));
 	}
-	m_places = NUM_CAST<unsigned short>(spot_position);
+	m_places = NUM_CAST<places_type>(spot_position);
 }
 
 
@@ -286,7 +286,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 /*
 istream& Decimal::read_parts_from_stream(istream& is)
 {
-	unsigned short new_places;
+	places_type new_places;
 	is >> m_intval >> new_places;
 	if (new_places > MAX_PLACES)
 	{
@@ -300,10 +300,10 @@ istream& Decimal::read_parts_from_stream(istream& is)
 }
 */
 
-int Decimal::rescale(unsigned short p_places)
+int Decimal::rescale(places_type p_places)
 {
 	#ifndef NDEBUG
-		unsigned short const DEBUGVARIABLE_orig_places = m_places;
+		places_type const DEBUGVARIABLE_orig_places = m_places;
 		int_type const DEBUGVARIABLE_orig_intval = m_intval;
 	#endif
 
@@ -370,7 +370,7 @@ int Decimal::rescale(unsigned short p_places)
 Decimal const& Decimal::operator++()
 {
 	#ifndef NDEBUG
-		unsigned short const benchmark_places = m_places;
+		places_type const benchmark_places = m_places;
 	#endif
 	if (CheckedArithmetic::addition_is_unsafe(m_intval,
 	  implicit_divisor()))
@@ -388,7 +388,7 @@ Decimal const& Decimal::operator++()
 Decimal const& Decimal::operator--()
 {
 	#ifndef NDEBUG
-		unsigned short const benchmark_places = m_places;
+		places_type const benchmark_places = m_places;
 	#endif
 	if (CheckedArithmetic::subtraction_is_unsafe(m_intval,
 	  implicit_divisor()))
@@ -407,7 +407,7 @@ Decimal const& Decimal::operator--()
 Decimal& Decimal::operator+=(Decimal rhs)
 {
 	#ifndef NDEBUG
-		unsigned short const benchmark_places = max(m_places, rhs.m_places);
+		places_type const benchmark_places = max(m_places, rhs.m_places);
 	#endif
 	co_normalize(*this, rhs);
 	if (CheckedArithmetic::addition_is_unsafe(m_intval, rhs.m_intval))
@@ -424,7 +424,7 @@ Decimal& Decimal::operator+=(Decimal rhs)
 Decimal& Decimal::operator-=(Decimal rhs)
 {
 	#ifndef NDEBUG
-		unsigned short const benchmark_places = max(m_places, rhs.m_places);
+		places_type const benchmark_places = max(m_places, rhs.m_places);
 	#endif
 	co_normalize(*this, rhs);
 	if (CheckedArithmetic::subtraction_is_unsafe(m_intval, rhs.m_intval))
@@ -660,7 +660,7 @@ bool Decimal::operator==(Decimal rhs) const
 }
 
 
-Decimal round(Decimal const& x, unsigned int decimal_places)
+Decimal round(Decimal const& x, Decimal::places_type decimal_places)
 {
 	Decimal ret = x;
 	if (ret.rescale(decimal_places) != 0)

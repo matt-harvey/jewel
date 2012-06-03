@@ -118,7 +118,7 @@ jewel	stopwatch.hpp	/^namespace jewel$/;"	n
 log	stopwatch.hpp	/^std::ostream& Stopwatch::log(std::ostream& os) const$/;"	f	class:jewel::Stopwatch
 m_intval	decimal.hpp	/^	int_type m_intval;$/;"	m	class:jewel::Decimal
 m_message	arithmetic_exceptions.hpp	/^	std::string m_message;$/;"	m	class:jewel::UnsafeArithmeticException
-m_places	decimal.hpp	/^	unsigned short m_places;$/;"	m	class:jewel::Decimal
+m_places	decimal.hpp	/^	places_type m_places;$/;"	m	class:jewel::Decimal
 m_start_time	stopwatch.hpp	/^	std::clock_t m_start_time;$/;"	m	class:jewel::Stopwatch
 main	main.cpp	/^int main()$/;"	f
 maximum	decimal.cpp	/^Decimal Decimal::maximum()$/;"	f	class:jewel::Decimal
@@ -152,11 +152,12 @@ operator <<	decimal.hpp	/^operator<<(std::basic_ostream<charT, traits>& os, Deci
 operator =	decimal.hpp	/^Decimal& Decimal::operator=(Decimal const& rhs)$/;"	f	class:jewel::Decimal
 operator ==	decimal.cpp	/^bool Decimal::operator==(Decimal rhs) const$/;"	f	class:jewel::Decimal
 operator >>	decimal.hpp	/^operator>>(std::basic_istream<charT, traits>& is, Decimal& d)$/;"	f	namespace:jewel
+places_type	decimal.hpp	/^	typedef places_type places_type;$/;"	t	class:jewel::Decimal
 power_vector	power_vector.hpp	/^power_vector(std::vector<T> const& v)$/;"	f	namespace:jewel
 power_vector0	power_vector_tests.cpp	/^	vector< vector<int> > power_vector0;$/;"	m	struct:PowerVectorFixture1	file:
 power_vector0	power_vector_tests.cpp	/^	vector< vector<string> > power_vector0;$/;"	m	struct:PowerVectorFixture2	file:
-rationalize	decimal.cpp	/^Decimal::rationalize(unsigned short min_places)$/;"	f	class:jewel::Decimal
-rescale	decimal.cpp	/^int Decimal::rescale(unsigned short p_places)$/;"	f	class:jewel::Decimal
+rationalize	decimal.cpp	/^Decimal::rationalize(places_type min_places)$/;"	f	class:jewel::Decimal
+rescale	decimal.cpp	/^int Decimal::rescale(places_type p_places)$/;"	f	class:jewel::Decimal
 round	decimal.cpp	/^Decimal round(Decimal const& x, unsigned int decimal_places)$/;"	f	namespace:jewel
 seconds_elapsed	stopwatch.hpp	/^double Stopwatch::seconds_elapsed() const$/;"	f	class:jewel::Stopwatch
 subtraction_is_unsafe	checked_arithmetic.cpp	/^CheckedArithmetic::subtraction_is_unsafe(unsigned long x, unsigned long y)$/;"	f	class:jewel::CheckedArithmetic

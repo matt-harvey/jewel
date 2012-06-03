@@ -58,18 +58,18 @@ TEST(decimal_int_type_constructor_with_default_places)
 TEST(decimal_int_type_constructor_with_specified_places)
 {
 	Decimal::int_type i0 = 394;
-	unsigned short us0 = 4;
+	places_type us0 = 4;
 	Decimal d0(i0, us0);
 	CHECK_EQUAL(d0, Decimal("0.0394"));
 	Decimal::int_type i1 = -234234;
-	unsigned short us1 = 1;
+	places_type us1 = 1;
 	Decimal d1(i1, us1);
 	CHECK_EQUAL(d1, Decimal("-23423.4"));
 	Decimal::int_type i2 = -23;
-	unsigned short us2 = 10;
+	places_type us2 = 10;
 	CHECK_THROW(Decimal d2(i2, us2), UnsafeArithmeticException);
 	Decimal::int_type i3(-23);
-	unsigned short us3 = 9;
+	places_type us3 = 9;
 	Decimal d3(i3, us3);
 	CHECK_EQUAL(d3, Decimal("-.000000023"));
 }

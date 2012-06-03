@@ -33,7 +33,7 @@ namespace jewel
  * @brief A "constrained floating point" decimal number class.
  *
  * Each number is represented as an integer (of int_type), and a number of
- * decimal places (an unsigned short).
+ * decimal places (of places_type).
  *
  * The number of decimal places can be changed at runtime. As such this is a
  * floating point class. However the range of magnitudes is deliberately
@@ -151,6 +151,16 @@ class Decimal:
 {
 public:
 
+	/** The type of the underlying integer representation of the
+	 * Decimal number.
+	 */
+	typedef long int_type;
+
+	/** The type of the integer representation of the number of
+	 * decimal places (scale).
+	 */
+	typedef unsigned short places_type;
+
 	// Output
 	template <typename charT, typename traits>
 	friend
@@ -158,15 +168,11 @@ public:
 	operator<<(std::basic_ostream<charT, traits>&, Decimal const&);
 
 	// Rounding
-	friend Decimal round(Decimal const& x, unsigned int decimal_places);
+	friend Decimal round(Decimal const& x,
+	  Decimal::places_type decimal_places);
 
 	// Unary minus
 	friend Decimal operator-(Decimal const& d);
-
-	/** The type of the underlying integer representation of the
-	 * Decimal number.
-	 */
-	typedef long int_type;
 
 	/** 
 	 * Initializes the Decimal to 0, with 0 decimal places.
@@ -363,7 +369,7 @@ private:
 	 * viz. 0 if successful, otherwise a non-zero value. 
 	 */
 	int
-	rescale(unsigned short p_places);
+	rescale(places_type p_places);
 
 	/**
 	 * Where the final digit(s) of the Decimal number are '0', this
@@ -384,7 +390,7 @@ private:
 	 * @parameter min_places is the minimum number of decimal places to retain
 	 * to the right of the decimal point.
 	 */
-	void rationalize(unsigned short min_places = 0);
+	void rationalize(places_type min_places = 0);
 
 	/**
 	 * Base of arithmetic. I can't imagine this ever being equal to
@@ -415,7 +421,7 @@ private:
 	/**
 	 * Number of digits of precision to the right of the decimal point.
 	 */
-	unsigned short m_places;
+	places_type m_places;
 
 	/** 
 	 * Convert two Decimal objects to the same number of places by converting
@@ -444,7 +450,7 @@ private:
 
 	/* I have commented this out unless and until I really need it.
 	 * Read into a Decimal from a std::istream in two parts: first an int_type
-	 * representing the underlying integer; then an unsigned short being the
+	 * representing the underlying integer; then a places_type being the
 	 * number of decimal places.
 	 * 
 	 * This function does not check, but presumes, that the correct types will
@@ -511,7 +517,7 @@ Decimal operator+(Decimal const& d);
  * 
  * @param x The Decimal number to be rounded.
  * @param decimal_places The number of decimal digits after the
- * zero to which you wish to round. Should be an \e unsigned int.
+ * zero to which you wish to round. Should be a \e Decimal::places_type.
  *
  * Note if you round to a number of decimal places greater than the current
  * fractional precision, it will return a Decimal with the requested fractional precision
@@ -522,7 +528,7 @@ Decimal operator+(Decimal const& d);
  * @exception UnsafeArithmeticException thrown if achieving the requested
  * degree of precision would cause overflow.
  */
-Decimal round(Decimal const& x, unsigned int decimal_places);
+Decimal round(Decimal const& x, Decimal::places_type decimal_places);
 
 
 
@@ -578,7 +584,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 	// We will write to a basic_ostringstream initially. Only at the last
 	// minute will we write to os itself.
 	std::basic_ostringstream<charT, traits> ss;
-	unsigned short const plcs = d.m_places;
+	Decimal::places_type const plcs = d.m_places;
 	Decimal::int_type dintval = d.m_intval;	
 
 	// special case of zero
