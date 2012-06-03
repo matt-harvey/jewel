@@ -562,6 +562,12 @@ TEST(decimal_divide_equals)
 	Decimal d104("-197787.987");
 	Decimal d104b(".9879");
 	CHECK_THROW(d104 /= d104b, UnsafeArithmeticException);
+	Decimal d105("1000000");
+	Decimal d106("0.000001");
+	CHECK_THROW(d105 /= d106, UnsafeArithmeticException);
+	Decimal d107("-1000000");
+	Decimal d108("0.000001");
+	CHECK_THROW(d107 /= d108, UnsafeArithmeticException);
 
 	// With division by zero
 	Decimal d300;
@@ -589,13 +595,13 @@ TEST(decimal_division)
 	// Check behaviour with unsafe operations
 	
 	// with straightforward overflow
-	CHECK_THROW(Decimal d101 = Decimal("-.03842") / Decimal("-23874"),
-	  UnsafeArithmeticException);
-	CHECK_THROW(Decimal d102 = Decimal("3.24") / Decimal("23442300.98"),
+	CHECK_THROW(Decimal d102 = Decimal("3.24") / Decimal("11442300.98"),
 	  UnsafeArithmeticException);
 	CHECK_THROW(Decimal d103 = Decimal("-43.434234") / Decimal("-4234234"),
 	  UnsafeArithmeticException);
 	CHECK_THROW(Decimal d104 = Decimal("-197787.987") / Decimal(".9879"),
+	  UnsafeArithmeticException);
+	CHECK_THROW(Decimal d105 = Decimal("3000089") / Decimal("0.000007"),
 	  UnsafeArithmeticException);
 }
 

@@ -440,12 +440,12 @@ Decimal& Decimal::operator-=(Decimal rhs)
 Decimal& Decimal::operator*=(Decimal rhs)
 {
 	Decimal const orig = *this;
-
+	
 	// Remember required sign of product
 	bool const diff_signs = (( m_intval > 0 && rhs.m_intval < 0 ) ||
 	                         ( m_intval < 0 && rhs.m_intval > 0 ));
 	
-	// Irritating but best to prevent complications
+	// To prevent complications
 	if ( (m_intval == numeric_limits<int_type>::min()) ||
 	     (rhs.m_intval == numeric_limits<int_type>::min()) )
 	{
@@ -508,15 +508,36 @@ Decimal& Decimal::operator*=(Decimal rhs)
 Decimal& Decimal::operator/=(Decimal rhs)
 {
 	Decimal const orig = *this;
+
+	// Capture division by zero
 	if (rhs.m_intval == 0)
 	{
+		assert (*this == orig);
 		throw (UnsafeArithmeticException("Division by zero"));
 	}
+	
+	// To prevent complications
+	if ( (m_intval == numeric_limits<int_type>::min()) ||
+	     (rhs.m_intval == numeric_limits<int_type>::min()) )
+	{
+		assert (*this == orig);
+		throw UnsafeArithmeticException("Smallest possible Decimal cannot "
+		  "feature in division operation.");
+	}
+	
+	// Remember required sign of product
+	bool const diff_signs = (( m_intval > 0 && rhs.m_intval < 0) ||
+	                         ( m_intval < 0 && rhs.m_intval > 0));
+
+	// Make absolute
+	if (m_intval < 0) m_intval *= -1;
+	if (rhs.m_intval < 0) rhs.m_intval *= -1;
+
 	rhs.rationalize();
 	while (rescale(m_places + 1) == 0)
 	{
 	}
-	while ( (m_intval < rhs.m_intval) && (rhs.m_places > 0) )
+	while (m_places < rhs.m_places)
 	{
 		rhs.rescale(rhs.m_places - 1);
 	}
@@ -525,8 +546,17 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		*this = orig;
 		throw (UnsafeArithmeticException("Unsafe division."));
 	}
-	m_intval /= rhs.m_intval;
 	m_places -= rhs.m_places;
+	int_type remainder = m_intval % rhs.m_intval;
+	m_intval /= rhs.m_intval;
+	while ( (remainder != 0) && (rescale(m_places + 1) == 0) )
+	{
+		remainder *= BASE;
+		int_type temp_remainder = remainder % rhs.m_intval;
+		m_intval += remainder / rhs.m_intval;
+		remainder = temp_remainder;
+	}
+	if (diff_signs) m_intval *= -1;
 	rationalize();
 	return *this;
 }

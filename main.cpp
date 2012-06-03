@@ -66,7 +66,14 @@ int main()
 	     << Decimal("1000001") * Decimal("0.00222")
 		 << endl;
 
+	cout << "56 / 7: \t" << Decimal("56") / Decimal("7") << endl;
 
+	Decimal a("56");
+	Decimal b("7");
+	a /= b;
+	cout << "a: \t" << a << endl;
+
+	cout << "long(560000000) / long(7): \t" << long(560000000) / long(7) << endl;
 
 
 	// The reason this division by 10 loses precision is because
