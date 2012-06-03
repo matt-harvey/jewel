@@ -55,27 +55,6 @@ int main()
 	#endif
 
 
-	cout << "100 / 10: \t" << Decimal("100") / Decimal("10") << endl;	
-	cout << "1 / 1000: \t" << Decimal("1") / Decimal("1000") << endl;
-	
-	cout << "1 / 3: \t" << Decimal("1") / Decimal("3") << endl;
-
-	cout << "100 * 0.001: \t" << Decimal("100") * Decimal("0.001") << endl;
-
-	cout << "1000001 * 0.00222: \t"
-	     << Decimal("1000001") * Decimal("0.00222")
-		 << endl;
-
-	cout << "56 / 7: \t" << Decimal("56") / Decimal("7") << endl;
-
-	Decimal a("56");
-	Decimal b("7");
-	a /= b;
-	cout << "a: \t" << a << endl;
-
-	cout << "long(560000000) / long(7): \t" << long(560000000) / long(7) << endl;
-
-
 	// The reason this division by 10 loses precision is because
 	// the division calls rescale, and
 	// rescale calls the conservative multiplication
@@ -195,6 +174,7 @@ int main()
 	cout << static_cast<bool>(cout.flags() & ios::dec) << endl;
 	*/
 
+	/*
 	// Test the speed of arithmetic operations
 
 	int lim = 1000000;
@@ -260,6 +240,7 @@ int main()
 	     << " seconds." << endl;
 	
 	// End "test the speed of arithmetic operations"
+	*/
 
 
 	return UnitTest::RunAllTests();

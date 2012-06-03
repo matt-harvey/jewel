@@ -456,7 +456,6 @@ TEST(decimal_multiply_equals)
 	CHECK(d50 < Decimal("-10686769"));
 	CHECK(d50 > Decimal("-10686770"));
 	Decimal d100 = Decimal("900001") * Decimal("0.2234");
-	cout << d100 << endl;
 	CHECK(d100 > Decimal("201060.2"));
 	CHECK(d100 < Decimal("201060.3"));
 
@@ -530,7 +529,6 @@ TEST(decimal_divide_equals)
 	Decimal d3("91");
 	Decimal d4("7.09010");
 	d3 /= d4;
-	cerr << "d3: " << d3 << endl;
 	CHECK(d3 > Decimal("12.834797"));
 	CHECK(d3 < Decimal("12.834799"));
 	Decimal d5("2");
