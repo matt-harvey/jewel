@@ -23,7 +23,6 @@ namespace jewel
 
 
 
-
 /**
  * \class CheckedArithmetic
  * \brief Provides functions that check the safety of arithmetic
@@ -157,17 +156,6 @@ private:
 	template <typename T> static bool
 	division_is_unsafe_floating_point_types(T, T);
 
-	// These function templates calculate highest significant bit
-	// of the absolute value of their argument. These are called by
-	// some of the checking functions above. Which one is called depends
-	// on the types of the arguments.
-
-	template <typename T> static size_t
-	highest_bit_unsigned_integral_types(T);
-
-	template <typename T> static size_t
-	highest_bit_signed_integral_types(T);
-
 };  // class CheckedArithmetic
 
 
@@ -208,7 +196,6 @@ CheckedArithmetic::subtraction_is_unsafe_unsigned_integral_types(T x, T y)
 }
 
 template <typename T>
-inline
 bool
 CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)
 {
@@ -236,20 +223,20 @@ CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)
 	{
 		if (y > 0)
 		{
-			return tmax / x < y;
+			return y > tmax / x;
 		}
 		assert (y < 0);
-		return tmin / x > y;
+		return y < tmin / x;
 	}
 	if (x < 0)
 	{
 		if (y < 0)
 		{
-			return tmax / -x < -y;
+			return -y > tmax / -x;
 		}
 	}
 	assert ((x < 0) && (y > 0));
-	return tmin / -x > -y;
+	return -y < tmin / -x;
 }
 
 template <typename T>
@@ -266,47 +253,6 @@ CheckedArithmetic::multiplication_is_unsafe_unsigned_integral_types(T x, T y)
 	assert (x != 0);
 	assert (y != 0);
 	return std::numeric_limits<T>::max() / x < y;
-}
-
-template <typename T>
-size_t CheckedArithmetic::highest_bit_signed_integral_types(T x)
-{
-	
-	if (x < 0)
-	{
-		// The shenanigans here are required because we
-		// want the absolute value of x, but we can't
-		// get it if x is the least possible (negative)
-		// value - so we settle for the _greatest_ possible
-		// (positive) value.
-		if (x != std::numeric_limits<T>::min())
-		{
-			x = -x;
-		}
-		else
-		{
-			x = std::numeric_limits<T>::max();
-		}
-	}
-	size_t bits = 0;
-	while (x != 0)
-	{
-		++bits;
-		x >>= 1;
-	}
-	return bits;
-}
-
-template <typename T>
-size_t CheckedArithmetic::highest_bit_unsigned_integral_types(T x)
-{
-	size_t bits = 0;
-	while (x != 0) 
-	{
-		++bits;
-		x >>= 1;
-	}
-	return bits;
 }
 
 
