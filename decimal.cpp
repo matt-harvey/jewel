@@ -534,7 +534,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	if (rhs.m_intval < 0) rhs.m_intval *= -1;
 
 	rhs.rationalize();
-	while ((m_places < rhs.m_places) && (rescale(m_places + 1) == 0))
+	while (m_places < rhs.m_places && rescale(m_places + 1) == 0)
 	{
 	}
 	if (rhs.m_places > m_places)
@@ -545,6 +545,17 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	m_places -= rhs.m_places;
 	int_type remainder = m_intval % rhs.m_intval;
 	m_intval /= rhs.m_intval;
+
+	while (remainder != 0 && rescale(m_places + 1) == 0)
+	{
+		remainder *= BASE;
+		int_type temp_remainder = remainder % rhs.m_intval;
+		m_intval += remainder / rhs.m_intval;
+		remainder = temp_remainder;
+	}
+
+
+	/*
 	while ( (remainder != 0) && (rescale(m_places + 1) == 0) )
 	{
 		remainder *= BASE;
@@ -552,6 +563,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		m_intval += remainder / rhs.m_intval;
 		remainder = temp_remainder;
 	}
+	*/
 	if (diff_signs) m_intval *= -1;
 	rationalize();
 	return *this;

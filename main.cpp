@@ -59,12 +59,12 @@ int main()
 	// the division calls rescale, and
 	// rescale calls the conservative multiplication
 	// safety check.
-	/*
 	Decimal dm = Decimal::maximum() - Decimal("1000");
 	cout << dm << endl;
 	dm /= Decimal("10");
 	cout << dm << endl;
-	*/
+
+	cout << 2147482647 % 10 << endl;
 
 	/*
 	cout << "round(Decimal(\"1\"), 2) = " << round(Decimal("1"), 2) << endl;
@@ -174,7 +174,6 @@ int main()
 	cout << static_cast<bool>(cout.flags() & ios::dec) << endl;
 	*/
 
-	/*
 	// Test the speed of arithmetic operations
 
 	int lim = 1000000;
@@ -240,7 +239,6 @@ int main()
 	     << " seconds." << endl;
 	
 	// End "test the speed of arithmetic operations"
-	*/
 
 
 	return UnitTest::RunAllTests();

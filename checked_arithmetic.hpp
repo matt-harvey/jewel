@@ -39,6 +39,12 @@ namespace jewel
  * preserved.
  *
  * This class can't be instantiated.
+ *
+ * @todo The false positives from the
+ * CheckedArithmetic::multiplication_is_unsafe function are causing some (not
+ * too serious) problems with precision in the Decimal class. I should make
+ * this multiplication check more accurate. Eliminate all or most of the
+ * false positives, but still don't allow any false negatives.
  */
 
 /*
