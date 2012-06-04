@@ -41,11 +41,10 @@ namespace jewel
  *
  * This class can't be instantiated.
  *
- * @todo The false positives from the
- * CheckedArithmetic::multiplication_is_unsafe function are causing some (not
- * too serious) problems with precision in the Decimal class. I should make
- * this multiplication check more accurate. Eliminate all or most of the
- * false positives, but still don't allow any false negatives.
+ * @todo Ensure unit tests for CheckedArithmetic::multiplication_is_unsafe
+ * cover every branch (combinations of positives and negatives) in the
+ * function. Think carefully through each of the cases, working through
+ * examples with a pen and paper. This function needs to be rock solid!
  */
 
 /*
@@ -248,9 +247,9 @@ CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)
 		{
 			return tmax / -x < -y;
 		}
-		assert (y > 0);
-		return tmin / -x > -y;
 	}
+	assert ((x < 0) && (y > 0));
+	return tmin / -x > -y;
 }
 
 template <typename T>

@@ -56,52 +56,6 @@ int main()
 	#endif
 
 
-	// Speed test multiplication safety checker
-	Stopwatch sw;
-	for (int i = 0; i != 50000000; ++i)
-	{
-		bool unsafe =
-		  CheckedArithmetic::multiplication_is_unsafe(-1000, 190789);
-		unsafe =
-		  CheckedArithmetic::multiplication_is_unsafe(88098, 9876);
-	}
-	sw.log();
-
-
-
-
-	// The reason this division by 10 loses precision is because
-	// the division calls rescale, and
-	// rescale calls the conservative multiplication
-	// safety check.
-	/*
-	Decimal dm = Decimal::maximum() - Decimal("1000");
-	cout << dm << endl;
-	dm /= Decimal("10");
-	cout << dm << endl;
-
-	cout << 2147482647 % 10 << endl;
-	*/
-
-	/*
-	cout << "round(Decimal(\"1\"), 2) = " << round(Decimal("1"), 2) << endl;
-
-	cout << "1 / 3 = " << Decimal("1") / Decimal("3") << endl;
-	cout << "1 / 10 = " << Decimal("1") / Decimal("10") << endl;
-	cout << "0.1 * 10000 = " << Decimal("0.1") * Decimal("10000") << endl;
-	cout << "0.8 * 80000 / 80000 = "
-	     << Decimal("0.8") * Decimal("80000") / Decimal("80000") << endl;	
-	cout << "0.8 * 80000 / 80000 * 80000 * 800 ="
-	     << Decimal("0.8") * Decimal("80000") / Decimal("80000") *
-		    Decimal("80000") * Decimal("800")
-		 << endl;
-	cout << "182847392 * 0.02134123 = "
-	     << Decimal("182847392") * Decimal("0.02134123") << endl;
-	*/
-
-
-
-
 	/* Here's how to print currency (though this doesn't include parentheses
 	 * for negative, or thousands separators just yet).
 	cout << std::setprecision(2) << std::showpoint << std::fixed;
@@ -193,7 +147,6 @@ int main()
 
 	// Test the speed of arithmetic operations
 
-	/*
 	int lim = 1000000;
 	vector<Decimal> vec;
 	for (int i = 0; i != lim; ++i)
@@ -257,7 +210,6 @@ int main()
 	     << " seconds." << endl;
 	
 	// End "test the speed of arithmetic operations"
-	*/
 
 
 	return UnitTest::RunAllTests();

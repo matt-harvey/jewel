@@ -639,7 +639,6 @@ TEST(checked_arithmetic_multiplication_is_unsafe_int)
 	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i27, i22));
 	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i28, i22));
 	int i29 = INT_MIN / 2;
-	int i30 = -2;
 	int i31 = 2;
 	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i29, i31));
 	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i31, i29));
