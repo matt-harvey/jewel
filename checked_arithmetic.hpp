@@ -11,6 +11,7 @@
  * Copyright (c) 2012, Matthew Harvey. All rights reserved.
  */
 
+#include <cassert>
 #include <climits>
 #include <cstdlib>
 #include <cmath>
@@ -212,11 +213,44 @@ inline
 bool
 CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)
 {
-	// max bits for T
-	static size_t const max_bits = sizeof(T) * CHAR_BIT - 1;
-
-	return highest_bit_signed_integral_types(x) +
-	 highest_bit_signed_integral_types(y) > max_bits;
+	// Deal with easy, common cases
+	if ((x == 0) || (y == 0) || (x == 1) || (y == 1))
+	{
+		return false;
+	}
+	T const tmin = std::numeric_limits<T>::min();
+	// Deal with case of smallest possible number
+	// It's dangerous to multiply this by anything except 1 or 0!
+	if (x == tmin)
+	{
+		return (y != 0) && (y != 1);
+	}
+	if (y == tmin)
+	{
+		return (x != 0) && (y != 1);
+	}
+	// Deal with ordinary cases
+	assert (x != 0);
+	assert (y != 0);
+	T const tmax = std::numeric_limits<T>::max();
+	if (x > 0)
+	{
+		if (y > 0)
+		{
+			return tmax / x < y;
+		}
+		assert (y < 0);
+		return tmin / x > y;
+	}
+	if (x < 0)
+	{
+		if (y < 0)
+		{
+			return tmax / -x < -y;
+		}
+		assert (y > 0);
+		return tmin / -x > -y;
+	}
 }
 
 template <typename T>
@@ -224,11 +258,15 @@ inline
 bool
 CheckedArithmetic::multiplication_is_unsafe_unsigned_integral_types(T x, T y)
 {
-	// max bits for T
-	static size_t const max_bits = sizeof(T) * CHAR_BIT;
-
-	return highest_bit_unsigned_integral_types(x) +
-	  highest_bit_unsigned_integral_types(y) > max_bits;
+	// Deal with easy, common cases 
+	if ((x == 0) || (y == 0) || (x == 1) || (y == 1))
+	{
+		return false;
+	}
+	// Deal with general cases
+	assert (x != 0);
+	assert (y != 0);
+	return std::numeric_limits<T>::max() / x < y;
 }
 
 template <typename T>

@@ -17,6 +17,7 @@
 #include <sstream>
 #include <vector>
 using jewel::round;
+using jewel::CheckedArithmetic;
 using jewel::Decimal;
 using jewel::NumDigits;
 using jewel::Stopwatch;
@@ -55,16 +56,32 @@ int main()
 	#endif
 
 
+	// Speed test multiplication safety checker
+	Stopwatch sw;
+	for (int i = 0; i != 50000000; ++i)
+	{
+		bool unsafe =
+		  CheckedArithmetic::multiplication_is_unsafe(-1000, 190789);
+		unsafe =
+		  CheckedArithmetic::multiplication_is_unsafe(88098, 9876);
+	}
+	sw.log();
+
+
+
+
 	// The reason this division by 10 loses precision is because
 	// the division calls rescale, and
 	// rescale calls the conservative multiplication
 	// safety check.
+	/*
 	Decimal dm = Decimal::maximum() - Decimal("1000");
 	cout << dm << endl;
 	dm /= Decimal("10");
 	cout << dm << endl;
 
 	cout << 2147482647 % 10 << endl;
+	*/
 
 	/*
 	cout << "round(Decimal(\"1\"), 2) = " << round(Decimal("1"), 2) << endl;
@@ -176,6 +193,7 @@ int main()
 
 	// Test the speed of arithmetic operations
 
+	/*
 	int lim = 1000000;
 	vector<Decimal> vec;
 	for (int i = 0; i != lim; ++i)
@@ -239,6 +257,7 @@ int main()
 	     << " seconds." << endl;
 	
 	// End "test the speed of arithmetic operations"
+	*/
 
 
 	return UnitTest::RunAllTests();

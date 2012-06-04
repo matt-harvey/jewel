@@ -608,8 +608,6 @@ TEST(checked_arithmetic_multiplication_is_unsafe_int)
 	CHECK(CheckedArithmetic::multiplication_is_unsafe(i203, i202));
 	
 	// Test reaction to safe operations
-	// This produces false positives... where commented out
-	// but these are acceptable false positives.
 	int i12 = 0;
 	int i13 = 0;
 	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i12, i13));
@@ -622,31 +620,29 @@ TEST(checked_arithmetic_multiplication_is_unsafe_int)
 	int i17 = 123;
 	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i16, i17));
 	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i17, i16));
-	// int i18 = INT_MAX;
-	// int i19 = -1;
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i18, i19));
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i19, i18));
-	// int i20 = INT_MIN;
-	// int i21 = 1;
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i20, i21));
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i21, i20));
-	// int i22 = INT_MAX / 6;
-	// int i26 = 6;
-	// int i27 = -5;
-	// int i28 = -6;
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i22, i26));
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i22, i27));
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i22, i28));
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i26, i22));
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i27, i22));
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i28, i22));
-	// int i29 = INT_MIN / 2;
-	// int i30 = -2;
-	// int i31 = 2;
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i29, i30));
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i29, i31));
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i30, i29));
-	// CHECK(!CheckedArithmetic::multiplication_is_unsafe(i31, i29));
+	int i18 = INT_MAX;
+	int i19 = -1;
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i18, i19));
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i19, i18));
+	int i20 = INT_MIN;
+	int i21 = 1;
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i20, i21));
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i21, i20));
+	int i22 = INT_MAX / 6;
+	int i26 = 6;
+	int i27 = -5;
+	int i28 = -6;
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i22, i26));
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i22, i27));
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i22, i28));
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i26, i22));
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i27, i22));
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i28, i22));
+	int i29 = INT_MIN / 2;
+	int i30 = -2;
+	int i31 = 2;
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i29, i31));
+	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i31, i29));
 	int i32 = 1000;
 	int i33 = 14;
 	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i32, i33));
@@ -698,10 +694,6 @@ TEST(checked_arithmetic_multiplication_is_unsafe_long)
 	CHECK(CheckedArithmetic::multiplication_is_unsafe(i203, i202));
 	
 	// Test reaction to safe operations
-	// See the test for the int version of this function, for note
-	// about false positives. The same result is likely with this
-	// verson - though I have not verified this. (It wouldn't matter
-	// much as I think those false positives are acceptable anyway.)
 	long i12 = 0;
 	long i13 = 0;
 	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i12, i13));
@@ -765,10 +757,6 @@ TEST(checked_arithmetic_multiplication_is_unsafe_short)
 	CHECK(CheckedArithmetic::multiplication_is_unsafe(i203, i202));
 	
 	// Test reaction to safe operations
-	// See the test for the int version of this function, for note
-	// about false positives. The same result is likely with this
-	// verson - though I have not verified this. (It wouldn't matter
-	// much as I think those false positives are acceptable anyway.)
 	short i12 = 0;
 	short i13 = 0;
 	CHECK(!CheckedArithmetic::multiplication_is_unsafe(i12, i13));
