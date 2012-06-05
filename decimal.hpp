@@ -122,6 +122,11 @@ namespace jewel
  * is one greater than the largest possible integer of that type. If not, then
  * I may have non-portable code.
  *
+ * @todo Division now incorporates rounding but: (a) it is a bit inefficient;
+ * and (b) it contains a "hard-wired" behaviour of rounding up at 5, while not
+ * actually referring to the Decimal::ROUNDING_THRESHOLD constant to achieve
+ * this. This is a kind of code repetition and so is bad.
+ *
  * @todo Do division and multiplication do incorporate rounding of the last
  * available digit of precision? Should they?
  */

@@ -548,19 +548,39 @@ TEST(decimal_divide_equals)
 	Decimal d11(".00001");
 	CHECK_EQUAL(d10 / d11, Decimal("109000000"));
 
+	// Check rounding behaviour
+	Decimal d500("2");
+	d500 /= Decimal("3");
+	CHECK(d500 >= Decimal("0.666"));
+	CHECK(d500 <= Decimal("0.667"));
+	ostringstream oss;
+	oss << d500;
+	string str = oss.str();
+	CHECK_EQUAL(str[str.size() - 1], '7');
+	Decimal d501("-7");
+	d501 /= Decimal("9");
+	CHECK(d501 <= Decimal("-0.777"));
+	CHECK(d501 >= Decimal("-0.778"));
+	ostringstream oss1;
+	oss1 << d501;
+	string str1 = oss1.str();
+	CHECK_EQUAL(str1[str1.size() - 1], '8');
+	Decimal d502("-1");
+	d502 /= Decimal("-3");
+	CHECK(d502 >= Decimal("0.333"));
+	CHECK(d502 <= Decimal("0.334"));
+	ostringstream oss2;
+	oss2 << d502;
+	string str2 = oss2.str();
+	CHECK_EQUAL(str2[str2.size() - 1], '3');
+	Decimal d104("-197787.987");
+	d104 /= Decimal(".9879");
+	CHECK(d104 < Decimal("-200210"));
+	CHECK(d104 > Decimal("-200211"));
+
 	// Check behaviour with unsafe operations
 	
 	// With straightforward overflow
-	Decimal d101("-.03842");	
-	CHECK_THROW(d101 /= Decimal("-23874"), UnsafeArithmeticException);
-	Decimal d102("3.24");
-	CHECK_THROW(d102 /= Decimal("23342342.4"), UnsafeArithmeticException);
-	Decimal d103("-43.234234");
-	Decimal d103b("-4345234");
-	CHECK_THROW(d103 /= d103b, UnsafeArithmeticException);
-	Decimal d104("-197787.987");
-	Decimal d104b(".9879");
-	CHECK_THROW(d104 /= d104b, UnsafeArithmeticException);
 	Decimal d105("1000000");
 	Decimal d106("0.000001");
 	CHECK_THROW(d105 /= d106, UnsafeArithmeticException);
@@ -583,6 +603,11 @@ TEST(decimal_division)
 	CHECK_EQUAL(d0, Decimal("3.5"));
 	CHECK(Decimal("4.863") / Decimal("95") > Decimal("0.05118"));
 	CHECK(Decimal("4.863") / Decimal("95") < Decimal("0.05119"));
+	CHECK(Decimal("3.24") / Decimal("11442300.98") > Decimal("0.0000002"));
+	CHECK(Decimal("3.24") / Decimal("11442300.98") < Decimal("0.0000003"));
+	cout << "Hey! " << Decimal("3.24") / Decimal("11442300.98") << endl;
+	cout << 3.24 / 11442300.98 << endl;
+
 
 	// Check value preservation
 	Decimal d300("1");

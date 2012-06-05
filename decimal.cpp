@@ -517,8 +517,8 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	}
 	
 	// To prevent complications
-	if ( (m_intval == numeric_limits<int_type>::min()) ||
-	     (rhs.m_intval == numeric_limits<int_type>::min()) )
+	if ( m_intval == numeric_limits<int_type>::min() ||
+	  rhs.m_intval == numeric_limits<int_type>::min() )
 	{
 		assert (*this == orig);
 		throw UnsafeArithmeticException("Smallest possible Decimal cannot "
@@ -554,16 +554,20 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		remainder = temp_remainder;
 	}
 
-
-	/*
-	while ( (remainder != 0) && (rescale(m_places + 1) == 0) )
+	assert (rhs.m_intval >= remainder);
+	assert (!CheckedArithmetic::subtraction_is_unsafe(rhs.m_intval,
+	  remainder));
+	if (rhs.m_intval - remainder <= remainder)
 	{
-		remainder *= BASE;
-		int_type temp_remainder = remainder % rhs.m_intval;
-		m_intval += remainder / rhs.m_intval;
-		remainder = temp_remainder;
+		if (CheckedArithmetic::addition_is_unsafe(m_intval,
+		  NUM_CAST<int_type>(1)))
+		{
+			throw UnsafeArithmeticException("Unsafe division.");
+		}
+		++m_intval;
 	}
-	*/
+
+
 	if (diff_signs) m_intval *= -1;
 	rationalize();
 	return *this;
