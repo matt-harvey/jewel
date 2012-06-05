@@ -542,12 +542,17 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		*this = orig;
 		throw (UnsafeArithmeticException("Unsafe division."));
 	}
+	assert (m_places >= rhs.m_places);
 	m_places -= rhs.m_places;
 	int_type remainder = m_intval % rhs.m_intval;
 	m_intval /= rhs.m_intval;
 
 	while (remainder != 0 && rescale(m_places + 1) == 0)
 	{
+		if (CheckedArithmetic::multiplication_is_unsafe(remainder, BASE))
+		{
+			throw UnsafeArithmeticException("Unsafe division.");
+		}
 		remainder *= BASE;
 		int_type temp_remainder = remainder % rhs.m_intval;
 		m_intval += remainder / rhs.m_intval;

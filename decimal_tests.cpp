@@ -453,7 +453,6 @@ TEST(decimal_multiply_equals)
 	CHECK_EQUAL(d3, Decimal("0"));
 	Decimal d50("90.27427");
 	d50 *= Decimal("-118381.12");
-	cerr << "d50: " << d50 << endl;
 	CHECK(d50 < Decimal("-10686769"));
 	CHECK(d50 > Decimal("-10686770"));
 	Decimal d100 = Decimal("900001") * Decimal("0.2234");
@@ -605,9 +604,10 @@ TEST(decimal_division)
 	CHECK(Decimal("4.863") / Decimal("95") < Decimal("0.05119"));
 	CHECK(Decimal("3.24") / Decimal("11442300.98") > Decimal("0.0000002"));
 	CHECK(Decimal("3.24") / Decimal("11442300.98") < Decimal("0.0000003"));
-	cout << "Hey! " << Decimal("3.24") / Decimal("11442300.98") << endl;
-	cout << 3.24 / 11442300.98 << endl;
-
+	CHECK(Decimal("-43.434234") / Decimal("-4234234") > Decimal("0.00001"));
+	CHECK(Decimal("-43.434234") / Decimal("-4234234") < Decimal("0.00002"));
+	CHECK(Decimal("-197787.987") / Decimal(".9879") < Decimal("-200210.5"));
+	CHECK(Decimal("-197787.987") / Decimal(".9879") > Decimal("-200210.6"));
 
 	// Check value preservation
 	Decimal d300("1");
@@ -619,61 +619,6 @@ TEST(decimal_division)
 	// Check behaviour with unsafe operations
 	
 	// with straightforward overflow
-	CHECK_THROW(Decimal d102 = Decimal("3.24") / Decimal("11442300.98"),
-	  UnsafeArithmeticException);
-	CHECK_THROW(Decimal d103 = Decimal("-43.434234") / Decimal("-4234234"),
-	  UnsafeArithmeticException);
-	CHECK_THROW(Decimal d104 = Decimal("-197787.987") / Decimal(".9879"),
-	  UnsafeArithmeticException);
-	CHECK_THROW(Decimal d105 = Decimal("3000089") / Decimal("0.000007"),
-	  UnsafeArithmeticException);
-}
-
-TEST(decimal_increment)
-{
-	Decimal d0("0.007");
-	++d0;
-	CHECK_EQUAL(d0, Decimal("1.007"));
-	d0++;
-	CHECK_EQUAL(d0, Decimal("2.007"));
-	d0++;
-	++d0;
-	Decimal d1 = d0++;
-	CHECK_EQUAL(d1, Decimal("4.007"));
-	d1 = ++d0;
-	CHECK_EQUAL(d0, Decimal("6.007"));
-	Decimal d2("-3");
-	++d2;
-	++d2;
-	CHECK_EQUAL(d2, Decimal("-1"));
-	Decimal d3("1.0");
-	d3++;
-	ostringstream oss;
-	oss << d3;
-	CHECK_EQUAL(oss.str(), "2.0");
-	CHECK(oss.str() != "2");
-
-	// Test behaviour with unsafe operations
-	Decimal d10 = Decimal::maximum();
-	CHECK_THROW(++d10, UnsafeArithmeticException);
-	CHECK_EQUAL(d10, Decimal::maximum());
-	CHECK_THROW(d10++, UnsafeArithmeticException);
-	CHECK_EQUAL(d10, Decimal::maximum());
-	// This should be safe
-	d10--;
-	Decimal d11 = ++d10;
-	// Then this should throw
-	CHECK_THROW(d11++, UnsafeArithmeticException);
-}
-
-TEST(decimal_decrement)
-{
-	Decimal d0("3");
-	--d0;
-	CHECK_EQUAL(d0, Decimal("2"));
-	Decimal d1("-78.23090");
-	--d1;
-	CHECK_EQUAL(d1, Decimal("-79.2309"));
 	Decimal d2("7897");
 	CHECK_EQUAL(--d2, Decimal("7896"));
 	d2--;
