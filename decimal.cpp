@@ -508,6 +508,9 @@ Decimal& Decimal::operator*=(Decimal rhs)
 Decimal& Decimal::operator/=(Decimal rhs)
 {
 	Decimal const orig = *this;
+	#ifndef NDEBUG
+		Decimal const orig_rhs = rhs;
+	#endif
 
 	// Capture division by zero
 	if (rhs.m_intval == 0)
@@ -547,12 +550,36 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	int_type remainder = m_intval % rhs.m_intval;
 	m_intval /= rhs.m_intval;
 
+	// Horribly clunky!
 	while (remainder != 0 && rescale(m_places + 1) == 0)
 	{
 		if (CheckedArithmetic::multiplication_is_unsafe(remainder, BASE))
 		{
-			throw UnsafeArithmeticException("Unsafe division.");
+			assert (rhs == orig_rhs);
+			if (rhs.m_intval % BASE >= ROUNDING_THRESHOLD)
+			{
+				// Do rounding
+				if (CheckedArithmetic::addition_is_unsafe(rhs.m_intval, BASE))
+				{
+					throw UnsafeArithmeticException("Unsafe division.");
+				}
+				rhs.m_intval += BASE;
+			}
+			rhs.m_intval /= BASE;
+			*this = orig / rhs;
+			if (m_intval % BASE >= ROUNDING_THRESHOLD)
+			{
+				// Do rounding
+				if (CheckedArithmetic::addition_is_unsafe(m_intval, BASE))
+				{
+					throw UnsafeArithmeticException("Unsafe division.");
+				}
+				m_intval += BASE;
+			}
+			m_intval /= BASE;
+			return *this;
 		}
+		assert(!CheckedArithmetic::multiplication_is_unsafe(remainder, BASE));
 		remainder *= BASE;
 		int_type temp_remainder = remainder % rhs.m_intval;
 		m_intval += remainder / rhs.m_intval;

@@ -602,8 +602,8 @@ TEST(decimal_division)
 	CHECK_EQUAL(d0, Decimal("3.5"));
 	CHECK(Decimal("4.863") / Decimal("95") > Decimal("0.05118"));
 	CHECK(Decimal("4.863") / Decimal("95") < Decimal("0.05119"));
-	CHECK(Decimal("3.24") / Decimal("11442300.98") > Decimal("0.0000002"));
-	CHECK(Decimal("3.24") / Decimal("11442300.98") < Decimal("0.0000003"));
+	CHECK(Decimal("3.24") / Decimal("11442300.98") > Decimal("0.000000283"));
+	CHECK(Decimal("3.24") / Decimal("11442300.98") < Decimal("0.000000284"));
 	CHECK(Decimal("-43.434234") / Decimal("-4234234") > Decimal("0.00001"));
 	CHECK(Decimal("-43.434234") / Decimal("-4234234") < Decimal("0.00002"));
 	CHECK(Decimal("-197787.987") / Decimal(".9879") < Decimal("-200210.5"));

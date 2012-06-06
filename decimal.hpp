@@ -127,8 +127,8 @@ namespace jewel
  * actually referring to the Decimal::ROUNDING_THRESHOLD constant to achieve
  * this. This is a kind of code repetition and so is bad.
  *
- * @todo Do division and multiplication do incorporate rounding of the last
- * available digit of precision? Should they?
+ * @todo Does multiplication incorporate rounding of the last
+ * available digit of precision?
  */
 
 class Decimal:
@@ -271,6 +271,10 @@ public:
 	 *
 	 * @todo Division should be able to offer a more well-defined
 	 * guarantee in regards to precision.
+	 *
+	 * @todo The implementation of division is messy. Though it seems to be
+	 * working correctly, I should tidy it up, even if I don't make it more
+	 * efficient. (But don't get too eager. I coded it like that for a reason.)
 	 *
 	 * In virtue of operator/=(Decimal) being defined,
 	 * \b operator/(Decimal, Decimal) is also defined (through the magic
