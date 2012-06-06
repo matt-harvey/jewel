@@ -630,8 +630,63 @@ TEST(decimal_division)
 	CHECK_EQUAL(d301b, Decimal("1"));
 
 	// Check behaviour with unsafe operations
-	
+	CHECK_THROW(Decimal d2000 = Decimal("10079297") / Decimal("0.000023"),
+	  UnsafeArithmeticException);
+	CHECK_THROW(Decimal d2001 = Decimal("-1901") / Decimal("0"),
+	  UnsafeArithmeticException);
+}
+
+TEST(decimal_increment)
+{
+	Decimal d0("0.007");
+	++d0;
+	CHECK_EQUAL(d0, Decimal("1.007"));
+	d0++;
+	CHECK_EQUAL(d0, Decimal("2.007"));
+	d0++;
+	++d0;
+	Decimal d1 = d0++;
+	CHECK_EQUAL(d1, Decimal("4.007"));
+	d1 = ++d0;
+	CHECK_EQUAL(d0, Decimal("6.007"));
+	Decimal d2("-3");
+	++d2;
+	++d2;
+	CHECK_EQUAL(d2, Decimal("-1"));
+
 	// Test behaviour with unsafe operations
+	Decimal d10 = Decimal::maximum();
+	CHECK_THROW(++d10, UnsafeArithmeticException);
+	CHECK_EQUAL(d10, Decimal::maximum());
+	CHECK_THROW(d10++, UnsafeArithmeticException);
+	CHECK_EQUAL(d10, Decimal::maximum());
+	// This should be safe
+	d10--;
+	Decimal d11 = ++d10;
+	// Then this should throw
+	CHECK_THROW(d11++, UnsafeArithmeticException);
+}
+
+TEST(decimal_decrement)
+{
+	Decimal d0("3");
+	--d0;
+	CHECK_EQUAL(d0, Decimal("2"));
+	Decimal d1("-78.23090");
+	--d1;
+	CHECK_EQUAL(d1, Decimal("-79.2309"));
+	Decimal d2("7897");
+	CHECK_EQUAL(--d2, Decimal("7896"));
+	d2--;
+	CHECK_EQUAL(d2, Decimal("7895"));
+	Decimal d3 = --d2;
+	CHECK_EQUAL(d3, Decimal("7894"));
+	CHECK_EQUAL(d2, Decimal("7894"));
+	Decimal d4 = d3--;
+	CHECK_EQUAL(d3, Decimal("7893"));
+	CHECK_EQUAL(d4, Decimal("7894"));
+
+	// Now test behaviour with unsafe operations.
 	Decimal d10 = -Decimal::maximum();
 	// This should be safe
 	--d10;
@@ -644,28 +699,8 @@ TEST(decimal_division)
 	d10--;
 	// This should throw
 	CHECK_THROW(d10--, UnsafeArithmeticException);
-
-	// with straightforward overflow
-	Decimal d2("7897");
-	CHECK_EQUAL(--d2, Decimal("7896"));
-	d2--;
-	CHECK_EQUAL(d2, Decimal("7895"));
-	Decimal d3 = --d2;
-	CHECK_EQUAL(d3, Decimal("7894"));
-	CHECK_EQUAL(d2, Decimal("7894"));
-	Decimal d4 = d3--;
-	CHECK_EQUAL(d3, Decimal("7893"));
-	CHECK_EQUAL(d4, Decimal("7894"));
-	Decimal d5("0.300");
-	--d5;
-	ostringstream oss;
-	oss << d5;
-	CHECK_EQUAL(oss.str(), "-0.700");
-	CHECK(oss.str() != "-0.70");
-	CHECK_EQUAL(d5, Decimal("-.7"));
-	CHECK_EQUAL(d5, Decimal("-0.700"));
-	CHECK_EQUAL(d5, Decimal("-0.70"));
 }
+
 
 TEST(decimal_operator_less_than)
 {

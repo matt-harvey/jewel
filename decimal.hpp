@@ -109,12 +109,6 @@ namespace jewel
  * (Replace it everywhere with plain static_cast, providing of course that
  * the tests pass when compiled in release mode.)
  *
- * @todo The increment and decrement operator tests seem to have disappeared.
- * Furthermore, some of the decrement operator checks seems to have become
- * mixed in with the division tests. It is all a bit weird. Try to rescue
- * it from version control. Failing that, re-write the missing tests and
- * put them in the right spot.
- *
  * @todo Properly document how operations and constructors handle "trailing
  * zeroes". Currently they cull trailing fractional zeroes in the result, but
  * only up to point. That point is the maximm of the fractional precisions of
