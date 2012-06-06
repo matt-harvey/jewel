@@ -507,10 +507,9 @@ Decimal& Decimal::operator*=(Decimal rhs)
 
 Decimal& Decimal::operator/=(Decimal rhs)
 {
+	// Record original dividend and divisor
 	Decimal const orig = *this;
-	#ifndef NDEBUG
-		Decimal const orig_rhs = rhs;
-	#endif
+	Decimal const orig_rhs = rhs;
 
 	// Capture division by zero
 	if (rhs.m_intval == 0)
@@ -536,29 +535,34 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	if (m_intval < 0) m_intval *= -1;
 	if (rhs.m_intval < 0) rhs.m_intval *= -1;
 
+	// Rescale the dividend as high as we can
 	rhs.rationalize();
 	while (m_places < rhs.m_places && rescale(m_places + 1) == 0)
 	{
 	}
 	if (rhs.m_places > m_places)
 	{
+		// We can't rescale high enough to proceed, so reset and throw
 		*this = orig;
 		throw (UnsafeArithmeticException("Unsafe division."));
 	}
 	assert (m_places >= rhs.m_places);
+
+	// Proceed with basic division algorithm
 	m_places -= rhs.m_places;
 	int_type remainder = m_intval % rhs.m_intval;
 	m_intval /= rhs.m_intval;
 
-	// Horribly clunky!
+	// Deal with any remainder using "long division"
 	while (remainder != 0 && rescale(m_places + 1) == 0)
 	{
 		if (CheckedArithmetic::multiplication_is_unsafe(remainder, BASE))
 		{
-			assert (rhs == orig_rhs);
+			// Then we can't proceed with ordinary "long division" safely,
+			// and need to "scale down" first
 			if (rhs.m_intval % BASE >= ROUNDING_THRESHOLD)
 			{
-				// Do rounding
+				// Do rounding if safe, otherwise throw
 				if (CheckedArithmetic::addition_is_unsafe(rhs.m_intval, BASE))
 				{
 					throw UnsafeArithmeticException("Unsafe division.");
@@ -566,19 +570,29 @@ Decimal& Decimal::operator/=(Decimal rhs)
 				rhs.m_intval += BASE;
 			}
 			rhs.m_intval /= BASE;
-			*this = orig / rhs;
-			if (m_intval % BASE >= ROUNDING_THRESHOLD)
+
+			// Redo the Decimal division on a "safe scale"
+			Decimal lhs = orig;
+			// Make absolute
+			if (lhs.m_intval < 0) lhs.m_intval *= -1;
+			assert (rhs.m_intval >= 0);  // We know it is already absolute
+			lhs /= rhs;
+			if (lhs.m_intval % BASE >= ROUNDING_THRESHOLD)
 			{
-				// Do rounding
-				if (CheckedArithmetic::addition_is_unsafe(m_intval, BASE))
+				// Do rounding if safe, otherwise throw
+				if (CheckedArithmetic::addition_is_unsafe(lhs.m_intval, BASE))
 				{
 					throw UnsafeArithmeticException("Unsafe division.");
 				}
-				m_intval += BASE;
+				lhs.m_intval += BASE;
 			}
-			m_intval /= BASE;
+			lhs.m_intval /= BASE;
+			if (diff_signs) lhs.m_intval *= -1;
+			*this = lhs;
 			return *this;
 		}
+
+		// It's safe to proceed with ordinary "long division"
 		assert(!CheckedArithmetic::multiplication_is_unsafe(remainder, BASE));
 		remainder *= BASE;
 		int_type temp_remainder = remainder % rhs.m_intval;
@@ -589,17 +603,21 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	assert (rhs.m_intval >= remainder);
 	assert (!CheckedArithmetic::subtraction_is_unsafe(rhs.m_intval,
 	  remainder));
+	
+	// Do rounding if required
 	if (rhs.m_intval - remainder <= remainder)
 	{
+		// If the required rounding would be unsafe, we throw
 		if (CheckedArithmetic::addition_is_unsafe(m_intval,
 		  NUM_CAST<int_type>(1)))
 		{
 			throw UnsafeArithmeticException("Unsafe division.");
 		}
+		// Do the rounding, it's safe
 		++m_intval;
 	}
 
-
+	// Put the correct sign
 	if (diff_signs) m_intval *= -1;
 	rationalize();
 	return *this;

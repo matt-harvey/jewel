@@ -608,16 +608,43 @@ TEST(decimal_division)
 	CHECK(Decimal("-43.434234") / Decimal("-4234234") < Decimal("0.00002"));
 	CHECK(Decimal("-197787.987") / Decimal(".9879") < Decimal("-200210.5"));
 	CHECK(Decimal("-197787.987") / Decimal(".9879") > Decimal("-200210.6"));
+	Decimal d900 = Decimal("-2.098987") / Decimal("-10.56983205");
+	CHECK(d900 < Decimal("0.198583"));
+	CHECK(d900 > Decimal("0.198582"));
+	Decimal d901 = Decimal("1.098986778") / Decimal("-1.156983333");
+	CHECK(d901 > Decimal("-0.9498727"));
+	CHECK(d901 < Decimal("-0.9498726"));
+	Decimal d902 = Decimal("3879989") / Decimal("1000000023");
+	CHECK(d902 < Decimal("0.00387999"));
+	CHECK(d902 > Decimal("0.00387998"));
 
 	// Check value preservation
 	Decimal d300("1");
 	Decimal const d300a = d300;
-	d300 /= Decimal("1000");
+	d300 = d300 / Decimal("1000");
 	d300 *= Decimal("1000");
 	CHECK_EQUAL(d300, d300a);
+	Decimal d301("-10000");
+	Decimal d301b = Decimal("1") / d301;
+	d301b *= d301;
+	CHECK_EQUAL(d301b, Decimal("1"));
 
 	// Check behaviour with unsafe operations
 	
+	// Test behaviour with unsafe operations
+	Decimal d10 = -Decimal::maximum();
+	// This should be safe
+	--d10;
+	// This should throw
+	CHECK_THROW(--d10, UnsafeArithmeticException);
+	CHECK_EQUAL(d10, Decimal::minimum());
+	// This should be safe
+	++d10;
+	CHECK_EQUAL(d10, Decimal::minimum() + Decimal("1"));
+	d10--;
+	// This should throw
+	CHECK_THROW(d10--, UnsafeArithmeticException);
+
 	// with straightforward overflow
 	Decimal d2("7897");
 	CHECK_EQUAL(--d2, Decimal("7896"));
@@ -638,21 +665,6 @@ TEST(decimal_division)
 	CHECK_EQUAL(d5, Decimal("-.7"));
 	CHECK_EQUAL(d5, Decimal("-0.700"));
 	CHECK_EQUAL(d5, Decimal("-0.70"));
-
-
-	// Now test behaviour with unsafe operations.
-	Decimal d10 = -Decimal::maximum();
-	// This should be safe
-	--d10;
-	// This should throw
-	CHECK_THROW(--d10, UnsafeArithmeticException);
-	CHECK_EQUAL(d10, Decimal::minimum());
-	// This should be safe
-	++d10;
-	CHECK_EQUAL(d10, Decimal::minimum() + Decimal("1"));
-	d10--;
-	// This should throw
-	CHECK_THROW(d10--, UnsafeArithmeticException);
 }
 
 TEST(decimal_operator_less_than)

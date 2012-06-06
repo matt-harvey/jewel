@@ -21,8 +21,6 @@ namespace jewel
 {
 
 
-
-
 /**
  * \class CheckedArithmetic
  * \brief Provides functions that check the safety of arithmetic
