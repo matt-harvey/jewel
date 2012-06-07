@@ -439,6 +439,53 @@ Decimal& Decimal::operator-=(Decimal rhs)
 
 Decimal& Decimal::operator*=(Decimal rhs)
 {
+	// Trying slow, methodical long-multiplication approach
+
+	// Make absolute and remember signs
+	bool signs_differ = ( (m_intval < 0 && rhs.m_intval > 0) ||
+	                      (m_intval > 0 && rhs.m_intval < 0) );
+	if (m_intval < 0) m_intval *= -1;
+	if (rhs.m_intval < 0) rhs.m_intval *= -1;
+
+	// Form string representation of each operand
+	ostringstream lhoss;
+	lhoss << m_intval;
+	string lhstr = lhoss.str();
+	ostringstream rhoss;
+	rhoss << rhs.m_intval;
+	string rhstr = rhoss.str();
+
+	// Form a vector of digits from the rhs
+	vector<int_type> rhvec;
+	for (string::size_type i = 0; i != rhstr.size(); ++i)
+	{
+		rhvec.push_back(lexical_cast<int_type>(rhstr[i]));
+	}
+	assert (rhvec.size() == rhstr.size());
+
+	// Multiply each of these digits by the lhs intval and store
+	// in another vector the resulting products
+	vector<int_type> products_vec;
+	for (vector<int_type>::size_type i = 0; i != rhvec.size(); ++i)
+	{
+		int_type product = m_intval * rhvec[i];
+		products_vec.push_back(product);
+	}
+	assert (products_vec.size() == rhstr.size());
+	assert (products_vec.size() == rhvec.size());
+
+	// UP TO HERE IN REWORKING MULTIPLICATION IMPLEMENTATION //
+
+
+
+
+
+
+
+
+
+
+	/*
 	Decimal const orig = *this;
 	
 	// Remember required sign of product
@@ -502,6 +549,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 
 	rationalize();
 	return *this;
+	*/
 }
 
 
