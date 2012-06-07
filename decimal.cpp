@@ -573,9 +573,8 @@ Decimal& Decimal::operator/=(Decimal rhs)
 
 			// Redo the Decimal division on a "safe scale"
 			Decimal lhs = orig;
-			// Make absolute
 			if (lhs.m_intval < 0) lhs.m_intval *= -1;
-			assert (rhs.m_intval >= 0);  // We know it is already absolute
+			assert (rhs.m_intval >= 0);
 			lhs /= rhs;
 			if (lhs.m_intval % BASE >= ROUNDING_THRESHOLD)
 			{

@@ -498,6 +498,13 @@ TEST(decimal_multiplication)
 	CHECK_EQUAL(d8, Decimal("0"));
 	CHECK_EQUAL(Decimal("1000001") * Decimal("0.00222"),
 	  Decimal("2220.00222"));
+	Decimal d100 = Decimal("-90.9087176") * Decimal("0.00020042");
+	CHECK(d100 < Decimal("-0.01821992"));
+	CHECK(d100 > Decimal("-0.01821993"));
+	Decimal d101 = Decimal("192384.43") * Decimal("-1.9962");
+	CHECK(d101 < Decimal("-384037.7"));
+	CHECK(d101 > Decimal("-384037.8"));
+	cout << d101 << endl;
 
 	// Test behaviour with unsafe operations
 	
