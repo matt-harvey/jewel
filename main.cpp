@@ -15,6 +15,8 @@ using std::ios;
 using std::setprecision;
 
 
+#include "decimal.hpp"
+using jewel::Decimal;
 
 int main()
 {
@@ -25,6 +27,8 @@ int main()
 	#else
 		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
 	#endif
+
+
 
 
 	/* Here's how to print currency (though this doesn't include parentheses

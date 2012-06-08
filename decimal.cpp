@@ -9,6 +9,7 @@
 #include <cstdlib>  // for abs
 #include <istream>
 #include <limits>
+#include <numeric>  // for accumulate
 #include <ostream>
 #include <sstream>
 #include <string>
@@ -33,12 +34,14 @@
 using boost::lexical_cast;
 using boost::bad_lexical_cast;
 using std::abs;
+using std::accumulate;
 using std::find;
 using std::isdigit;
 using std::istream;
 using std::numeric_limits;
 using std::basic_ostream;
 using std::basic_ostringstream;
+using std::max_element;
 using std::ostream;
 using std::ostringstream;
 using std::max;
@@ -437,9 +440,35 @@ Decimal& Decimal::operator-=(Decimal rhs)
 	return *this;
 }
 
+Decimal& Decimal::unchecked_multiply(Decimal rhs)
+{
+	m_intval = m_intval * rhs.m_intval;
+	assert (!CheckedArithmetic::addition_is_unsafe(m_places, rhs.m_places));
+	m_places = m_places + rhs.m_places;
+	while (m_places > MAX_PLACES)
+	{
+		assert (m_places > 0);
+		rescale(m_places - 1);
+	}
+	return *this;
+}
+
 Decimal& Decimal::operator*=(Decimal rhs)
 {
 	// Trying slow, methodical long-multiplication approach
+
+	Decimal orig = *this;
+
+	rationalize();
+	rhs.rationalize();
+
+	// Rule out problematic smallest Decimal
+	if (*this == minimum() || rhs == minimum())
+	{
+		assert (*this == orig);
+		throw UnsafeArithmeticException("Cannot multiply smallest possible "
+		  "Decimal safely.");
+	}
 
 	// Make absolute and remember signs
 	bool signs_differ = ( (m_intval < 0 && rhs.m_intval > 0) ||
@@ -447,10 +476,18 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	if (m_intval < 0) m_intval *= -1;
 	if (rhs.m_intval < 0) rhs.m_intval *= -1;
 
-	// Form string representation of each operand
-	ostringstream lhoss;
-	lhoss << m_intval;
-	string lhstr = lhoss.str();
+	// Do unchecked_multiply if we can
+	assert (m_intval >= 0 && rhs.m_intval >= 0);	
+	if (!CheckedArithmetic::multiplication_is_unsafe(m_intval, rhs.m_intval))
+	{
+		unchecked_multiply(rhs);
+		if (signs_differ) m_intval *= -1;
+		return *this;
+	}
+
+
+
+	// Form string representation of rhs.m_intval
 	ostringstream rhoss;
 	rhoss << rhs.m_intval;
 	string rhstr = rhoss.str();
@@ -459,24 +496,110 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	vector<int_type> rhvec;
 	for (string::size_type i = 0; i != rhstr.size(); ++i)
 	{
-		rhvec.push_back(lexical_cast<int_type>(rhstr[i]));
+		assert (isdigit(rhstr[i]));
+		int_type x = lexical_cast<int_type>(rhstr[i]);
+		rhvec.push_back(x);
 	}
 	assert (rhvec.size() == rhstr.size());
+
+	int_type const max_rhvec = *(max_element(rhvec.begin(), rhvec.end()));
+	if (CheckedArithmetic::multiplication_is_unsafe(m_intval, max_rhvec))
+	{
+		if (m_places == 0)
+		{
+			throw UnsafeArithmeticException("Unsafe multiplication.");
+		}
+		assert (m_places > 0);
+		Decimal lhs = *this;
+		assert (lhs.m_places == m_places);
+		lhs.rescale(m_places - 1);
+		*this = lhs * rhs;
+		return *this;
+	}
 
 	// Multiply each of these digits by the lhs intval and store
 	// in another vector the resulting products
 	vector<int_type> products_vec;
 	for (vector<int_type>::size_type i = 0; i != rhvec.size(); ++i)
 	{
-		int_type product = m_intval * rhvec[i];
-		products_vec.push_back(product);
+		assert (!CheckedArithmetic::multiplication_is_unsafe(m_intval,
+		  rhvec[i]));
+		products_vec.push_back(m_intval * rhvec[i]);
 	}
 	assert (products_vec.size() == rhstr.size());
 	assert (products_vec.size() == rhvec.size());
 
-	// UP TO HERE IN REWORKING MULTIPLICATION IMPLEMENTATION //
+	places_type places_to_lose = 0;
+	while (!products_vec.empty() &&
+	  CheckedArithmetic::multiplication_is_unsafe(products_vec[0],
+	  NUM_CAST<int_type>(pow(BASE,
+	                         NUM_CAST<double>(products_vec.size() - 1)))))
+	{
+		if (products_vec[products_vec.size() - 1] >= ROUNDING_THRESHOLD
+		 && products_vec.size() > 1)
+		{
+			assert (!CheckedArithmetic::addition_is_unsafe(
+			  products_vec[products_vec.size() - 2], NUM_CAST<int_type>(1)));
+			products_vec[products_vec.size() - 2] += NUM_CAST<int_type>(1);
+			++places_to_lose;
+		}
+		products_vec.resize(products_vec.size() - 1);
+	}
+	if (products_vec.empty())
+	{
+		throw UnsafeArithmeticException("Unsafe multiplication.");
+	}
+	vector<int_type>::size_type sz = products_vec.size();
+	for (vector<int_type>::size_type j = 0; j != sz; ++j)
+	{
+		assert (NUM_CAST<long double>(sz - j - 1) <
+		  NumDigits::num_digits(numeric_limits<int_type>::max()));
+		int_type multiplier = pow(BASE, NUM_CAST<long double>(sz - j - 1));
+		if (CheckedArithmetic::multiplication_is_unsafe(products_vec[j],
+		  multiplier))
+		{
+			*this = orig;
+			throw UnsafeArithmeticException("Unsafe multiplication.");
+		}
+		products_vec[j] *= multiplier;
+	}
 
+	int_type sum = 0;
+	for (vector<int_type>::size_type k = 0; k != products_vec.size(); ++k)
+	{
+		if (CheckedArithmetic::addition_is_unsafe(sum, products_vec[k]))
+		{
+			*this = orig;
+			throw UnsafeArithmeticException("Unsafe multiplication.");
+		}
+		sum += products_vec[k];
+	}
 
+	if (signs_differ) m_intval *= -1;
+	assert (!CheckedArithmetic::addition_is_unsafe(m_places, rhs.m_places));
+	m_places += rhs.m_places;
+	while (m_places > MAX_PLACES)
+	{
+		if (m_intval % BASE >= ROUNDING_THRESHOLD)
+		{
+			if (CheckedArithmetic::addition_is_unsafe(m_intval, BASE))
+			{
+				*this = orig;	
+				throw UnsafeArithmeticException("Unsafe multiplication.");
+			}
+			m_intval += BASE;
+		}
+		assert (m_places > 0);
+		rescale(m_places - 1);
+	}
+	/*
+	if (places_to_lose > m_places)
+	{
+		throw UnsafeArithmeticException("Unsafe multiplication.");
+	}
+	m_places -= places_to_lose;
+	*/
+	return *this;
 
 
 

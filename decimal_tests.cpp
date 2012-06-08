@@ -504,7 +504,6 @@ TEST(decimal_multiplication)
 	Decimal d101 = Decimal("192384.43") * Decimal("-1.9962");
 	CHECK(d101 < Decimal("-384037.7"));
 	CHECK(d101 > Decimal("-384037.8"));
-	cout << d101 << endl;
 
 	// Test behaviour with unsafe operations
 	

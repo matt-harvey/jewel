@@ -472,6 +472,23 @@ private:
 	// also commented out.)
 	// std::ostream& write_parts_to_stream(std::ostream&) const;	
 
+	/**
+	 * Function to use as implementation of operator*= when it's safe to
+	 * multiply m_intval by rhs.m_intval, and when both operands are
+	 * non-negative.
+	 *
+	 * @param rhs the Decimal by which to multiply *this.
+	 *
+	 * @returns *this, after multplying *this by rhs and storing the result
+	 * in *this
+	 *
+	 * The caller is resposible for ensuring that rhs and *this are both
+	 * non-negative, and that it is safe to multiply m_intval and
+	 * rhs.m_intval without fear of overflow.
+	 */
+	Decimal& unchecked_multiply(Decimal rhs);
+
+
 }; // class Decimal
 
 
