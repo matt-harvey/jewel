@@ -552,6 +552,13 @@ TEST(decimal_divide_equals)
 	Decimal d10("1090");
 	Decimal d11(".00001");
 	CHECK_EQUAL(d10 / d11, Decimal("109000000"));
+	Decimal d800("1000001");
+	d800 /= Decimal("0.001");
+	CHECK_EQUAL(d800, Decimal("1000001000"));
+	Decimal d801("90.27423");
+	d801 /= Decimal("0.00008447");
+	CHECK(d801 > Decimal("109793"));
+	CHECK(d801 < Decimal("109794"));
 
 	// Check rounding behaviour
 	Decimal d500("2");

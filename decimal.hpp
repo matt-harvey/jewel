@@ -47,6 +47,11 @@ namespace jewel
  * of precision, but do guarantee that they will throw an exception
  * rather than overflow.
  *
+ * @todo I think I should change places_type to a signed and then just do
+ * away with arbitrary restrictions. This would free me up a bit w.r.t.
+ * the implementation of multiplication and division. Although it would
+ * complicate output and input.
+ *
  * @todo Multiplication and division should offer specific guarantees about
  * precison, and the class documentation (above para.) should reflect this.
  *
@@ -95,6 +100,19 @@ namespace jewel
  * Apart from the above requirements, Decimals will store as many digits of
  * precision as possible. So "1/3" will result in "0.333...." with as many
  * trailing '3's as are permitted by the implementation.
+ * 
+ * @todo Multiplication and divison are both still broken. Division is not
+ * radically broken and at least it throws rather than giving
+ * a wrong answer. However multiplication is far from working correctly.
+ * I have a solution to this - see "decimal_README" - which is basically
+ * to use a wider integer type for m_intval (long long), and throw
+ * UnsafeArithmeticException rather than attempting complicated workarounds
+ * in cases where the simple multiplication and division would cause
+ * temporary overflow. I could even make Decimal::max() and Decimal::min()
+ * arbitrary limits of my choosing (carefully policed in all functions),
+ * so that there is \e deliberate \e headroom created for the simpler
+ * implementations of multiplication and divison to work in ALL cases.
+ * I LIKE THIS SOLUTION. IT MAKES FOR SIMPLER CODE.
  *
  * @todo Make it work as expected with standard library stream precision
  * manipulators and formatting. To do this properly, I need to understand

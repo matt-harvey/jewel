@@ -30,7 +30,6 @@ int main()
 
 
 
-
 	/* Here's how to print currency (though this doesn't include parentheses
 	 * for negative, or thousands separators just yet).
 	cout << std::setprecision(2) << std::showpoint << std::fixed;

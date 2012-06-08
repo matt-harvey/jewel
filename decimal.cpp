@@ -458,7 +458,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	// Trying slow, methodical long-multiplication approach
 
 	Decimal orig = *this;
-
+	Decimal orig_rhs = rhs;
 	rationalize();
 	rhs.rationalize();
 
@@ -485,194 +485,32 @@ Decimal& Decimal::operator*=(Decimal rhs)
 		return *this;
 	}
 
-
-
-	// Form string representation of rhs.m_intval
-	ostringstream rhoss;
-	rhoss << rhs.m_intval;
-	string rhstr = rhoss.str();
-
-	// Form a vector of digits from the rhs
-	vector<int_type> rhvec;
-	for (string::size_type i = 0; i != rhstr.size(); ++i)
+	// Now we have to do things the hard way
+	/*
+	assert (CheckedArithmetic::multiplication_is_unsafe(m_intval,
+	  rhs.m_intval));
+	*this = orig;
+	rhs = orig_rhs;
+	try
 	{
-		assert (isdigit(rhstr[i]));
-		int_type x = lexical_cast<int_type>(rhstr[i]);
-		rhvec.push_back(x);
+		rhs = Decimal("1") / rhs;
 	}
-	assert (rhvec.size() == rhstr.size());
-
-	int_type const max_rhvec = *(max_element(rhvec.begin(), rhvec.end()));
-	if (CheckedArithmetic::multiplication_is_unsafe(m_intval, max_rhvec))
-	{
-		if (m_places == 0)
-		{
-			throw UnsafeArithmeticException("Unsafe multiplication.");
-		}
-		assert (m_places > 0);
-		Decimal lhs = *this;
-		assert (lhs.m_places == m_places);
-		lhs.rescale(m_places - 1);
-		*this = lhs * rhs;
-		return *this;
-	}
-
-	// Multiply each of these digits by the lhs intval and store
-	// in another vector the resulting products
-	vector<int_type> products_vec;
-	for (vector<int_type>::size_type i = 0; i != rhvec.size(); ++i)
-	{
-		assert (!CheckedArithmetic::multiplication_is_unsafe(m_intval,
-		  rhvec[i]));
-		products_vec.push_back(m_intval * rhvec[i]);
-	}
-	assert (products_vec.size() == rhstr.size());
-	assert (products_vec.size() == rhvec.size());
-
-	places_type places_to_lose = 0;
-	while (!products_vec.empty() &&
-	  CheckedArithmetic::multiplication_is_unsafe(products_vec[0],
-	  NUM_CAST<int_type>(pow(BASE,
-	                         NUM_CAST<double>(products_vec.size() - 1)))))
-	{
-		if (products_vec[products_vec.size() - 1] >= ROUNDING_THRESHOLD
-		 && products_vec.size() > 1)
-		{
-			assert (!CheckedArithmetic::addition_is_unsafe(
-			  products_vec[products_vec.size() - 2], NUM_CAST<int_type>(1)));
-			products_vec[products_vec.size() - 2] += NUM_CAST<int_type>(1);
-			++places_to_lose;
-		}
-		products_vec.resize(products_vec.size() - 1);
-	}
-	if (products_vec.empty())
+	catch (UnsafeArithmeticException&)
 	{
 		throw UnsafeArithmeticException("Unsafe multiplication.");
 	}
-	vector<int_type>::size_type sz = products_vec.size();
-	for (vector<int_type>::size_type j = 0; j != sz; ++j)
+	try
 	{
-		assert (NUM_CAST<long double>(sz - j - 1) <
-		  NumDigits::num_digits(numeric_limits<int_type>::max()));
-		int_type multiplier = pow(BASE, NUM_CAST<long double>(sz - j - 1));
-		if (CheckedArithmetic::multiplication_is_unsafe(products_vec[j],
-		  multiplier))
-		{
-			*this = orig;
-			throw UnsafeArithmeticException("Unsafe multiplication.");
-		}
-		products_vec[j] *= multiplier;
+		*this /= rhs;
 	}
-
-	int_type sum = 0;
-	for (vector<int_type>::size_type k = 0; k != products_vec.size(); ++k)
-	{
-		if (CheckedArithmetic::addition_is_unsafe(sum, products_vec[k]))
-		{
-			*this = orig;
-			throw UnsafeArithmeticException("Unsafe multiplication.");
-		}
-		sum += products_vec[k];
-	}
-
-	if (signs_differ) m_intval *= -1;
-	assert (!CheckedArithmetic::addition_is_unsafe(m_places, rhs.m_places));
-	m_places += rhs.m_places;
-	while (m_places > MAX_PLACES)
-	{
-		if (m_intval % BASE >= ROUNDING_THRESHOLD)
-		{
-			if (CheckedArithmetic::addition_is_unsafe(m_intval, BASE))
-			{
-				*this = orig;	
-				throw UnsafeArithmeticException("Unsafe multiplication.");
-			}
-			m_intval += BASE;
-		}
-		assert (m_places > 0);
-		rescale(m_places - 1);
-	}
-	/*
-	if (places_to_lose > m_places)
-	{
-		throw UnsafeArithmeticException("Unsafe multiplication.");
-	}
-	m_places -= places_to_lose;
-	*/
-	return *this;
-
-
-
-
-
-
-
-
-	/*
-	Decimal const orig = *this;
-	
-	// Remember required sign of product
-	bool const diff_signs = (( m_intval > 0 && rhs.m_intval < 0 ) ||
-	                         ( m_intval < 0 && rhs.m_intval > 0 ));
-	
-	// To prevent complications
-	if ( (m_intval == numeric_limits<int_type>::min()) ||
-	     (rhs.m_intval == numeric_limits<int_type>::min()) )
-	{
-		throw UnsafeArithmeticException("Cannot safely perform multiplication"
-		  " on the smallest possible Decimal.");
-	}
-
-	// Make absolute
-	if (m_intval < 0) m_intval *= -1;
-	if (rhs.m_intval < 0) rhs.m_intval *= -1;
-
-	// To record any places that we later need to cull
-	unsigned int places_to_lose = 0;
-
-	// Multiply the underlying integers of the multiplicands. Reduce precision
-	// until this can be done safely.
-	while (CheckedArithmetic::multiplication_is_unsafe(m_intval,
-	  rhs.m_intval))
-	{
-		int_type* reducee = &m_intval;
-		if (m_intval < rhs.m_intval) reducee = &(rhs.m_intval);
-		int_type remainder = *reducee % BASE;
-		if (remainder >= ROUNDING_THRESHOLD) ++*reducee;
-		*reducee /= BASE;
-		++places_to_lose;
-	}
-	m_intval *= rhs.m_intval;
-	m_places += rhs.m_places;
-
-	// If we can do so safely, reduce m_places according to the level
-	// of precision-reduction calculated above. Otherwise reset and throw.
-	if (m_places < places_to_lose)
+	catch (UnsafeArithmeticException&)
 	{
 		*this = orig;
 		throw UnsafeArithmeticException("Unsafe multiplication.");
 	}
-	assert (m_places >= places_to_lose);
-	m_places -= places_to_lose;
-
-	// Make negative if required.
-	if (diff_signs)
-	{
-		m_intval *= -1;
-	}
-
-	// Ensure we don't exceed MAX_PLACES.
-	if (m_places > MAX_PLACES)
-	{
-		if (rescale(MAX_PLACES) != 0)
-		{
-			throw (UnsafeArithmeticException("Unsafe multiplication."));
-		}
-	}
-
-	rationalize();
-	return *this;
 	*/
+
+	return *this;
 }
 
 
