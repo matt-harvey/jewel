@@ -348,7 +348,7 @@ public:
 	/**
 	 * Returns the maximum number of digits of precision
 	 */
-	static int maximum_precision();
+	static places_type maximum_precision();
 
 private:
 
@@ -689,7 +689,7 @@ operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 
 
 inline
-int Decimal::maximum_precision()
+Decimal::places_type Decimal::maximum_precision()
 {
 	return MAX_PLACES;
 }
