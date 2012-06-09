@@ -6,19 +6,21 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 BASE	decimal.cpp	/^Decimal::BASE = 10;$/;"	m	class:jewel::Decimal::Decimal	file:
 BASE	decimal.hpp	/^	static int_type const BASE;$/;"	m	class:jewel::Decimal
-CheckedArithmetic	checked_arithmetic.hpp	/^class CheckedArithmetic$/;"	c	namespace:jewel
+CheckedArithmetic	checked_arithmetic_detail.hpp	/^class CheckedArithmetic$/;"	c	namespace:jewel::detail
 Decimal	decimal.cpp	/^Decimal::Decimal(string const& str): m_intval(0), m_places(0)$/;"	f	class:jewel::Decimal
 Decimal	decimal.hpp	/^Decimal::Decimal(): m_intval(0), m_places(0)$/;"	f	class:jewel::Decimal
 Decimal	decimal.hpp	/^class Decimal:$/;"	c	namespace:jewel
 GUARD_arithmetic_exceptions_hpp	arithmetic_exceptions.hpp	2;"	d
+GUARD_checked_arithmetic_detail_hpp	checked_arithmetic_detail.hpp	2;"	d
 GUARD_checked_arithmetic_hpp	checked_arithmetic.hpp	2;"	d
 GUARD_decimal_hpp	decimal.hpp	2;"	d
+GUARD_decimal_special_tests_hpp	decimal_special_tests.hpp	2;"	d
 GUARD_num_digits_hpp	num_digits.hpp	2;"	d
 GUARD_power_vector_hpp	power_vector.hpp	2;"	d
 GUARD_stopwatch_hpp	stopwatch.hpp	2;"	d
 MAX_PLACES	decimal.cpp	/^Decimal::MAX_PLACES = NumDigits::num_digits(numeric_limits<int_type>::min());$/;"	m	class:jewel::Decimal	file:
 MAX_PLACES	decimal.hpp	/^	static size_t const MAX_PLACES;$/;"	m	class:jewel::Decimal
-NUM_CAST	decimal.cpp	22;"	d	file:
+NUM_CAST	decimal.cpp	23;"	d	file:
 NumDigits	num_digits.hpp	/^class NumDigits$/;"	c	namespace:jewel
 PowerVectorFixture1	power_vector_tests.cpp	/^PowerVectorFixture1::PowerVectorFixture1()$/;"	f	class:PowerVectorFixture1
 PowerVectorFixture1	power_vector_tests.cpp	/^struct PowerVectorFixture1$/;"	s	file:
@@ -89,28 +91,35 @@ TEST_FIXTURE	power_vector_tests.cpp	/^TEST_FIXTURE(PowerVectorFixture2, TestPowe
 TEST_FIXTURE	power_vector_tests.cpp	/^TEST_FIXTURE(PowerVectorFixture2, TestPowerVectorSize2)$/;"	f
 UnsafeArithmeticException	arithmetic_exceptions.cpp	/^UnsafeArithmeticException::UnsafeArithmeticException(std::string p_message):$/;"	f	class:jewel::UnsafeArithmeticException
 UnsafeArithmeticException	arithmetic_exceptions.hpp	/^class UnsafeArithmeticException$/;"	c	namespace:jewel
-addition_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::addition_is_unsafe(int x, int y)$/;"	f	class:jewel::CheckedArithmetic
-addition_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::addition_is_unsafe(long x, long y)$/;"	f	class:jewel::CheckedArithmetic
-addition_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::addition_is_unsafe(short x, short y)$/;"	f	class:jewel::CheckedArithmetic
-addition_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::addition_is_unsafe(unsigned int x, unsigned int y)$/;"	f	class:jewel::CheckedArithmetic
-addition_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::addition_is_unsafe(unsigned long x, unsigned long y)$/;"	f	class:jewel::CheckedArithmetic
-addition_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::addition_is_unsafe(unsigned short x, unsigned short y)$/;"	f	class:jewel::CheckedArithmetic
-addition_is_unsafe_signed_integral_types	checked_arithmetic.hpp	/^bool CheckedArithmetic::addition_is_unsafe_signed_integral_types(T x, T y)$/;"	f	class:jewel::CheckedArithmetic
-addition_is_unsafe_unsigned_integral_types	checked_arithmetic.hpp	/^bool CheckedArithmetic::addition_is_unsafe_unsigned_integral_types(T x, T y)$/;"	f	class:jewel::CheckedArithmetic
+addition_is_unsafe	checked_arithmetic.hpp	/^bool addition_is_unsafe(T x, T y)$/;"	f	namespace:jewel
+addition_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::addition_is_unsafe(int x, int y)$/;"	f	class:jewel::detail::CheckedArithmetic
+addition_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::addition_is_unsafe(long x, long y)$/;"	f	class:jewel::detail::CheckedArithmetic
+addition_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::addition_is_unsafe(short x, short y)$/;"	f	class:jewel::detail::CheckedArithmetic
+addition_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::addition_is_unsafe(unsigned int x, unsigned int y)$/;"	f	class:jewel::detail::CheckedArithmetic
+addition_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::addition_is_unsafe(unsigned long x, unsigned long y)$/;"	f	class:jewel::detail::CheckedArithmetic
+addition_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::addition_is_unsafe(unsigned short x, unsigned short y)$/;"	f	class:jewel::detail::CheckedArithmetic
+addition_is_unsafe_signed_integral_types	checked_arithmetic_detail.hpp	/^bool CheckedArithmetic::addition_is_unsafe_signed_integral_types(T x, T y)$/;"	f	class:jewel::detail::CheckedArithmetic
+addition_is_unsafe_unsigned_integral_types	checked_arithmetic_detail.hpp	/^bool CheckedArithmetic::addition_is_unsafe_unsigned_integral_types(T x, T y)$/;"	f	class:jewel::detail::CheckedArithmetic
 co_normalize	decimal.cpp	/^void Decimal::co_normalize(Decimal& x, Decimal& y)$/;"	f	class:jewel::Decimal
-highest_bit_signed_integral_types	checked_arithmetic.hpp	/^size_t CheckedArithmetic::highest_bit_signed_integral_types(T x)$/;"	f	class:jewel::CheckedArithmetic
-highest_bit_unsigned_integral_types	checked_arithmetic.hpp	/^size_t CheckedArithmetic::highest_bit_unsigned_integral_types(T x)$/;"	f	class:jewel::CheckedArithmetic
+decimal_csv_test	decimal_special_tests.cpp	/^void decimal_csv_test()$/;"	f	namespace:jewel::detail
+decimal_speed_test	decimal_special_tests.cpp	/^void decimal_speed_test()$/;"	f	namespace:jewel::detail
+detail	checked_arithmetic_detail.cpp	/^namespace detail$/;"	n	namespace:jewel	file:
+detail	checked_arithmetic_detail.hpp	/^namespace detail$/;"	n	namespace:jewel
+detail	decimal_special_tests.cpp	/^namespace detail$/;"	n	namespace:jewel	file:
+detail	decimal_special_tests.hpp	/^namespace detail$/;"	n	namespace:jewel
 implicit_divisor	decimal.cpp	/^Decimal::implicit_divisor() const$/;"	f	class:jewel::Decimal
 int_type	decimal.hpp	/^	typedef long int_type;$/;"	t	class:jewel::Decimal
 int_type	decimal_tests.cpp	/^typedef Decimal::int_type int_type;$/;"	t	file:
-int_type	main.cpp	/^typedef Decimal::int_type int_type; $/;"	t	file:
-is_dagger	main.cpp	/^bool is_dagger(char c)$/;"	f
+is_dagger	decimal_special_tests.cpp	/^bool is_dagger(char c)$/;"	f	namespace:jewel::detail
 jewel	arithmetic_exceptions.cpp	/^namespace jewel$/;"	n	file:
 jewel	arithmetic_exceptions.hpp	/^namespace jewel$/;"	n
-jewel	checked_arithmetic.cpp	/^namespace jewel$/;"	n	file:
 jewel	checked_arithmetic.hpp	/^namespace jewel$/;"	n
+jewel	checked_arithmetic_detail.cpp	/^namespace jewel$/;"	n	file:
+jewel	checked_arithmetic_detail.hpp	/^namespace jewel$/;"	n
 jewel	decimal.cpp	/^namespace jewel$/;"	n	file:
 jewel	decimal.hpp	/^namespace jewel$/;"	n
+jewel	decimal_special_tests.cpp	/^namespace jewel$/;"	n	file:
+jewel	decimal_special_tests.hpp	/^namespace jewel$/;"	n
 jewel	num_digits.cpp	/^namespace jewel$/;"	n	file:
 jewel	num_digits.hpp	/^namespace jewel$/;"	n
 jewel	power_vector.hpp	/^namespace jewel$/;"	n
@@ -124,14 +133,15 @@ main	main.cpp	/^int main()$/;"	f
 maximum	decimal.cpp	/^Decimal Decimal::maximum()$/;"	f	class:jewel::Decimal
 maximum_precision	decimal.hpp	/^int Decimal::maximum_precision()$/;"	f	class:jewel::Decimal
 minimum	decimal.cpp	/^Decimal Decimal::minimum()$/;"	f	class:jewel::Decimal
-multiplication_is_unsafe	checked_arithmetic.cpp	/^  multiplication_is_unsafe(unsigned short x, unsigned short y)$/;"	f	class:jewel::CheckedArithmetic
-multiplication_is_unsafe	checked_arithmetic.cpp	/^CheckedArithmetic::multiplication_is_unsafe(unsigned int x, unsigned int y)$/;"	f	class:jewel::CheckedArithmetic
-multiplication_is_unsafe	checked_arithmetic.cpp	/^CheckedArithmetic::multiplication_is_unsafe(unsigned long x, unsigned long y)$/;"	f	class:jewel::CheckedArithmetic
-multiplication_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::multiplication_is_unsafe(int x, int y)$/;"	f	class:jewel::CheckedArithmetic
-multiplication_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::multiplication_is_unsafe(long x, long y)$/;"	f	class:jewel::CheckedArithmetic
-multiplication_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::multiplication_is_unsafe(short x, short y)$/;"	f	class:jewel::CheckedArithmetic
-multiplication_is_unsafe_signed_integral_types	checked_arithmetic.hpp	/^CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)$/;"	f	class:jewel::CheckedArithmetic
-multiplication_is_unsafe_unsigned_integral_types	checked_arithmetic.hpp	/^CheckedArithmetic::multiplication_is_unsafe_unsigned_integral_types(T x, T y)$/;"	f	class:jewel::CheckedArithmetic
+multiplication_is_unsafe	checked_arithmetic.hpp	/^bool multiplication_is_unsafe(T x, T y)$/;"	f	namespace:jewel
+multiplication_is_unsafe	checked_arithmetic_detail.cpp	/^  multiplication_is_unsafe(unsigned short x, unsigned short y)$/;"	f	class:jewel::detail::CheckedArithmetic
+multiplication_is_unsafe	checked_arithmetic_detail.cpp	/^CheckedArithmetic::multiplication_is_unsafe(unsigned int x, unsigned int y)$/;"	f	class:jewel::detail::CheckedArithmetic
+multiplication_is_unsafe	checked_arithmetic_detail.cpp	/^CheckedArithmetic::multiplication_is_unsafe(unsigned long x, unsigned long y)$/;"	f	class:jewel::detail::CheckedArithmetic
+multiplication_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::multiplication_is_unsafe(int x, int y)$/;"	f	class:jewel::detail::CheckedArithmetic
+multiplication_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::multiplication_is_unsafe(long x, long y)$/;"	f	class:jewel::detail::CheckedArithmetic
+multiplication_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::multiplication_is_unsafe(short x, short y)$/;"	f	class:jewel::detail::CheckedArithmetic
+multiplication_is_unsafe_signed_integral_types	checked_arithmetic_detail.hpp	/^CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)$/;"	f	class:jewel::detail::CheckedArithmetic
+multiplication_is_unsafe_unsigned_integral_types	checked_arithmetic_detail.hpp	/^CheckedArithmetic::multiplication_is_unsafe_unsigned_integral_types(T x, T y)$/;"	f	class:jewel::detail::CheckedArithmetic
 num_digits	num_digits.cpp	/^std::size_t NumDigits::num_digits(int x, int base)$/;"	f	class:jewel::NumDigits
 num_digits	num_digits.cpp	/^std::size_t NumDigits::num_digits(long x, long base)$/;"	f	class:jewel::NumDigits
 num_digits	num_digits.cpp	/^std::size_t NumDigits::num_digits(short x, short base)$/;"	f	class:jewel::NumDigits
@@ -152,22 +162,24 @@ operator <<	decimal.hpp	/^operator<<(std::basic_ostream<charT, traits>& os, Deci
 operator =	decimal.hpp	/^Decimal& Decimal::operator=(Decimal const& rhs)$/;"	f	class:jewel::Decimal
 operator ==	decimal.cpp	/^bool Decimal::operator==(Decimal rhs) const$/;"	f	class:jewel::Decimal
 operator >>	decimal.hpp	/^operator>>(std::basic_istream<charT, traits>& is, Decimal& d)$/;"	f	namespace:jewel
-places_type	decimal.hpp	/^	typedef places_type places_type;$/;"	t	class:jewel::Decimal
+places_type	decimal.hpp	/^	typedef unsigned short places_type;$/;"	t	class:jewel::Decimal
 power_vector	power_vector.hpp	/^power_vector(std::vector<T> const& v)$/;"	f	namespace:jewel
 power_vector0	power_vector_tests.cpp	/^	vector< vector<int> > power_vector0;$/;"	m	struct:PowerVectorFixture1	file:
 power_vector0	power_vector_tests.cpp	/^	vector< vector<string> > power_vector0;$/;"	m	struct:PowerVectorFixture2	file:
 rationalize	decimal.cpp	/^Decimal::rationalize(places_type min_places)$/;"	f	class:jewel::Decimal
 rescale	decimal.cpp	/^int Decimal::rescale(places_type p_places)$/;"	f	class:jewel::Decimal
-round	decimal.cpp	/^Decimal round(Decimal const& x, unsigned int decimal_places)$/;"	f	namespace:jewel
+round	decimal.cpp	/^Decimal round(Decimal const& x, Decimal::places_type decimal_places)$/;"	f	namespace:jewel
 seconds_elapsed	stopwatch.hpp	/^double Stopwatch::seconds_elapsed() const$/;"	f	class:jewel::Stopwatch
-subtraction_is_unsafe	checked_arithmetic.cpp	/^CheckedArithmetic::subtraction_is_unsafe(unsigned long x, unsigned long y)$/;"	f	class:jewel::CheckedArithmetic
-subtraction_is_unsafe	checked_arithmetic.cpp	/^CheckedArithmetic::subtraction_is_unsafe(unsigned short x, unsigned short y)$/;"	f	class:jewel::CheckedArithmetic
-subtraction_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::subtraction_is_unsafe(int x, int y)$/;"	f	class:jewel::CheckedArithmetic
-subtraction_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::subtraction_is_unsafe(long x, long y)$/;"	f	class:jewel::CheckedArithmetic
-subtraction_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::subtraction_is_unsafe(short x, short y)$/;"	f	class:jewel::CheckedArithmetic
-subtraction_is_unsafe	checked_arithmetic.cpp	/^bool CheckedArithmetic::subtraction_is_unsafe(unsigned int x, unsigned int y)$/;"	f	class:jewel::CheckedArithmetic
-subtraction_is_unsafe_signed_integral_types	checked_arithmetic.hpp	/^bool CheckedArithmetic::subtraction_is_unsafe_signed_integral_types(T x, T y)$/;"	f	class:jewel::CheckedArithmetic
-subtraction_is_unsafe_unsigned_integral_types	checked_arithmetic.hpp	/^CheckedArithmetic::subtraction_is_unsafe_unsigned_integral_types(T x, T y)$/;"	f	class:jewel::CheckedArithmetic
+subtraction_is_unsafe	checked_arithmetic.hpp	/^bool subtraction_is_unsafe(T x, T y)$/;"	f	namespace:jewel
+subtraction_is_unsafe	checked_arithmetic_detail.cpp	/^CheckedArithmetic::subtraction_is_unsafe(unsigned long x, unsigned long y)$/;"	f	class:jewel::detail::CheckedArithmetic
+subtraction_is_unsafe	checked_arithmetic_detail.cpp	/^CheckedArithmetic::subtraction_is_unsafe(unsigned short x, unsigned short y)$/;"	f	class:jewel::detail::CheckedArithmetic
+subtraction_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::subtraction_is_unsafe(int x, int y)$/;"	f	class:jewel::detail::CheckedArithmetic
+subtraction_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::subtraction_is_unsafe(long x, long y)$/;"	f	class:jewel::detail::CheckedArithmetic
+subtraction_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::subtraction_is_unsafe(short x, short y)$/;"	f	class:jewel::detail::CheckedArithmetic
+subtraction_is_unsafe	checked_arithmetic_detail.cpp	/^bool CheckedArithmetic::subtraction_is_unsafe(unsigned int x, unsigned int y)$/;"	f	class:jewel::detail::CheckedArithmetic
+subtraction_is_unsafe_signed_integral_types	checked_arithmetic_detail.hpp	/^bool CheckedArithmetic::subtraction_is_unsafe_signed_integral_types(T x, T y)$/;"	f	class:jewel::detail::CheckedArithmetic
+subtraction_is_unsafe_unsigned_integral_types	checked_arithmetic_detail.hpp	/^CheckedArithmetic::subtraction_is_unsafe_unsigned_integral_types(T x, T y)$/;"	f	class:jewel::detail::CheckedArithmetic
+unchecked_multiply	decimal.cpp	/^Decimal& Decimal::unchecked_multiply(Decimal rhs)$/;"	f	class:jewel::Decimal
 vector0	power_vector_tests.cpp	/^	vector<int> vector0;$/;"	m	struct:PowerVectorFixture1	file:
 vector0	power_vector_tests.cpp	/^	vector<string> vector0;$/;"	m	struct:PowerVectorFixture2	file:
 vector0_0	power_vector_tests.cpp	/^	vector<int> vector0_0;$/;"	m	struct:PowerVectorFixture1	file:

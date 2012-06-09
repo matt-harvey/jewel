@@ -1,10 +1,10 @@
 #include "decimal.hpp"
-#include "num_digits.hpp"  // for num_digits
 #include "arithmetic_exceptions.hpp"
+#include "checked_arithmetic.hpp"
+#include "num_digits.hpp"  // for num_digits
 
 #include <algorithm>
 #include <cassert>
-#include <checked_arithmetic.hpp>
 #include <cmath>    // for pow
 #include <cstdlib>  // for abs
 #include <istream>
@@ -327,8 +327,7 @@ int Decimal::rescale(places_type p_places)
 		int_type multiplier =
 		  NUM_CAST<int_type>(pow(base, p_places - m_places));
 
-		if (CheckedArithmetic::multiplication_is_unsafe(m_intval,
-		  multiplier))
+		if (multiplication_is_unsafe(m_intval, multiplier))
 		{
 			assert (m_places == DEBUGVARIABLE_orig_places);
 			assert (m_intval == DEBUGVARIABLE_orig_intval);
@@ -375,8 +374,7 @@ Decimal const& Decimal::operator++()
 	#ifndef NDEBUG
 		places_type const benchmark_places = m_places;
 	#endif
-	if (CheckedArithmetic::addition_is_unsafe(m_intval,
-	  implicit_divisor()))
+	if (addition_is_unsafe(m_intval, implicit_divisor()))
 	{
 		throw UnsafeArithmeticException("Addition may cause overflow.");
 	}
@@ -393,8 +391,7 @@ Decimal const& Decimal::operator--()
 	#ifndef NDEBUG
 		places_type const benchmark_places = m_places;
 	#endif
-	if (CheckedArithmetic::subtraction_is_unsafe(m_intval,
-	  implicit_divisor()))
+	if (subtraction_is_unsafe(m_intval, implicit_divisor()))
 	{
 		throw UnsafeArithmeticException("Subtraction may cause "
 		  "overflow.");
@@ -413,7 +410,7 @@ Decimal& Decimal::operator+=(Decimal rhs)
 		places_type const benchmark_places = max(m_places, rhs.m_places);
 	#endif
 	co_normalize(*this, rhs);
-	if (CheckedArithmetic::addition_is_unsafe(m_intval, rhs.m_intval))
+	if (addition_is_unsafe(m_intval, rhs.m_intval))
 	{
 		throw UnsafeArithmeticException("Addition may cause overflow.");
 	}
@@ -430,7 +427,7 @@ Decimal& Decimal::operator-=(Decimal rhs)
 		places_type const benchmark_places = max(m_places, rhs.m_places);
 	#endif
 	co_normalize(*this, rhs);
-	if (CheckedArithmetic::subtraction_is_unsafe(m_intval, rhs.m_intval))
+	if (subtraction_is_unsafe(m_intval, rhs.m_intval))
 	{
 		throw UnsafeArithmeticException("Subtraction may cause "
 		  "overflow.");
@@ -442,9 +439,9 @@ Decimal& Decimal::operator-=(Decimal rhs)
 
 Decimal& Decimal::unchecked_multiply(Decimal rhs)
 {
-	m_intval = m_intval * rhs.m_intval;
-	assert (!CheckedArithmetic::addition_is_unsafe(m_places, rhs.m_places));
-	m_places = m_places + rhs.m_places;
+	m_intval *= rhs.m_intval;
+	assert (!addition_is_unsafe(m_places, rhs.m_places));
+	m_places += rhs.m_places;
 	while (m_places > MAX_PLACES)
 	{
 		assert (m_places > 0);
@@ -478,39 +475,18 @@ Decimal& Decimal::operator*=(Decimal rhs)
 
 	// Do unchecked_multiply if we can
 	assert (m_intval >= 0 && rhs.m_intval >= 0);	
-	if (!CheckedArithmetic::multiplication_is_unsafe(m_intval, rhs.m_intval))
+	if (!multiplication_is_unsafe(m_intval, rhs.m_intval))
 	{
 		unchecked_multiply(rhs);
 		if (signs_differ) m_intval *= -1;
 		return *this;
 	}
 
-	// Now we have to do things the hard way
-	/*
-	assert (CheckedArithmetic::multiplication_is_unsafe(m_intval,
-	  rhs.m_intval));
 	*this = orig;
-	rhs = orig_rhs;
-	try
-	{
-		rhs = Decimal("1") / rhs;
-	}
-	catch (UnsafeArithmeticException&)
-	{
-		throw UnsafeArithmeticException("Unsafe multiplication.");
-	}
-	try
-	{
-		*this /= rhs;
-	}
-	catch (UnsafeArithmeticException&)
-	{
-		*this = orig;
-		throw UnsafeArithmeticException("Unsafe multiplication.");
-	}
-	*/
+	throw UnsafeArithmeticException("Unsafe multiplication.");
+	assert (false);  // Execution should never reach here.
+	return *this;    // Quiet compiler warnings
 
-	return *this;
 }
 
 
@@ -565,14 +541,14 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	// Deal with any remainder using "long division"
 	while (remainder != 0 && rescale(m_places + 1) == 0)
 	{
-		if (CheckedArithmetic::multiplication_is_unsafe(remainder, BASE))
+		if (multiplication_is_unsafe(remainder, BASE))
 		{
 			// Then we can't proceed with ordinary "long division" safely,
 			// and need to "scale down" first
 			if (rhs.m_intval % BASE >= ROUNDING_THRESHOLD)
 			{
 				// Do rounding if safe, otherwise throw
-				if (CheckedArithmetic::addition_is_unsafe(rhs.m_intval, BASE))
+				if (addition_is_unsafe(rhs.m_intval, BASE))
 				{
 					throw UnsafeArithmeticException("Unsafe division.");
 				}
@@ -588,7 +564,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			if (lhs.m_intval % BASE >= ROUNDING_THRESHOLD)
 			{
 				// Do rounding if safe, otherwise throw
-				if (CheckedArithmetic::addition_is_unsafe(lhs.m_intval, BASE))
+				if (addition_is_unsafe(lhs.m_intval, BASE))
 				{
 					throw UnsafeArithmeticException("Unsafe division.");
 				}
@@ -601,7 +577,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		}
 
 		// It's safe to proceed with ordinary "long division"
-		assert(!CheckedArithmetic::multiplication_is_unsafe(remainder, BASE));
+		assert(!multiplication_is_unsafe(remainder, BASE));
 		remainder *= BASE;
 		int_type temp_remainder = remainder % rhs.m_intval;
 		m_intval += remainder / rhs.m_intval;
@@ -609,15 +585,13 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	}
 
 	assert (rhs.m_intval >= remainder);
-	assert (!CheckedArithmetic::subtraction_is_unsafe(rhs.m_intval,
-	  remainder));
+	assert (!subtraction_is_unsafe(rhs.m_intval, remainder));
 	
 	// Do rounding if required
 	if (rhs.m_intval - remainder <= remainder)
 	{
 		// If the required rounding would be unsafe, we throw
-		if (CheckedArithmetic::addition_is_unsafe(m_intval,
-		  NUM_CAST<int_type>(1)))
+		if (addition_is_unsafe(m_intval, NUM_CAST<int_type>(1)))
 		{
 			throw UnsafeArithmeticException("Unsafe division.");
 		}

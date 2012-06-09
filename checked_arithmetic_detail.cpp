@@ -1,6 +1,9 @@
-#include "checked_arithmetic.hpp"
+#include "checked_arithmetic_detail.hpp"
 
 namespace jewel
+{
+
+namespace detail
 {
 
 bool CheckedArithmetic::addition_is_unsafe(int x, int y)
@@ -99,6 +102,8 @@ CheckedArithmetic::
 	return multiplication_is_unsafe_unsigned_integral_types(x, y);
 }
 
+
+}  // namespace detail
 
 }  // namespace jewel
 

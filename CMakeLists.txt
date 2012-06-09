@@ -5,7 +5,7 @@ link_directories (/home/matthew/lib/jewel)
 add_executable (main 
                 main.cpp
 				arithmetic_exceptions.cpp
-                checked_arithmetic.cpp
+                checked_arithmetic_detail.cpp
                 checked_arithmetic_tests.cpp
 		        decimal.cpp
 				decimal_special_tests.cpp
@@ -15,7 +15,7 @@ add_executable (main
 		        stopwatch_tests.cpp
 		        power_vector_tests.cpp)
 add_library(jewel
-            checked_arithmetic.cpp
+            checked_arithmetic_detail.cpp
 	        decimal.cpp
 			arithmetic_exceptions.cpp
 			num_digits.cpp)
