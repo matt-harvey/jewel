@@ -278,27 +278,29 @@ public:
 	 *
 	 * The precision of the returned quotient is never more than
 	 * a number of decimal places to the right
-	 * of the decimal point, equal to the number of digits in the value
-	 * returned by Decimal::maximum(). Also, the returned quotient never has
+	 * of the decimal point, equal to the value
+	 * returned by Decimal::maximum_precision().
+	 * Also, the returned quotient never has
 	 * more significant (non-zero) digits than this. Division returns a
 	 * quotient that is as precise as possible within these constraints.
 	 * However, pointless trailing zeroes to the right of the
 	 * decimal point are eliminated rather than stored within the result.
 	 *
-	 * Currently, to be able to divide two Decimals, it must be possible
-	 * for the implementation of the division function to increase the
+	 * Currently, to be able to divide one Decimal by another,
+	 * it must be possible for the implementation of the division
+	 * function to increase the
 	 * fractional precision (number of places to the right of the decimal
 	 * point) of the dividend until it equals the fractional precision
-	 * of the divisor. If the dividend is much larger than the divisor, it
-	 * is possible that this operation will fail, in which case an exception
-	 * (jewel::UnsafeArithmeticException) will be thrown. You can avoid this
+	 * of the divisor. In some cases it is not possible to do this safely,
+	 * in which case an exception
+	 * (jewel::UnsafeArithmeticException) is thrown. You can avoid this
 	 * possibility by ensuring that you only divide Decimals where the
 	 * fractional precision of the dividend is at least as great as that
 	 * of the divisor; or, failing that, where the sum of the number of
-	 * significant digits in the dividend, plus the number of extra digits
+	 * significant digits in the dividend, and the number of extra digits
 	 * of fractional precision that would need to be added to match the
-	 * fractional precision of the divisor, is less than the number of
-	 * digits in the value returned by Decimal::maximum().
+	 * fractional precision of the divisor, is less than the value returned
+	 * by Decimal::maximum_precision().
 	 *
 	 * @todo The implementation of division is messy. Though it seems to be
 	 * working correctly, I should tidy it up, even if I don't make it more
@@ -516,7 +518,7 @@ private:
 	 * non-negative, and that it is safe to multiply m_intval and
 	 * rhs.m_intval without fear of overflow.
 	 */
-	Decimal& unchecked_multiply(Decimal rhs);
+	Decimal& unchecked_multiply(Decimal const& rhs);
 
 
 }; // class Decimal

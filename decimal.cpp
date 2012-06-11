@@ -437,7 +437,7 @@ Decimal& Decimal::operator-=(Decimal rhs)
 	return *this;
 }
 
-Decimal& Decimal::unchecked_multiply(Decimal rhs)
+Decimal& Decimal::unchecked_multiply(Decimal const& rhs)
 {
 	m_intval *= rhs.m_intval;
 	assert (!addition_is_unsafe(m_places, rhs.m_places));
@@ -744,7 +744,7 @@ Decimal operator-(Decimal const& d)
 // Same goes for Decimal::maximum().
 Decimal Decimal::minimum()
 {
-	static bool calculated_already;
+	static bool calculated_already = false;
 	static Decimal ret;
 	if (calculated_already)
 	{
@@ -754,12 +754,13 @@ Decimal Decimal::minimum()
 	ostringstream oss;
 	oss << numeric_limits<int_type>::min();
 	ret = Decimal(oss.str());
+	calculated_already = true;
 	return ret;
 }
 
 Decimal Decimal::maximum()
 {
-	static bool calculated_already;
+	static bool calculated_already = false;
 	static Decimal ret;
 	if (calculated_already)
 	{
@@ -769,6 +770,7 @@ Decimal Decimal::maximum()
 	ostringstream oss;
 	oss << numeric_limits<int_type>::max();
 	ret = Decimal(oss.str());
+	calculated_already = true;
 	return ret;
 }
 

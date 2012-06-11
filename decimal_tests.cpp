@@ -464,7 +464,7 @@ TEST(decimal_multiply_equals)
 	d3 *= d4;
 	CHECK_EQUAL(d3, Decimal("0"));
 	Decimal d50("90.27427");
-	d50 *= Decimal("-118381.12");
+	d50 *= Decimal("-118381.12");  // Unhandled exception here 2012-06-11
 	CHECK(d50 < Decimal("-10686769"));
 	CHECK(d50 > Decimal("-10686770"));
 	Decimal d100 = Decimal("900001") * Decimal("0.2234");
@@ -502,18 +502,18 @@ TEST(decimal_multiplication)
 	CHECK_EQUAL(d2, d3);
 	Decimal d4("0.1008");
 	Decimal d5("0.7000024");
-	CHECK(d4 * d5 > Decimal("0.0705602"));
-	CHECK(d4 * d5 < Decimal("0.0705603"));
+	CHECK(d4 * d5 > Decimal("0.0705602")); // Unhandled exception
+	CHECK(d4 * d5 < Decimal("0.0705603")); // Unhandled exception
 	Decimal d6("0.00000001");
 	Decimal d7("0.0000001");
 	Decimal d8 = d6 * d7;
 	CHECK_EQUAL(d8, Decimal("0"));
 	CHECK_EQUAL(Decimal("1000001") * Decimal("0.00222"),
 	  Decimal("2220.00222"));
-	Decimal d100 = Decimal("-90.9087176") * Decimal("0.00020042");
+	Decimal d100 = Decimal("-90.9087176") * Decimal("0.00020042"); // Unhandled exception
 	CHECK(d100 < Decimal("-0.01821992"));
 	CHECK(d100 > Decimal("-0.01821993"));
-	Decimal d101 = Decimal("192384.43") * Decimal("-1.9962");
+	Decimal d101 = Decimal("192384.43") * Decimal("-1.9962"); // Unhandled exception
 	CHECK(d101 < Decimal("-384037.7"));
 	CHECK(d101 > Decimal("-384037.8"));
 
