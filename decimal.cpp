@@ -409,9 +409,11 @@ Decimal& Decimal::operator+=(Decimal rhs)
 	#ifndef NDEBUG
 		places_type const benchmark_places = max(m_places, rhs.m_places);
 	#endif
+	Decimal orig = *this;
 	co_normalize(*this, rhs);
 	if (addition_is_unsafe(m_intval, rhs.m_intval))
 	{
+		*this = orig;
 		throw UnsafeArithmeticException("Addition may cause overflow.");
 	}
 	m_intval += rhs.m_intval;
@@ -426,9 +428,11 @@ Decimal& Decimal::operator-=(Decimal rhs)
 	#ifndef NDEBUG
 		places_type const benchmark_places = max(m_places, rhs.m_places);
 	#endif
+	Decimal orig = *this;
 	co_normalize(*this, rhs);
 	if (subtraction_is_unsafe(m_intval, rhs.m_intval))
 	{
+		*this = orig;
 		throw UnsafeArithmeticException("Subtraction may cause "
 		  "overflow.");
 	}
@@ -452,8 +456,6 @@ Decimal& Decimal::unchecked_multiply(Decimal const& rhs)
 
 Decimal& Decimal::operator*=(Decimal rhs)
 {
-	// Trying slow, methodical long-multiplication approach
-
 	Decimal orig = *this;
 	Decimal orig_rhs = rhs;
 	rationalize();
@@ -468,8 +470,8 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	}
 
 	// Make absolute and remember signs
-	bool signs_differ = ( (m_intval < 0 && rhs.m_intval > 0) ||
-	                      (m_intval > 0 && rhs.m_intval < 0) );
+	bool const signs_differ = ( (m_intval < 0 && rhs.m_intval > 0) ||
+	                            (m_intval > 0 && rhs.m_intval < 0) );
 	if (m_intval < 0) m_intval *= -1;
 	if (rhs.m_intval < 0) rhs.m_intval *= -1;
 
@@ -485,7 +487,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	*this = orig;
 	throw UnsafeArithmeticException("Unsafe multiplication.");
 	assert (false);  // Execution should never reach here.
-	return *this;    // Quiet compiler warnings
+	return *this;    // Silence compiler warnings
 
 }
 
@@ -597,6 +599,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		// If the required rounding would be unsafe, we throw
 		if (addition_is_unsafe(m_intval, NUM_CAST<int_type>(1)))
 		{
+			*this = orig;
 			throw UnsafeArithmeticException("Unsafe division.");
 		}
 		// Do the rounding, it's safe
