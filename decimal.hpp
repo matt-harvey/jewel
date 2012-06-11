@@ -83,8 +83,6 @@ namespace jewel
  * the operands. However, as with addition and subtraction, only fractional
  * zeroes are culled, and never whole digits.
  *
- * @todo Multiplication is now very slow for some reason. Find out why.
- *  
  * Apart from the above requirements, Decimals will store as many digits of
  * precision as possible. So "1/3" will result in "0.333...." with as many
  * trailing '3's as are permitted by the implementation.
