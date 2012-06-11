@@ -545,32 +545,36 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		{
 			// Then we can't proceed with ordinary "long division" safely,
 			// and need to "scale down" first
+			bool add_rounding_right = false;
 			if (rhs.m_intval % BASE >= ROUNDING_THRESHOLD)
 			{
-				// Do rounding if safe, otherwise throw
-				if (addition_is_unsafe(rhs.m_intval, BASE))
-				{
-					throw UnsafeArithmeticException("Unsafe division.");
-				}
-				rhs.m_intval += BASE;
+				add_rounding_right = true;
 			}
 			rhs.m_intval /= BASE;
+			if (add_rounding_right)
+			{
+				assert (!addition_is_unsafe(rhs.m_intval,
+				  NUM_CAST<int_type>(1)));
+				++(rhs.m_intval);
+			}
 
 			// Redo the Decimal division on a "safe scale"
 			Decimal lhs = orig;
 			if (lhs.m_intval < 0) lhs.m_intval *= -1;
 			assert (rhs.m_intval >= 0);
 			lhs /= rhs;
+			bool add_rounding_left = false;
 			if (lhs.m_intval % BASE >= ROUNDING_THRESHOLD)
 			{
-				// Do rounding if safe, otherwise throw
-				if (addition_is_unsafe(lhs.m_intval, BASE))
-				{
-					throw UnsafeArithmeticException("Unsafe division.");
-				}
-				lhs.m_intval += BASE;
+				add_rounding_left = true;	
 			}
 			lhs.m_intval /= BASE;
+			if (add_rounding_left)
+			{
+				assert (!addition_is_unsafe(lhs.m_intval,
+				  NUM_CAST<int_type>(1)));
+				++(lhs.m_intval);
+			}
 			if (diff_signs) lhs.m_intval *= -1;
 			*this = lhs;
 			return *this;

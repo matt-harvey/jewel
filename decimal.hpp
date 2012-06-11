@@ -38,25 +38,15 @@ namespace jewel
  * floating point class. However the range of magnitudes is deliberately
  * restricted.
  *
- * Addition and subtraction operations throw exceptions if they
- * would cause either overflow, or precision loss relative to the level of
- * precision (conceived as digits to the right of the decimal point) of the
- * more precise of the two Decimals being operated on. At this point,
- * multiplication and division do not guarantee any particular level
- * of precision, but do guarantee that they will throw an exception
- * rather than overflow.
- *
  * @todo I think I should change places_type to a signed and then just do
  * away with arbitrary restrictions. This would free me up a bit w.r.t.
  * the implementation of multiplication and division. Although it would
- * complicate output and input.
+ * complicate output and input. I would also need to change things
+ * everywhere where it relies on m_places always being positive.
  *
- * @todo Multiplication and division should offer specific guarantees about
+ * @todo Multiplication should offer specific guarantees about
  * precison, and the class documentation (above para.) should reflect this.
- *
- * @todo Test the below statements (up to the next "to-do") regarding
- * the behaviour of Decimals w.r.t. precision.
- *
+ * 
  * There are two concepts of precision in regards to this Decimal class. The
  * \e total \e precision of an instance of this class is the total number of
  * decimal digits, to either the left or the right of the decimal point,
@@ -99,6 +89,9 @@ namespace jewel
  * precision as possible. So "1/3" will result in "0.333...." with as many
  * trailing '3's as are permitted by the implementation.
  * 
+ * @todo I am not convinced that division is accurate in cases where
+ * the "scale down" branch is used. Figure this out.
+ *
  * @todo Multiplication and divison are both still broken. Division is not
  * radically broken and at least it throws rather than giving
  * a wrong answer. However multiplication is far from working correctly.
@@ -106,7 +99,8 @@ namespace jewel
  * to use a wider integer type for m_intval (long long), and throw
  * UnsafeArithmeticException rather than attempting complicated workarounds
  * in cases where the simple multiplication and division would cause
- * temporary overflow. I could even make Decimal::max() and Decimal::min()
+ * temporary overflow. I could even make Decimal::maximum() and
+ * Decimal::minimum()
  * arbitrary limits of my choosing (carefully policed in all functions),
  * so that there is \e deliberate \e headroom created for the simpler
  * implementations of multiplication and divison to work in ALL cases.
@@ -124,11 +118,6 @@ namespace jewel
  * @todo For eventual release, tidy the naughty NUM_CAST macro in decimal.cpp.
  * (Replace it everywhere with plain static_cast, providing of course that
  * the tests pass when compiled in release mode.)
- *
- * @todo Properly document how operations and constructors handle "trailing
- * zeroes". Currently they cull trailing fractional zeroes in the result, but
- * only up to point. That point is the maximm of the fractional precisions of
- * the most precise of the two operands.
  *
  * @todo Fully test the expected behaviour w.r.t. the number of trailing
  * fractional zeroes left behind by operations and constructors.
@@ -207,6 +196,14 @@ public:
 	 *   greater than the value returned by Decimal::maximum_precision(); or
 	 *   the implied Decimal number would be required to exceed the maximum of
 	 *   the underlying integeral representation.
+	 *
+	 * Trailing zeroes to the right of the decimal point in the passed string
+	 * influence the number of digits of fractional precision stored in the
+	 * resulting Decimal. So \c Decimal("0.00") is stored with two digits of
+	 * fractional precision. However it is still the case that
+	 * <tt> Decimal("0.00") == Decimal("0") <\tt>.
+	 * Note leading negative signs in front of c\ Decimal("0") or its
+	 * equivalents are \e not stored.
 	 */
 	explicit Decimal(std::string const& str);
 
@@ -279,14 +276,29 @@ public:
 	 * @exception jewel::UnsafeArithmeticException is thrown if
 	 * division would cause overflow.
 	 *
-	 * Precision is never more than a number of decimal places to the right
-	 * of the decimal point, equal to the value returned by 
-	 * of the decimal point. Sometimes it can be less: there are no 
-	 * guarantees at this point in regards to precision from the division
-	 * operation.
+	 * The precision of the returned quotient is never more than
+	 * a number of decimal places to the right
+	 * of the decimal point, equal to the number of digits in the value
+	 * returned by Decimal::maximum(). Also, the returned quotient never has
+	 * more significant (non-zero) digits than this. Division returns a
+	 * quotient that is as precise as possible within these constraints.
+	 * However, pointless trailing zeroes to the right of the
+	 * decimal point are eliminated rather than stored within the result.
 	 *
-	 * @todo Division should be able to offer a more well-defined
-	 * guarantee in regards to precision.
+	 * Currently, to be able to divide two Decimals, it must be possible
+	 * for the implementation of the division function to increase the
+	 * fractional precision (number of places to the right of the decimal
+	 * point) of the dividend until it equals the fractional precision
+	 * of the divisor. If the dividend is much larger than the divisor, it
+	 * is possible that this operation will fail, in which case an exception
+	 * (jewel::UnsafeArithmeticException) will be thrown. You can avoid this
+	 * possibility by ensuring that you only divide Decimals where the
+	 * fractional precision of the dividend is at least as great as that
+	 * of the divisor; or, failing that, where the sum of the number of
+	 * significant digits in the dividend, plus the number of extra digits
+	 * of fractional precision that would need to be added to match the
+	 * fractional precision of the divisor, is less than the number of
+	 * digits in the value returned by Decimal::maximum().
 	 *
 	 * @todo The implementation of division is messy. Though it seems to be
 	 * working correctly, I should tidy it up, even if I don't make it more
@@ -332,6 +344,8 @@ public:
 
 	/**
 	* Equality operator. Compares Decimals by value.
+	* Note the following evaluate to \c true:\n
+	* Decimal("-0.000") == Decimal("0");\n
 	*/
 	bool operator==(Decimal) const;
 
