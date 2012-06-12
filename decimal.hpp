@@ -44,9 +44,6 @@ namespace jewel
  * complicate output and input. I would also need to change things
  * everywhere where it relies on m_places always being positive.
  *
- * @todo Multiplication should offer specific guarantees about
- * precison, and the class documentation (above para.) should reflect this.
- * 
  * There are two concepts of precision in regards to this Decimal class. The
  * \e total \e precision of an instance of this class is the total number of
  * decimal digits, to either the left or the right of the decimal point,
@@ -90,19 +87,22 @@ namespace jewel
  * @todo I am not convinced that division is accurate in cases where
  * the "scale down" branch is used. Figure this out.
  *
- * @todo Multiplication and divison are both still broken. Division is not
- * radically broken and at least it throws rather than giving
- * a wrong answer. However multiplication is far from working correctly.
- * One solution to this is basically
- * to use a wider integer type for m_intval (long long), and throw
- * UnsafeArithmeticException rather than attempting complicated workarounds
- * in cases where the simple multiplication and division would cause
- * temporary overflow. I could even make Decimal::maximum() and
+ * @todo Multiplication and division throw exceptions in some cases where
+ * they should be able to calculate an answer. I have documented these
+ * behaviours in the API docs. I don't believe this is a very serious
+ * problem, as the behaviour is well documented and exceptions are thrown
+ * rather than silent failure occurring. However, it could be quite limiting
+ * for certain use cases. The ideal solution is to use more sophisticated
+ * floating point algorithms. But another solution is simply 
+ * to use a wider integer type for m_intval (<tt> long long </tt>), to provide more
+ * room to move, even while the same structural limitations remain.
+ * (I could possibly make Decimal::maximum() and
  * Decimal::minimum()
  * arbitrary limits of my choosing (carefully policed in all functions),
  * so that there is \e deliberate \e headroom created for the simpler
- * implementations of multiplication and divison to work in ALL cases.
- * I LIKE THIS SOLUTION. IT MAKES FOR SIMPLER CODE.
+ * implementations of multiplication and divison to work in ALL cases. I
+ * think this would be too limiting though, even if I use <tt> long long
+ * </tt>.)
  *
  * @todo Make it work as expected with standard library stream precision
  * manipulators and formatting. To do this properly, I need to understand
@@ -119,6 +119,9 @@ namespace jewel
  *
  * @todo Fully test the expected behaviour w.r.t. the number of trailing
  * fractional zeroes left behind by operations and constructors.
+ *
+ * @todo I should test that Decimal value is actually preserved after
+ * an exception is thrown and caught from an aborted arithmetic operation.
  *
  * @todo Find out whether it's \e always the case that the smallest possible
  * integer of every integral type on every machine has an absolute value that
@@ -249,19 +252,39 @@ public:
 	/**
 	 * @exception jewel::UnsafeArithmeticException thrown if multiplication
 	 * would cause overflow.
-	 * 
+	 *
+	 * Currently, for multiplication to be executed safely, it must be
+	 * the case that the underlying integral representations of the Decimals
+	 * being multiplied can themselves be multiplied without overflow. If
+	 * this cannot occur, then the Decimal multiplication operation will
+	 * throw an exception rather than proceeding with the operation. The
+	 * simplest way to avoid an exception from multiplication is to ensure
+	 * that the number of significant digits in the left multiplicand,
+	 * plus the number of significant digits in the right multiplicand,
+	 * is less than
+	 * the value returned by Decimal::maximum_precision(). Note
+	 * that all digits to the left of the decimal point (excluding the case
+	 * where the only
+	 * such digit is \c 0) are counted as significant digits.
+	 * In Decimals with fractional parts (digits to the right of the 
+	 * decimal point), the significant
+	 * digits, going from left to right, start at the first non-zero digit,
+	 * and continue consecutively until the last non-zero digit is reached
+	 * (and the "boundary digits" just mentioned count as significant
+	 * digits). The negative sign and the decimal point
+	 * do not count as digits.
+	 *
 	 * Note also the smallest possible Decimal (the value returned by
 	 * Decimal::minimum()) cannot be multiplied, and an exception is thrown
 	 * if this is attempted.
 	 *
-	 * Precision is never more than a number of decimal places to the right
-	 * of the decimal point, equal to the value returned by 
-	 * Decimal::maximum_precision(). Sometimes it can be less: there are no
-	 * guarantees at this point in regard to precision from the
-	 * multiplication operation.
-	 *
-	 * @todo Multiplication should be offer a more well-defined guarantee in
-	 * regards to precision.
+	 * The fractional precision of the returned product is never more
+	 * than a number of decimal places to the right
+	 * of the decimal point equal to the value returned by 
+	 * Decimal::maximum_precision(). The returned product is as precise as
+	 * possible within this constraint; however, trailing fractional zeroes
+	 * are always eliminated rather than being stored within the returned
+	 * product.
 	 *
 	 * In virtue of operator*=(Decimal) being defined,
 	 * \b operator*(Decimal, Decimal) is also defined (through the magic of
@@ -363,6 +386,7 @@ public:
 	 * Returns the maximum number of digits of precision
 	 */
 	static places_type maximum_precision();
+
 
 private:
 

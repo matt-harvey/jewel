@@ -14,6 +14,9 @@ using std::endl;
 using std::ios;
 using std::setprecision;
 
+#include "decimal.hpp"
+using jewel::Decimal;
+
 
 
 int main()
@@ -25,6 +28,32 @@ int main()
 	#else
 		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
 	#endif
+
+
+	/*
+	cout << "A sample of Decimal instances" << endl << endl;
+	cout << "string rep." << std::setw(10) << "m_intval" << std::setw(10)
+	     << "m_places"
+	     << endl;
+	Decimal d0("0");
+	Decimal d1("0.0");
+	Decimal d2("-0.00");
+	Decimal d3("234.212340");
+	Decimal d4("0.00033");
+	Decimal d5("0.000330");
+	Decimal d6("-0.000330");
+	Decimal da[] = { d0, d1, d2, d3, d4, d5, d6 };
+	for (size_t i = 0; i != 7; ++i)
+	{
+		cout << std::setw(10) << da[i]
+		     << std::setw(10) << da[i].get_intval()
+			 << std::setw(10) << da[i].get_places()
+			 << std::setw(10) << endl;
+	}
+	cout << endl;
+	*/
+
+
 
 
 
@@ -54,7 +83,7 @@ int main()
 	*/
 
 	// decimal_csv_test();
-	decimal_speed_test();
+	// decimal_speed_test();
 
 	return UnitTest::RunAllTests();
 }

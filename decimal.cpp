@@ -481,13 +481,14 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	{
 		unchecked_multiply(rhs);
 		if (signs_differ) m_intval *= -1;
+		rationalize();
 		return *this;
 	}
 
 	*this = orig;
 	throw UnsafeArithmeticException("Unsafe multiplication.");
 	assert (false);  // Execution should never reach here.
-	return *this;    // Silence compiler warnings
+	return *this;    // Silence compiler re. return from non-void function.
 
 }
 
