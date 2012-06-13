@@ -21,9 +21,11 @@
  * <tt>
  * int\n
  * long\n
+ * long long\n
  * short\n
  * unsigned int\n
  * unsigned long\n
+ * unsigned long long\n
  * unsigned short\n
  *
  * @param x first number that would be added (or subtracted, or multiplied).
@@ -32,6 +34,9 @@
  * unsafe to add \c x and \c y (or subtract \c y from \c x, or multiply \c x
  * by \c y) (i.e. would give rise to overflow), otherwise returns false.
  * The operation being tested is not actually performed.
+ *
+ * @todo Need to write unit tests for the long long and unsigned long long
+ * versions of the checking functions.
  */
 
 

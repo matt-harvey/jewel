@@ -89,12 +89,13 @@ namespace jewel
  *
  * @todo Multiplication and division throw exceptions in some cases where
  * they should be able to calculate an answer. I have documented these
- * behaviours in the API docs. I don't believe this is a very serious
+ * behaviours in the API docs. I don't believe this is a \e very serious
  * problem, as the behaviour is well documented and exceptions are thrown
- * rather than silent failure occurring. However, it could be quite limiting
+ * rather than silent failure occurring. However, it is quite limiting
  * for certain use cases. The ideal solution is to use more sophisticated
  * floating point algorithms. But another solution is simply 
- * to use a wider integer type for m_intval (<tt> long long </tt>), to provide more
+ * to use a wider integer type for m_intval (<tt> long long </tt>),
+ * to provide more
  * room to move, even while the same structural limitations remain.
  * (I could possibly make Decimal::maximum() and
  * Decimal::minimum()

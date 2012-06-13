@@ -67,9 +67,11 @@ public:
 	// accordingly.
 	static bool addition_is_unsafe(int, int);
 	static bool addition_is_unsafe(long, long);
+	static bool addition_is_unsafe(long long, long long);
 	static bool addition_is_unsafe(short, short);
 	static bool addition_is_unsafe(unsigned int, unsigned int);
 	static bool addition_is_unsafe(unsigned long, unsigned long);
+	static bool addition_is_unsafe(unsigned long long, unsigned long long);
 	static bool addition_is_unsafe(unsigned short, unsigned short);
 	//@}
 
@@ -80,9 +82,11 @@ public:
 	// accordingly.
 	static bool subtraction_is_unsafe(int, int);
 	static bool subtraction_is_unsafe(long, long);
+	static bool subtraction_is_unsafe(long long, long long);
 	static bool subtraction_is_unsafe(short, short);
 	static bool subtraction_is_unsafe(unsigned int, unsigned int);
 	static bool subtraction_is_unsafe(unsigned long, unsigned long);
+	static bool subtraction_is_unsafe(unsigned long long, unsigned long long);
 	static bool subtraction_is_unsafe(unsigned short, unsigned short);
 	//@}
 
@@ -93,9 +97,12 @@ public:
 	// accordingly.
 	static bool multiplication_is_unsafe(int, int);
 	static bool multiplication_is_unsafe(long, long);
+	static bool multiplication_is_unsafe(long long, long long);
 	static bool multiplication_is_unsafe(short, short);
 	static bool multiplication_is_unsafe(unsigned int, unsigned int);
 	static bool multiplication_is_unsafe(unsigned long, unsigned long);
+	static bool multiplication_is_unsafe(unsigned long long,
+	  unsigned long long);
 	static bool multiplication_is_unsafe(unsigned short, unsigned short);
 	//@}
 
