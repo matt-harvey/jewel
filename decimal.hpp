@@ -550,6 +550,9 @@ private:
 // non-member functions - declarations
 
 /** Write to an output stream.
+ *
+ * @todo Make sure this doesn't fail when Decimal being written is the
+ * return value of Decimal::minimum().
  */
 template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
