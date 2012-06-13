@@ -1,21 +1,15 @@
 #include <unittest++/UnitTest++.h>
 #include "decimal_special_tests.hpp"
-#include "num_digits.hpp"
-#include "stopwatch.hpp"
-#include <boost/lexical_cast.hpp>
-#include <boost/numeric/conversion/cast.hpp>
 #include <iomanip>
 #include <iostream>
-#include <map>
 using jewel::detail::decimal_csv_test;
 using jewel::detail::decimal_speed_test;
 using std::cout;
 using std::endl;
 using std::ios;
 using std::setprecision;
+using std::string;
 
-#include "decimal.hpp"
-using jewel::Decimal;
 
 
 
@@ -28,9 +22,6 @@ int main()
 	#else
 		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
 	#endif
-
-
-
 
 
 	/* Here's how to print currency (though this doesn't include parentheses

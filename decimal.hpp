@@ -156,7 +156,7 @@ public:
 	/** The type of the underlying integer representation of the
 	 * Decimal number.
 	 */
-	typedef long int_type;
+	typedef long long int_type;
 
 	/** The type of the integer representation of the number of
 	 * decimal places (scale).
@@ -646,6 +646,8 @@ Decimal operator+(Decimal const& d)
 
 // Output
 
+
+
 template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
 operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
@@ -656,7 +658,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 	// minute will we write to os itself.
 	std::basic_ostringstream<charT, traits> ss;
 	Decimal::places_type const plcs = d.m_places;
-	Decimal::int_type dintval = d.m_intval;	
+	Decimal::int_type const dintval = d.m_intval;	
 
 	// special case of zero
 	if (dintval == 0)
@@ -669,7 +671,8 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 
 	// Our starting point is the string of digits representing
 	// the absolute value of the underlying integer
-	std::string s = boost::lexical_cast<std::string>(abs(dintval));
+	Decimal::int_type const absdintval = (dintval < 0? dintval * -1: dintval);
+	std::string s = boost::lexical_cast<std::string>(absdintval);
 	assert(s != "0");
 	str_sz slen = s.size();
 	

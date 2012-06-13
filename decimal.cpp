@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>    // for pow
-#include <cstdlib>  // for abs
 #include <istream>
 #include <limits>
 #include <numeric>  // for accumulate
@@ -33,7 +32,6 @@
 
 using boost::lexical_cast;
 using boost::bad_lexical_cast;
-using std::abs;
 using std::accumulate;
 using std::find;
 using std::isdigit;
@@ -347,8 +345,9 @@ int Decimal::rescale(places_type p_places)
 
 		// with one more place still to eliminate, we calculate
 		// whether rounding is required
-		bool remainder =
-		  abs(m_intval % BASE) >= ROUNDING_THRESHOLD;
+		int_type remainder_temp = m_intval % BASE;
+		if (remainder_temp < 0) remainder_temp *= -1;
+		bool remainder = (remainder_temp >= ROUNDING_THRESHOLD);
 
 		// now remove the remaining place
 		m_intval /= BASE;
