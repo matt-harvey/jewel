@@ -18,6 +18,7 @@
 #include <boost/operators.hpp>
 #include <cassert>
 #include <cctype>   // for isdigit
+#include <cstdlib>  // for abs
 #include <cmath>
 #include <istream>
 #include <ostream>
@@ -674,8 +675,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 
 	// Our starting point is the string of digits representing
 	// the absolute value of the underlying integer
-	Decimal::int_type const absdintval = (dintval < 0? dintval * -1: dintval);
-	std::string s = boost::lexical_cast<std::string>(absdintval);
+	std::string s = boost::lexical_cast<std::string>(std::abs(dintval));
 	assert(s != "0");
 	str_sz slen = s.size();
 	

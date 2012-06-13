@@ -11,6 +11,8 @@ using std::setprecision;
 using std::string;
 
 
+#include "decimal.hpp"
+using jewel::Decimal;
 
 
 int main()
@@ -23,6 +25,8 @@ int main()
 		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
 	#endif
 
+
+	cout << Decimal("1") / Decimal("3") << endl;
 
 	/* Here's how to print currency (though this doesn't include parentheses
 	 * for negative, or thousands separators just yet).
