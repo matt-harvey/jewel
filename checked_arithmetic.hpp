@@ -34,9 +34,6 @@
  * unsafe to add \c x and \c y (or subtract \c y from \c x, or multiply \c x
  * by \c y) (i.e. would give rise to overflow), otherwise returns false.
  * The operation being tested is not actually performed.
- *
- * @todo Need to write unit tests for the long long and unsigned long long
- * versions of the checking functions.
  */
 
 
@@ -51,7 +48,7 @@ namespace jewel
 // INTERFACE
 
 /// \name Check addition, subtraction and multiplication 
-// operations for overflow.
+/// operations for overflow.
  //@{
 /** See documentation for file checked_arithmetic.hpp.
  */
