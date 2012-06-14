@@ -280,28 +280,6 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 }
 
 
-// miscellaneous functions
-
-// This function was a quick way of reading from a stream - MUCH quicker than
-// the operator>> function, or initialization from a string. However I want
-// to hide it and comment it out unless and until it's really required.
-/*
-istream& Decimal::read_parts_from_stream(istream& is)
-{
-	places_type new_places;
-	is >> m_intval >> new_places;
-	if (new_places > MAX_PLACES)
-	{
-		m_intval = 0;
-		new_places = 0;
-		throw UnsafeArithmeticException("Attempted to set"
-		  " m_places to a value of exceeding MAX_PLACES.");
-	}
-	m_places = new_places;
-	return is;
-}
-*/
-
 int Decimal::rescale(places_type p_places)
 {
 	#ifndef NDEBUG

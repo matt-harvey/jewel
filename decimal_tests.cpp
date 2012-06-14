@@ -37,81 +37,6 @@ TEST(decimal_parameterless_constructor)
 	CHECK_EQUAL(d0 - d0, d0);
 }
 
-/* The function being tested here is now dormant and commented out. 
-TEST(decimal_int_type_constructor_with_default_places)
-{
-	Decimal::int_type i0 = 3;	
-	Decimal d0(i0);
-	CHECK_EQUAL(d0, Decimal("3"));
-	Decimal d1(int_type(50));
-	CHECK_EQUAL(d1, Decimal("50"));
-	Decimal d2(int_type(-234));
-	CHECK_EQUAL(d2, Decimal("-234"));
-	Decimal d3(int_type(0));
-	CHECK_EQUAL(d3, Decimal("0"));
-	Decimal d4(int_type(-0));
-	CHECK_EQUAL(d4, Decimal("0"));
-}
-*/
-
-/* The function being tested here is now dormant and commented out. 
-TEST(decimal_int_type_constructor_with_specified_places)
-{
-	Decimal::int_type i0 = 394;
-	places_type us0 = 4;
-	Decimal d0(i0, us0);
-	CHECK_EQUAL(d0, Decimal("0.0394"));
-	Decimal::int_type i1 = -234234;
-	places_type us1 = 1;
-	Decimal d1(i1, us1);
-	CHECK_EQUAL(d1, Decimal("-23423.4"));
-	Decimal::int_type i2 = -23;
-	places_type us2 = 10;
-	CHECK_THROW(Decimal d2(i2, us2), UnsafeArithmeticException);
-	Decimal::int_type i3(-23);
-	places_type us3 = 9;
-	Decimal d3(i3, us3);
-	CHECK_EQUAL(d3, Decimal("-.000000023"));
-}
-*/
-
-/* The function being tested here is now dormant and commented out.
-TEST(decimal_int_constructor_with_default_places)
-{
-	Decimal d0(3);
-	CHECK_EQUAL(d0, Decimal("3"));
-	Decimal d1(50);
-	CHECK_EQUAL(d1, Decimal("50"));
-}
-*/
-
-/* The function being tested here is now dormant and commented out.
-TEST(decimal_int_constructor_with_specified_places)
-{
-	Decimal d0(3, 2);
-	CHECK_EQUAL(d0, Decimal("0.03"));
-	Decimal d1(-4340, 3);
-	CHECK_EQUAL(d1, Decimal("-4.34"));
-	CHECK_EQUAL(d1, Decimal("-4.340"));
-}
-*/
-
-
-/* The function being tested here is now dormant and commented out.
-TEST(decimal_double_constructor)
-{
-	double doub0 = 300.9;
-	CHECK_THROW(Decimal d0(doub0), UnsafeArithmeticException);
-	float float0 = float(300.9);
-	CHECK_THROW(Decimal d1(float0), UnsafeArithmeticException);
-	double doub1 = 0;
-	CHECK_THROW(Decimal d2(doub1), UnsafeArithmeticException);
-	float float1 = 0;
-	CHECK_THROW(Decimal d3(float1), UnsafeArithmeticException);
-}
-*/
-
-
 TEST(decimal_string_constructor)
 {
 	// Test basic functionality
@@ -162,37 +87,6 @@ TEST(decimal_string_constructor)
 	oss1 << d25;
 	CHECK_EQUAL(oss1.str(), "0.0");
 }
-
-/* The function being tested here is now dormant and commented out.
-TEST(decimal_read_parts_from_stream)
-{
-	istringstream is0("90 3");
-	Decimal d0;
-	d0.read_parts_from_stream(is0);
-	CHECK_EQUAL(d0, Decimal(".090"));
-	istringstream is1("90 3 -100 0");
-	Decimal d1a;
-	Decimal d1b;
-	d1a.read_parts_from_stream(is1);
-	CHECK_EQUAL(d1a, Decimal("0.090"));
-	d1b.read_parts_from_stream(is1);
-	CHECK_EQUAL(d1b, Decimal("-100"));
-}
-*/
-
-/* The function being tested here is now dormant and commented out.
-TEST(decimal_write_parts_to_stream)
-{	
-	ostringstream os;
-	Decimal d0("-90.234");
-	d0.write_parts_to_stream(os);
-	CHECK_EQUAL(os.str(), "-90234 3");
-	Decimal d1(423798);
-	os << endl;
-	d1.write_parts_to_stream(os);
-	CHECK_EQUAL(os.str(), "-90234 3\n423798 0");
-}
-*/
 
 TEST(decimal_assignment)
 {

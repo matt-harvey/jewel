@@ -502,32 +502,6 @@ private:
 	 */
 	explicit Decimal(int);
 
-
-	/* I have commented this out unless and until I really need it.
-	 * Read into a Decimal from a std::istream in two parts: first an int_type
-	 * representing the underlying integer; then a places_type being the
-	 * number of decimal places.
-	 * 
-	 * This function does not check, but presumes, that the correct types will
-	 * be read from the stream.
-	 *
-	 * @exception jewel::UnsafeArithmeticException thrown when the number of
-	 * decimal places exceeds the value returned by
-	 * Decimal::maximum_precision().
-	 */
-	// This function was a quick way of reading from a stream - MUCH quicker
-	// than the operator>> function, or initialization from a stream. However
-	// I want to hide it and comment it out unless and until it's really
-	// required.
-	// std::istream& read_parts_from_stream(std::istream&);
-	
-	// write underlying integer and number of places to stream
-	// I've commented this out unless and until I need it. The advantage of
-	// this is it's much faster than operator<< method, but there's no need to
-	// implement it or expose it at this point. (Note the implementation is
-	// also commented out.)
-	// std::ostream& write_parts_to_stream(std::ostream&) const;	
-
 	/**
 	 * Function to use as implementation of operator*= when it's safe to
 	 * multiply m_intval by rhs.m_intval, and when both operands are
@@ -618,18 +592,6 @@ Decimal::Decimal(): m_intval(0), m_places(0)
 {
 }
 
-
-// various member functions
-
-/* This is a quick way of storing to a stream but for I've commented it
- * out unless and until I'm required to use or expose it.
-inline
-std::ostream& Decimal::write_parts_to_stream(std::ostream& os) const
-{
-	os << m_intval << ' ' << m_places;
-	return os;
-}
-*/
 
 inline
 Decimal& Decimal::operator=(Decimal const& rhs)

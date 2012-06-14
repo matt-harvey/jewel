@@ -47,8 +47,8 @@ int main()
 	cout << static_cast<bool>(cout.flags() & ios::dec) << endl;
 	*/
 
-	decimal_csv_test();
-	decimal_speed_test();
+	// decimal_csv_test();
+	// decimal_speed_test();
 
 	return UnitTest::RunAllTests();
 }
