@@ -69,7 +69,8 @@ TEST(decimal_string_constructor)
 		digits += "7092";
 	}
 	string initializer = digits.substr(0, Decimal::maximum_precision() + 1);
-	assert (initializer.size() == Decimal::maximum_precision() + 1);
+	assert (initializer.size() ==
+	  static_cast<string::size_type>(Decimal::maximum_precision() + 1));
 	// This should be too long and throw
 	CHECK_THROW(Decimal d100(initializer), UnsafeArithmeticException);
 	initializer += "12";

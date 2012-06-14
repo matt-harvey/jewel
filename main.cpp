@@ -11,8 +11,6 @@ using std::setprecision;
 using std::string;
 
 
-
-
 int main()
 {
 
