@@ -46,9 +46,9 @@ TEST(decimal_string_constructor)
 	CHECK_EQUAL(d0, Decimal("0"));
 	CHECK_EQUAL(d0b, d0);
 	CHECK_EQUAL(d0c, d0);
-	Decimal d1("-98.234");
+	Decimal d1("-900008.234");
 	CHECK(d0 != d1);
-	CHECK_EQUAL(d1, Decimal("-98.23400"));
+	CHECK_EQUAL(d1, Decimal("-900008.23400"));
 	
 	// Test behaviour with empty string
 	CHECK_THROW(Decimal d10(""), UnsafeArithmeticException);
@@ -63,10 +63,30 @@ TEST(decimal_string_constructor)
 	
 	// Test behaviour with attempted Decimal having too large a would-be
 	// underlying integer.
-	CHECK_THROW(Decimal d14("9792347897"), UnsafeArithmeticException);
-	CHECK_THROW(Decimal d15("-.9000000000"), UnsafeArithmeticException);
-	CHECK_THROW(Decimal d16("-.1234124121767123"), UnsafeArithmeticException);
-	// But these should't throw
+	string digits = "";
+	for (string::size_type i = 0; i != 1000; ++i)
+	{
+		digits += "7092";
+	}
+	string initializer = digits.substr(0, Decimal::maximum_precision() + 1);
+	assert (initializer.size() == Decimal::maximum_precision() + 1);
+	// This should be too long and throw
+	CHECK_THROW(Decimal d100(initializer), UnsafeArithmeticException);
+	initializer += "12";
+	// So should this
+	CHECK_THROW(Decimal d101(initializer), UnsafeArithmeticException);
+	initializer.resize(Decimal::maximum_precision() - 1);
+	// This should be OK though
+	Decimal d102(initializer);
+	initializer = "-" + initializer;
+	// This should be OK too
+	Decimal d103(initializer);
+	assert (initializer.size() == Decimal::maximum_precision());
+	initializer += "00";
+	// This should throw
+	CHECK_THROW(Decimal d104(initializer), UnsafeArithmeticException);
+
+	// These should't throw
 	Decimal d18("100000030");
 	Decimal d19("1.00000030");
 	Decimal d20("-1.00000030");
