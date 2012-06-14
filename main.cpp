@@ -1,7 +1,9 @@
 #include <unittest++/UnitTest++.h>
+#include "decimal.hpp"
 #include "decimal_special_tests.hpp"
 #include <iomanip>
 #include <iostream>
+using jewel::Decimal;
 using jewel::detail::decimal_csv_test;
 using jewel::detail::decimal_speed_test;
 using std::cout;
