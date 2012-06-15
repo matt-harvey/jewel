@@ -163,10 +163,6 @@ Decimal::rationalize(places_type min_places)
 {
 	while ((m_places > min_places) && (m_intval % BASE == 0))
 	{
-		if (m_places <= 0)
-		{
-			cerr << endl << endl << m_places << endl << endl;
-		}
 		assert (m_places > 0);
 		m_intval /= BASE;
 		--m_places;
@@ -186,14 +182,14 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	typedef string::size_type sz_t;
 	if (str.empty())
 	{
-		m_intval = 0;
-		m_places = 0;
+		assert (m_intval == 0);
+		assert (m_places == 0);
 		throw UnsafeArithmeticException(
 		  "Cannot construct Decimal from an empty string");
 	}
 	sz_t const str_size = str.size();
 	
-	// To hold string representation of underlying integer
+	// To hold string representation of underlying integer...
 	// We will decrease this size later if there's a spot (decimal point)
 	// as we won't hold the spot in str_rep.
 	string str_rep(str_size, '\0');
@@ -205,14 +201,14 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 		str_rep[si] = '-';
 		++si;
 	}
-	// Note copying str[si] to a local const here seem to speed things up.
+	// Copying str[si] to a local const here seemed to speed things up.
 	for ( ; str[si] != SPOT && si != str_size; ++si)
 	{
 		assert (si < str.size());
 		if (!isdigit(str[si]))  // Note: this is fairly cheap.
 		{
-			m_intval = 0;
-			m_places = 0;
+			assert (m_intval == 0);
+			assert (m_places == 0);
 			throw UnsafeArithmeticException("Invalid string passed "
 			  "to Decimal constructor.");
 		}
@@ -244,8 +240,8 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 			assert (si < str.size());
 			if (!isdigit(str[si]))  // Note: this is fairly cheap.
 			{
-				m_intval = 0;
-				m_places = 0;
+				assert (m_intval == 0);
+				assert (m_places == 0);
 				throw UnsafeArithmeticException("Invalid string passed to"
 				  " Decimal constructor.");
 			}
@@ -256,6 +252,13 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 			++ri;
 		}
 	}
+	if (spot_position > MAX_PLACES)
+	{
+		assert (m_intval == 0);
+		assert (m_places == 0);
+		throw (UnsafeArithmeticException("Attempt to set m_places "
+		  "to a value exceeding MAX_PLACES."));
+	}
 	try
 	{	
 		// This lexical cast accounted for over half of the execution
@@ -265,16 +268,9 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	catch (bad_lexical_cast&)
 	{
 		m_intval = 0;
-		m_places = 0;
+		assert (m_places == 0);
 		throw UnsafeArithmeticException("Cannot create a Decimal as large as"
 		  " is implied by this string.");
-	}
-	if (spot_position > MAX_PLACES)
-	{
-		m_intval = 0;
-		m_places = 0;
-		throw (UnsafeArithmeticException("Attempt to set m_places "
-		  "to a value exceeding MAX_PLACES."));
 	}
 	m_places = NUM_CAST<places_type>(spot_position);
 }

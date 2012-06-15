@@ -23,8 +23,8 @@ int main()
 		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
 	#endif
 
-	/* Here's how to print currency (though this doesn't include parentheses
-	 * for negative, or thousands separators just yet).
+
+	/*
 	cout << std::setprecision(2) << std::showpoint << std::fixed;
 	cout << std::setw(10) << std::right << double(11) << endl
 	     << std::setw(10) << std::right << double(1) << endl
