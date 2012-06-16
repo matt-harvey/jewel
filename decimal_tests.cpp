@@ -72,7 +72,7 @@ struct DigitStringFixture
 // To add a "randomish" digit to a string of digits
 void add_digit(string& s)
 {
-	string digit_source = "3400988137";
+	string digit_source = "3422988137";
 	assert (digit_source.size() == 10);
 	s += digit_source[s.size() % 10];
 	return;
