@@ -183,10 +183,12 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	
 	// Test behaviour with attempted Decimal having too large a would-be
 	// underlying integer.
-	CHECK_THROW(Decimal d100(s_max_digits_plus_one), UnsafeArithmeticException);
+	CHECK_THROW(Decimal d100(s_max_digits_plus_one),
+	  UnsafeArithmeticException);
 	string even_longer = s_max_digits_plus_one + "00";
 	CHECK_THROW(Decimal d101(even_longer), UnsafeArithmeticException);
-	CHECK_THROW(Decimal d102(s_neg_max_digits_plus_one), UnsafeArithmeticException);
+	CHECK_THROW(Decimal d102(s_neg_max_digits_plus_one),
+	  UnsafeArithmeticException);
 	// These should be OK though
 	Decimal d103(s_max_digits_one_and_zeroes);
 	Decimal d104(s_neg_max_digits_one_and_zeroes);
@@ -195,8 +197,10 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	Decimal d107(s_max_int_type);
 	Decimal d108(s_min_int_type);
 	// These should throw
-	CHECK_THROW(Decimal d109(s_max_digits_plus_one_places_2), UnsafeArithmeticException);
-	CHECK_THROW(Decimal d110(s_neg_max_digits_plus_one_places_2), UnsafeArithmeticException);
+	CHECK_THROW(Decimal d109(s_max_digits_plus_one_places_2),
+	  UnsafeArithmeticException);
+	CHECK_THROW(Decimal d110(s_neg_max_digits_plus_one_places_2),
+	  UnsafeArithmeticException);
 	// These should be OK
 	Decimal d111(s_max_digits_one_and_zeroes_places_2);
 	Decimal d112(s_neg_max_digits_one_and_zeroes_places_2);
@@ -226,8 +230,6 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	CHECK_EQUAL(oss1.str(), "0.0");
 }
 
-#warning have yet to change unit tests below here to use test fixture
-
 TEST(decimal_assignment)
 {
 	Decimal d0("3074.2340");
@@ -236,6 +238,14 @@ TEST(decimal_assignment)
 	CHECK_EQUAL(d0, d1);
 	CHECK_EQUAL(d1, Decimal("3074.2340"));
 	CHECK(d0 != Decimal("34.234"));
+	Decimal d2("-23.00");
+	Decimal d3("0.1");
+	d3 = d2;
+	CHECK_EQUAL(d3, d2);
+	CHECK_EQUAL(d3, Decimal("-23"));
+	ostringstream oss;
+	oss << d3;
+	CHECK_EQUAL(oss.str(), "-23.00");
 }
 
 TEST(decimal_plus_equals)
