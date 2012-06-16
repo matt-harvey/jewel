@@ -23,6 +23,8 @@ int main()
 		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
 	#endif
 
+
+
 	/*
 	cout << std::setprecision(2) << std::showpoint << std::fixed;
 	cout << std::setw(10) << std::right << double(11) << endl

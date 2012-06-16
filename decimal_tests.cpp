@@ -248,7 +248,7 @@ TEST(decimal_assignment)
 	CHECK_EQUAL(oss.str(), "-23.00");
 }
 
-TEST(decimal_plus_equals)
+TEST_FIXTURE(DigitStringFixture, decimal_plus_equals)
 {
 	Decimal d0("907.89");
 	Decimal d1("-9.0878");
@@ -271,17 +271,22 @@ TEST(decimal_plus_equals)
 	// Check behaviour for unsafe operations
 
 	// With precision loss
-	Decimal d10("100000000");
-	Decimal d11("0.00000001");
+	string s10(Decimal::maximum_precision() * 2 / 3, '0');
+	string s11 = s10;
+	s10[0] = '1';
+	s11[1] = '.';
+	s11[s11.size() - 1] = '1';
+	Decimal d10(s10);
+	Decimal d11(s11);
 	CHECK_THROW(d10 += d11, UnsafeArithmeticException);
-	Decimal d12("7927439");
+	Decimal d12(s_max_digits_less_one);
 	CHECK_THROW(d12 += Decimal(".001"), UnsafeArithmeticException);
 	Decimal d13("-.900009");
-	CHECK_THROW(d13 += Decimal("10000"), UnsafeArithmeticException);
-	Decimal d14("09.009423");
-	CHECK_THROW(d14 += Decimal("2924"), UnsafeArithmeticException);
-	Decimal d15("-.98984790");
-	CHECK_THROW(d15 += Decimal("-2342422"), UnsafeArithmeticException);
+	Decimal d13b(s_max_digits_less_one_places_2);
+	CHECK_THROW(d13 += d13b, UnsafeArithmeticException);
+	Decimal d14("-0." + s_max_digits_less_one);
+	CHECK_THROW(d14 += Decimal("29"), UnsafeArithmeticException);
+	
 	// With straightforward overflow
 	ostringstream oss;
 	oss << numeric_limits<int_type>::max() / 11;
