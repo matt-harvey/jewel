@@ -28,14 +28,15 @@ using std::string;
 typedef Decimal::int_type int_type;
 typedef Decimal::places_type places_type;
 
+// @cond (to hide this from Doxygen-generated docs)
+
 // We shouldn't rely on Decimal::int_type being a particular width.
 // But we want to test the behaviour of Decimals at the edges
 // of that width. To achieve this, let's create some strings, which we 
 // know to have certain characteristics in relation to the size of
 // Decimal::int_type, and then use these strings to construct Decimals
 // to use in this testing.
-
-/// @cond (to hide this from Doxygen-generated docs)
+// We'll do that in this test fixture.
 struct DigitStringFixture
 {
 	// setup
@@ -48,15 +49,31 @@ struct DigitStringFixture
 
 	// data members - strings to be passed to Decimal constructor in
 	// various tests
+	
+	// String of "randomish" digits one less than the max safe size
+	// for constructing a Decimal
 	string s_max_digits_less_one;
-	string s_neg_max_digits_less_one;
+	string s_neg_max_digits_less_one;  // with a negative sign
+
+	// A string of the form "1000..." that's the maximum safe size
+	// for constructing a Decimal
 	string s_max_digits_one_and_zeroes;
-	string s_neg_max_digits_one_and_zeroes;
+	string s_neg_max_digits_one_and_zeroes;  // negative
+
+	// A string of randomish digits that's one more than the maximum
+	// safe size
 	string s_max_digits_plus_one;
 	string s_neg_max_digits_plus_one;
+
+	// A string version of the maximum value of Decimal::int_type
 	string s_max_int_type;
-	string s_neg_max_int_type;
+	string s_neg_max_int_type;  // Negative of same
+
+	// A string version of the minimum value of Decimal::int_type
 	string s_min_int_type;
+
+	// The following are all versions of the above strings, but with
+	// a decimal point two spaces from the end.
 	string s_max_digits_less_one_places_2;
 	string s_neg_max_digits_less_one_places_2;
 	string s_max_digits_one_and_zeroes_places_2;
@@ -375,7 +392,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_addition)
 	large_num_b = large_num_b + (-large_num_b);
 }
 
-TEST(decimal_minus_equals)
+TEST_FIXTURE(DigitStringFixture, decimal_minus_equals)
 {
 	Decimal d0("30.86");
 	Decimal d1("20000.9");
@@ -403,17 +420,18 @@ TEST(decimal_minus_equals)
 	// Check behaviour for unsafe operations
 
 	// With precision loss
-	Decimal d10("100000000");
-	Decimal d11("-0.00000001");
+	string s10 = s_max_digits_one_and_zeroes;
+	s10.resize(s10.size() - 3);
+	string s11 = "0.00001";
+	Decimal d10(s10);
+	Decimal d11(s11);
 	CHECK_THROW(d10 -= d11, UnsafeArithmeticException);
 	Decimal d12("7927439");
-	CHECK_THROW(d12 -= Decimal("-.001"), UnsafeArithmeticException);
-	Decimal d13("-.900009");
-	CHECK_THROW(d13 -= Decimal("-10000"), UnsafeArithmeticException);
-	Decimal d14("09.009423");
-	CHECK_THROW(d14 -= Decimal("-2924"), UnsafeArithmeticException);
-	Decimal d15("-.98984790");
-	CHECK_THROW(d15 -= Decimal("2342422"), UnsafeArithmeticException);
+	Decimal d12b("-." + string(Decimal::maximum_precision() - 4, '0') + '1');
+	CHECK_THROW(d12 -= d12b, UnsafeArithmeticException);
+	Decimal d13("1.90009");
+	Decimal s13b(s_max_digits_one_and_zeroes_places_2);
+	CHECK_THROW(d13 -= s13b, UnsafeArithmeticException);
 	// With straightforward overflow
 	ostringstream oss;
 	oss << numeric_limits<int_type>::max() / 11;
