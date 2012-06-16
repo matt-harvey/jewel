@@ -26,6 +26,130 @@ using std::ostringstream;
 using std::string;
 
 typedef Decimal::int_type int_type;
+typedef Decimal::places_type places_type;
+
+// We shouldn't rely on Decimal::int_type being a particular width.
+// But we want to test the behaviour of Decimals at the edges
+// of that width. To achieve this, let's create some strings, which we 
+// know to have certain characteristics in relation to the size of
+// Decimal::int_type, and then use these strings to construct Decimals
+// to use in this testing.
+
+/// @cond (to hide this from Doxygen-generated docs)
+struct DigitStringFixture
+{
+	// setup
+	DigitStringFixture();
+
+	// teardown
+	~DigitStringFixture()
+	{
+	}
+
+	// data members - strings to be passed to Decimal constructor in
+	// various tests
+	string s_max_digits_less_one;
+	string s_neg_max_digits_less_one;
+	string s_max_digits_one_and_zeroes;
+	string s_neg_max_digits_one_and_zeroes;
+	string s_max_digits_plus_one;
+	string s_neg_max_digits_plus_one;
+	string s_max_int_type;
+	string s_neg_max_int_type;
+	string s_min_int_type;
+	string s_max_digits_less_one_places_2;
+	string s_neg_max_digits_less_one_places_2;
+	string s_max_digits_one_and_zeroes_places_2;
+	string s_neg_max_digits_one_and_zeroes_places_2;
+	string s_max_digits_plus_one_places_2;
+	string s_neg_max_digits_plus_one_places_2;
+	string s_max_int_type_places_2;
+	string s_neg_max_int_type_places_2;
+	string s_min_int_type_places_2;
+};
+// @endcond
+
+// To add a "randomish" digit to a string of digits
+void add_digit(string& s)
+{
+	string digit_source = "3400988137";
+	assert (digit_source.size() == 10);
+	s += digit_source[s.size() % 10];
+	return;
+}
+
+// To insert character c at n places from the end of a string
+void insert_from_end(char c, string& s, string::size_type n)
+{
+	string::iterator it = s.end();
+	it -= n;
+	s.insert(it, c);
+	return;
+}
+
+DigitStringFixture::DigitStringFixture()
+{
+	int_type const maxi = numeric_limits<int_type>::max();
+	int_type const mini = numeric_limits<int_type>::min();
+	places_type const max_digits = NumDigits::num_digits(mini);
+	for (places_type i = 0; i != max_digits - 1; ++i)
+	{
+		add_digit(s_max_digits_less_one);
+	}
+	assert (s_max_digits_less_one.size() ==
+	  static_cast<string::size_type>(max_digits - 1));
+	s_neg_max_digits_less_one = "-" + s_max_digits_less_one;
+	assert (s_neg_max_digits_less_one.size() == max_digits);
+	assert (s_neg_max_digits_less_one[0] == '-');
+	s_max_digits_one_and_zeroes = "1";
+	for (places_type i = 1; i != max_digits; ++i)
+	{
+		s_max_digits_one_and_zeroes += '0';
+	}
+	assert (s_max_digits_one_and_zeroes.size() == max_digits);
+	assert (s_max_digits_one_and_zeroes[0] == '1');
+	assert (s_max_digits_one_and_zeroes[max_digits - 1] == '0');
+	s_neg_max_digits_one_and_zeroes = "-" + s_max_digits_one_and_zeroes;
+	assert (s_neg_max_digits_one_and_zeroes.size() == max_digits);
+	s_max_digits_plus_one = s_max_digits_less_one;
+	add_digit(s_max_digits_plus_one);
+	add_digit(s_max_digits_plus_one);
+	assert (s_max_digits_plus_one.size() ==
+	  static_cast<string::size_type>(max_digits + 1));
+	ostringstream ossmax;
+	ossmax << maxi;
+	s_max_int_type = ossmax.str();
+	s_neg_max_int_type = "-" + s_max_int_type;
+	ostringstream ossmin;
+	ossmin << mini;
+	s_min_int_type = ossmin.str();
+	assert (s_min_int_type.size() ==
+	  static_cast<string::size_type>(max_digits + 1));
+	assert (s_min_int_type[0] == '-');
+
+	s_max_digits_less_one_places_2 = s_max_digits_less_one;
+	insert_from_end('.', s_max_digits_less_one_places_2, 2);
+	assert (s_max_digits_less_one_places_2.size()
+	  == s_max_digits_less_one.size() + 1);
+	s_neg_max_digits_less_one_places_2 = "-" + s_max_digits_less_one_places_2;
+	s_max_digits_one_and_zeroes_places_2 = s_max_digits_one_and_zeroes;
+	insert_from_end('.', s_max_digits_one_and_zeroes_places_2, 2);
+	s_neg_max_digits_one_and_zeroes_places_2 =
+	  "-" + s_max_digits_one_and_zeroes_places_2;
+	s_max_digits_plus_one_places_2 = s_max_digits_plus_one;
+	insert_from_end('.', s_max_digits_plus_one_places_2, 2);
+	s_neg_max_digits_plus_one_places_2 = "-" + s_max_digits_plus_one_places_2;
+	s_max_int_type_places_2 = s_max_int_type;
+	insert_from_end('.', s_max_int_type_places_2, 2);
+	s_neg_max_int_type_places_2 = "-" + s_max_int_type_places_2;
+	s_min_int_type_places_2 = s_min_int_type;
+	insert_from_end('.', s_min_int_type_places_2, 2);
+}
+		
+
+
+
+
 
 
 TEST(decimal_parameterless_constructor)
