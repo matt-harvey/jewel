@@ -110,7 +110,8 @@ DigitStringFixture::DigitStringFixture()
 	assert (s_max_digits_one_and_zeroes[0] == '1');
 	assert (s_max_digits_one_and_zeroes[max_digits - 1] == '0');
 	s_neg_max_digits_one_and_zeroes = "-" + s_max_digits_one_and_zeroes;
-	assert (s_neg_max_digits_one_and_zeroes.size() == max_digits);
+	assert (s_neg_max_digits_one_and_zeroes.size() ==
+	  static_cast<string::size_type>(max_digits + 1));
 	s_max_digits_plus_one = s_max_digits_less_one;
 	add_digit(s_max_digits_plus_one);
 	add_digit(s_max_digits_plus_one);
@@ -147,11 +148,6 @@ DigitStringFixture::DigitStringFixture()
 }
 		
 
-
-
-
-
-
 TEST(decimal_parameterless_constructor)
 {
 	Decimal d0;
@@ -161,7 +157,7 @@ TEST(decimal_parameterless_constructor)
 	CHECK_EQUAL(d0 - d0, d0);
 }
 
-TEST(decimal_string_constructor)
+TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 {
 	// Test basic functionality
 	Decimal d0("0");
@@ -170,9 +166,9 @@ TEST(decimal_string_constructor)
 	CHECK_EQUAL(d0, Decimal("0"));
 	CHECK_EQUAL(d0b, d0);
 	CHECK_EQUAL(d0c, d0);
-	Decimal d1("-900008.234");
+	Decimal d1("-908.234");
 	CHECK(d0 != d1);
-	CHECK_EQUAL(d1, Decimal("-900008.23400"));
+	CHECK_EQUAL(d1, Decimal("-908.23400"));
 	
 	// Test behaviour with empty string
 	CHECK_THROW(Decimal d10(""), UnsafeArithmeticException);
@@ -187,38 +183,35 @@ TEST(decimal_string_constructor)
 	
 	// Test behaviour with attempted Decimal having too large a would-be
 	// underlying integer.
-	string digits = "";
-	for (string::size_type i = 0; i != 1000; ++i)
-	{
-		digits += "7092";
-	}
-	string initializer = digits.substr(0, Decimal::maximum_precision() + 1);
-	assert (initializer.size() ==
-	  static_cast<Decimal::places_type>(1 + Decimal::maximum_precision()));
-	// This should be too long and throw
-	CHECK_THROW(Decimal d100(initializer), UnsafeArithmeticException);
-	initializer += "12";
-	// So should this
-	CHECK_THROW(Decimal d101(initializer), UnsafeArithmeticException);
-	initializer.resize(Decimal::maximum_precision() - 1);
-	// This should be OK though
-	Decimal d102(initializer);
-	initializer = "-" + initializer;
-	// This should be OK too
-	Decimal d103(initializer);
-	assert (initializer.size() == Decimal::maximum_precision());
-	initializer += "00";
-	// This should throw
-	CHECK_THROW(Decimal d104(initializer), UnsafeArithmeticException);
+	CHECK_THROW(Decimal d100(s_max_digits_plus_one), UnsafeArithmeticException);
+	string even_longer = s_max_digits_plus_one + "00";
+	CHECK_THROW(Decimal d101(even_longer), UnsafeArithmeticException);
+	CHECK_THROW(Decimal d102(s_neg_max_digits_plus_one), UnsafeArithmeticException);
+	// These should be OK though
+	Decimal d103(s_max_digits_one_and_zeroes);
+	Decimal d104(s_neg_max_digits_one_and_zeroes);
+	Decimal d105(s_max_digits_less_one);
+	Decimal d106(s_neg_max_digits_less_one);
+	Decimal d107(s_max_int_type);
+	Decimal d108(s_min_int_type);
+	// These should throw
+	CHECK_THROW(Decimal d109(s_max_digits_plus_one_places_2), UnsafeArithmeticException);
+	CHECK_THROW(Decimal d110(s_neg_max_digits_plus_one_places_2), UnsafeArithmeticException);
+	// These should be OK
+	Decimal d111(s_max_digits_one_and_zeroes_places_2);
+	Decimal d112(s_neg_max_digits_one_and_zeroes_places_2);
+	Decimal d113(s_max_int_type_places_2);
+	Decimal d114(s_neg_max_int_type_places_2);
+	Decimal d115(s_min_int_type_places_2);
 
 	// These should't throw
-	Decimal d18("100000030");
-	Decimal d19("1.00000030");
-	Decimal d20("-1.00000030");
-	Decimal d20b("0000000001");
-	Decimal d21(".000000430");
-	Decimal d22("-.999999489");
-	Decimal d23(".000000000");
+	Decimal d18("1000030");
+	Decimal d19("1.000030");
+	Decimal d20("-1.000030");
+	Decimal d20b("0000001");
+	Decimal d21(".0000430");
+	Decimal d22("-.99489");
+	Decimal d23(".00000");
 
 	// Test retention of fractional precision implied by string
 	Decimal d24("90.100");
@@ -232,6 +225,8 @@ TEST(decimal_string_constructor)
 	oss1 << d25;
 	CHECK_EQUAL(oss1.str(), "0.0");
 }
+
+#warning have yet to change unit tests below here to use test fixture
 
 TEST(decimal_assignment)
 {
