@@ -312,40 +312,43 @@ TEST_FIXTURE(DigitStringFixture, decimal_plus_equals)
 	large_num_b += (-large_num_b);
 }
 
-TEST(decimal_addition)
+TEST_FIXTURE(DigitStringFixture, decimal_addition)
 {
 	Decimal d0("-.30010");
 	Decimal d1("-400.678");
 	Decimal d2 = d0 + d1;
 	CHECK_EQUAL(d2, Decimal("-400.97810"));
 	CHECK_EQUAL(d2, Decimal("-400.9781"));
-	Decimal d3("-.00000001");
-	Decimal d4("100000000");
-	CHECK_THROW(Decimal d5 = d3 + d4, UnsafeArithmeticException);
 	Decimal d5 = Decimal("123.00900") + Decimal("0.001");
 	CHECK_EQUAL(d5, Decimal("123.01"));
 	ostringstream oss0;
 	oss0 << d5;
 	CHECK_EQUAL(oss0.str(), "123.01000");
 	CHECK(oss0.str() != "123.01");
+	CHECK_EQUAL(Decimal("23.91001") + Decimal("-.29781"), Decimal("23.6122"));
+	CHECK_EQUAL(Decimal("10604.9") + Decimal("917.1909"),
+	  Decimal("11522.0909"));
 	
 	// Check behaviour for unsafe operations
 
 	// With precision loss
-	Decimal d10("100000000");
-	Decimal d11("0.00000001");
-	CHECK_THROW(d10 = d10 + d11, UnsafeArithmeticException);
-	Decimal d12("7927439");
-	CHECK_THROW(Decimal d12b = d12 + Decimal(".001"),
-	  UnsafeArithmeticException);
-	Decimal d13("-.900009");
-	CHECK_THROW(Decimal d13b = d13 + Decimal("10000"),
-	  UnsafeArithmeticException);
-	Decimal d14("09.009423");
-	CHECK_THROW(d14 = d14 + Decimal("2924"), UnsafeArithmeticException);
-	Decimal d15("-.98984790");
-	CHECK_THROW(Decimal d15b = d15 + Decimal("-2342422"),
-	  UnsafeArithmeticException);
+	string s10(Decimal::maximum_precision() * 2 / 3, '0');
+	string s11 = s10;
+	s10[0] = '1';
+	s11[1] = '.';
+	s11[s11.size() - 1] = '1';
+	Decimal d10(s10);
+	Decimal d11(s11);
+	CHECK_THROW(Decimal d10p11 = d10 + d11, UnsafeArithmeticException);
+	Decimal d12(s_max_digits_less_one);
+	Decimal d12p("12.3");
+	CHECK_THROW(d12p = d12 + Decimal("0.001"), UnsafeArithmeticException);
+	Decimal d13("-.129774");
+	Decimal d13b(s_max_digits_less_one_places_2);
+	CHECK_THROW(Decimal d13p = d13 + d13b, UnsafeArithmeticException);
+	Decimal d14("-0." + s_max_digits_less_one);
+	CHECK_THROW(Decimal d14p = d14 + Decimal("29"), UnsafeArithmeticException);
+	
 	// With straightforward overflow
 	ostringstream oss;
 	oss << numeric_limits<int_type>::max() / 11;
@@ -370,8 +373,6 @@ TEST(decimal_addition)
 	large_num_b = large_num_b + Decimal("10");
 	Decimal large_neg_num_c = large_neg_num_b + large_num_b;
 	large_num_b = large_num_b + (-large_num_b);
-
-
 }
 
 TEST(decimal_minus_equals)
