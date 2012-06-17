@@ -552,8 +552,8 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiply_equals)
 	// With overflow in execution
 	Decimal d50("1.1111111");
 	string s51 = s_max_digits_one_and_zeroes;
-	s51.resize(s51.size() - 1);
-	Decimal d51(d51);
+	s51.resize(s51.size() - 3);
+	Decimal d51(s51);
 	CHECK_THROW(d50 *= d51, UnsafeArithmeticException);
 
 	// The smallest possible Decimal cannot be multiplied
@@ -567,19 +567,18 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiply_equals)
 	
 }
 
-#warning changing tests to use test fixture is only up to here
 
-TEST(decimal_multiplication)
+TEST_FIXTURE(DigitStringFixture, decimal_multiplication)
 {
 	Decimal d0("-100789.8");
 	Decimal d1("-78.9");
 	Decimal d2 = d0 * d1;
 	Decimal d3 = Decimal("7952315.22");
 	CHECK_EQUAL(d2, d3);
-	Decimal d6("0.00000001");
-	Decimal d7("0.0000001");
+	Decimal d6("0.0000001");
+	Decimal d7("0.00001");
 	Decimal d8 = d6 * d7;
-	CHECK_EQUAL(d8, Decimal("0"));
+	CHECK(d8 < Decimal("0.0000000001"));
 	CHECK_EQUAL(Decimal("1000001") * Decimal("0.00222"),
 	  Decimal("2220.00222"));
 
@@ -598,13 +597,12 @@ TEST(decimal_multiplication)
 	  UnsafeArithmeticException);
 
 	// With overflow within execution
-	Decimal d4("0.1008");
-	Decimal d5("0.7000024");
-	CHECK_THROW(Decimal d0405 = d4 * d5, UnsafeArithmeticException);
-	CHECK_THROW(Decimal d100 = Decimal("-90.9087176") * Decimal("0.00020042"),
-	  UnsafeArithmeticException);
-	CHECK_THROW(Decimal d101 = Decimal("192384.43") * Decimal("-1.9962"),
-	  UnsafeArithmeticException);
+	Decimal d50("2.0877879");
+	string s51 = s_max_digits_one_and_zeroes;
+	s51.resize(s51.size() - 3);
+	s51 = "-" + s51;
+	Decimal d51(s51);
+	CHECK_THROW(Decimal d52 = d51 * d50, UnsafeArithmeticException);
 
 	// The smallest possible Decimal cannot be multiplied
 	Decimal d10 = Decimal::minimum();
