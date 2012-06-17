@@ -198,8 +198,8 @@ public:
 	 * influence the number of digits of fractional precision stored in the
 	 * resulting Decimal. So \c Decimal("0.00") is stored with two digits of
 	 * fractional precision. However it is still the case that
-	 * <tt> Decimal("0.00") == Decimal("0") <\tt>.
-	 * Note leading negative signs in front of c\ Decimal("0") or its
+	 * <tt> Decimal("0.00") == Decimal("0") </tt>.
+	 * Note leading negative signs in front of \c Decimal("0") or its
 	 * equivalents are \e not stored.
 	 */
 	explicit Decimal(std::string const& str);
@@ -365,8 +365,8 @@ public:
 
 	/**
 	* Equality operator. Compares Decimals by value.
-	* Note the following evaluate to \c true:\n
-	* Decimal("-0.000") == Decimal("0");\n
+	* Note the following evaluates to \c true: \n
+	* Decimal("-0.000") == Decimal("0");
 	*/
 	bool operator==(Decimal) const;
 

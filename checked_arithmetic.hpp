@@ -27,7 +27,7 @@
  * unsigned long\n
  * unsigned long long\n
  * unsigned short\n
- *
+ * </tt>
  * @param x first number that would be added (or subtracted, or multiplied).
  * @param y second number that would be added (or subtracted, or multiplied).
  * @returns \c true if and only if it \e would be
