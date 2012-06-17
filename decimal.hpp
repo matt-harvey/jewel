@@ -121,10 +121,6 @@ namespace jewel
  * fractional zeroes left behind by operations and constructors.
  *
  * @todo HIGH PRIORITY
- * I should test that Decimal value is actually preserved after
- * an exception is thrown and caught from an aborted arithmetic operation.
- *
- * @todo HIGH PRIORITY
  * Find out whether it's \e always the case that the smallest possible
  * integer of every integral type on every machine has an absolute value that
  * is one greater than the largest possible integer of that type. If not, then

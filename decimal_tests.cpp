@@ -301,6 +301,17 @@ TEST_FIXTURE(DigitStringFixture, decimal_plus_equals)
 	Decimal d13("-.900009");
 	Decimal d13b(s_max_digits_less_one_places_2);
 	CHECK_THROW(d13 += d13b, UnsafeArithmeticException);
+	// Check value unchanged after exception thrown
+	CHECK_EQUAL(d13, Decimal("-.900009"));
+	// Check again using standard try/catch
+	try
+	{
+		d13 += d13b;
+	}
+	catch (UnsafeArithmeticException&)
+	{
+	}
+	CHECK_EQUAL(d13, Decimal("-.900009"));
 	Decimal d14("-0." + s_max_digits_less_one);
 	CHECK_THROW(d14 += Decimal("29"), UnsafeArithmeticException);
 	
@@ -426,6 +437,18 @@ TEST_FIXTURE(DigitStringFixture, decimal_minus_equals)
 	Decimal d10(s10);
 	Decimal d11(s11);
 	CHECK_THROW(d10 -= d11, UnsafeArithmeticException);
+	// Check value unchanged after exception
+	CHECK_EQUAL(d10, Decimal(s10));
+	// Check again using standard try/catch
+	try
+	{
+		d10 -= d11;
+	}
+	catch (UnsafeArithmeticException&)
+	{
+		CHECK_EQUAL(d10, Decimal(s10));
+	}
+	CHECK_EQUAL(Decimal(s10), d10);
 	Decimal d12("7927439");
 	Decimal d12b("-." + string(Decimal::maximum_precision() - 4, '0') + "1");
 	CHECK_THROW(d12 -= d12b, UnsafeArithmeticException);
@@ -493,6 +516,18 @@ TEST_FIXTURE(DigitStringFixture, decimal_subtraction)
 	Decimal d14("09.009423");
 	CHECK_THROW(d14 = d14 - Decimal(s_max_digits_less_one),
 	  UnsafeArithmeticException);
+	// Check value unchanged after exception thrown
+	CHECK_EQUAL(d14, Decimal("09.009423"));
+	// Check again using normal try/catch
+	try
+	{
+		d14 = d14 - Decimal(s_max_digits_less_one);
+	}
+	catch (UnsafeArithmeticException&)
+	{
+		CHECK_EQUAL(d14, Decimal("09.009423"));
+	}
+
 	// With straightforward overflow
 	ostringstream oss;
 	oss << numeric_limits<int_type>::max() / 11;
@@ -547,6 +582,17 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiply_equals)
 	Decimal large_neg_num = -large_num;
 	CHECK_THROW(large_num *= large_num, UnsafeArithmeticException);
 	CHECK_THROW(large_num *= Decimal("-29"), UnsafeArithmeticException);
+	// Check value unchanged after exception
+	CHECK_EQUAL(large_num, Decimal(oss.str()));
+	// Check again using standard try/catch
+	try
+	{
+		large_num *= Decimal("-29");
+	}
+	catch (UnsafeArithmeticException&)
+	{
+		CHECK_EQUAL(large_num, Decimal(oss.str()));
+	}
 	CHECK_THROW(large_neg_num * large_num, UnsafeArithmeticException);
 
 	// With overflow in execution
@@ -555,10 +601,33 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiply_equals)
 	s51.resize(s51.size() - 3);
 	Decimal d51(s51);
 	CHECK_THROW(d50 *= d51, UnsafeArithmeticException);
+	// Check value unchanged after exception
+	CHECK_EQUAL(d50, Decimal("1.1111111"));
+	// Check again using standard try/catch
+	try
+	{
+		d50 *= d51;
+	}
+	catch (UnsafeArithmeticException&)
+	{
+		CHECK_EQUAL(d50, Decimal("1.1111111"));
+	}
 
 	// The smallest possible Decimal cannot be multiplied
 	Decimal d200 = Decimal::minimum();
 	CHECK_THROW(d200 *= Decimal("1"), UnsafeArithmeticException);
+	// Check value unchanged after exception
+	CHECK_EQUAL(d200, Decimal::minimum());
+	// Check again using standard try/catch, and a different variable
+	Decimal d200b = Decimal::minimum();
+	try
+	{
+		d200b *= Decimal("1");
+	}
+	catch (UnsafeArithmeticException&)
+	{
+		CHECK_EQUAL(d200b, Decimal::minimum());
+	}
 
 	// But these should shouldn't throw
 	Decimal d101 = large_num * Decimal("0");
@@ -608,6 +677,21 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiplication)
 	Decimal large_neg_num = -large_num;
 	CHECK_THROW(Decimal large_num_b = large_num * large_num,
 	  UnsafeArithmeticException);
+	// Check value unchanged after exception using standard try/catch
+	Decimal large_num_b2(oss.str());
+	bool exception_has_been_caught = false;
+	try
+	{
+		large_num_b2 = large_num * large_num;
+	}
+	catch (UnsafeArithmeticException&)
+	{
+		exception_has_been_caught = true;
+	}
+	CHECK(exception_has_been_caught);
+	CHECK_EQUAL(large_num_b2, Decimal(oss.str()));
+	CHECK_EQUAL(large_num, Decimal(oss.str()));
+	// End check of value preservation
 	CHECK_THROW(Decimal large_num_c = Decimal("-29") * large_num,
 	  UnsafeArithmeticException);
 	CHECK_THROW(Decimal large_neg_num_b = large_neg_num * large_num,
@@ -619,7 +703,21 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiplication)
 	s51.resize(s51.size() - 3);
 	s51 = "-" + s51;
 	Decimal d51(s51);
-	CHECK_THROW(Decimal d52 = d51 * d50, UnsafeArithmeticException);
+	Decimal d52 = Decimal("1");
+	CHECK_THROW(d52 = d51 * d50, UnsafeArithmeticException);
+	// Check value unchanged after exception
+	CHECK_EQUAL(d52, Decimal("1"));
+	// Check again using standard try/catch
+	try
+	{
+		d52 = d51 * d50;
+	}
+	catch (UnsafeArithmeticException&)
+	{
+	}
+	CHECK_EQUAL(d52, Decimal("1"));
+	CHECK_EQUAL(d51, Decimal(s51));
+	CHECK_EQUAL(d50, Decimal("2.0877879"));
 
 	// The smallest possible Decimal cannot be multiplied
 	Decimal d10 = Decimal::minimum();
@@ -704,15 +802,47 @@ TEST_FIXTURE(DigitStringFixture, decimal_divide_equals)
 	Decimal d105(s105);
 	Decimal d106("0.000001");
 	CHECK_THROW(d105 /= d106, UnsafeArithmeticException);
+	// Check value unchanged after exception
+	CHECK_EQUAL(d105, Decimal(s105));
+	// Check again using standard try/catch and a different variable
+	Decimal d105b(s105);
+	Decimal const d105c = d105b;
+	bool exception_was_caught = false;
+	try
+	{
+		d105b /= d106;
+	}
+	catch (UnsafeArithmeticException&)
+	{
+		exception_was_caught = true;
+	}
+	CHECK_EQUAL(d105b, d105c);
+	CHECK_EQUAL(exception_was_caught, true);
 	Decimal d107("-" + s105);
 	Decimal d108("0.000001");
 	CHECK_THROW(d107 /= d108, UnsafeArithmeticException);
+	// Check value unchanged after exception
+	CHECK_EQUAL(d107, Decimal("-" + s105));
+	// Check again using standard try/catch
+	Decimal const d107c = d107;
+	Decimal const d108c = d108;
+	try
+	{
+		d107 /= d108;
+	}
+	catch (UnsafeArithmeticException&)
+	{
+	}
+	CHECK_EQUAL(d107, d107c);
+	CHECK_EQUAL(d108, d108c);
 
 	// With division by zero
-	Decimal d300;
+	Decimal d300("24.3");
 	CHECK_THROW(d300 /= Decimal("0"), UnsafeArithmeticException);
 	CHECK_THROW(d300 /= Decimal(".0"), UnsafeArithmeticException);
 	CHECK_THROW(d300 /= Decimal("-0.0"), UnsafeArithmeticException);
+	// Check value unchanged after exception
+	CHECK_EQUAL(Decimal("24.3"), d300);
 }
 
 TEST_FIXTURE(DigitStringFixture, decimal_division)
@@ -757,9 +887,28 @@ TEST_FIXTURE(DigitStringFixture, decimal_division)
 	string s2001 = "0.000023";
 	Decimal d2001(s2001);
 	CHECK_THROW(Decimal d2002 = d2000 / d2001, UnsafeArithmeticException);
-	CHECK_THROW(Decimal d2003 = Decimal("-1901") / Decimal("0"),
+	Decimal d2003("20");
+	CHECK_THROW(d2003 = Decimal("-1901") / Decimal("0"),
 	  UnsafeArithmeticException);
+	// Check value unchanged after exception
+	Decimal d2003b("20");
+	CHECK_EQUAL(d2003, d2003b);
+	// Check again using standard try/catch, and different variable
+	Decimal d2004("20");
+	Decimal d2005("-1901");
+	Decimal d2006("0");
+	try
+	{
+		d2004 = d2005 / d2006;
+	}
+	catch (UnsafeArithmeticException&)
+	{
+	}
+	CHECK_EQUAL(d2004, Decimal("20"));
+	CHECK_EQUAL(d2005, Decimal("-1901"));
+	CHECK_EQUAL(Decimal("0"), d2006);
 }
+
 
 TEST(decimal_increment)
 {
@@ -782,6 +931,17 @@ TEST(decimal_increment)
 	// Test behaviour with unsafe operations
 	Decimal d10 = Decimal::maximum();
 	CHECK_THROW(++d10, UnsafeArithmeticException);
+	// Check value unchanged after exception
+	CHECK_EQUAL(d10, Decimal::maximum());
+	// Check again using standard try/catch
+	try
+	{
+		++d10;
+	}
+	catch (UnsafeArithmeticException&)
+	{
+		CHECK(Decimal::maximum() == d10);
+	}
 	CHECK_EQUAL(d10, Decimal::maximum());
 	CHECK_THROW(d10++, UnsafeArithmeticException);
 	CHECK_EQUAL(d10, Decimal::maximum());
@@ -817,13 +977,36 @@ TEST(decimal_decrement)
 	--d10;
 	// This should throw
 	CHECK_THROW(--d10, UnsafeArithmeticException);
+	// Check value unchanged after exception
 	CHECK_EQUAL(d10, Decimal::minimum());
+	// Check again using standard try/catch
+	try
+	{
+		--d10;
+	}
+	catch (UnsafeArithmeticException&)
+	{
+		CHECK_EQUAL(d10, Decimal::minimum());
+	}
 	// This should be safe
 	++d10;
 	CHECK_EQUAL(d10, Decimal::minimum() + Decimal("1"));
 	d10--;
+	CHECK_EQUAL(d10, Decimal::minimum());
 	// This should throw
 	CHECK_THROW(d10--, UnsafeArithmeticException);
+	// Check value unchanged after exception
+	CHECK_EQUAL(d10, Decimal::minimum());
+	// Check again using standard try/catch
+	try
+	{
+		d10--;
+	}
+	catch (UnsafeArithmeticException&)
+	{
+		CHECK_EQUAL(d10, Decimal::minimum());
+	}
+	CHECK(Decimal::minimum() == d10);
 }
 
 
@@ -835,6 +1018,9 @@ TEST(decimal_operator_less_than)
 	Decimal d2("-1");
 	Decimal d3("1.0000");
 	CHECK(d2 < d3);
+	// Check operands unchanged
+	CHECK_EQUAL(d2, Decimal("-1"));
+	CHECK_EQUAL(d3, Decimal("1.0000"));
 	CHECK(Decimal("0") < Decimal(".034"));
 	CHECK(Decimal("-.34") < Decimal("-0.000"));
 	CHECK(!(Decimal(".34") < Decimal("0.000")));
@@ -858,6 +1044,13 @@ TEST(decimal_operator_greater_than)
 	Decimal d0("100000000");
 	Decimal d1(".00000001");
 	CHECK(d0 > d1);
+	// Check operands unchanged after comparison
+	Decimal d2("19237.02");
+	Decimal d3("1234.2");
+	bool b = (d2 > d3);
+	CHECK_EQUAL(b, true);
+	CHECK_EQUAL(d2, Decimal("19237.02"));
+	CHECK_EQUAL(Decimal("1234.2"), d3);
 	CHECK(!(Decimal("0.000001") > Decimal("9000000")));
 	CHECK(Decimal("-.000003") > Decimal("-112341878"));
 	CHECK(Decimal("201060.2234") > Decimal("201060.2"));
@@ -869,7 +1062,12 @@ TEST(decimal_operator_equality)
 {
 	Decimal d0("-0.0000001");
 	Decimal d1("-0.00000010");
+	Decimal const d0c = d0;
+	Decimal const d1c = d1;
 	CHECK_EQUAL(d0, d1);
+	// Check values unchanged after comparison
+	CHECK_EQUAL(d0, d0c);
+	CHECK_EQUAL(d1, d1c);
 	CHECK(d0 == d1);
 	CHECK(Decimal("1234.00") == Decimal("1234"));
 	CHECK(Decimal(".988") == Decimal("000.988"));
