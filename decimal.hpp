@@ -56,7 +56,8 @@ namespace jewel
  * The maximum total precision of any given Decimal is equal to the number
  * of decimal digits in the largest possible Decimal. This
  * number is implementation dependent, and is the number returned by the
- * Decimal::maximum() static function. Regardless of any of the behaviour
+ * Decimal::maximum_precision() static function.
+ * Regardless of any of the behaviour
  * outlined below, the total precision of a Decimal will never exceed this
  * level. Note we cannot end up with a number that has more than this many
  * digits in its whole part, even if all but one of these digits are zero.
