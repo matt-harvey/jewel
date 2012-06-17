@@ -116,11 +116,6 @@ namespace jewel
  * I should probably define this in a separate file. It could include
  * currency formats and so forth, too.
  * 
- * @todo LOW PRIORITY
- * I should probably tidy the naughty NUM_CAST macro in decimal.cpp.
- * (Replace it everywhere with plain static_cast, providing of course that
- * the tests pass when compiled in release mode.)
- *
  * @todo HIGH PRIORITY
  * Fully test the expected behaviour w.r.t. the number of trailing
  * fractional zeroes left behind by operations and constructors.
