@@ -930,6 +930,21 @@ TEST(decimal_operator_output)
 	os9 << "-3001.09";
 	os10 << Decimal("-3001.09");
 	CHECK_EQUAL(os9.str(), os10.str());
+	ostringstream os11;
+	os11 << numeric_limits<Decimal::int_type>::max();
+	ostringstream os12;
+	os12 << Decimal::maximum();
+	CHECK_EQUAL(os11.str(), os12.str());
+	ostringstream os13;
+	os13 << numeric_limits<Decimal::int_type>::max() * -1;
+	ostringstream os14;
+	os14 << Decimal::maximum() * Decimal("-1");
+	CHECK_EQUAL(os13.str(), os14.str());
+	ostringstream os15;
+	os15 << numeric_limits<Decimal::int_type>::min();
+	ostringstream os16;
+	os16 << Decimal::minimum();
+	CHECK_EQUAL(os15.str(), os16.str());
 }
 
 TEST(decimal_operator_input)

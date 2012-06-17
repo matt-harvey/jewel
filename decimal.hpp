@@ -512,10 +512,6 @@ private:
 // non-member functions - declarations
 
 /** Write to an output stream.
- *
- * @todo HIGH PRIORITY
- * Make sure this doesn't fail when Decimal being written is the
- * return value of Decimal::minimum().
  */
 template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
@@ -619,6 +615,16 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 	{
 		ss << '0';
 		if (plcs > 0) ss << Decimal::SPOT << std::string(plcs, '0');
+		os << ss.str();
+		return os;
+	}
+
+	// special case of smallest possible dintval - as we
+	// cannot take the absolute value below
+	if (dintval == std::numeric_limits<Decimal::int_type>::min())
+	{
+		assert (plcs == 0);
+		ss << dintval;
 		os << ss.str();
 		return os;
 	}

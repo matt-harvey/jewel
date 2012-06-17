@@ -4,6 +4,7 @@
 #include "decimal_special_tests.hpp"
 #include <iomanip>
 #include <iostream>
+#include <limits>
 using jewel::Decimal;
 using jewel::detail::decimal_csv_test;
 using jewel::detail::decimal_speed_test;
@@ -11,6 +12,7 @@ using jewel::multiplication_is_unsafe;
 using std::cout;
 using std::endl;
 using std::ios;
+using std::numeric_limits;
 using std::setprecision;
 using std::string;
 
@@ -24,8 +26,6 @@ int main()
 	#else
 		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
 	#endif
-
-
 
 	/*
 	cout << std::setprecision(2) << std::showpoint << std::fixed;
@@ -50,8 +50,8 @@ int main()
 	cout << static_cast<bool>(cout.flags() & ios::dec) << endl;
 	*/
 
-	// decimal_csv_test();
-	// decimal_speed_test();
+	decimal_csv_test();
+	decimal_speed_test();
 
 	return UnitTest::RunAllTests();
 }
