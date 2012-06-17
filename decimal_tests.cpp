@@ -291,7 +291,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_plus_equals)
 	string s10(Decimal::maximum_precision() * 2 / 3, '0');
 	string s11 = s10;
 	s10[0] = '1';
-	s11[1] = '.';
+	s11 = "0." + s11;
 	s11[s11.size() - 1] = '1';
 	Decimal d10(s10);
 	Decimal d11(s11);
@@ -352,7 +352,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_addition)
 	string s10(Decimal::maximum_precision() * 2 / 3, '0');
 	string s11 = s10;
 	s10[0] = '1';
-	s11[1] = '.';
+	s11 = "0." + s11;
 	s11[s11.size() - 1] = '1';
 	Decimal d10(s10);
 	Decimal d11(s11);
@@ -641,6 +641,9 @@ TEST_FIXTURE(DigitStringFixture, decimal_divide_equals)
 	Decimal d800("1000001");
 	d800 /= Decimal("0.001");
 	CHECK_EQUAL(d800, Decimal("1000001000"));
+	/* Note this next check crashes if Decimal::int_type is only 32 bit
+	 * instead of 64 bit.
+	 */
 	Decimal d801("90.27423");
 	d801 /= Decimal("0.00008447");
 	CHECK(d801 > Decimal("1068713.50"));
@@ -695,7 +698,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_divide_equals)
 	CHECK_THROW(d300 /= Decimal("-0.0"), UnsafeArithmeticException);
 }
 
-TEST(decimal_division)
+TEST_FIXTURE(DigitStringFixture, decimal_division)
 {
 	Decimal d0("0.07");
 	Decimal d1("0.02");
@@ -731,9 +734,13 @@ TEST(decimal_division)
 	CHECK_EQUAL(d301b, Decimal("1"));
 
 	// Check behaviour with unsafe operations
-	CHECK_THROW(Decimal d2000 = Decimal("10079297") / Decimal("0.000023"),
-	  UnsafeArithmeticException);
-	CHECK_THROW(Decimal d2001 = Decimal("-1901") / Decimal("0"),
+	string s2000 = s_max_digits_less_one;
+	s2000.resize(s2000.size() - 3);
+	Decimal d2000(s2000);
+	string s2001 = "0.000023";
+	Decimal d2001(s2001);
+	CHECK_THROW(Decimal d2002 = d2000 / d2001, UnsafeArithmeticException);
+	CHECK_THROW(Decimal d2003 = Decimal("-1901") / Decimal("0"),
 	  UnsafeArithmeticException);
 }
 

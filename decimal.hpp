@@ -93,11 +93,8 @@ namespace jewel
  * behaviours in the API docs. I don't believe this is a \e very serious
  * problem, as the behaviour is well documented and exceptions are thrown
  * rather than silent failure occurring. However, it is quite limiting
- * for certain use cases. The ideal solution is to use more sophisticated
- * floating point algorithms. But another solution is simply 
- * to use a wider integer type for m_intval (<tt> long long </tt>),
- * to provide more
- * room to move, even while the same structural limitations remain.
+ * for certain use cases. Now that I have used <tt> long long </tt> for
+ * Decimal::int_type, it is much less limited though.
  * (I could possibly make Decimal::maximum() and
  * Decimal::minimum()
  * arbitrary limits of my choosing (carefully policed in all functions),
