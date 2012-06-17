@@ -806,6 +806,10 @@ TEST(checked_arithmetic_multiplication_is_unsafe_int)
 	int i203 = -2;
 	CHECK(multiplication_is_unsafe(i202, i203));
 	CHECK(multiplication_is_unsafe(i203, i202));
+	int i204 = INT_MIN / 20;
+	int i205 = -30;
+	CHECK(multiplication_is_unsafe(i204, i205));
+	CHECK(multiplication_is_unsafe(i205, i204));
 	
 	// Test reaction to safe operations
 	int i12 = 0;
@@ -823,7 +827,7 @@ TEST(checked_arithmetic_multiplication_is_unsafe_int)
 	int i18 = INT_MAX;
 	int i19 = -1;
 	CHECK(!multiplication_is_unsafe(i18, i19));
-	CHECK(!multiplication_is_unsafe(i19, i18));
+	CHECK(!multiplication_is_unsafe(i19, i18)); // Unhandled exception
 	int i20 = INT_MIN;
 	int i21 = 1;
 	CHECK(!multiplication_is_unsafe(i20, i21));

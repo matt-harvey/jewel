@@ -42,19 +42,7 @@ namespace detail
  * functions provided in checked_arithmetic.hpp.
  *
  * This class can't be instantiated.
- *
- * @todo Ensure unit tests for CheckedArithmetic::multiplication_is_unsafe
- * cover every branch (combinations of positives and negatives) in the
- * function. Think carefully through each of the cases, working through
- * examples with a pen and paper. This function needs to be rock solid!
  */
-
-/*
-Note function declarations containing long long have not been provided because
-this type is not in the C++ standard prior to C++11 (even though it is in
-C99 and most compilers support it).
-*/
-
 class CheckedArithmetic
 {
 //@cond
@@ -227,20 +215,22 @@ CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)
 		return false;
 	}
 	T const tmin = std::numeric_limits<T>::min();
+	assert ((x != 0) && (y != 0) && (x != 1) && (y != 1));
 	// Deal with case of smallest possible number
 	// It's dangerous to multiply this by anything except 1 or 0!
-	if (x == tmin)
+	if ((x == tmin) || (y == tmin))
 	{
-		return (y != 0) && (y != 1);
+		return true;
 	}
-	if (y == tmin)
+	if ((x == -1) || (y == -1))
 	{
-		return (x != 0) && (y != 1);
+		// Then multiplication is safe given tmin is not involved
+		return false;
 	}
+	assert ((x != tmin) && (y != tmin));
 	// Deal with ordinary cases
-	assert (x != 0);
-	assert (y != 0);
 	T const tmax = std::numeric_limits<T>::max();
+	assert ((x != -1) && (y != -1));  // Avoids errors with tmin below
 	if (x > 0)
 	{
 		if (y > 0)
@@ -254,11 +244,11 @@ CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)
 	{
 		if (y < 0)
 		{
-			return -y > tmax / -x;
+			return y < tmax / x;
 		}
 	}
 	assert ((x < 0) && (y > 0));
-	return -y < tmin / -x;
+	return y > tmin / x;
 }
 
 template <typename T>

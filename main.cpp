@@ -1,4 +1,5 @@
 #include <unittest++/UnitTest++.h>
+#include "checked_arithmetic.hpp"
 #include "decimal.hpp"
 #include "decimal_special_tests.hpp"
 #include <iomanip>
@@ -6,6 +7,7 @@
 using jewel::Decimal;
 using jewel::detail::decimal_csv_test;
 using jewel::detail::decimal_speed_test;
+using jewel::multiplication_is_unsafe;
 using std::cout;
 using std::endl;
 using std::ios;
