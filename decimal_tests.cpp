@@ -581,6 +581,23 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiplication)
 	CHECK(d8 < Decimal("0.0000000001"));
 	CHECK_EQUAL(Decimal("1000001") * Decimal("0.00222"),
 	  Decimal("2220.00222"));
+	string s100 = "0." + string(Decimal::maximum_precision() - 2, '0') + "1";
+	string s101 = "-0." + string(Decimal::maximum_precision() - 3, '0') + "1";
+	Decimal d100(s100);
+	Decimal d101(s101);
+	CHECK_EQUAL(d100 * d101, Decimal("0"));
+	// Check rounding occurs
+	string s102 = "0." + string(Decimal::maximum_precision() - 1, '0') + "5";
+	string s102r = "0." + string(Decimal::maximum_precision() - 1, '0') + "1";
+	CHECK_EQUAL(Decimal(s102) * Decimal("0.1"), Decimal(s102r));
+	string s103 = "-0." + string(Decimal::maximum_precision() - 1, '0') + "7";
+	string s103r =
+	  "-0." + string(Decimal::maximum_precision() - 1, '0') + "1";
+	CHECK_EQUAL(Decimal(s102) * Decimal("0.1"), Decimal(s102r));
+	// or doesn't occur, as appropriate
+	string s104 = "0." + string(Decimal::maximum_precision() - 1, '0') + "4";
+	string s104r = "0." + string(Decimal::maximum_precision() - 1, '0') + "0";
+	CHECK_EQUAL(Decimal(s104) * Decimal("0.1"), Decimal(s104r));
 
 	// Test behaviour with unsafe operations
 	

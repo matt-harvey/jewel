@@ -288,6 +288,13 @@ int Decimal::rescale(places_type p_places)
 		return 0;
 	}
 
+	// remember sign
+	bool const is_positive = (m_intval > 0);
+	#ifndef NDEBUG
+		bool const is_zero = (m_intval == 0);
+		bool const is_negative = (m_intval < 0);
+	#endif
+
 	if (m_places < p_places)
 	{	
 		if (p_places > MAX_PLACES)
@@ -328,8 +335,13 @@ int Decimal::rescale(places_type p_places)
 		// and add rounding if required
 		if (remainder)
 		{
-			if (m_intval > 0) ++m_intval;
-			else --m_intval;
+			if (is_positive) ++m_intval;
+			else
+			{
+				assert (is_negative);
+				assert (!is_zero);
+				--m_intval;
+			}
 		}
 	}
 	m_places = p_places;
@@ -413,19 +425,6 @@ Decimal& Decimal::operator-=(Decimal rhs)
 	return *this;
 }
 
-Decimal& Decimal::unchecked_multiply(Decimal const& rhs)
-{
-	m_intval *= rhs.m_intval;
-	assert (!addition_is_unsafe(m_places, rhs.m_places));
-	m_places += rhs.m_places;
-	while (m_places > MAX_PLACES)
-	{
-		assert (m_places > 0);
-		rescale(m_places - 1);
-	}
-	return *this;
-}
-
 Decimal& Decimal::operator*=(Decimal rhs)
 {
 	Decimal orig = *this;
@@ -447,11 +446,18 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	if (m_intval < 0) m_intval *= -1;
 	if (rhs.m_intval < 0) rhs.m_intval *= -1;
 
-	// Do unchecked_multiply if we can
+	// Do "unchecked multiply" if we can
 	assert (m_intval >= 0 && rhs.m_intval >= 0);	
 	if (!multiplication_is_unsafe(m_intval, rhs.m_intval))
 	{
-		unchecked_multiply(rhs);
+		assert (!addition_is_unsafe(m_places, rhs.m_places));
+		m_intval *= rhs.m_intval;
+		m_places += rhs.m_places;
+		while (m_places > MAX_PLACES)
+		{
+			assert (m_places > 0);
+			rescale(m_places - 1);
+		}
 		if (signs_differ) m_intval *= -1;
 		rationalize();
 		return *this;

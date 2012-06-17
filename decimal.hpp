@@ -131,9 +131,6 @@ namespace jewel
  * and (b) it contains a "hard-wired" behaviour of rounding up at 5, while not
  * actually referring to the Decimal::ROUNDING_THRESHOLD constant to achieve
  * this. This is a kind of code repetition and so is bad.
- *
- * @todo Does multiplication incorporate rounding of the last
- * available digit of precision?
  */
 
 class Decimal:
@@ -498,23 +495,6 @@ private:
 	 * a convertible-to-int is passed to constructor, compilation will fail.
 	 */
 	explicit Decimal(int);
-
-	/**
-	 * Function to use as implementation of operator*= when it's safe to
-	 * multiply m_intval by rhs.m_intval, and when both operands are
-	 * non-negative.
-	 *
-	 * @param rhs the Decimal by which to multiply *this.
-	 *
-	 * @returns *this, after multplying *this by rhs and storing the result
-	 * in *this
-	 *
-	 * The caller is resposible for ensuring that rhs and *this are both
-	 * non-negative, and that it is safe to multiply m_intval and
-	 * rhs.m_intval without fear of overflow.
-	 */
-	Decimal& unchecked_multiply(Decimal const& rhs);
-
 
 }; // class Decimal
 
