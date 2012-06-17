@@ -610,7 +610,8 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiplication)
 	CHECK_THROW(Decimal d12 = Decimal("1") * d10, UnsafeArithmeticException);
 }
 
-TEST(decimal_divide_equals)
+
+TEST_FIXTURE(DigitStringFixture, decimal_divide_equals)
 {
 	Decimal d0("1");
 	Decimal d1("3");
@@ -640,12 +641,10 @@ TEST(decimal_divide_equals)
 	Decimal d800("1000001");
 	d800 /= Decimal("0.001");
 	CHECK_EQUAL(d800, Decimal("1000001000"));
-	/*
 	Decimal d801("90.27423");
 	d801 /= Decimal("0.00008447");
-	CHECK(d801 > Decimal("109793"));
-	CHECK(d801 < Decimal("109794"));
-	*/
+	CHECK(d801 > Decimal("1068713.50"));
+	CHECK(d801 < Decimal("1068713.51"));
 
 	// Check rounding behaviour
 	Decimal d500("2");
@@ -680,10 +679,12 @@ TEST(decimal_divide_equals)
 	// Check behaviour with unsafe operations
 	
 	// With straightforward overflow
-	Decimal d105("1000000");
+	string s105 = s_max_digits_one_and_zeroes;
+	s105.resize(s105.size() - 5);
+	Decimal d105(s105);
 	Decimal d106("0.000001");
 	CHECK_THROW(d105 /= d106, UnsafeArithmeticException);
-	Decimal d107("-1000000");
+	Decimal d107("-" + s105);
 	Decimal d108("0.000001");
 	CHECK_THROW(d107 /= d108, UnsafeArithmeticException);
 
