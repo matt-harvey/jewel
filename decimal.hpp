@@ -39,7 +39,8 @@ namespace jewel
  * floating point class. However the range of magnitudes is deliberately
  * restricted.
  *
- * @todo I think I should change places_type to a signed and then just do
+ * @todo LOW PRIORITY
+ * I think I should change places_type to a signed and then just do
  * away with arbitrary restrictions. This would free me up a bit w.r.t.
  * the implementation of multiplication and division. Although it would
  * complicate output and input. I would also need to change things
@@ -85,16 +86,18 @@ namespace jewel
  * precision as possible. So "1/3" will result in "0.333...." with as many
  * trailing '3's as are permitted by the implementation.
  * 
- * @todo I am not convinced that division is accurate in cases where
+ * @todo HIGH PRIORITY
+ * I am not convinced that division is accurate in cases where
  * the "scale down" branch is used. Figure this out.
  *
- * @todo Multiplication and division throw exceptions in some cases where
+ * @todo LOW PRIORITY
+ * Multiplication and division throw exceptions in some cases where
  * they should be able to calculate an answer. I have documented these
  * behaviours in the API docs. I don't believe this is a \e very serious
  * problem, as the behaviour is well documented and exceptions are thrown
- * rather than silent failure occurring. However, it is quite limiting
+ * rather than silent failure occurring. However, it is limiting
  * for certain use cases. Now that I have used <tt> long long </tt> for
- * Decimal::int_type, it is much less limited though.
+ * Decimal::int_type, it is much less limiting though.
  * (I could possibly make Decimal::maximum() and
  * Decimal::minimum()
  * arbitrary limits of my choosing (carefully policed in all functions),
@@ -103,31 +106,36 @@ namespace jewel
  * think this would be too limiting though, even if I use <tt> long long
  * </tt>.)
  *
- * @todo Make it work as expected with standard library stream precision
- * manipulators and formatting. To do this properly, I need to understand
- * about how streams work. Create a function that takes a string
+ * @todo LOW PRIORITY
+ * Make it work as expected with standard library stream precision
+ * manipulators and formatting. Create a function that takes a string
  * representation of a number, and the set of all the formatting flags
  * of an ostream (or a basic_ostream<>?), and use
  * those flags to format the string in accordance with those flags.
  * I should probably define this in a separate file. It could include
  * currency formats and so forth, too.
  * 
- * @todo For eventual release, tidy the naughty NUM_CAST macro in decimal.cpp.
+ * @todo LOW PRIORITY
+ * I should probably tidy the naughty NUM_CAST macro in decimal.cpp.
  * (Replace it everywhere with plain static_cast, providing of course that
  * the tests pass when compiled in release mode.)
  *
- * @todo Fully test the expected behaviour w.r.t. the number of trailing
+ * @todo HIGH PRIORITY
+ * Fully test the expected behaviour w.r.t. the number of trailing
  * fractional zeroes left behind by operations and constructors.
  *
- * @todo I should test that Decimal value is actually preserved after
+ * @todo HIGH PRIORITY
+ * I should test that Decimal value is actually preserved after
  * an exception is thrown and caught from an aborted arithmetic operation.
  *
- * @todo Find out whether it's \e always the case that the smallest possible
+ * @todo HIGH PRIORITY
+ * Find out whether it's \e always the case that the smallest possible
  * integer of every integral type on every machine has an absolute value that
  * is one greater than the largest possible integer of that type. If not, then
  * I may have non-portable code.
  *
- * @todo Division now incorporates rounding but: (a) it is a bit inefficient;
+ * @todo LOW PRIORITY
+ * Division now incorporates rounding but: (a) it is a bit inefficient;
  * and (b) it contains a "hard-wired" behaviour of rounding up at 5, while not
  * actually referring to the Decimal::ROUNDING_THRESHOLD constant to achieve
  * this. This is a kind of code repetition and so is bad.
@@ -319,7 +327,8 @@ public:
 	 * fractional precision of the divisor, is less than the value returned
 	 * by Decimal::maximum_precision().
 	 *
-	 * @todo The implementation of division is messy. Though it seems to be
+	 * @todo LOW PRIORITY
+	 * The implementation of division is messy. Though it seems to be
 	 * working correctly, I should tidy it up, even if I don't make it more
 	 * efficient. (But don't get too eager. I coded it like that for a reason.)
 	 *
@@ -357,7 +366,8 @@ public:
 	 *
 	 * These all behave as you would expect.
 	 *
-	 * @todo operator<(Decimal) could probably be made more efficient.
+	 * @todo LOW PRIORITY
+	 * operator<(Decimal) could probably be made more efficient.
 	 */
 	bool operator<(Decimal) const;
 
@@ -503,7 +513,8 @@ private:
 
 /** Write to an output stream.
  *
- * @todo Make sure this doesn't fail when Decimal being written is the
+ * @todo HIGH PRIORITY
+ * Make sure this doesn't fail when Decimal being written is the
  * return value of Decimal::minimum().
  */
 template <typename charT, typename traits>
