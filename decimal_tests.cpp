@@ -522,9 +522,8 @@ TEST_FIXTURE(DigitStringFixture, decimal_subtraction)
 	large_num_b = large_num_e - large_num_b;
 }
 
-#warning changing tests to use test fixture is only up to here
 
-TEST(decimal_multiply_equals)
+TEST_FIXTURE(DigitStringFixture, decimal_multiply_equals)
 {
 	Decimal d0("56.9");
 	Decimal d1("12");
@@ -551,8 +550,11 @@ TEST(decimal_multiply_equals)
 	CHECK_THROW(large_neg_num * large_num, UnsafeArithmeticException);
 
 	// With overflow in execution
-	Decimal d50("90.27427");
-	CHECK_THROW(d50 *= Decimal("-118381.12"), UnsafeArithmeticException);
+	Decimal d50("1.1111111");
+	string s51 = s_max_digits_one_and_zeroes;
+	s51.resize(s51.size() - 1);
+	Decimal d51(d51);
+	CHECK_THROW(d50 *= d51, UnsafeArithmeticException);
 
 	// The smallest possible Decimal cannot be multiplied
 	Decimal d200 = Decimal::minimum();
@@ -564,6 +566,8 @@ TEST(decimal_multiply_equals)
 	Decimal d103 = large_num * Decimal("-1.000");
 	
 }
+
+#warning changing tests to use test fixture is only up to here
 
 TEST(decimal_multiplication)
 {
