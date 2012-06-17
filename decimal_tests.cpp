@@ -427,7 +427,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_minus_equals)
 	Decimal d11(s11);
 	CHECK_THROW(d10 -= d11, UnsafeArithmeticException);
 	Decimal d12("7927439");
-	Decimal d12b("-." + string(Decimal::maximum_precision() - 4, '0') + '1');
+	Decimal d12b("-." + string(Decimal::maximum_precision() - 4, '0') + "1");
 	CHECK_THROW(d12 -= d12b, UnsafeArithmeticException);
 	Decimal d13("1.90009");
 	Decimal s13b(s_max_digits_one_and_zeroes_places_2);
@@ -457,7 +457,8 @@ TEST_FIXTURE(DigitStringFixture, decimal_minus_equals)
 	large_num_b -= large_num_b;
 }
 
-TEST(decimal_subtraction)
+
+TEST_FIXTURE(DigitStringFixture, decimal_subtraction)
 {
 	Decimal d0("30.86");
 	Decimal d1("20000.978");
@@ -477,19 +478,20 @@ TEST(decimal_subtraction)
 	// Check behaviour for unsafe operations
 
 	// With precision loss
-	Decimal d10("100000000");
-	Decimal d11("-0.00000001");
+	string s10 = s_max_digits_one_and_zeroes;
+	s10.resize(s10.size() - 3);
+	string s11 = "0.00001";
+	Decimal d10(s10);
+	Decimal d11(s11);
 	CHECK_THROW(Decimal d11b = d10 - d11, UnsafeArithmeticException);
 	Decimal d12("7927439");
-	CHECK_THROW(Decimal d12b = d12 - Decimal("-.001"),
-	  UnsafeArithmeticException);
-	Decimal d13("-.900009");
-	CHECK_THROW(Decimal d13b = d13 - Decimal("10000"),
-	  UnsafeArithmeticException);
+	Decimal d12b("-." + string(Decimal::maximum_precision() - 4, '0') + "1");
+	CHECK_THROW(Decimal d12c = d12 - d12b, UnsafeArithmeticException);
+	Decimal d13("1.900009");
+	Decimal d13b(s_max_digits_one_and_zeroes_places_2);
+	CHECK_THROW(Decimal d13c = d13 - d13b, UnsafeArithmeticException);
 	Decimal d14("09.009423");
-	CHECK_THROW(d14 = d14 - Decimal("2924"), UnsafeArithmeticException);
-	Decimal d15("-.98984790");
-	CHECK_THROW(Decimal d15b = d15 - Decimal("2342422"),
+	CHECK_THROW(d14 = d14 - Decimal(s_max_digits_less_one),
 	  UnsafeArithmeticException);
 	// With straightforward overflow
 	ostringstream oss;
@@ -519,6 +521,8 @@ TEST(decimal_subtraction)
 	Decimal large_num_e = large_num_b - Decimal("24");
 	large_num_b = large_num_e - large_num_b;
 }
+
+#warning changing tests to use test fixture is only up to here
 
 TEST(decimal_multiply_equals)
 {
