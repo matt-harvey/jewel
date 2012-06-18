@@ -115,10 +115,6 @@ namespace jewel
  * those flags to format the string in accordance with those flags.
  * I should probably define this in a separate file. It could include
  * currency formats and so forth, too.
- * 
- * @todo HIGH PRIORITY
- * Fully test the expected behaviour w.r.t. the number of trailing
- * fractional zeroes left behind by operations and constructors.
  *
  * @todo HIGH PRIORITY
  * Find out whether it's \e always the case that the smallest possible
@@ -219,6 +215,11 @@ public:
 	 * added. This ensures that - unlike in unchecked floating point
 	 * arithmetic - the sum of two non-zero numbers is always equal to
 	 * neither of the original numbers (or else throw an exception).
+	 * 
+	 * Note trailing fractional zeroes are never "rationalized away" from the
+	 * result. Stored fractional precision is always maintained at the level
+	 * of the more precise of the operands, and if it cannot be, an exception
+	 * is thrown.
 	 *
 	 * In virtue of operator+=(Decimal) being defined,
 	 * \b operator+(Decimal, Decimal) is also defined (through the magic of
@@ -238,6 +239,11 @@ public:
 	 * yield a number that is equal to neither of the original numbers (Or
 	 * else throw an exception).
 	 *
+	 * Note trailing fractional zeroes are never "rationalized away" from the
+	 * result. Stored fractional precision is always maintained at the level
+	 * of the more precise of the operands, and if it cannot be, an exception
+	 * is thrown.
+
 	 * In virtue of operator-=(Decimal) being defined,
 	 * \b operator-(Decimal, Decimal) is also defined (through the magic
 	 * of Boost). It behaves as expected, and will throw the same exceptions

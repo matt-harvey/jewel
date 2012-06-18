@@ -239,6 +239,10 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	ostringstream oss0;
 	oss0 << d24;
 	CHECK_EQUAL(oss0.str(), "90.100");
+	Decimal d402(".0");
+	ostringstream oss402;
+	oss402 << d402;
+	CHECK_EQUAL(oss402.str(), "0.0");
 
 	// Test elimination of pointless negative
 	Decimal d25("-0.0");
@@ -260,6 +264,7 @@ TEST(decimal_assignment)
 	d3 = d2;
 	CHECK_EQUAL(d3, d2);
 	CHECK_EQUAL(d3, Decimal("-23"));
+	// Test retention of fractional precision
 	ostringstream oss;
 	oss << d3;
 	CHECK_EQUAL(oss.str(), "-23.00");
@@ -338,6 +343,21 @@ TEST_FIXTURE(DigitStringFixture, decimal_plus_equals)
 	large_num_b += Decimal("10");
 	large_neg_num_b += large_num_b;
 	large_num_b += (-large_num_b);
+
+	// Test retention of fractional precision
+	Decimal d21("0.99");
+	Decimal d22("0.01");
+	ostringstream oss22;
+	d21 += d22;
+	oss22 << d21;
+	CHECK_EQUAL(oss22.str(), "1.00");
+	CHECK(oss22.str() != "1");
+	Decimal d23("-2340.1230");
+	Decimal d24("2340.1230");
+	d23 += d24;
+	ostringstream oss24;
+	oss24 << d23;
+	CHECK_EQUAL(oss24.str(), "0.0000");
 }
 
 TEST_FIXTURE(DigitStringFixture, decimal_addition)
@@ -401,6 +421,11 @@ TEST_FIXTURE(DigitStringFixture, decimal_addition)
 	large_num_b = large_num_b + Decimal("10");
 	Decimal large_neg_num_c = large_neg_num_b + large_num_b;
 	large_num_b = large_num_b + (-large_num_b);
+
+	// Test retention of fractional precision
+	ostringstream oss21;
+	oss21 << Decimal("-3.5") + Decimal("-4.5");
+	CHECK_EQUAL(oss21.str(), "-8.0");
 }
 
 TEST_FIXTURE(DigitStringFixture, decimal_minus_equals)
@@ -478,6 +503,14 @@ TEST_FIXTURE(DigitStringFixture, decimal_minus_equals)
 	large_num_b -= Decimal("10");
 	large_neg_num_b -= large_neg_num_b;
 	large_num_b -= large_num_b;
+
+	// Test retention of fractional precision
+	Decimal d21("100");
+	Decimal d22("0.00000");
+	d21 -= d22;
+	ostringstream oss22;
+	oss22 << d21;
+	CHECK_EQUAL(oss22.str(), "100.00000");
 }
 
 
@@ -555,8 +588,15 @@ TEST_FIXTURE(DigitStringFixture, decimal_subtraction)
 	large_neg_num_b = large_neg_num_d - large_neg_num_b;
 	Decimal large_num_e = large_num_b - Decimal("24");
 	large_num_b = large_num_e - large_num_b;
-}
 
+	// Test retention of fractional precision
+	Decimal d21("329876.0877");
+	Decimal d22("0.0877");
+	Decimal d23 = d21 - d22;
+	ostringstream oss23;
+	oss23 << d23;
+	CHECK_EQUAL(oss23.str(), "329876.0000");
+}
 
 TEST_FIXTURE(DigitStringFixture, decimal_multiply_equals)
 {
@@ -633,7 +673,20 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiply_equals)
 	Decimal d101 = large_num * Decimal("0");
 	Decimal d102 = -large_num * Decimal("1");
 	Decimal d103 = large_num * Decimal("-1.000");
-	
+
+	// Test elimination of trailing fractional zeroes
+	Decimal d104("2.00");
+	d104 *= Decimal("1.00");
+	ostringstream oss104;
+	oss104 << d104;
+	CHECK_EQUAL(oss104.str(), "2");
+	CHECK(oss104.str() != "2.00");
+	Decimal d105("-0.20");
+	Decimal d106("-5.0");
+	d105 *= d106;
+	ostringstream oss105;
+	oss105 << d105;
+	CHECK_EQUAL(oss105.str(), "1");
 }
 
 
@@ -723,6 +776,13 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiplication)
 	Decimal d10 = Decimal::minimum();
 	CHECK_THROW(Decimal d11 = d10 * Decimal("1"), UnsafeArithmeticException);
 	CHECK_THROW(Decimal d12 = Decimal("1") * d10, UnsafeArithmeticException);
+
+	// Test elimination of trailing fractional zeroes
+	Decimal d700("107.0700");
+	d700 /= Decimal("10");
+	ostringstream oss700;
+	oss700 << d700;
+	CHECK_EQUAL(oss700.str(), "10.707");
 }
 
 
@@ -843,6 +903,11 @@ TEST_FIXTURE(DigitStringFixture, decimal_divide_equals)
 	CHECK_THROW(d300 /= Decimal("-0.0"), UnsafeArithmeticException);
 	// Check value unchanged after exception
 	CHECK_EQUAL(Decimal("24.3"), d300);
+
+	// Test elimination of trailing fractional zeroes
+	ostringstream oss301;
+	oss301 << Decimal("234.001100") / Decimal("10");
+	CHECK_EQUAL(oss301.str(), "23.40011");
 }
 
 TEST_FIXTURE(DigitStringFixture, decimal_division)
@@ -907,6 +972,11 @@ TEST_FIXTURE(DigitStringFixture, decimal_division)
 	CHECK_EQUAL(d2004, Decimal("20"));
 	CHECK_EQUAL(d2005, Decimal("-1901"));
 	CHECK_EQUAL(Decimal("0"), d2006);
+
+	// Test elimination of trailing fractional zeroes
+	ostringstream oss3000;
+	oss3000 << Decimal("1.333333340") / Decimal("-1");
+	CHECK_EQUAL(oss3000.str(), "-1.33333334");
 }
 
 
@@ -950,6 +1020,17 @@ TEST(decimal_increment)
 	Decimal d11 = ++d10;
 	// Then this should throw
 	CHECK_THROW(d11++, UnsafeArithmeticException);
+
+	// Test preservation of fractional precision
+	Decimal d12("1.900");
+	++d12;
+	ostringstream oss12;
+	oss12 << d12;
+	CHECK_EQUAL(oss12.str(), "2.900");
+	d12++;
+	ostringstream oss12b;
+	oss12b << d12;
+	CHECK_EQUAL(oss12b.str(), "3.900");
 }
 
 TEST(decimal_decrement)
@@ -1007,6 +1088,17 @@ TEST(decimal_decrement)
 		CHECK_EQUAL(d10, Decimal::minimum());
 	}
 	CHECK(Decimal::minimum() == d10);
+
+	// Check preservation of fractional precision
+	Decimal d11("1.099000");
+	d11--;
+	ostringstream oss11;
+	oss11 << d11;
+	CHECK_EQUAL(oss11.str(), "0.099000");
+	--d11;
+	ostringstream oss11b;
+	oss11b << d11;
+	CHECK_EQUAL(oss11b.str(), "-0.901000");
 }
 
 
@@ -1021,6 +1113,10 @@ TEST(decimal_operator_less_than)
 	// Check operands unchanged
 	CHECK_EQUAL(d2, Decimal("-1"));
 	CHECK_EQUAL(d3, Decimal("1.0000"));
+	CHECK_EQUAL(d3, Decimal("1"));
+	ostringstream oss3;
+	oss3 << d3;
+	CHECK_EQUAL(oss3.str(), "1.0000");
 	CHECK(Decimal("0") < Decimal(".034"));
 	CHECK(Decimal("-.34") < Decimal("-0.000"));
 	CHECK(!(Decimal(".34") < Decimal("0.000")));
@@ -1187,6 +1283,10 @@ TEST(decimal_operator_unary_minus)
 	CHECK_EQUAL(-Decimal("100"), Decimal("-100"));
 	Decimal dmin = Decimal::minimum();
 	CHECK_THROW(-dmin, UnsafeArithmeticException);
+	Decimal d4("34.712000");
+	ostringstream oss4;
+	oss4 << -d4;
+	CHECK_EQUAL(oss4.str(), "-34.712000");
 }
 
 TEST(decimal_operator_unary_plus)
@@ -1195,6 +1295,10 @@ TEST(decimal_operator_unary_plus)
 	CHECK_EQUAL(Decimal("-1.432"), +Decimal("-1.432"));
 	Decimal d0("234");
 	CHECK_EQUAL(d0, +d0);
+	Decimal d1("1.0");
+	ostringstream oss1;
+	oss1 << +d1;
+	CHECK_EQUAL(oss1.str(), "1.0");
 }
 
 TEST(decimal_value_preservation)
