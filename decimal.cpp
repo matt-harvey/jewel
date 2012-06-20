@@ -565,6 +565,15 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			}
 			if (diff_signs) lhs.m_intval *= -1;
 			*this = lhs;
+
+			#warning temporary code in Decimal division needs to be removed
+			cerr << "About to return from rescaling branch of division..."
+			     << endl;
+			cerr << "lhs: " << orig << endl;
+			cerr << "rhs: " << orig_rhs << endl;
+			cerr << endl;
+				
+
 			return *this;
 		}
 
