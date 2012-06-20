@@ -89,7 +89,11 @@ namespace jewel
  * 
  * @todo HIGH PRIORITY
  * I am not convinced that division is accurate in cases where
- * the "scale down" branch is used. Figure this out.
+ * the "scale down" branch is used. Furthermore, it seems that in none of my
+ * test cases is this branch actually used. This may be dead code. Figure out
+ * whether it is in fact dead code. If it is, remove it. If it isn't, write
+ * test cases that exercise it, and determine whether the results of those
+ * tests are satisfactory.
  *
  * @todo LOW PRIORITY
  * Multiplication and division throw exceptions in some cases where

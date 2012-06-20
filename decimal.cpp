@@ -526,6 +526,13 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		{
 			// Then we can't proceed with ordinary "long division" safely,
 			// and need to "scale down" first
+
+			#warning temporary code in Decimal division needs to be removed
+			cerr << "Entering rescaling branch of division..." << endl;
+			cerr << "lhs: " << orig << endl;
+			cerr << "rhs: " << orig_rhs << endl;
+			cerr << endl;
+
 			bool add_rounding_right = false;
 			if (rhs.m_intval % BASE >= ROUNDING_THRESHOLD)
 			{
