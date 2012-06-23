@@ -112,13 +112,7 @@ namespace jewel
  * I should probably define this in a separate file. It could include
  * currency formats and so forth, too.
  *
- * @todo HIGH PRIORITY
- * Find out whether it's \e always the case that the smallest possible
- * integer of every integral type on every machine has an absolute value that
- * is one greater than the largest possible integer of that type. If not, then
- * I may have non-portable code.
- *
- * @todo LOW PRIORITY
+  @todo LOW PRIORITY
  * Division now incorporates rounding but: (a) it is a bit inefficient;
  * and (b) it contains a "hard-wired" behaviour of rounding up at 5, while not
  * actually referring to the Decimal::ROUNDING_THRESHOLD constant to achieve
