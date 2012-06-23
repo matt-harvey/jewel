@@ -21,6 +21,28 @@ add_library(jewel
 			num_digits.cpp)
 target_link_libraries (main unittest++)
 
+install(TARGETS
+        main
+		jewel
+		DESTINATION
+		/home/matthew/lib/jewel)
+
+install(FILES
+        arithmetic_exceptions.hpp
+		checked_arithmetic.hpp
+		checked_arithmetic_detail.hpp
+		decimal.hpp
+		decimal_special_tests.hpp
+		num_digits.hpp
+		overview.dox
+		power_vector.hpp
+		stopwatch.hpp
+		testdata
+		DESTINATION
+		/home/matthew/lib/jewel)
+		
+
+
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)
 if(DOXYGEN_FOUND)

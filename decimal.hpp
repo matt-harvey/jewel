@@ -12,7 +12,7 @@
  */
 
 
-#include <arithmetic_exceptions.hpp>
+#include "arithmetic_exceptions.hpp"
 #include <boost/exception/all.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
