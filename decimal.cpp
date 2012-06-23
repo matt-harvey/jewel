@@ -477,6 +477,8 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	Decimal const orig = *this;
 	Decimal const orig_rhs = rhs;
 
+	rhs.rationalize();
+
 	// Capture division by zero
 	if (rhs.m_intval == 0)
 	{
@@ -492,6 +494,15 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		throw UnsafeArithmeticException("Smallest possible Decimal cannot "
 		  "feature in division operation.");
 	}
+	assert (NumDigits::num_digits(rhs.m_intval) <= maximum_precision());
+	if (NumDigits::num_digits(rhs.m_intval) == maximum_precision())
+	{
+		assert (*this == orig);
+		throw UnsafeArithmeticException("Dividend has a number of significant"
+		  "digits that is greater than or equal to the return value of "
+		  "Decimal::maximum_precision(); as a result, division cannot be "
+		  "performed safely.");
+	}
 	
 	// Remember required sign of product
 	bool const diff_signs = (( m_intval > 0 && rhs.m_intval < 0) ||
@@ -502,7 +513,6 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	if (rhs.m_intval < 0) rhs.m_intval *= -1;
 
 	// Rescale the dividend as high as we can
-	rhs.rationalize();
 	while (m_places < rhs.m_places && rescale(m_places + 1) == 0)
 	{
 	}
@@ -522,16 +532,21 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	// Deal with any remainder using "long division"
 	while (remainder != 0 && rescale(m_places + 1) == 0)
 	{
+		assert (!multiplication_is_unsafe(remainder, BASE));
+
+		/*
+		 * Previously this commented-out section of code dealt
+		 * with the case where it was unsafe to multiply remainder
+		 * and BASE. However, this is now dealt with by the fact that
+		 * an exception is thrown if the number of significant digits
+		 * in the dividend is equal to Decimal::maximum_precision().
+		 * This makes for a more straightforward API, since the
+		 * below code caused loss of precision under difficult-to-explain
+		 * circumstances.
 		if (multiplication_is_unsafe(remainder, BASE))
 		{
 			// Then we can't proceed with ordinary "long division" safely,
 			// and need to "scale down" first
-
-			#warning temporary code in Decimal division needs to be removed
-			cerr << "Entering rescaling branch of division..." << endl;
-			cerr << "lhs: " << orig << endl;
-			cerr << "rhs: " << orig_rhs << endl;
-			cerr << endl;
 
 			bool add_rounding_right = false;
 			if (rhs.m_intval % BASE >= ROUNDING_THRESHOLD)
@@ -566,16 +581,9 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			if (diff_signs) lhs.m_intval *= -1;
 			*this = lhs;
 
-			#warning temporary code in Decimal division needs to be removed
-			cerr << "About to return from rescaling branch of division..."
-			     << endl;
-			cerr << "lhs: " << orig << endl;
-			cerr << "rhs: " << orig_rhs << endl;
-			cerr << endl;
-				
-
 			return *this;
 		}
+		*/
 
 		// It's safe to proceed with ordinary "long division"
 		assert(!multiplication_is_unsafe(remainder, BASE));

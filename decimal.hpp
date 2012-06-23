@@ -86,12 +86,6 @@ namespace jewel
  * Apart from the above requirements, Decimals will store as many digits of
  * precision as possible. So "1/3" will result in "0.333...." with as many
  * trailing '3's as are permitted by the implementation.
- * 
- * @todo HIGH PRIORITY
- * I am not convinced that division is accurate in cases where
- * the "scale down" branch is used. Currently none of my test cases exercise
- * this branch. I need to test this branch properly and figure out whether
- * it is accurate.
  *
  * @todo LOW PRIORITY
  * Multiplication and division throw exceptions in some cases where
@@ -326,6 +320,23 @@ public:
 	 * of fractional precision that would need to be added to match the
 	 * fractional precision of the divisor, is less than the value returned
 	 * by Decimal::maximum_precision().
+	 *
+	 * In addition, an exception will be thrown in cases where the number
+	 * of significant digits in the dividend is equal to the return
+	 * value of Decimal::maximum_precision(). This is due to limitations
+	 * in the implementation. For division to succeed, the number of
+	 * significant digits in the dividend must be less than the value
+	 * returned by Decimal::maximum_precision(). Note
+	 * that all digits to the left of the decimal point (excluding the case
+	 * where the only
+	 * such digit is \c 0) are counted as significant digits.
+	 * In Decimals with fractional parts (digits to the right of the 
+	 * decimal point), the significant
+	 * digits, going from left to right, start at the first non-zero digit,
+	 * and continue consecutively until the last non-zero digit is reached
+	 * (and the "boundary digits" just mentioned count as significant
+	 * digits). The negative sign and the decimal point
+	 * do not count as digits.
 	 *
 	 * @todo LOW PRIORITY
 	 * The implementation of division is messy. Though it seems to be

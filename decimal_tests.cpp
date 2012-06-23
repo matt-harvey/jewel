@@ -908,6 +908,53 @@ TEST_FIXTURE(DigitStringFixture, decimal_divide_equals)
 	ostringstream oss301;
 	oss301 << Decimal("234.001100") / Decimal("10");
 	CHECK_EQUAL(oss301.str(), "23.40011");
+
+	// Test that exception is thrown when dividend has too many
+	// significant digits
+	Decimal d400("1");
+	Decimal d401("-31.908");
+	Decimal d402("-1");
+	CHECK_THROW(d400 /= Decimal(s_max_digits_one_and_zeroes),
+	  UnsafeArithmeticException);
+	d400 = Decimal("1");
+	CHECK_THROW(d400 /= Decimal::maximum(), UnsafeArithmeticException);
+	d400 = Decimal("1");
+	CHECK_THROW(d400 /= Decimal(s_max_digits_one_and_zeroes_places_2) +
+	  Decimal("0.01"), UnsafeArithmeticException);
+	d400 = Decimal("1");
+	CHECK_THROW(d400 /= Decimal(s_neg_max_digits_one_and_zeroes) -
+	  Decimal("0.01"), UnsafeArithmeticException);
+	d400 = Decimal("1");
+	CHECK_THROW(d400 /= Decimal(s_neg_max_int_type_places_2),
+	  UnsafeArithmeticException);
+	d400 = Decimal("1");
+	CHECK_THROW(d401 /= Decimal(s_max_digits_one_and_zeroes),
+	  UnsafeArithmeticException);
+	d401 = Decimal("-31.908");
+	CHECK_THROW(d401 /= Decimal::maximum(), UnsafeArithmeticException);
+	d401 = Decimal("-31.908");
+	CHECK_THROW(d401 /= Decimal(s_max_digits_one_and_zeroes_places_2) +
+	  Decimal("0.01"), UnsafeArithmeticException);
+	d401 = Decimal("-31.908");
+	CHECK_THROW(d401 /= Decimal(s_neg_max_digits_one_and_zeroes),
+	  UnsafeArithmeticException);
+	d401 = Decimal("-31.908");
+	CHECK_THROW(d401 /= Decimal(s_neg_max_int_type_places_2),
+	  UnsafeArithmeticException);
+	d401 = Decimal("-31.908");
+	CHECK_THROW(d402 /= Decimal(s_max_digits_one_and_zeroes),
+	  UnsafeArithmeticException);
+	d402 = Decimal("-1");
+	CHECK_THROW(d402 /= Decimal::maximum(), UnsafeArithmeticException);
+	d402 = Decimal("-1");
+	CHECK_THROW(d402 /= Decimal(s_max_digits_one_and_zeroes_places_2) +
+	  Decimal("0.01"), UnsafeArithmeticException);
+	d402 = Decimal("-1");
+	CHECK_THROW(d402 /= Decimal(s_max_int_type_places_2),
+	  UnsafeArithmeticException);
+	d402 = Decimal("-1");
+	CHECK_THROW(d402 /= Decimal(s_neg_max_int_type_places_2),
+	  UnsafeArithmeticException);
 }
 
 TEST_FIXTURE(DigitStringFixture, decimal_division)
@@ -977,6 +1024,39 @@ TEST_FIXTURE(DigitStringFixture, decimal_division)
 	ostringstream oss3000;
 	oss3000 << Decimal("1.333333340") / Decimal("-1");
 	CHECK_EQUAL(oss3000.str(), "-1.33333334");
+
+	// Test that exception is thrown when dividend has too many
+	// significant digits
+	Decimal d400("1");
+	Decimal d401("-31.908");
+	Decimal d402("-1");
+	CHECK_THROW(d400 / Decimal(s_max_digits_one_and_zeroes),
+	  UnsafeArithmeticException);
+	CHECK_THROW(d400 / Decimal::maximum(), UnsafeArithmeticException);
+	CHECK_THROW(d400 / (Decimal(s_max_digits_one_and_zeroes_places_2) +
+	  Decimal("0.01")), UnsafeArithmeticException);
+	CHECK_THROW(d400 / Decimal(s_neg_max_digits_one_and_zeroes),
+	  UnsafeArithmeticException);
+	CHECK_THROW(d400 / Decimal(s_neg_max_int_type_places_2),
+	  UnsafeArithmeticException);
+	CHECK_THROW(d401 / Decimal(s_max_digits_one_and_zeroes),
+	  UnsafeArithmeticException);
+	CHECK_THROW(d401 / Decimal::maximum(), UnsafeArithmeticException);
+	CHECK_THROW(d401 / (Decimal(s_max_digits_one_and_zeroes_places_2) +
+	  Decimal("0.01")), UnsafeArithmeticException);
+	CHECK_THROW(d401 / Decimal(s_neg_max_digits_one_and_zeroes),
+	  UnsafeArithmeticException);
+	CHECK_THROW(d401 / Decimal(s_neg_max_int_type_places_2),
+	  UnsafeArithmeticException);
+	CHECK_THROW(d402 / Decimal(s_max_digits_one_and_zeroes),
+	  UnsafeArithmeticException);
+	CHECK_THROW(d402 / Decimal::maximum(), UnsafeArithmeticException);
+	CHECK_THROW(d402 / (Decimal(s_max_digits_one_and_zeroes_places_2) +
+	  Decimal("0.01")), UnsafeArithmeticException);
+	CHECK_THROW(d402 / Decimal(s_max_int_type_places_2),
+	  UnsafeArithmeticException);
+	CHECK_THROW(d402 / Decimal(s_neg_max_int_type_places_2),
+	  UnsafeArithmeticException);
 }
 
 
