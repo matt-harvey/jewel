@@ -338,11 +338,6 @@ public:
 	 * digits). The negative sign and the decimal point
 	 * do not count as digits.
 	 *
-	 * @todo LOW PRIORITY
-	 * The implementation of division is messy. Though it seems to be
-	 * working correctly, I should tidy it up, even if I don't make it more
-	 * efficient. (But don't get too eager. I coded it like that for a reason.)
-	 *
 	 * In virtue of operator/=(Decimal) being defined,
 	 * \b operator/(Decimal, Decimal) is also defined (through the magic
 	 * of Boost). It behaves as expected, and will through the same exceptions
