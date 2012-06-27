@@ -112,6 +112,15 @@ namespace jewel
  * I should probably define this in a separate file. It could include
  * currency formats and so forth, too.
  *
+ * @todo LOW PRIORITY
+ * Make Doxygen apidocs build and install as part of make install, and then
+ * just install to the installation directory the apidocs folder, not the
+ * Doxyfile.
+ *
+ * @todo LOW PRIORITY
+ * Stop Doxygen from spewing all those warnings. They relate only to Doxygen
+ * markup.
+ *
   @todo LOW PRIORITY
  * Division now incorporates rounding but: (a) it is a bit inefficient;
  * and (b) it contains a "hard-wired" behaviour of rounding up at 5, while not
