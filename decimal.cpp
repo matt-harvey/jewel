@@ -201,7 +201,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 		str_rep[si] = '-';
 		++si;
 	}
-	// Copying str[si] to a local const here seemed to speed things up.
+	// Copying str[si] to a local const here seemed not to speed things up.
 	for ( ; str[si] != SPOT && si != str_size; ++si)
 	{
 		assert (si < str.size());
