@@ -24,7 +24,7 @@ namespace detail
 
 void decimal_speed_test()
 {
-	int lim = 1000000;
+	int const lim = 1000000;
 	vector<Decimal> vec;
 	for (int i = 0; i != lim; ++i)
 	{
@@ -32,6 +32,8 @@ void decimal_speed_test()
 		vec.push_back(Decimal("98.35"));
 	}
 
+	// Base case... we will factor this out when
+	// measuring the speed of the arithmetic operations
 	Stopwatch sw_base_case;
 	for (int i = 0; i != lim; ++i)
 	{
@@ -39,6 +41,7 @@ void decimal_speed_test()
 		Decimal d1 = vec[i + 1];
 	}
 	double const base_case = sw_base_case.seconds_elapsed();
+
 
 	Stopwatch sw_multiplication;
 	for (int i = 0; i != lim; ++i)
@@ -85,6 +88,35 @@ void decimal_speed_test()
 	cout << lim << " subtractions take "
 	     << sw_subtraction.seconds_elapsed() - base_case
 	     << " seconds." << endl;
+
+
+	// Measure construction
+	int const ctest_lim = 1000000 / 5;
+	vector<string> ctest_vec;
+	for (int i = 0; i != ctest_lim; ++i)
+	{
+		ctest_vec.push_back("-0.9871967");
+		ctest_vec.push_back("13987.870");
+		ctest_vec.push_back("23.2");
+		ctest_vec.push_back("19");
+		ctest_vec.push_back("-1234.197423");
+	}
+	Stopwatch sw_ctest_base;
+	for (vector<string>::const_iterator it = ctest_vec.begin();
+	  it != ctest_vec.end(); ++it)
+	{
+		string s = *it;
+	}
+	double const ctest_base_case = sw_ctest_base.seconds_elapsed();
+	Stopwatch sw_ctest;
+	for (vector<string>::const_iterator it = ctest_vec.begin();
+	  it != ctest_vec.end(); ++it)
+	{
+		Decimal d0(*it);
+	}
+	cout << ctest_lim * 5 << " calls to Decimal constructor-from-string"
+	     << " take " << sw_ctest.seconds_elapsed() - ctest_base_case
+		 << " seconds." << endl;
 
 	return;
 }

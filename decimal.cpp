@@ -173,23 +173,21 @@ Decimal::rationalize(places_type min_places)
 
 Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 {
-	// Writing through indexes here to try to make it as fast
-	// as possible.
-	// This is about 25% faster than using push_back.
-	// (Maybe not worth it... though risk of writing through unchecked
-	// indexes is ameliorated via plentiful asserts.)
+	// Writing through iterators here to make it as fast as I reasonably
+	// can.
 	//
-	// I could probably increase the speed still further by implementing this
-	// with raw pointers into a char[]... but that would be a pretty
-	// desperate move.
+	// This seems to be about as fast as using indexing, but roughly 25%
+	// faster than using push_back.
 	//
-	// Note, my experimentation suggests that writing using a
-	// string::iterator is MUCH slower that either indexes or raw pointers.
+	// I've got plentiful asserts to ensure I don't read or write off the
+	// end.
+	//
 	// Note the lexical cast near the end accounts for a huge chunk of the
 	// execution time.
 	//
-	// In reality, if I want extremely fast initialization of a Decimal,
-	// this is not the best constructor to achieve that.
+	// Of course, if I want extremely fast construction of a Decimal,
+	// the constructor-from-string is not the best constructor to achieve
+	// that.
 	
 	typedef string::size_type sz_t;
 	if (str.empty())
@@ -206,31 +204,32 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	// as we won't hold the spot in str_rep.
 	string str_rep(str_size, '\0');
 
-	sz_t si = 0;
-	if (str[0] == '-')
+	string::const_iterator si = str.begin();  // We'll through from this
+	string::iterator ri = str_rep.begin();    // And write through this
+
+	if (*si == '-')
 	{
-		assert (si < str_size);
-		str_rep[si] = '-';
+		assert (ri < str_rep.end());
+		*ri = '-';
 		++si;
+		++ri;
 	}
-	// Copying str[si] to a local const here seemed not to speed things up.
-	for ( ; str[si] != SPOT && si != str_size; ++si)
+	string::const_iterator const str_end = str.end();
+	for ( ; *si != SPOT && si != str_end; ++si, ++ri)
 	{
-		assert (si < str.size());
-		if (!isdigit(str[si]))  // Note: this is fairly cheap.
+		assert (si < str_end);
+		if (!isdigit(*si))  // Note: this is fairly cheap.
 		{
 			assert (m_intval == 0);
 			assert (m_places == 0);
 			throw UnsafeArithmeticException("Invalid string passed "
 			  "to Decimal constructor.");
 		}
-		assert (str_size == str_rep.size());
-		assert (si < str_size);
-		assert (si < str.size());
-		str_rep[si] = str[si];
+		assert (ri < str_rep.end());
+		*ri = *si;
 	}
 	sz_t spot_position = 0;   // for the position of decimal point	
-	if (str[si] == SPOT)
+	if (*si == SPOT)
 	{
 		// We have a spot.
 		// We have a str_rep that's one too big
@@ -240,17 +239,16 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 		assert (reduced_size < str_size);
 		assert (str_size >= 1);
 
-		sz_t ri = si;  // We now need a separate index for str_rep.
-		
 		// Jump over the spot in str
 		++si;
 
 		// Now let's get the remaining the digits
-		for ( ; si != str_size; ++si)
+		assert (str_end == str.end());
+		for ( ; si != str_end; ++si, ++ri)
 		{
 			++spot_position;        // To count no. of fractional places
-			assert (si < str.size());
-			if (!isdigit(str[si]))  // Note: this is fairly cheap.
+			assert (si < str_end);
+			if (!isdigit(*si))  // Note: this is fairly cheap.
 			{
 				assert (m_intval == 0);
 				assert (m_places == 0);
@@ -258,10 +256,8 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 				  " Decimal constructor.");
 			}
 			assert (reduced_size == str_rep.size());
-			assert (ri < reduced_size);
-			assert (si < str.size());
-			str_rep[ri] = str[si];
-			++ri;
+			assert (ri < str_rep.end());
+			*ri = *si;
 		}
 	}
 	if (spot_position > MAX_PLACES)

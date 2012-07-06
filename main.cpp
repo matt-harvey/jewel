@@ -59,7 +59,7 @@ int main()
 	*/
 
 	decimal_csv_test();
-	// decimal_speed_test();
+	decimal_speed_test();
 
 	return UnitTest::RunAllTests();
 }
