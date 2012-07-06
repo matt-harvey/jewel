@@ -175,9 +175,20 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 {
 	// Writing through indexes here to try to make it as fast
 	// as possible.
-	// It is about 25% faster than using push_back.
+	// This is about 25% faster than using push_back.
 	// (Maybe not worth it... though risk of writing through unchecked
 	// indexes is ameliorated via plentiful asserts.)
+	//
+	// I could significantly increase the speed again by implementing this
+	// with raw pointers into a char[]... but that would be a desperate
+	// move...
+	//
+	// Note, my experimentation suggests that writing using a
+	// string::iterator is MUCH slower that indexes (and roughly an order
+	// of magnitude slower than raw pointers).
+	//
+	// Note the lexical cast near the end accounts for a huge chunk of the
+	// execution time.
 	
 	typedef string::size_type sz_t;
 	if (str.empty())
