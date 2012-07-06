@@ -173,7 +173,7 @@ Decimal::rationalize(places_type min_places)
 
 Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 {
-	// Writing though indexes here to try to make it as fast
+	// Writing through indexes here to try to make it as fast
 	// as possible.
 	// It is about 25% faster than using push_back.
 	// (Maybe not worth it... though risk of writing through unchecked
