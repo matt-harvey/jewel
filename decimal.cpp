@@ -179,16 +179,17 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	// (Maybe not worth it... though risk of writing through unchecked
 	// indexes is ameliorated via plentiful asserts.)
 	//
-	// I could significantly increase the speed again by implementing this
-	// with raw pointers into a char[]... but that would be a desperate
-	// move...
+	// I could probably increase the speed still further by implementing this
+	// with raw pointers into a char[]... but that would be a pretty
+	// desperate move.
 	//
 	// Note, my experimentation suggests that writing using a
-	// string::iterator is MUCH slower that indexes (and roughly an order
-	// of magnitude slower than raw pointers).
-	//
+	// string::iterator is MUCH slower that either indexes or raw pointers.
 	// Note the lexical cast near the end accounts for a huge chunk of the
 	// execution time.
+	//
+	// In reality, if I want extremely fast initialization of a Decimal,
+	// this is not the best constructor to achieve that.
 	
 	typedef string::size_type sz_t;
 	if (str.empty())
