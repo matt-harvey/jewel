@@ -1,12 +1,3 @@
----
-
-I need to use long long int to get 64-bit integers, but this is strictly
-a C++11 feature - even though it was in the C99 standard and is supported by
-most compilers pre-C++11 anyway. I could use a compiler flag or macro
-of some kind that I can use to use long int where long long int can't be used,
-for maximum portability. (But 32-bit integers are so crappy!)
-
-- - -
 
 NOTES ON EFFICIENCY AND COMPARISON WITH DECIMAL WITH STATIC PLACES
 
@@ -57,6 +48,7 @@ decimal places on the odd occasion that that is required.
 
 The other important message is that you can add a million numbers in roughly
 a hundredth of a second either way.
+
 
   
 
