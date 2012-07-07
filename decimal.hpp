@@ -89,16 +89,23 @@ namespace jewel
  * precision as possible. So "1/3" will result in "0.333...." with as many
  * trailing '3's as are permitted by the implementation.
  *
- * @todo HIGH PRIORITY
+ * @todo LOW PRIORITY
  * Multiplication and division throw exceptions in some cases where
  * they should be able to calculate an answer. I have documented these
  * behaviours in the API docs. I don't believe this is a \e very serious
  * problem, as the behaviour is well documented and exceptions are thrown
  * rather than silent failure occurring. However, it is limiting
- * for certain use cases. I should be able to get around this, and also
+ * for certain use cases, and it makes for a messy API.
+ * I should be able to get around this, and also
  * simplify my implementation of both division and multiplication, by
  * using boost::int32_t for int_type, while overflowing into boost::int64_t
- * within the implementation of these functions.
+ * within the implementation of these functions where required. The functions
+ * will then only throw if the final value of m_intval cannot be fit into
+ * boost::int32_t. The only problem then is that int_type is limited to
+ * 32 bits. I'm not sure whether this is acceptable for e.g. an accounting
+ * application. I think it is probably better to retain the current
+ * "messy" situation until there's a clear need to reimplement things
+ * in light of actual use cases.
  
  * @todo LOW PRIORITY
  * Make it work as expected with standard library stream precision
