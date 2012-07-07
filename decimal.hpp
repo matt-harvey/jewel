@@ -94,14 +94,13 @@ namespace jewel
  * problem, as the behaviour is well documented and exceptions are thrown
  * rather than silent failure occurring. However, it is limiting
  * for certain use cases. Now that I have used <tt> long long </tt> for
- * Decimal::int_type, it is much less limiting though.
- * (I could possibly make Decimal::maximum() and
- * Decimal::minimum()
- * arbitrary limits of my choosing (carefully policed in all functions),
- * so that there is \e deliberate \e headroom created for the simpler
- * implementations of multiplication and divison to work in ALL cases. I
- * think this would be too limiting though, even if I use <tt> long long
- * </tt>.)
+ * Decimal::int_type, it is much less limiting. But I could probably eliminate
+ * the problem by explicitly using int32_t as the type for m_intval, and
+ * then within the implementations of divison and multiplication, use
+ * int64_t and overflow into that. These types are not officially supported
+ * by C++98, however, and there is perhaps some danger of non-portability. But
+ * then long long isn't officially supported either. (Of course, I could just
+ * go with C++11, but I have decided against that for other reasons.)
  *
  * @todo LOW PRIORITY
  * Make it work as expected with standard library stream precision
