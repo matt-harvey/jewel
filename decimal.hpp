@@ -18,6 +18,7 @@
 #include <boost/exception/all.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
+#include <boost/serialization/access.hpp>
 #include <cassert>
 #include <cctype>   // for isdigit
 #include <cstdlib>  // for abs
@@ -88,6 +89,10 @@ namespace jewel
  * Apart from the above requirements, Decimals will store as many digits of
  * precision as possible. So "1/3" will result in "0.333...." with as many
  * trailing '3's as are permitted by the implementation.
+ *
+ * @todo LOW PRIORITY
+ * My use of boost::int64_t may compromise portability on some (probably
+ * obscure) platforms. It may or may not be worth addressing this.
  *
  * @todo LOW PRIORITY
  * Multiplication and division throw exceptions in some cases where
@@ -519,6 +524,14 @@ private:
 	 */
 	explicit Decimal(int);
 
+
+	friend class boost::serialization::access;
+	/** Provide for serialization via Boost.serialization.
+	 * See Boost documentation for details on how this works.
+	 */
+	template <typename Archive>
+	void serialize(Archive& ar, unsigned int const version);
+
 }; // class Decimal
 
 
@@ -706,6 +719,17 @@ inline
 Decimal::places_type Decimal::maximum_precision()
 {
 	return MAX_PLACES;
+}
+
+
+// Serialization
+
+template <typename Archive>
+inline
+void Decimal::serialize(Archive& ar, unsigned int const version)
+{
+	ar & m_intval;
+	ar & m_places;
 }
 
 
