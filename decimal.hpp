@@ -12,7 +12,9 @@
  */
 
 
+
 #include "arithmetic_exceptions.hpp"
+#include <boost/cstdint.hpp>
 #include <boost/exception/all.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
@@ -87,21 +89,17 @@ namespace jewel
  * precision as possible. So "1/3" will result in "0.333...." with as many
  * trailing '3's as are permitted by the implementation.
  *
- * @todo LOW PRIORITY
+ * @todo HIGH PRIORITY
  * Multiplication and division throw exceptions in some cases where
  * they should be able to calculate an answer. I have documented these
  * behaviours in the API docs. I don't believe this is a \e very serious
  * problem, as the behaviour is well documented and exceptions are thrown
  * rather than silent failure occurring. However, it is limiting
- * for certain use cases. Now that I have used <tt> long long </tt> for
- * Decimal::int_type, it is much less limiting. But I could probably eliminate
- * the problem by explicitly using int32_t as the type for m_intval, and
- * then within the implementations of divison and multiplication, use
- * int64_t and overflow into that. These types are not officially supported
- * by C++98, however, and there is perhaps some danger of non-portability. But
- * then long long isn't officially supported either. (Of course, I could just
- * go with C++11, but I have decided against that for other reasons.)
- *
+ * for certain use cases. I should be able to get around this, and also
+ * simplify my implementation of both division and multiplication, by
+ * using boost::int32_t for int_type, while overflowing into boost::int64_t
+ * within the implementation of these functions.
+ 
  * @todo LOW PRIORITY
  * Make it work as expected with standard library stream precision
  * manipulators and formatting. Create a function that takes a string
@@ -145,7 +143,7 @@ public:
 	/** The type of the underlying integer representation of the
 	 * Decimal number.
 	 */
-	typedef long long int_type;
+	typedef boost::int64_t int_type;
 
 	/** The type of the integer representation of the number of
 	 * decimal places (scale).

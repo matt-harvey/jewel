@@ -21,11 +21,11 @@
  * <tt>
  * int\n
  * long\n
- * long long\n
+ * boost::int64_t\n
  * short\n
  * unsigned int\n
  * unsigned long\n
- * unsigned long long\n
+ * boost::uint64_t\n
  * unsigned short\n
  * </tt>
  * @param x first number that would be added (or subtracted, or multiplied).
@@ -36,14 +36,14 @@
  * The operation being tested is not actually performed.
  */
 
-
-
+#include <boost/cstdint.hpp>
 #include "checked_arithmetic_detail.hpp"
 
-using jewel::detail::CheckedArithmetic;
 
 namespace jewel
 {
+
+using detail::CheckedArithmetic;
 
 // INTERFACE
 

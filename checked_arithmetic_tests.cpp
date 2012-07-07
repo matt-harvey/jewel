@@ -1,3 +1,4 @@
+#include <boost/cstdint.hpp>
 #include <cassert>
 #include <iostream>
 #include <limits>
@@ -140,63 +141,63 @@ TEST(checked_arithmetic_addition_is_unsafe_long)
 
 TEST(checked_arithmetic_addition_is_unsafe_long_long)
 {
-	long long llmax = numeric_limits<long long>::max();
-	long long llmin = numeric_limits<long long>::min();
+	boost::int64_t llmax = numeric_limits<boost::int64_t>::max();
+	boost::int64_t llmin = numeric_limits<boost::int64_t>::min();
 
 	// Test reaction to unsafe operations
-	long long i0 = llmax - 3;
-	long long i1 = 10;
+	boost::int64_t i0 = llmax - 3;
+	boost::int64_t i1 = 10;
 	CHECK(addition_is_unsafe(i0, i1));
 	CHECK(addition_is_unsafe(i1, i0));
-	long long i2 = llmax;
-	long long i3 = 1;
+	boost::int64_t i2 = llmax;
+	boost::int64_t i3 = 1;
 	CHECK(addition_is_unsafe(i2, i3));
 	CHECK(addition_is_unsafe(i3, i2));
-	long long i4 = llmin + 3;
-	long long i5 = -10;
+	boost::int64_t i4 = llmin + 3;
+	boost::int64_t i5 = -10;
 	CHECK(addition_is_unsafe(i4, i5));
 	CHECK(addition_is_unsafe(i5, i4));
-	long long i6 = llmin;
-	long long i7 = -1;
+	boost::int64_t i6 = llmin;
+	boost::int64_t i7 = -1;
 	CHECK(addition_is_unsafe(i6, i7));
 	CHECK(addition_is_unsafe(i7, i6));
-	long long i8 = llmax / 2;
-	long long i9 = llmax / 4;
+	boost::int64_t i8 = llmax / 2;
+	boost::int64_t i9 = llmax / 4;
 	i8 += i9;
 	CHECK(addition_is_unsafe(i8, i9 + 3L));
 	CHECK(addition_is_unsafe(i9 + 3L, i8));
-	long long i200 = llmax;
-	long long i201 = llmax;
+	boost::int64_t i200 = llmax;
+	boost::int64_t i201 = llmax;
 	CHECK(addition_is_unsafe(i200, i201));
 	CHECK(addition_is_unsafe(i201, i200));
 
 	// Test reaction to safe operations
-	long long i10 = 0;
-	long long i11 = 1;
+	boost::int64_t i10 = 0;
+	boost::int64_t i11 = 1;
 	CHECK(!addition_is_unsafe(i10, i11));
 	CHECK(!addition_is_unsafe(i11, i10));
-	long long i12 = 0;
-	long long i13 = -1;
+	boost::int64_t i12 = 0;
+	boost::int64_t i13 = -1;
 	CHECK(!addition_is_unsafe(i12, i13));
 	CHECK(!addition_is_unsafe(i13, i12));
-	long long i14 = llmax - 10;
-	long long i15 = 9;
+	boost::int64_t i14 = llmax - 10;
+	boost::int64_t i15 = 9;
 	CHECK(!addition_is_unsafe(i14, i15));
 	CHECK(!addition_is_unsafe(i15, i14));
-	long long i16 = llmin + 10;
-	long long i17 = -9;
+	boost::int64_t i16 = llmin + 10;
+	boost::int64_t i17 = -9;
 	CHECK(!addition_is_unsafe(i16, i17));
 	CHECK(!addition_is_unsafe(i17, i16));
-	long long i18 = llmax / 2;
-	long long i19 = llmax / 2;
+	boost::int64_t i18 = llmax / 2;
+	boost::int64_t i19 = llmax / 2;
 	CHECK(!addition_is_unsafe(i18, i19));
 	CHECK(!addition_is_unsafe(i19, i18));
-	long long i20 = llmin + 10;
-	long long i21 = -10;
+	boost::int64_t i20 = llmin + 10;
+	boost::int64_t i21 = -10;
 	CHECK(!addition_is_unsafe(i20, i21));
 	CHECK(!addition_is_unsafe(i21, i20));	
-	long long i22 = llmax - 10;
-	long long i23 = 10;
+	boost::int64_t i22 = llmax - 10;
+	boost::int64_t i23 = 10;
 	CHECK(!addition_is_unsafe(i22, i23));
 	CHECK(!addition_is_unsafe(i23, i22));
 }
@@ -349,43 +350,43 @@ TEST(checked_arithmetic_addition_is_unsafe_unsigned_long)
 
 TEST(checked_arithmetic_addition_is_unsafe_unsigned_long_long)
 {
-	unsigned long long ullmax =
-	  numeric_limits<unsigned long long>::max();
+	boost::uint64_t ullmax =
+	  numeric_limits<boost::uint64_t>::max();
 	
 	// Test reaction to unsafe operations
-	unsigned long long i0 = ullmax - 3;
-	unsigned long long i1 = 10;
+	boost::uint64_t i0 = ullmax - 3;
+	boost::uint64_t i1 = 10;
 	CHECK(addition_is_unsafe(i0, i1));
 	CHECK(addition_is_unsafe(i1, i0));
-	unsigned long long i2 = ullmax;
-	unsigned long long i3 = 1;
+	boost::uint64_t i2 = ullmax;
+	boost::uint64_t i3 = 1;
 	CHECK(addition_is_unsafe(i2, i3));
 	CHECK(addition_is_unsafe(i3, i2));
-	unsigned long long i8 = ullmax / 2;
-	unsigned long long i9 = ullmax / 4;
+	boost::uint64_t i8 = ullmax / 2;
+	boost::uint64_t i9 = ullmax / 4;
 	i8 += i9;
 	CHECK(addition_is_unsafe(i8, i9 + 3));
 	CHECK(addition_is_unsafe(i9 + 3, i8));
-	unsigned long long i200 = ullmax;
-	unsigned long long i201 = ullmax;
+	boost::uint64_t i200 = ullmax;
+	boost::uint64_t i201 = ullmax;
 	CHECK(addition_is_unsafe(i200, i201));
 	CHECK(addition_is_unsafe(i201, i200));
 
 	// Test reaction to safe operations
-	unsigned long long i10 = 0;
-	unsigned long long i11 = 1;
+	boost::uint64_t i10 = 0;
+	boost::uint64_t i11 = 1;
 	CHECK(!addition_is_unsafe(i10, i11));
 	CHECK(!addition_is_unsafe(i11, i10));
-	unsigned long long i14 = ullmax - 10;
-	unsigned long long i15 = 9;
+	boost::uint64_t i14 = ullmax - 10;
+	boost::uint64_t i15 = 9;
 	CHECK(!addition_is_unsafe(i14, i15));
 	CHECK(!addition_is_unsafe(i15, i14));
-	unsigned long long i18 = ullmax / 2;
-	unsigned long long i19 = ullmax / 2;
+	boost::uint64_t i18 = ullmax / 2;
+	boost::uint64_t i19 = ullmax / 2;
 	CHECK(!addition_is_unsafe(i18, i19));
 	CHECK(!addition_is_unsafe(i19, i18));
-	unsigned long long i22 = ullmax - 10;
-	unsigned long long i23 = 10;
+	boost::uint64_t i22 = ullmax - 10;
+	boost::uint64_t i23 = 10;
 	CHECK(!addition_is_unsafe(i22, i23));
 	CHECK(!addition_is_unsafe(i23, i22));
 }
@@ -550,57 +551,57 @@ TEST(checked_arithmetic_subtraction_is_unsafe_long)
 
 TEST(checked_arithmetic_subtraction_is_unsafe_long_long)
 {
-	long long llmax = numeric_limits<long long>::max();
-	long long llmin = numeric_limits<long long>::min();
+	boost::int64_t llmax = numeric_limits<boost::int64_t>::max();
+	boost::int64_t llmin = numeric_limits<boost::int64_t>::min();
 
 	// Test reaction to unsafe operations
-	long long i0 = llmax - 3;
-	long long i1 = -10;
+	boost::int64_t i0 = llmax - 3;
+	boost::int64_t i1 = -10;
 	CHECK(subtraction_is_unsafe(i0, i1));
 	CHECK(subtraction_is_unsafe(i1, i0));
-	long long i2 = llmax;
-	long long i3 = -2;
+	boost::int64_t i2 = llmax;
+	boost::int64_t i3 = -2;
 	CHECK(subtraction_is_unsafe(i2, i3));
 	CHECK(subtraction_is_unsafe(i3, i2));
-	long long i4 = llmin + 3;
-	long long i5 = 10;
+	boost::int64_t i4 = llmin + 3;
+	boost::int64_t i5 = 10;
 	CHECK(subtraction_is_unsafe(i4, i5));
 	CHECK(subtraction_is_unsafe(i5, i4));
-	long long i6 = llmin;
-	long long i7 = 1;
+	boost::int64_t i6 = llmin;
+	boost::int64_t i7 = 1;
 	CHECK(subtraction_is_unsafe(i6, i7));
 	CHECK(subtraction_is_unsafe(i7, i6));
 
 	// Test reaction to safe operations
-	long long i10 = 0;
-	long long i11 = -1;
+	boost::int64_t i10 = 0;
+	boost::int64_t i11 = -1;
 	CHECK(!subtraction_is_unsafe(i10, i11));
 	CHECK(!subtraction_is_unsafe(i11, i10));
-	long long i12 = 0;
-	long long i13 = 1;
+	boost::int64_t i12 = 0;
+	boost::int64_t i13 = 1;
 	CHECK(!subtraction_is_unsafe(i12, i13));
 	CHECK(!subtraction_is_unsafe(i13, i12));
-	long long i14 = llmax - 10;
-	long long i15 = -9;
+	boost::int64_t i14 = llmax - 10;
+	boost::int64_t i15 = -9;
 	CHECK(!subtraction_is_unsafe(i14, i15));
 	CHECK(!subtraction_is_unsafe(i15, i14));
-	long long i16 = llmin + 10;
-	long long i17 = 9;
+	boost::int64_t i16 = llmin + 10;
+	boost::int64_t i17 = 9;
 	CHECK(!subtraction_is_unsafe(i16, i17));
 	CHECK(!subtraction_is_unsafe(i17, i16));
-	long long i18 = llmax / 2;
-	long long i19 = -(llmax / 2);
+	boost::int64_t i18 = llmax / 2;
+	boost::int64_t i19 = -(llmax / 2);
 	CHECK(!subtraction_is_unsafe(i18, i19));
 	CHECK(!subtraction_is_unsafe(i19, i18));
-	long long i20 = llmin + 10;
-	long long i21 = 10;
+	boost::int64_t i20 = llmin + 10;
+	boost::int64_t i21 = 10;
 	CHECK(!subtraction_is_unsafe(i20, i21));
-	long long i22 = llmax - 10;
-	long long i23 = -10;
+	boost::int64_t i22 = llmax - 10;
+	boost::int64_t i23 = -10;
 	CHECK(!subtraction_is_unsafe(i22, i23));
 	CHECK(!subtraction_is_unsafe(i23, i22));
-	long long i24 = -llmax;
-	long long i25 = 1;
+	boost::int64_t i24 = -llmax;
+	boost::int64_t i25 = 1;
 	// Remember the absolute value of llmax is 1 less than that
 	// of llmin - so the following operation should be safe
 	CHECK(!subtraction_is_unsafe(i24, i25));
@@ -716,29 +717,29 @@ TEST(checked_arithmetic_subtraction_is_unsafe_unsigned_long)
 
 TEST(checked_arithmetic_subtraction_is_unsafe_unsigned_long_long)
 {
-	unsigned long long ullmax =
-	  numeric_limits<unsigned long long>::max();
+	boost::uint64_t ullmax =
+	  numeric_limits<boost::uint64_t>::max();
 
 	// Test reaction to unsafe operations
-	unsigned long long i0 = 0;
-	unsigned long long i1 = 1;
+	boost::uint64_t i0 = 0;
+	boost::uint64_t i1 = 1;
 	CHECK(subtraction_is_unsafe(i0, i1));
-	unsigned long long i2 = 1020;
-	unsigned long long i3 = 32342;
+	boost::uint64_t i2 = 1020;
+	boost::uint64_t i3 = 32342;
 	CHECK(subtraction_is_unsafe(i2, i3));
-	unsigned long long i4 = ullmax - 1;
-	unsigned long long i5 = ullmax;
+	boost::uint64_t i4 = ullmax - 1;
+	boost::uint64_t i5 = ullmax;
 	CHECK(subtraction_is_unsafe(i4, i5));
 	
 	// Test reaction to safe operations
 	CHECK(!subtraction_is_unsafe(i1, i0));
 	CHECK(!subtraction_is_unsafe(i3, i2));
 	CHECK(!subtraction_is_unsafe(i5, i4));
-	unsigned long long k1 = 0;
-	unsigned long long k2 = 0;
+	boost::uint64_t k1 = 0;
+	boost::uint64_t k2 = 0;
 	CHECK(!subtraction_is_unsafe(k1, k2));
-	unsigned long long k3 = ullmax;
-	unsigned long long k4 = ullmax;
+	boost::uint64_t k3 = ullmax;
+	boost::uint64_t k4 = ullmax;
 	CHECK(!subtraction_is_unsafe(k3, k4));
 }
 
@@ -926,66 +927,66 @@ TEST(checked_arithmetic_multiplication_is_unsafe_long)
 
 TEST(checked_arithmetic_multiplication_is_unsafe_long_long)
 {
-	long long llmax = numeric_limits<long long>::max();
-	long long llmin = numeric_limits<long long>::min();
+	boost::int64_t llmax = numeric_limits<boost::int64_t>::max();
+	boost::int64_t llmin = numeric_limits<boost::int64_t>::min();
 
 	// Test reaction to unsafe operations
-	long long i0 = 3;
-	long long i1 = llmax / 2;
+	boost::int64_t i0 = 3;
+	boost::int64_t i1 = llmax / 2;
 	CHECK(multiplication_is_unsafe(i0, i1));
 	CHECK(multiplication_is_unsafe(i1, i0));
-	long long i2 = 3;
-	long long i3 = llmin / -2;
+	boost::int64_t i2 = 3;
+	boost::int64_t i3 = llmin / -2;
 	CHECK(multiplication_is_unsafe(i2, i3));
 	CHECK(multiplication_is_unsafe(i3, i2));
-	long long i4 = llmax / 10;
-	long long i5 = -500;
+	boost::int64_t i4 = llmax / 10;
+	boost::int64_t i5 = -500;
 	CHECK(multiplication_is_unsafe(i4, i5));
 	CHECK(multiplication_is_unsafe(i5, i4));
-	long long i6 = llmax - 1;
-	long long i7 = llmax - 1;
+	boost::int64_t i6 = llmax - 1;
+	boost::int64_t i7 = llmax - 1;
 	CHECK(multiplication_is_unsafe(i6, i7));
 	CHECK(multiplication_is_unsafe(i7, i6));
-	long long i8 = llmin;
-	long long i9 = llmax;
+	boost::int64_t i8 = llmin;
+	boost::int64_t i9 = llmax;
 	CHECK(multiplication_is_unsafe(i8, i9));
 	CHECK(multiplication_is_unsafe(i9, i8));
-	long long i10 = llmin / 20;
-	long long i11 = 30;
+	boost::int64_t i10 = llmin / 20;
+	boost::int64_t i11 = 30;
 	CHECK(multiplication_is_unsafe(i10, i11));
 	CHECK(multiplication_is_unsafe(i11, i10));
-	long long i200 = llmin;
-	long long i201 = -1;
+	boost::int64_t i200 = llmin;
+	boost::int64_t i201 = -1;
 	CHECK(multiplication_is_unsafe(i200, i201));
 	CHECK(multiplication_is_unsafe(i201, i200));
-	long long i202 = llmin;
-	long long i203 = -2;
+	boost::int64_t i202 = llmin;
+	boost::int64_t i203 = -2;
 	CHECK(multiplication_is_unsafe(i202, i203));
 	CHECK(multiplication_is_unsafe(i203, i202));
 	
 	// Test reaction to safe operations
-	long long i12 = 0;
-	long long i13 = 0;
+	boost::int64_t i12 = 0;
+	boost::int64_t i13 = 0;
 	CHECK(!multiplication_is_unsafe(i12, i13));
 	CHECK(!multiplication_is_unsafe(i13, i12));
-	long long i14 = -0;
-	long long i15 = 0;
+	boost::int64_t i14 = -0;
+	boost::int64_t i15 = 0;
 	CHECK(!multiplication_is_unsafe(i14, i15));
 	CHECK(!multiplication_is_unsafe(i15, i14));
-	long long i16 = 1023;
-	long long i17 = 123;
+	boost::int64_t i16 = 1023;
+	boost::int64_t i17 = 123;
 	CHECK(!multiplication_is_unsafe(i16, i17));
 	CHECK(!multiplication_is_unsafe(i17, i16));
-	long long i32 = 1000;
-	long long i33 = 14;
+	boost::int64_t i32 = 1000;
+	boost::int64_t i33 = 14;
 	CHECK(!multiplication_is_unsafe(i32, i33));
 	CHECK(!multiplication_is_unsafe(i33, i32));
-	long long i34 = llmax / 10;
-	long long i35 = 6;
+	boost::int64_t i34 = llmax / 10;
+	boost::int64_t i35 = 6;
 	CHECK(!multiplication_is_unsafe(i34, i35));
 	CHECK(!multiplication_is_unsafe(i35, i34));
-	long long i36 = llmin / 10;
-	long long i37 = 6;
+	boost::int64_t i36 = llmin / 10;
+	boost::int64_t i37 = 6;
 	CHECK(!multiplication_is_unsafe(i36, i37));
 	CHECK(!multiplication_is_unsafe(i37, i36));
 }
@@ -1145,46 +1146,46 @@ TEST(checked_arithmetic_multiplication_is_unsafe_unsigned_long)
 
 TEST(checked_arithmetic_multiplication_is_unsafe_unsigned_long_long)
 {
-	unsigned long long ullmax =
-	  numeric_limits<unsigned long long>::max();
+	boost::uint64_t ullmax =
+	  numeric_limits<boost::uint64_t>::max();
 
 	// Test reaction to unsafe operations
-	unsigned long long i0 = 3;
-	unsigned long long i1 = ullmax / 2;
+	boost::uint64_t i0 = 3;
+	boost::uint64_t i1 = ullmax / 2;
 	CHECK(multiplication_is_unsafe(i0, i1));
 	CHECK(multiplication_is_unsafe(i1, i0));
-	unsigned long long i4 = ullmax / 10;
-	unsigned long long i5 = 15;
+	boost::uint64_t i4 = ullmax / 10;
+	boost::uint64_t i5 = 15;
 	CHECK(multiplication_is_unsafe(i4, i5));
 	CHECK(multiplication_is_unsafe(i5, i4));
-	unsigned long long i6 = ullmax - 1;
-	unsigned long long i7 = ullmax - 1;
+	boost::uint64_t i6 = ullmax - 1;
+	boost::uint64_t i7 = ullmax - 1;
 	CHECK(multiplication_is_unsafe(i6, i7));
 	CHECK(multiplication_is_unsafe(i7, i6));
-	unsigned long long i8 = ullmax;
-	unsigned long long i9 = ullmax;
+	boost::uint64_t i8 = ullmax;
+	boost::uint64_t i9 = ullmax;
 	CHECK(multiplication_is_unsafe(i8, i9));
 	CHECK(multiplication_is_unsafe(i9, i8));
-	unsigned long long i10 = ullmax / 20;
-	unsigned long long i11 = 30;
+	boost::uint64_t i10 = ullmax / 20;
+	boost::uint64_t i11 = 30;
 	CHECK(multiplication_is_unsafe(i10, i11));
 	CHECK(multiplication_is_unsafe(i11, i10));
 	
 	// Test reaction to safe operations
-	unsigned long long i12 = 0;
-	unsigned long long i13 = 0;
+	boost::uint64_t i12 = 0;
+	boost::uint64_t i13 = 0;
 	CHECK(!multiplication_is_unsafe(i12, i13));
 	CHECK(!multiplication_is_unsafe(i13, i12));
-	unsigned long long i32 = 100;
-	unsigned long long i33 = 14;
+	boost::uint64_t i32 = 100;
+	boost::uint64_t i33 = 14;
 	CHECK(!multiplication_is_unsafe(i32, i33));
 	CHECK(!multiplication_is_unsafe(i33, i32));
-	unsigned long long i34 = ullmax / 10;
-	unsigned long long i35 = 6;
+	boost::uint64_t i34 = ullmax / 10;
+	boost::uint64_t i35 = 6;
 	CHECK(!multiplication_is_unsafe(i34, i35));
 	CHECK(!multiplication_is_unsafe(i35, i34));
-	unsigned long long i36 = 100;
-	unsigned long long i37 = 30;
+	boost::uint64_t i36 = 100;
+	boost::uint64_t i37 = 30;
 	CHECK(!multiplication_is_unsafe(i36, i37));
 	CHECK(!multiplication_is_unsafe(i37, i36));
 }
