@@ -14,6 +14,7 @@
 
 
 #include "arithmetic_exceptions.hpp"
+#include <boost/archive/xml_oarchive.hpp>  // for BOOST_SERIALIZATION_NVP
 #include <boost/cstdint.hpp>
 #include <boost/exception/all.hpp>
 #include <boost/lexical_cast.hpp>
@@ -41,6 +42,9 @@ namespace jewel
  * The number of decimal places can be changed at runtime. As such this is a
  * floating point class. However the range of magnitudes is deliberately
  * restricted.
+ *
+ * @todo HIGH PRIORITY
+ * Write unit tests for serialization capability.
  *
  * @todo LOW PRIORITY
  * I think I should change places_type to a signed and then just do
@@ -728,8 +732,8 @@ template <typename Archive>
 inline
 void Decimal::serialize(Archive& ar, unsigned int const version)
 {
-	ar & m_intval;
-	ar & m_places;
+	ar & BOOST_SERIALIZATION_NVP(m_intval);
+	ar & BOOST_SERIALIZATION_NVP(m_places);
 }
 
 

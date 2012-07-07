@@ -19,7 +19,7 @@ add_library(jewel
 	        decimal.cpp
 			arithmetic_exceptions.cpp
 			num_digits.cpp)
-target_link_libraries (main unittest++)
+target_link_libraries (main unittest++ boost_serialization)
 
 install(TARGETS
 		jewel
