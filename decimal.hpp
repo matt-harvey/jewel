@@ -43,15 +43,17 @@ namespace jewel
  * floating point class. However the range of magnitudes is deliberately
  * restricted.
  *
- * @todo HIGH PRIORITY
- * Write unit tests for serialization capability.
- *
  * @todo LOW PRIORITY
  * I think I should change places_type to a signed and then just do
  * away with arbitrary restrictions. This would free me up a bit w.r.t.
  * the implementation of multiplication and division. Although it would
  * complicate output and input. I would also need to change things
  * everywhere where it relies on m_places always being positive.
+ *
+ * @todo LOW PRIORITY
+ * I have a hack in the serialization function to suppress compiler warning
+ * about unused parameter. I should find a better way and/or see if it has
+ * been reported to the Boost developers.
  *
  * There are two concepts of precision in regards to this Decimal class. The
  * \e total \e precision of an instance of this class is the total number of
@@ -97,6 +99,10 @@ namespace jewel
  * @todo LOW PRIORITY
  * My use of boost::int64_t may compromise portability on some (probably
  * obscure) platforms. It may or may not be worth addressing this.
+ *
+ * @todo LOW PRIORITY
+ * I should probably allow Decimals to be constructed from strings beginning
+ * with unary '+'.
  *
  * @todo LOW PRIORITY
  * Multiplication and division throw exceptions in some cases where
@@ -734,6 +740,12 @@ void Decimal::serialize(Archive& ar, unsigned int const version)
 {
 	ar & BOOST_SERIALIZATION_NVP(m_intval);
 	ar & BOOST_SERIALIZATION_NVP(m_places);
+
+	// Suppress compiler warning about unused parameter. Ugh!
+	unsigned int dummy = version;
+	dummy += 0;
+
+	return;
 }
 
 

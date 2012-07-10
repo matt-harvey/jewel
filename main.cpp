@@ -13,6 +13,7 @@ using boost::numeric_cast;
 using jewel::Decimal;
 using jewel::detail::decimal_csv_test;
 using jewel::detail::decimal_speed_test;
+using jewel::detail::decimal_serialization_test;
 using jewel::multiplication_is_unsafe;
 using jewel::NumDigits;
 using jewel::UnsafeArithmeticException;
@@ -59,6 +60,8 @@ int main()
 
 	decimal_csv_test();
 	decimal_speed_test();
+	decimal_serialization_test();
 
+	cout << "Now running various unit tests..." << endl;
 	return UnitTest::RunAllTests();
 }
