@@ -223,7 +223,7 @@ void decimal_serialization_test()
 
 	ofstream xofs("xml_store.xml");
 	boost::archive::xml_oarchive xoa(xofs);
-	cout << "Writing 1,000,000 Decimals to xml archive..."
+	cout << "Writing 1,000,000 Decimals to XML archive..."
 	     << endl;
 	Stopwatch sw_write_xml;
 	for (vector<Decimal>::const_iterator it = vec.begin();
@@ -244,15 +244,16 @@ void decimal_serialization_test()
 	}
 	xofs.flush();
 	xofs.close();
-	cout << "Writing to xml archive took "
+	cout << "Writing to XML archive took "
 	     << sw_write_xml.seconds_elapsed() << " seconds."
 		 << endl;
 
 
-	// Read back from binary format
+	// Read back from binary archive
+	
 	vector<Decimal> decs_read_back_from_binary_store;
 	cout << "Now reading 1,000,000 binary-serialized Decimals from "
-	        "binary store, and pushing them onto a vector..." << endl;
+	        "binary archive, and pushing them onto a vector..." << endl;
 	Stopwatch swbin;
 	ifstream bifs("binary_store.archive");
 	boost::archive::binary_iarchive bia(bifs);
@@ -262,32 +263,35 @@ void decimal_serialization_test()
 		bia >> d;
 		decs_read_back_from_binary_store.push_back(d);
 	}
-	cout << "Done. Reading took "
+	cout << "Done. Reading from binary archive took "
 		 << swbin.seconds_elapsed() << " seconds." << endl;
-	
+
+
+	// Check integrity of Decimals read back from binary archive
+
 	Decimal total_read_back_from_binary_store =
 	  accumulate(decs_read_back_from_binary_store.begin(),
 	  decs_read_back_from_binary_store.end(), Decimal("0"));
 
 	if (total_read_back_from_binary_store != total_as_written)
 	{
-		cout << "Fail! Sum of Decimals read back from binary store "
+		cout << "Fail! Sum of Decimals read back from binary archive "
 		        "does not equal sum as written." << endl;
 	}
 	else
 	{
 		cout << "Decimals successfully stored and read back from "
-		        "binary store. Sum of Decimals read back equals "
+		        "binary archive. Sum of Decimals read back equals "
 				"sum of Decimals written." << endl;
 	}
 	bifs.close();
 
 
-	// Read back from xml format
+	// Read back from XML archive
 
 	vector<Decimal> decs_read_back_from_xml_store;
-	cout << "Now reading 1,000,000 xml-serialized Decimals from "
-	        "xml store, and pushing them onto a vector..." << endl;
+	cout << "Now reading 1,000,000 XML-serialized Decimals from "
+	        "XML archive, and pushing them onto a vector..." << endl;
 	Stopwatch swxml;
 	ifstream xifs("xml_store.xml");
 	boost::archive::xml_iarchive xia(xifs);
@@ -297,30 +301,30 @@ void decimal_serialization_test()
 		xia >> BOOST_SERIALIZATION_NVP(d);
 		decs_read_back_from_xml_store.push_back(d);
 	}
-	cout << "Done. Reading took "
+	cout << "Done. Reading from XML archive took "
 		 << swxml.seconds_elapsed() << " seconds." << endl;
 	
+
+	// Check integrity of Decimals read back from XML archive
+
 	Decimal total_read_back_from_xml_store =
 	  accumulate(decs_read_back_from_xml_store.begin(),
 	  decs_read_back_from_xml_store.end(), Decimal("0"));
 
 	if (total_read_back_from_xml_store != total_as_written)
 	{
-		cout << "Fail! Sum of Decimals read back from xml store "
+		cout << "Fail! Sum of Decimals read back from XML archive "
 		        "does not equal sum as written." << endl;
 	}
 	else
 	{
 		cout << "Decimals successfully stored and read back from "
-		        "xml store. Sum of Decimals read back equals "
+		        "XML archive. Sum of Decimals read back equals "
 				"sum of Decimals written." << endl;
 	}
 	xifs.close();
 
-
-
 	return;
-
 }
 
 }  // namespace detail
