@@ -14,6 +14,7 @@
  */
 
 
+#include <stdexcept>
 #include <string>
 
 
@@ -23,7 +24,7 @@ namespace jewel
  * Exception to be thrown if there is an attempt to perform unsafe
  * arithmetic.
  */
-class UnsafeArithmeticException
+class UnsafeArithmeticException: public std::exception
 {
 public:
 	UnsafeArithmeticException(std::string p_message);
