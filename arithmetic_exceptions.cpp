@@ -17,7 +17,7 @@ UnsafeArithmeticException::~UnsafeArithmeticException() throw()
 }
 
 const char*
-UnsafeArithmeticException::what() throw()
+UnsafeArithmeticException::what() const throw()
 {
 	return m_message.c_str();
 }

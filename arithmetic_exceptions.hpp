@@ -27,9 +27,9 @@ namespace jewel
 class UnsafeArithmeticException: public std::exception
 {
 public:
-	UnsafeArithmeticException(std::string p_message);
+	explicit UnsafeArithmeticException(std::string p_message);
 	~UnsafeArithmeticException() throw();
-	const char* what() throw();
+	const char* what() const throw();
 private:
 	std::string m_message;
 };
