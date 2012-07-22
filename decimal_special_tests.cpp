@@ -109,15 +109,21 @@ void decimal_speed_test()
 		ctest_vec.push_back("-1234.197423");
 	}
 	Stopwatch sw_ctest_base;
-	for (vector<string>::const_iterator it = ctest_vec.begin();
-	  it != ctest_vec.end(); ++it)
+	for
+	(	vector<string>::const_iterator it = ctest_vec.begin();
+		it != ctest_vec.end();
+		++it
+	)
 	{
 		string s = *it;
 	}
 	double const ctest_base_case = sw_ctest_base.seconds_elapsed();
 	Stopwatch sw_ctest;
-	for (vector<string>::const_iterator it = ctest_vec.begin();
-	  it != ctest_vec.end(); ++it)
+	for
+	(	vector<string>::const_iterator it = ctest_vec.begin();
+	 	it != ctest_vec.end();
+		++it
+	)
 	{
 		Decimal d0(*it);
 	}
@@ -189,8 +195,11 @@ void decimal_serialization_test()
 		vec.push_back(dec3);
 	}
 	cout << "Decimals generated." << endl;
-	Decimal const total_as_written =
-	  accumulate(vec.begin(), vec.end(), Decimal("0"));
+	Decimal const total_as_written = accumulate
+	(	vec.begin(),
+		vec.end(),
+		Decimal("0")
+	);
 
 
 	// Serialize in binary format
@@ -200,8 +209,7 @@ void decimal_serialization_test()
 	cout << "Writing 1,000,000 Decimals to binary archive..."
 	     << endl;
 	Stopwatch sw_write_binary;
-	for (vector<Decimal>::const_iterator it = vec.begin();
-	  it != vec.end(); )
+	for (vector<Decimal>::const_iterator it = vec.begin(); it != vec.end(); )
 	{
 		boa << *it;
 		++it;
@@ -226,8 +234,7 @@ void decimal_serialization_test()
 	cout << "Writing 1,000,000 Decimals to XML archive..."
 	     << endl;
 	Stopwatch sw_write_xml;
-	for (vector<Decimal>::const_iterator it = vec.begin();
-	  it != vec.end(); )
+	for (vector<Decimal>::const_iterator it = vec.begin(); it != vec.end(); )
 	{
 		Decimal d0 = *it;
 		++it;
@@ -269,9 +276,11 @@ void decimal_serialization_test()
 
 	// Check integrity of Decimals read back from binary archive
 
-	Decimal total_read_back_from_binary_store =
-	  accumulate(decs_read_back_from_binary_store.begin(),
-	  decs_read_back_from_binary_store.end(), Decimal("0"));
+	Decimal total_read_back_from_binary_store = accumulate
+	(	decs_read_back_from_binary_store.begin(),
+		decs_read_back_from_binary_store.end(),
+		Decimal("0")
+	);
 
 	if (total_read_back_from_binary_store != total_as_written)
 	{
@@ -307,9 +316,11 @@ void decimal_serialization_test()
 
 	// Check integrity of Decimals read back from XML archive
 
-	Decimal total_read_back_from_xml_store =
-	  accumulate(decs_read_back_from_xml_store.begin(),
-	  decs_read_back_from_xml_store.end(), Decimal("0"));
+	Decimal total_read_back_from_xml_store = accumulate
+	(	decs_read_back_from_xml_store.begin(),
+	 	decs_read_back_from_xml_store.end(),
+		Decimal("0")
+	);
 
 	if (total_read_back_from_xml_store != total_as_written)
 	{

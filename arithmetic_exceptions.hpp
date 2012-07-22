@@ -20,6 +20,7 @@
 
 namespace jewel
 {
+
  /**
  * Exception to be thrown if there is an attempt to perform unsafe
  * arithmetic.

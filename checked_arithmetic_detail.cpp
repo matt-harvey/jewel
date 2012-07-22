@@ -59,7 +59,10 @@ bool CheckedArithmetic::subtraction_is_unsafe(long x, long y)
 	return subtraction_is_unsafe_signed_integral_types(x, y);
 }
 
-bool CheckedArithmetic::subtraction_is_unsafe(boost::int64_t x, boost::int64_t y)
+bool CheckedArithmetic::subtraction_is_unsafe
+(	boost::int64_t x,
+	boost::int64_t y
+)
 {
 	return subtraction_is_unsafe_signed_integral_types(x, y);
 }
@@ -103,7 +106,10 @@ bool CheckedArithmetic::multiplication_is_unsafe(long x, long y)
 	return multiplication_is_unsafe_signed_integral_types(x, y);
 }
 
-bool CheckedArithmetic::multiplication_is_unsafe(boost::int64_t x, boost::int64_t y)
+bool CheckedArithmetic::multiplication_is_unsafe
+(	boost::int64_t x,
+	boost::int64_t y
+)
 {
 	return multiplication_is_unsafe_signed_integral_types(x, y);
 }

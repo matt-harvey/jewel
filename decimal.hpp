@@ -179,8 +179,10 @@ public:
 	operator<<(std::basic_ostream<charT, traits>&, Decimal const&);
 
 	// Rounding
-	friend Decimal round(Decimal const& x,
-	  Decimal::places_type decimal_places);
+	friend Decimal round
+	(	Decimal const& x,
+		Decimal::places_type decimal_places
+	);
 
 	// Unary minus
 	friend Decimal operator-(Decimal const& d);

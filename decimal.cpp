@@ -312,8 +312,9 @@ int Decimal::rescale(places_type p_places)
 			return 1;
 		}
 		double base = BASE;  // necessary only as pow needs a double
-		int_type multiplier =
-		  NUM_CAST<int_type>(pow(base, p_places - m_places));
+		int_type multiplier = NUM_CAST<int_type>
+		(	pow(base, p_places - m_places)
+		);
 
 		if (multiplication_is_unsafe(m_intval, multiplier))
 		{
@@ -449,8 +450,10 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	}
 
 	// Make absolute and remember signs
-	bool const signs_differ = ( (m_intval < 0 && rhs.m_intval > 0) ||
-	                            (m_intval > 0 && rhs.m_intval < 0) );
+	bool const signs_differ =
+	(	(m_intval < 0 && rhs.m_intval > 0) ||
+	    (m_intval > 0 && rhs.m_intval < 0)
+	);
 	if (m_intval < 0) m_intval *= -1;
 	if (rhs.m_intval < 0) rhs.m_intval *= -1;
 
@@ -513,8 +516,10 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	}
 	
 	// Remember required sign of product
-	bool const diff_signs = (( m_intval > 0 && rhs.m_intval < 0) ||
-	                         ( m_intval < 0 && rhs.m_intval > 0));
+	bool const diff_signs =
+	(	( m_intval > 0 && rhs.m_intval < 0) ||
+		( m_intval < 0 && rhs.m_intval > 0)
+	);
 
 	// Make absolute
 	if (m_intval < 0) m_intval *= -1;
@@ -643,8 +648,10 @@ bool Decimal::operator<(Decimal rhs) const
 	{
 		return rhs.m_intval > 0;
 	}
-	assert ( (m_intval < 0 && rhs.m_intval < 0) ||
-	         (m_intval > 0 && rhs.m_intval > 0) );
+	assert
+	(	(m_intval < 0 && rhs.m_intval < 0) ||
+		(m_intval > 0 && rhs.m_intval > 0)
+	);
 	
 	// Now we're left with the more
 	// difficult cases.
@@ -686,10 +693,14 @@ bool Decimal::operator<(Decimal rhs) const
 	string leftstr = ossleft.str();
 	string rightstr = ossright.str();
 	assert ( (leftstr[0] == '-') == (rightstr[0] == '-') );
-	string& smallerstring = ( leftstr.size() < rightstr.size() ?
-	                          leftstr : rightstr );
-	size_t const greatersize = ( leftstr.size() < rightstr.size() ?
-	                             rightstr.size() : leftstr.size() );
+	string& smallerstring =
+	(	leftstr.size() < rightstr.size() ?
+	    leftstr : rightstr
+	);
+	size_t const greatersize =
+	(	leftstr.size() < rightstr.size() ?
+		rightstr.size() : leftstr.size()
+	);
 	
 	// Get the strings to be the same size by adding zeroes to the
 	// shorter one.
@@ -721,8 +732,10 @@ bool Decimal::operator==(Decimal rhs) const
 	Decimal temp_lhs = *this;
 	temp_lhs.rationalize();
 	rhs.rationalize();
-	return ( temp_lhs.m_intval == rhs.m_intval &&
-	         temp_lhs.m_places == rhs.m_places );
+	return
+	(	temp_lhs.m_intval == rhs.m_intval &&
+		temp_lhs.m_places == rhs.m_places
+	);
 }
 
 

@@ -56,7 +56,7 @@ private:
 
 inline
 Stopwatch::Stopwatch():
-  m_start_time(std::clock())
+ 	m_start_time(std::clock())
 {
 }
 
