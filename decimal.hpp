@@ -104,8 +104,7 @@ namespace jewel
  * My Decimal::minimum() and Decimal::maximum() functions could be made
  * a bit more efficient by changing them into class-scope private static
  * member variables that are initialized by calling a private calculating
- * function. This might be more thread-safe too (not that it's a goal of
- * this library to be thread-safe).
+ * function.
  *
  * @todo LOW PRIORITY
  * I should probably allow Decimals to be constructed from strings beginning
@@ -547,7 +546,6 @@ private:
 	 * a convertible-to-int is passed to constructor, compilation will fail.
 	 */
 	explicit Decimal(int);
-
 
 	friend class boost::serialization::access;
 	/** Provide for serialization via Boost.serialization.
