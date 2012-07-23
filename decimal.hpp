@@ -101,6 +101,13 @@ namespace jewel
  * obscure) platforms. It may or may not be worth addressing this.
  *
  * @todo LOW PRIORITY
+ * My Decimal::minimum() and Decimal::maximum() functions could be made
+ * a bit more efficient by changing them into class-scope private static
+ * member variables that are initialized by calling a private calculating
+ * function. This might be more thread-safe too (not that it's a goal of
+ * this library to be thread-safe).
+ *
+ * @todo LOW PRIORITY
  * I should probably allow Decimals to be constructed from strings beginning
  * with unary '+'.
  *
@@ -121,7 +128,12 @@ namespace jewel
  * application. I think it is probably better to retain the current
  * "messy" situation until there's a clear need to reimplement things
  * in light of actual use cases.
- 
+ *
+ * @todo HIGH PRIORITY
+ * Change the capitalized variable names that are NOT macros to be in lower
+ * case. I named static constants using this convention at one point, but I
+ * am now convinced that that was bad style.
+ *
  * @todo LOW PRIORITY
  * Make it work as expected with standard library stream precision
  * manipulators and formatting. Create a function that takes a string
@@ -591,8 +603,8 @@ Decimal operator+(Decimal const& d);
  * zero to which you wish to round. Should be a \e Decimal::places_type.
  *
  * Note if you round to a number of decimal places greater than the current
- * fractional precision, it will return a Decimal with the requested fractional precision
- * (filling in the extra places effectively with zeroes).
+ * fractional precision, it will return a Decimal with the requested
+ * fractional precision (filling in the extra places effectively with zeroes).
  * If this cannot be safely done an exception will be thrown.
  *
  * @returns A decimal number by value (distinct from x, which is not changed).

@@ -744,8 +744,12 @@ Decimal round(Decimal const& x, Decimal::places_type decimal_places)
 	Decimal ret = x;
 	if (ret.rescale(decimal_places) != 0)
 	{	
-		throw (UnsafeArithmeticException("Decimal number cannot "
-		  "safely be rounded to this number of places."));
+		throw
+		(	UnsafeArithmeticException
+			(	"Decimal number cannot "
+				"safely be rounded to this number of places."
+			)
+		);
 	}
 	return ret;
 }
@@ -755,8 +759,12 @@ Decimal operator-(Decimal const& d)
 {
 	if (d.m_intval == numeric_limits<Decimal::int_type>::min())
 	{
-		throw (UnsafeArithmeticException("Unsafe arithmetic "
-		  "operation (unary minus)."));
+		throw
+		(	UnsafeArithmeticException
+			(	"Unsafe arithmetic "
+		  		"operation (unary minus)."
+			)
+		);
 	}
 	assert (d.m_intval != numeric_limits<Decimal::int_type>::min());
 	Decimal ret = d;
@@ -764,11 +772,6 @@ Decimal operator-(Decimal const& d)
 	return ret;
 }
 
-// I could also implement this as simple wrapper for a private static
-// const member variable, defined as equal to the value of a minimum_aux()
-// function called only once initialization work. This might be a bit
-// more efficient for callers; but I don't think it's worth the extra effort.
-// Same goes for Decimal::maximum().
 Decimal Decimal::minimum()
 {
 	static bool calculated_already = false;
