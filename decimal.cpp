@@ -83,9 +83,10 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 	{
 		if (x.rescale(y.m_places) != 0)
 		{
-			throw (UnsafeArithmeticException("Unsafe attempt to "
-			  "set fractional precision in course of co-normalization"
-			  " attempt."));
+			throw UnsafeArithmeticException
+			(	"Unsafe attempt to set fractional precision in course "
+				"of co-normalization attempt."
+			);
 		}
 	}
 	else
@@ -93,9 +94,10 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 		assert (y.m_places < x.m_places);
 		if (y.rescale(x.m_places) != 0)
 		{
-			throw (UnsafeArithmeticException("Unsafe attempt to "
-			  "set fractional precision in course of co-normalization"
-			  " attempt."));
+			throw UnsafeArithmeticException
+			(	"Unsafe attempt to set fractional precision in course "
+				"of co-normalization attempt."
+			);
 		}
 	}
 	return;
@@ -196,8 +198,9 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	{
 		assert (m_intval == 0);
 		assert (m_places == 0);
-		throw UnsafeArithmeticException(
-		  "Cannot construct Decimal from an empty string");
+		throw UnsafeArithmeticException
+		(	"Cannot construct Decimal from an empty string"
+		);
 	}
 	sz_t const str_size = str.size();
 	
@@ -224,8 +227,10 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 		{
 			assert (m_intval == 0);
 			assert (m_places == 0);
-			throw UnsafeArithmeticException("Invalid string passed "
-			  "to Decimal constructor.");
+			throw UnsafeArithmeticException
+			(	"Invalid string passed "
+				"to Decimal constructor."
+			);
 		}
 		assert (ri < str_rep.end());
 		*ri = *si;
@@ -254,8 +259,10 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 			{
 				assert (m_intval == 0);
 				assert (m_places == 0);
-				throw UnsafeArithmeticException("Invalid string passed to"
-				  " Decimal constructor.");
+				throw UnsafeArithmeticException
+				(	"Invalid string passed to"
+					" Decimal constructor."
+				);
 			}
 			assert (reduced_size == str_rep.size());
 			assert (ri < str_rep.end());
@@ -282,8 +289,10 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	{
 		m_intval = 0;
 		assert (m_places == 0);
-		throw UnsafeArithmeticException("Cannot create a Decimal as large as"
-		  " is implied by this string.");
+		throw UnsafeArithmeticException
+		(	"Cannot create a Decimal as large as"
+			" is implied by this string."
+		);
 	}
 	m_places = NUM_CAST<places_type>(spot_position);
 }
@@ -394,8 +403,10 @@ Decimal const& Decimal::operator--()
 	#endif
 	if (subtraction_is_unsafe(m_intval, implicit_divisor()))
 	{
-		throw UnsafeArithmeticException("Subtraction may cause "
-		  "overflow.");
+		throw UnsafeArithmeticException
+		(	"Subtraction may cause "
+			"overflow."
+		);
 	}
 	m_intval -= implicit_divisor();
 	assert (m_places >= benchmark_places);
@@ -434,8 +445,7 @@ Decimal& Decimal::operator-=(Decimal rhs)
 	if (subtraction_is_unsafe(m_intval, rhs.m_intval))
 	{
 		*this = orig;
-		throw UnsafeArithmeticException("Subtraction may cause "
-		  "overflow.");
+		throw UnsafeArithmeticException("Subtraction may cause overflow.");
 	}
 	m_intval -= rhs.m_intval;
 	assert (m_places >= benchmark_places);
@@ -453,8 +463,10 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	if (*this == minimum() || rhs == minimum())
 	{
 		assert (*this == orig);
-		throw UnsafeArithmeticException("Cannot multiply smallest possible "
-		  "Decimal safely.");
+		throw UnsafeArithmeticException
+		(	"Cannot multiply smallest possible "
+			"Decimal safely."
+		);
 	}
 
 	// Make absolute and remember signs
@@ -510,17 +522,21 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	  rhs.m_intval == numeric_limits<int_type>::min() )
 	{
 		assert (*this == orig);
-		throw UnsafeArithmeticException("Smallest possible Decimal cannot "
-		  "feature in division operation.");
+		throw UnsafeArithmeticException
+		(	"Smallest possible Decimal cannot "
+			"feature in division operation."
+		);
 	}
 	assert (NumDigits::num_digits(rhs.m_intval) <= maximum_precision());
 	if (NumDigits::num_digits(rhs.m_intval) == maximum_precision())
 	{
 		assert (*this == orig);
-		throw UnsafeArithmeticException("Dividend has a number of significant"
-		  "digits that is greater than or equal to the return value of "
-		  "Decimal::maximum_precision(); as a result, division cannot be "
-		  "performed safely.");
+		throw UnsafeArithmeticException
+		(	"Dividend has a number of significant"
+		 	"digits that is greater than or equal to the return value of "
+			"Decimal::maximum_precision(); as a result, division cannot be "
+			"performed safely."
+		);
 	}
 	
 	// Remember required sign of product
@@ -752,11 +768,9 @@ Decimal round(Decimal const& x, Decimal::places_type decimal_places)
 	Decimal ret = x;
 	if (ret.rescale(decimal_places) != 0)
 	{	
-		throw
-		(	UnsafeArithmeticException
-			(	"Decimal number cannot "
-				"safely be rounded to this number of places."
-			)
+		throw UnsafeArithmeticException
+		(	"Decimal number cannot "
+			"safely be rounded to this number of places."
 		);
 	}
 	return ret;
@@ -767,11 +781,9 @@ Decimal operator-(Decimal const& d)
 {
 	if (d.m_intval == numeric_limits<Decimal::int_type>::min())
 	{
-		throw
-		(	UnsafeArithmeticException
-			(	"Unsafe arithmetic "
-		  		"operation (unary minus)."
-			)
+		throw UnsafeArithmeticException
+		(	"Unsafe arithmetic "
+			"operation (unary minus)."
 		);
 	}
 	assert (d.m_intval != numeric_limits<Decimal::int_type>::min());
