@@ -57,16 +57,18 @@ namespace jewel
 // define static member constants
 
 Decimal::int_type const
-Decimal::BASE = 10;
+Decimal::s_base = 10;
 
 Decimal::int_type const
-Decimal::ROUNDING_THRESHOLD = 5;
+Decimal::s_rounding_threshold = 5;
 
 size_t const
-Decimal::MAX_PLACES = NumDigits::num_digits(numeric_limits<int_type>::min());
+Decimal::s_max_places = NumDigits::num_digits
+(	numeric_limits<int_type>::min()
+);
 
 char const
-Decimal::SPOT = '.';
+Decimal::s_spot = '.';
 
 // static member functions
 
@@ -119,12 +121,12 @@ Decimal::implicit_divisor() const
 	}
 	assert (!calculated_already);
 	int_type next_power = 1;
-	for (size_t j = 0; j != MAX_PLACES; ++j)
+	for (size_t j = 0; j != s_max_places; ++j)
 	{
 		lookup_table.push_back(next_power);
-		next_power *= BASE;
+		next_power *= s_base;
 	}
-	assert (lookup_table.size() == MAX_PLACES);
+	assert (lookup_table.size() == s_max_places);
 	calculated_already = true;
 	return lookup_table[m_places];
 }
@@ -153,7 +155,7 @@ Decimal::whole_part() const
 
 	// Then truncate the fractional digit.
 	// We don't want rounding here!
-	ret /= BASE;
+	ret /= s_base;
 	return ret;
 }
 
@@ -161,10 +163,10 @@ Decimal::whole_part() const
 void
 Decimal::rationalize(places_type min_places)
 {
-	while ((m_places > min_places) && (m_intval % BASE == 0))
+	while ((m_places > min_places) && (m_intval % s_base == 0))
 	{
 		assert (m_places > 0);
-		m_intval /= BASE;
+		m_intval /= s_base;
 		--m_places;
 	}
 	return;
@@ -215,7 +217,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 		++ri;
 	}
 	string::const_iterator const str_end = str.end();
-	for ( ; *si != SPOT && si != str_end; ++si, ++ri)
+	for ( ; *si != s_spot && si != str_end; ++si, ++ri)
 	{
 		assert (si < str_end);
 		if (!isdigit(*si))  // Note: this is fairly cheap.
@@ -229,7 +231,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 		*ri = *si;
 	}
 	sz_t spot_position = 0;   // for the position of decimal point	
-	if (*si == SPOT)
+	if (*si == s_spot)
 	{
 		// We have a spot.
 		// We have a str_rep that's one too big
@@ -260,12 +262,15 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 			*ri = *si;
 		}
 	}
-	if (spot_position > MAX_PLACES)
+	if (spot_position > s_max_places)
 	{
 		assert (m_intval == 0);
 		assert (m_places == 0);
-		throw (UnsafeArithmeticException("Attempt to set m_places "
-		  "to a value exceeding MAX_PLACES."));
+		throw UnsafeArithmeticException
+		(	"Attempt to set m_places "
+			"to a value exceeding that returned by "
+			"Decimal::maximum_precision()."
+		);
 	}
 	try
 	{	
@@ -305,13 +310,13 @@ int Decimal::rescale(places_type p_places)
 
 	if (m_places < p_places)
 	{	
-		if (p_places > MAX_PLACES)
+		if (p_places > s_max_places)
 		{
 			assert (m_places == DEBUGVARIABLE_orig_places);
 			assert (m_intval == DEBUGVARIABLE_orig_intval);
 			return 1;
 		}
-		double base = BASE;  // necessary only as pow needs a double
+		double base = s_base;  // necessary only as pow needs a double
 		int_type multiplier = NUM_CAST<int_type>
 		(	pow(base, p_places - m_places)
 		);
@@ -331,15 +336,18 @@ int Decimal::rescale(places_type p_places)
 		// truncate all but one of the required places
 		for (unsigned int j = m_places - 1; j != p_places; --j)
 		{
-			m_intval /= BASE;
+			m_intval /= s_base;
 		}
 
 		// with one more place still to eliminate, we calculate
 		// whether rounding is required
-		bool remainder = (std::abs(m_intval % BASE) >= ROUNDING_THRESHOLD);
+		bool remainder =
+		(	std::abs(m_intval % s_base) >=
+			s_rounding_threshold
+		);
 
 		// now remove the remaining place
-		m_intval /= BASE;
+		m_intval /= s_base;
 
 		// and add rounding if required
 		if (remainder)
@@ -464,7 +472,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 		assert (!addition_is_unsafe(m_places, rhs.m_places));
 		m_intval *= rhs.m_intval;
 		m_places += rhs.m_places;
-		while (m_places > MAX_PLACES)
+		while (m_places > s_max_places)
 		{
 			assert (m_places > 0);
 			rescale(m_places - 1);
@@ -545,28 +553,28 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	// Deal with any remainder using "long division"
 	while (remainder != 0 && rescale(m_places + 1) == 0)
 	{
-		assert (!multiplication_is_unsafe(remainder, BASE));
+		assert (!multiplication_is_unsafe(remainder, s_base));
 
 		/*
 		 * Previously this commented-out section of code dealt
 		 * with the case where it was unsafe to multiply remainder
-		 * and BASE. However, this is now dealt with by the fact that
+		 * and s_base. However, this is now dealt with by the fact that
 		 * an exception is thrown if the number of significant digits
 		 * in the dividend is equal to Decimal::maximum_precision().
 		 * This makes for a more straightforward API, since the
 		 * below code caused loss of precision under difficult-to-explain
 		 * circumstances.
-		if (multiplication_is_unsafe(remainder, BASE))
+		if (multiplication_is_unsafe(remainder, s_base))
 		{
 			// Then we can't proceed with ordinary "long division" safely,
 			// and need to "scale down" first
 
 			bool add_rounding_right = false;
-			if (rhs.m_intval % BASE >= ROUNDING_THRESHOLD)
+			if (rhs.m_intval % s_base >= s_rounding_threshold)
 			{
 				add_rounding_right = true;
 			}
-			rhs.m_intval /= BASE;
+			rhs.m_intval /= s_base;
 			if (add_rounding_right)
 			{
 				assert (!addition_is_unsafe(rhs.m_intval,
@@ -580,11 +588,11 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			assert (rhs.m_intval >= 0);
 			lhs /= rhs;
 			bool add_rounding_left = false;
-			if (lhs.m_intval % BASE >= ROUNDING_THRESHOLD)
+			if (lhs.m_intval % s_base >= s_rounding_threshold)
 			{
 				add_rounding_left = true;	
 			}
-			lhs.m_intval /= BASE;
+			lhs.m_intval /= s_base;
 			if (add_rounding_left)
 			{
 				assert (!addition_is_unsafe(lhs.m_intval,
@@ -599,8 +607,8 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		*/
 
 		// It's safe to proceed with ordinary "long division"
-		assert(!multiplication_is_unsafe(remainder, BASE));
-		remainder *= BASE;
+		assert(!multiplication_is_unsafe(remainder, s_base));
+		remainder *= s_base;
 		int_type temp_remainder = remainder % rhs.m_intval;
 		m_intval += remainder / rhs.m_intval;
 		remainder = temp_remainder;

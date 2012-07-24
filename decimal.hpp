@@ -128,11 +128,6 @@ namespace jewel
  * "messy" situation until there's a clear need to reimplement things
  * in light of actual use cases.
  *
- * @todo HIGH PRIORITY
- * Change the capitalized variable names that are NOT macros to be in lower
- * case. I named static constants using this convention at one point, but I
- * am now convinced that that was bad style.
- *
  * @todo LOW PRIORITY
  * Make it work as expected with standard library stream precision
  * manipulators and formatting. Create a function that takes a string
@@ -154,7 +149,7 @@ namespace jewel
   @todo LOW PRIORITY
  * Division now incorporates rounding but: (a) it is a bit inefficient;
  * and (b) it contains a "hard-wired" behaviour of rounding up at 5, while not
- * actually referring to the Decimal::ROUNDING_THRESHOLD constant to achieve
+ * actually referring to the Decimal::s_rounding_threshold constant to achieve
  * this. This is a kind of code repetition and so is bad.
  */
 
@@ -457,7 +452,7 @@ private:
 	 * @param p_places the new number of decimal places (i.e. number
 	 * of digits of precision to the right of the decimal point)
 	 *
-	 * If p_places exceeds MAX_PLACES, or if the function cannot otherwise
+	 * If p_places exceeds s_max_places, or if the function cannot otherwise
 	 * execute safely, an exception is \e not thrown, but
 	 * rather a non-zero value is returned to indicate error. If this occurs
 	 * the unsafe operation is not actually executed, but rather the Decimal
@@ -495,23 +490,23 @@ private:
 	/**
 	 * Base of arithmetic. I can't imagine this ever being equal to
 	 */
-	static int_type const BASE;
+	static int_type const s_base;
 
 	/**
 	 * Threshold at which rounding goes up rather than down.
 	 */
-	static int_type const ROUNDING_THRESHOLD;
+	static int_type const s_rounding_threshold;
 
 	/**
 	 * Maximum number of decimal places of precision to the right of
 	 * the decimal point.
 	 */
-	static size_t const MAX_PLACES;
+	static size_t const s_max_places;
 
 	/**
 	 * The character used for the decimal point.
 	 */
-	static char const SPOT;
+	static char const s_spot;
 
 	/**
 	 * Underlying integer representation of Decimal number.
@@ -662,7 +657,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 	if (dintval == 0)
 	{
 		ss << '0';
-		if (plcs > 0) ss << Decimal::SPOT << std::string(plcs, '0');
+		if (plcs > 0) ss << Decimal::s_spot << std::string(plcs, '0');
 		os << ss.str();
 		return os;
 	}
@@ -689,7 +684,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 	// case where the whole part is zero
 	if (slen <= plcs)
 	{
-		ss << '0' << Decimal::SPOT;
+		ss << '0' << Decimal::s_spot;
 		str_sz stop_here = plcs - slen;
 		for (str_sz i = 0; i != stop_here; ++i) ss << '0';
 		for (str_sz j = 0; j != slen; ++j) ss << s[j];
@@ -703,7 +698,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 	for ( ; k != whole_digits; ++k) ss << s[k];
 	if (plcs > 0)
 	{
-		ss << Decimal::SPOT;
+		ss << Decimal::s_spot;
 		for ( ; k != slen; ++k) ss << s[k];
 	}
 	os << ss.str();
@@ -740,7 +735,7 @@ operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 inline
 Decimal::places_type Decimal::maximum_precision()
 {
-	return MAX_PLACES;
+	return s_max_places;
 }
 
 
