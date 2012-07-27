@@ -102,9 +102,10 @@ namespace jewel
  *
  * @todo LOW PRIORITY
  * My Decimal::minimum() and Decimal::maximum() functions could be made
- * a bit more efficient by changing them into class-scope private static
- * member variables that are initialized by calling a private calculating
- * function.
+ * a bit more efficient by creating corresponding class-scope private static
+ * variables that are initialized by calling private auxiliary 
+ * functions. For the public API the static variables could in turn be
+ * exposed via a getter.
  *
  * @todo LOW PRIORITY
  * I should probably allow Decimals to be constructed from strings beginning
