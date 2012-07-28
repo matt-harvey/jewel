@@ -416,6 +416,18 @@ public:
 	bool operator==(Decimal) const;
 
 	/**
+	 * Return the underlying integer representing the Decimal. This
+	 */
+	int_type underlying_integer() const;	
+
+	/**
+	 * Return the number of digits of fractional precision in the
+	 * Decimal, i.e. the number of digits to the right of the decimal
+	 * point.
+	 */
+	places_type places() const;
+
+	/**
 	 * Returns the largest possible Decimal number
 	 */
 	static Decimal maximum();
@@ -629,6 +641,31 @@ Decimal& Decimal::operator=(Decimal const& rhs)
 	return *this;
 }
 
+// Inline member functions
+
+inline
+Decimal::int_type
+Decimal::underlying_integer() const
+{
+	return m_intval;
+}
+
+inline 
+Decimal::places_type
+Decimal::places() const
+{
+	return m_places;
+}
+
+// Inline static class functions
+
+inline
+Decimal::places_type Decimal::maximum_precision()
+{
+	return s_max_places;
+}
+
+
 // inline non-member functions
 
 inline
@@ -731,13 +768,6 @@ operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 	return is;
 }
 
-
-
-inline
-Decimal::places_type Decimal::maximum_precision()
-{
-	return s_max_places;
-}
 
 
 // Serialization
