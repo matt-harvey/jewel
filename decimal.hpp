@@ -418,7 +418,7 @@ public:
 	/**
 	 * Return the underlying integer representing the Decimal. This
 	 */
-	int_type underlying_integer() const;	
+	int_type intval() const;	
 
 	/**
 	 * Return the number of digits of fractional precision in the
@@ -645,7 +645,7 @@ Decimal& Decimal::operator=(Decimal const& rhs)
 
 inline
 Decimal::int_type
-Decimal::underlying_integer() const
+Decimal::intval() const
 {
 	return m_intval;
 }

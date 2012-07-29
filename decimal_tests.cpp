@@ -1518,14 +1518,14 @@ TEST(decimal_operations_in_combination)
 	CHECK_EQUAL(-d23 - d_23p09 * d23, Decimal("508.07"));
 }
 
-TEST(decimal_underlying_integer)
+TEST(decimal_intval)
 {
 	Decimal d0("982.970");
-	CHECK_EQUAL(d0.underlying_integer(), 982970);
+	CHECK_EQUAL(d0.intval(), 982970);
 	Decimal d1("-1849");
-	CHECK_EQUAL(d1.underlying_integer(), -1849);
+	CHECK_EQUAL(d1.intval(), -1849);
 	Decimal d2("-0.0000");
-	CHECK_EQUAL(d2.underlying_integer(), 0);
+	CHECK_EQUAL(d2.intval(), 0);
 }
 
 TEST(decimal_places)

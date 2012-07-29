@@ -58,9 +58,11 @@ int main()
 	cout << static_cast<bool>(cout.flags() & ios::dec) << endl;
 	*/
 
+	/*
 	decimal_csv_test();
 	decimal_speed_test();
 	decimal_serialization_test();
+	*/
 
 	cout << "Now running various unit tests..." << endl;
 	return UnitTest::RunAllTests();
