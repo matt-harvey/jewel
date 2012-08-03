@@ -5,8 +5,6 @@
  *
  * \brief Exceptions to be used with jewel::Decimal class
  *
- * These exceptions should not be inherited.
- *
  * \author Matthew Harvey
  * \date 15 May 2012
  *
@@ -14,6 +12,7 @@
  */
 
 
+#include "exception_macros.hpp"
 #include <stdexcept>
 #include <string>
 
@@ -25,18 +24,7 @@ namespace jewel
  * Exception to be thrown if there is an attempt to perform unsafe
  * arithmetic.
  */
-class UnsafeArithmeticException: public std::exception
-{
-public:
-	explicit UnsafeArithmeticException(std::string p_message);
-	~UnsafeArithmeticException() throw();
-	const char* what() const throw();
-private:
-	std::string m_message;
-};
-
-
-
+JEWEL_STANDARD_EXCEPTION(UnsafeArithmeticException);
 
 }  // namespace jewel
 

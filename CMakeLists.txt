@@ -4,7 +4,6 @@ include_directories (/home/matthew/lib/jewel)
 link_directories (/home/matthew/lib/jewel)
 add_executable (main 
                 main.cpp
-				arithmetic_exceptions.cpp
                 checked_arithmetic_detail.cpp
                 checked_arithmetic_tests.cpp
 		        decimal.cpp
@@ -17,7 +16,6 @@ add_executable (main
 add_library(jewel
             checked_arithmetic_detail.cpp
 	        decimal.cpp
-			arithmetic_exceptions.cpp
 			num_digits.cpp)
 target_link_libraries (main
                        unittest++
