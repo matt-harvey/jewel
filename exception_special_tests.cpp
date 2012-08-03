@@ -70,7 +70,7 @@ void test_exception_macros()
 	}
 	catch (TrialException0&)
 	{
-		// This should be reached as TrialException0 should not
+		// This should not be reached as TrialException0 should not
 		// catch TrialException1_0.
 		assert (false);
 	}
