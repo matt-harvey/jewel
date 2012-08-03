@@ -32,6 +32,7 @@ install(FILES
 		checked_arithmetic_detail.hpp
 		debug_log.hpp
 		decimal.hpp
+		exception_macros.hpp
 		Doxyfile
 		num_digits.hpp
 		overview.dox
