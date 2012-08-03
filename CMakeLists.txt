@@ -9,6 +9,7 @@ add_executable (main
 		        decimal.cpp
 				decimal_special_tests.cpp
 		        decimal_tests.cpp
+				exception_special_tests.cpp
 				num_digits.cpp
 		        num_digits_tests.cpp
 		        stopwatch_tests.cpp

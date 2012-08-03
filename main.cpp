@@ -4,6 +4,7 @@
 #include "checked_arithmetic.hpp"
 #include "decimal.hpp"
 #include "decimal_special_tests.hpp"
+#include "exception_special_tests.hpp"
 #include "num_digits.hpp"
 #include <iomanip>
 #include <iostream>
@@ -14,6 +15,7 @@ using jewel::Decimal;
 using jewel::detail::decimal_csv_test;
 using jewel::detail::decimal_speed_test;
 using jewel::detail::decimal_serialization_test;
+using jewel::detail::test_exception_macros;
 using jewel::multiplication_is_unsafe;
 using jewel::NumDigits;
 using jewel::UnsafeArithmeticException;
@@ -63,6 +65,11 @@ int main()
 	decimal_speed_test();
 	decimal_serialization_test();
 	*/
+	
+	cout << "Now running special tests of exception related macros."
+	     << endl;
+	
+	test_exception_macros();
 
 	cout << "Now running various unit tests..." << endl;
 	return UnitTest::RunAllTests();
