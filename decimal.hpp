@@ -107,6 +107,14 @@ namespace jewel
  * functions. For the public API the static variables could in turn be
  * exposed via a getter.
  *
+ * @todo HIGH PRIORITY
+ * Currently just about every exception thrown by Decimal operations is
+ * UnsafeArithmeticException. However there are times when this is probably
+ * not going to be informative enough for clients of the Decimal class.
+ * I should make use of the exception class macros to create a more
+ * informative hierarchy of exceptions and incorporate this into the Decimal
+ * class soon, before there is significant client code of the class.
+ *
  * @todo LOW PRIORITY
  * I should probably allow Decimals to be constructed from strings beginning
  * with unary '+'.

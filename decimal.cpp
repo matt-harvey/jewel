@@ -27,7 +27,7 @@
 
 /*
  * Don't rely on the exceptions thrown by boost::numeric_cast.
- * If boost::numeric_cast is ever thrown, there's something wrong
+ * If boost::numeric_cast is throws here, there's something wrong
  * with the program!
  */
 
