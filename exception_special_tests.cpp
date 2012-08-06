@@ -1,9 +1,11 @@
 #include "exception_special_tests.hpp"
 #include <cassert>
 #include <iostream>
+#include <string>
 
 using std::cout;
 using std::endl;
+using std::string;
 
 
 namespace jewel
@@ -26,9 +28,8 @@ void test_exception_macros()
 	{
 		throw TrialException0("Hello!");
 	}
-	catch (boost::exception& e)
+	catch (boost::exception&)
 	{
-		assert (e.what() == "Hello!");	
 	}
 
 	try
@@ -124,7 +125,7 @@ void test_exception_macros()
 	}
 	catch (TrialException1_0_1& e)
 	{
-		assert (e.what() == "Here's a TrialException1_0_1.");
+		assert (e.what() == string("Here's a TrialException1_0_1."));
 	}
 
 	try
