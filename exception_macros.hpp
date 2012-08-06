@@ -1,7 +1,6 @@
 #ifndef GUARD_exception_macros_hpp
 #define GUARD_exception_macros_hpp
 
-
 /** @file exception_macros.hpp
  *
  * @brief Provides macros to ease the declaration and definition of
@@ -14,6 +13,14 @@
  * of boilerplate involved in creating such a structure. These macros
  * aim to vastly reduce the repetitive boilerplate required to create
  * a hierarchy of exception classes.
+ *
+ * @todo HIGH PRIORITY
+ * Make CLASS also be default constructible, so that it will work with the
+ * Boost exception framework. Also make CLASS inherit from boost::exception
+ * as well as from std::exception. Specify in the documentation that the
+ * inheritance is virtual. Also, consider including headers <stdexcept>,
+ * <string> and <boost/exceptions/all.hpp> in this file. (This would make for
+ * greater convenience but also less transparency.)
  *
  */
 
