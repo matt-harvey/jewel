@@ -1,8 +1,6 @@
 #include "exception_special_tests.hpp"
-#include <boost/exception/all.hpp>
 #include <cassert>
 #include <iostream>
-#include <stdexcept>
 
 using std::cout;
 using std::endl;

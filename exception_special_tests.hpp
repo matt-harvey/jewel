@@ -3,8 +3,6 @@
 
 
 #include "exception_macros.hpp"
-#include <stdexcept>
-#include <string>
 
 /**
  * This file declares special testing functions (not managed by UnitTest++),
