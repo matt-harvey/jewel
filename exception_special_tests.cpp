@@ -1,11 +1,11 @@
 #include "exception_special_tests.hpp"
+#include <boost/exception/all.hpp>
 #include <cassert>
 #include <iostream>
 #include <stdexcept>
 
 using std::cout;
 using std::endl;
-using std::exception;
 
 
 namespace jewel
@@ -20,7 +20,24 @@ void test_exception_macros()
 	{
 		throw TrialException0("Here's a TrialException0.");
 	}
-	catch (exception&)
+	catch (std::exception&)
+	{
+	}
+
+	try
+	{
+		throw TrialException0("Hello!");
+	}
+	catch (boost::exception& e)
+	{
+		assert (e.what() == "Hello!");	
+	}
+
+	try
+	{
+		throw TrialException1("Here's a TrialException1.");
+	}
+	catch (std::exception&)
 	{
 	}
 
@@ -28,7 +45,7 @@ void test_exception_macros()
 	{
 		throw TrialException1("Here's a TrialException1.");
 	}
-	catch (exception&)
+	catch (boost::exception&)
 	{
 	}
 
@@ -36,7 +53,7 @@ void test_exception_macros()
 	{
 		throw TrialException0_0("Here's TrialException0_0.");
 	}
-	catch (exception&)
+	catch (std::exception&)
 	{
 	}
 
@@ -52,13 +69,13 @@ void test_exception_macros()
 	{
 		throw TrialException1_0("Here's TrialException1_0.");
 	}
-	catch (exception&)
+	catch (std::exception&)
 	{
 	}
 
 	try
 	{
-		throw TrialException1_0("Here a TrialException1_0.");
+		throw TrialException1_0();
 	}
 	catch (TrialException1&)
 	{
@@ -81,7 +98,7 @@ void test_exception_macros()
 
 	try
 	{
-		throw TrialException1_0_1("Here's a TrialException1_0_1.");
+		throw TrialException1_0_1();
 	}
 	catch (TrialException1_0_1&)
 	{
@@ -102,12 +119,29 @@ void test_exception_macros()
 	catch (TrialException1&)
 	{
 	}
-	
+
 	try
 	{
 		throw TrialException1_0_1("Here's a TrialException1_0_1.");
 	}
-	catch (exception&)
+	catch (TrialException1_0_1& e)
+	{
+		assert (e.what() == "Here's a TrialException1_0_1.");
+	}
+
+	try
+	{
+		throw std::exception();
+	}
+	catch (std::exception&)
+	{
+	}
+
+	try
+	{
+		throw TrialException1_0_1("Here's a TrialException1_0_1.");
+	}
+	catch (std::exception&)
 	{
 	}
 

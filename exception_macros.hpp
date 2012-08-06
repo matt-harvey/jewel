@@ -1,6 +1,10 @@
 #ifndef GUARD_exception_macros_hpp
 #define GUARD_exception_macros_hpp
 
+#include <boost/exception/exception.hpp>
+#include <stdexcept>
+#include <string>
+
 /** @file exception_macros.hpp
  *
  * @brief Provides macros to ease the declaration and definition of
@@ -14,35 +18,31 @@
  * aim to vastly reduce the repetitive boilerplate required to create
  * a hierarchy of exception classes.
  *
- * @todo HIGH PRIORITY
- * Make CLASS also be default constructible, so that it will work with the
- * Boost exception framework. Also make CLASS inherit from boost::exception
- * as well as from std::exception. Specify in the documentation that the
- * inheritance is virtual. Also, consider including headers <stdexcept>,
- * <string> and <boost/exceptions/all.hpp> in this file. (This would make for
- * greater convenience but also less transparency.)
- *
+ * Note this file \c #includes the following headers:\n
+ * 	\c <boost/exception/exception.hpp>\n
+ * 	\c <stdexcept>\n
+ * 	\c <string>\n
  */
 
 
 /**
- * Macro to declare and define an exception class named \c CLASS, inheriting
- * from std::exception. Instances of the newly created exception class, unlike
- * std::exception, should be initialized with a std::string, representing
- * an error message.
- *
- * The macro should be invoked only in a location where declarations for
- * std::string and std::exception are available (typically in a location that
- * has included <string> and <stdexcept>).
+ * Macro to declare and define an exception class named \c CLASS, that
+ * inherits virtually from both \c boost::exception and
+ * from \c std::exception. Instances of the newly created exception class,
+ * can be initialized with either a \c std::string \c const (representing
+ * an error message), or with no parameters.
  *
  * Note the macro definition omits a trailing semi-colon. A semi-colon should
  * always be appended when the macro is invoked.
  */
 #define JEWEL_STANDARD_EXCEPTION(CLASS)\
-	class CLASS: public std::exception\
+	class CLASS: public boost::exception, public std::exception\
 	{\
 	public:\
-		explicit CLASS(std::string p_message):\
+		CLASS() throw()\
+		{\
+		}\
+		explicit CLASS(std::string const& p_message):\
 			m_message(p_message)\
 		{\
 		}\
@@ -61,11 +61,10 @@
 /**
  * Macro to declare and define an exception class called \c DERIVED_CLASS,
  * inheriting from \c BASE_CLASS. The \c BASE_CLASS must have a constructor
- * that takes a std::string, representing an error message.
- *
- * The macro should be invoked only in a location where declarations for
- * std::string and std::exception are available (typically in a location that
- * has included <string> and <stdexcept>).
+ * that takes a \c std::string \c const&, representing an error message.
+ * 
+ * \c DERIVED_CLASS will have both a default constructor, and a constructor
+ * that takes a \c std::string \c const& , representing an error message.
  *
  * Note the macro definition omits a trailing semi-colon. A semi-colon should
  * always be appended when the macro is invoked.
@@ -74,7 +73,10 @@
 	class DERIVED_CLASS: public BASE_CLASS\
 	{\
 	public:\
-		explicit DERIVED_CLASS(std::string p_message):\
+		DERIVED_CLASS() throw()\
+		{\
+		}\
+		explicit DERIVED_CLASS(std::string const& p_message):\
 			BASE_CLASS(p_message)\
 		{\
 		}\
