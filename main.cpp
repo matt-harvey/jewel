@@ -4,6 +4,7 @@
 #include "checked_arithmetic.hpp"
 #include "decimal.hpp"
 #include "decimal_special_tests.hpp"
+#include "exception.hpp"
 #include "exception_special_tests.hpp"
 #include "num_digits.hpp"
 #include <iomanip>
@@ -26,6 +27,9 @@ using std::numeric_limits;
 using std::ostringstream;
 using std::setprecision;
 using std::string;
+
+JEWEL_DERIVED_EXCEPTION(GoobyException, UnsafeArithmeticException);
+JEWEL_DERIVED_EXCEPTION(GoobyDooException, GoobyException);
 
 int main()
 {

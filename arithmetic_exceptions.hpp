@@ -12,7 +12,7 @@
  */
 
 
-#include "exception_macros.hpp"
+#include "exception.hpp"
 #include <stdexcept>
 #include <string>
 
@@ -24,7 +24,7 @@ namespace jewel
  * Exception to be thrown if there is an attempt to perform unsafe
  * arithmetic.
  */
-JEWEL_STANDARD_EXCEPTION(UnsafeArithmeticException);
+JEWEL_DERIVED_EXCEPTION(UnsafeArithmeticException, Exception);
 
 }  // namespace jewel
 

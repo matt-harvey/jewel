@@ -9,6 +9,7 @@ add_executable (main
 		        decimal.cpp
 				decimal_special_tests.cpp
 		        decimal_tests.cpp
+				exception.cpp
 				exception_special_tests.cpp
 				num_digits.cpp
 		        num_digits_tests.cpp
@@ -17,6 +18,7 @@ add_executable (main
 add_library(jewel
             checked_arithmetic_detail.cpp
 	        decimal.cpp
+			exception.cpp
 			num_digits.cpp)
 target_link_libraries (main
                        unittest++
@@ -33,7 +35,7 @@ install(FILES
 		checked_arithmetic_detail.hpp
 		debug_log.hpp
 		decimal.hpp
-		exception_macros.hpp
+		exception.hpp
 		Doxyfile
 		num_digits.hpp
 		overview.dox

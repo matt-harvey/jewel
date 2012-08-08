@@ -24,13 +24,7 @@ void test_exception_macros()
 	{
 	}
 
-	try
-	{
-		throw TrialException0("Hello!");
-	}
-	catch (boost::exception&)
-	{
-	}
+	
 
 	try
 	{
@@ -40,13 +34,6 @@ void test_exception_macros()
 	{
 	}
 
-	try
-	{
-		throw TrialException1("Here's a TrialException1.");
-	}
-	catch (boost::exception&)
-	{
-	}
 
 	try
 	{
@@ -125,7 +112,7 @@ void test_exception_macros()
 	}
 	catch (TrialException1_0_1& e)
 	{
-		assert (e.what() == string("Here's a TrialException1_0_1."));
+		assert (string(e.what()) == string("Here's a TrialException1_0_1."));
 	}
 
 	try
