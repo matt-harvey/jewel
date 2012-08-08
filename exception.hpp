@@ -31,8 +31,6 @@ namespace jewel
  *
  * @todo Test exact point of truncation.
  */
-
-
 class Exception: public virtual std::exception
 {
 	Exception const operator=(Exception const&);
