@@ -55,6 +55,17 @@ namespace jewel
  * about unused parameter. I should find a better way and/or see if it has
  * been reported to the Boost developers.
  *
+ * @todo HIGH PRIORITY
+ * Go through the code assessing, for each function, whether it:\n
+ * (a) offers on exception safety guarantee;\n
+ * (b) offers the basic guarantee;\n
+ * (c) offers the strong guarantee; or\n
+ * (d) offers the nothrow guarantee.
+ * For functions that fall under (a), try to rewrite them so they at least
+ * fall under (b). Then, for each function, document in the API docs the
+ * guarantee that it offers. Do something similar for the other functions
+ * in the Jewel library.
+ *
  * There are two concepts of precision in regards to this Decimal class. The
  * \e total \e precision of an instance of this class is the total number of
  * decimal digits, to either the left or the right of the decimal point,
@@ -223,7 +234,7 @@ public:
 	 *   the position of the decimal point implies a number of decimal places
 	 *   greater than the value returned by Decimal::maximum_precision(); or
 	 *   the implied Decimal number would be required to exceed the maximum of
-	 *   the underlying integeral representation.
+	 *   the underlying integral representation.
 	 *
 	 * Trailing zeroes to the right of the decimal point in the passed string
 	 * influence the number of digits of fractional precision stored in the
@@ -424,7 +435,7 @@ public:
 	bool operator==(Decimal) const;
 
 	/**
-	 * Return the underlying integer representing the Decimal. This
+	 * Return the underlying integer representing the Decimal.
 	 */
 	int_type intval() const;	
 
@@ -509,7 +520,8 @@ private:
 	void rationalize(places_type min_places = 0);
 
 	/**
-	 * Base of arithmetic. I can't imagine this ever being equal to
+	 * Base of arithmetic. I can't imagine this ever being equal to anything
+	 * other than 10.
 	 */
 	static int_type const s_base;
 
@@ -552,13 +564,15 @@ private:
 	 */
 	int_type implicit_divisor() const;
 
-	// Return an int_type being the value of the whole part of the Decimal,
-	// i.e. the part "to the left of the decimal point".
-	// This is like rounding down to nil decimal places, but returning
-	// an int_type rather than another Decimal.
-	int_type whole_part() const;
+	/** 
+	 * Returns an int_type being the value of the whole part of the Decimal,
+	 * i.e. the part "to the left of the decimal point".
+	 * This is like rounding down to nil decimal places, but returning
+	 * an int_type rather than another Decimal.
+	 */
+	 int_type whole_part() const;
 
-	/** This constructor deliberately unimplemented. Ensures if an int or
+	/** This constructor is deliberately unimplemented. Ensures if an int or
 	 * a convertible-to-int is passed to constructor, compilation will fail.
 	 */
 	explicit Decimal(int);

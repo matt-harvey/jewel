@@ -61,12 +61,15 @@ size_t Exception::max_message_size() throw()
 
 Exception::Exception(Exception const& rhs) throw()
 {
-	size_t i = 0;
-	for (char const* it = rhs.m_message; *it != '\0'; ++it, ++i)
+	if (&rhs != this)
 	{
-		m_message[i] = *it;
+		size_t i = 0;
+		for (char const* it = rhs.m_message; *it != '\0'; ++it, ++i)
+		{
+			m_message[i] = *it;
+		}
+		m_message[i] = '\0';
 	}
-	m_message[i] = '\0';
 }
 
 
