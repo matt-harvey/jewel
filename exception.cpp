@@ -1,8 +1,16 @@
 #include "exception.hpp"
 
+#include "debug_log.hpp"
+#include <cassert>
 #include <cstring>
+#include <iostream>
+#include <string>
 
+using std::endl;
 using std::strlen;
+using std::strcpy;
+using std::strncpy;
+using std::string;
 
 namespace jewel
 {
@@ -11,34 +19,28 @@ namespace jewel
 char const* Exception::s_truncation_flag = "[TRUNCATED]";
 
 
-
 Exception::Exception() throw()
 {
+	m_message[0] = '\0';
 }
 
 Exception::Exception(char const* p_message) throw()
 {
+	char const* it = p_message;
 	size_t i = 0;
-	for
-	(	char const* it = p_message;
-		*it != '\0' && i != max_message_size();
-		++it, ++i
-	)
+	while (*it != '\0' && i != max_message_size())
 	{
-		m_message[i] = *it;
+		m_message[i++] = *it++;
 	}
-	if (i >= max_message_size())
+	m_message[i] = '\0';
+	if (*it != '\0')
 	{
-		for
-		(	char const* jt = s_truncation_flag;
-			*jt != '\0';
-			++jt, ++i
-		)
-		{
-			m_message[i] = *jt;
-		}
-		m_message[i] = '\0';
+		assert (i == max_message_size());
+		assert (i + strlen(s_truncation_flag) + 1 == s_message_buffer_size);
+		strcpy(m_message + i, s_truncation_flag);
+		assert (strlen(m_message) + 1 == s_message_buffer_size);
 	}
+	assert (strlen(m_message) < s_message_buffer_size);
 }
 
 Exception::~Exception() throw()
@@ -53,23 +55,15 @@ char const* Exception::what() const throw()
 size_t Exception::max_message_size() throw()
 {
 	static const size_t ret =
-		s_message_buffer_size -
-		strlen(s_truncation_flag);
+		s_message_buffer_size - strlen(s_truncation_flag) - 1;
 
 	return ret;
 }
 
 Exception::Exception(Exception const& rhs) throw()
 {
-	if (&rhs != this)
-	{
-		size_t i = 0;
-		for (char const* it = rhs.m_message; *it != '\0'; ++it, ++i)
-		{
-			m_message[i] = *it;
-		}
-		m_message[i] = '\0';
-	}
+	strcpy(m_message, rhs.m_message);
+	assert (strlen(m_message) < s_message_buffer_size);
 }
 
 

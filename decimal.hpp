@@ -118,14 +118,6 @@ namespace jewel
  * functions. For the public API the static variables could in turn be
  * exposed via a getter.
  *
- * @todo HIGH PRIORITY
- * Currently just about every exception thrown by Decimal operations is
- * UnsafeArithmeticException. However there are times when this is probably
- * not going to be informative enough for clients of the Decimal class.
- * I should make use of the exception class macros to create a more
- * informative hierarchy of exceptions and incorporate this into the Decimal
- * class soon, before there is significant client code of the class.
- *
  * @todo LOW PRIORITY
  * I should probably allow Decimals to be constructed from strings beginning
  * with unary '+'.
@@ -210,7 +202,10 @@ public:
 		Decimal::places_type decimal_places
 	);
 
-	// Unary minus
+	/** Unary minus
+	 *
+	 * See separate documentation for this function.
+	 */
 	friend Decimal operator-(Decimal const& d);
 
 	/** 
@@ -227,14 +222,19 @@ public:
 	 *
 	 * Examples of non-accepted strings: "10e2", "12312.23413434123424".
 	 *
-	 * @exception jewel::UnsafeArithmeticException is thrown if:\n
-	 *   an empty string is passed to str;\n
+	 * @exception DecimalFromStringException is thrown if:\n
+	 *   an empty string is passed to \c str;\n
 	 *   non-digit characters (other than '-' and '.', at the
-	 *   appropriate point) are included in the string; or
+	 *   appropriate point) are included in the string.
+	 * 
+	 * @exception DecimalPrecisionException is thrown if \c str is otherwise
+	 *   valid, but
 	 *   the position of the decimal point implies a number of decimal places
-	 *   greater than the value returned by Decimal::maximum_precision(); or
-	 *   the implied Decimal number would be required to exceed the maximum of
-	 *   the underlying integral representation.
+	 *   greater than the value returned by Decimal::maximum_precision().
+	 *
+	 * @exception DecimalSizeException thrown if the implied Decimal number
+	 *   would be required to exceed the maximum of the underlying integral
+	 *   representation.
 	 *
 	 * Trailing zeroes to the right of the decimal point in the passed string
 	 * influence the number of digits of fractional precision stored in the
@@ -255,12 +255,16 @@ public:
 	Decimal& operator=(Decimal const&);
 
 	/**
-	 * @exception jewel::UnsafeArithmeticException thrown if addition
-	 * would cause overflow, or if fractional precision cannot be maintained
-	 * at the same level as that of the more precise of the two numbers being
+	 * @exception DecimalAdditionException thrown if addition
+	 * would cause overflow
+	 *
+	 * @exception DecimalPrecisionException thrown if fractional precision
+	 * cannot be maintained at the same level as that of the more precise
+	 * of the two numbers being
 	 * added. This ensures that - unlike in unchecked floating point
-	 * arithmetic - the sum of two non-zero numbers is always equal to
-	 * neither of the original numbers (or else throw an exception).
+	 * arithmetic - adding two non-zero Decimals is always yield a Decimal
+	 * that is equal to neither of the original Decimals (or else will throw
+	 * an exception).
 	 * 
 	 * Note trailing fractional zeroes are never "rationalized away" from the
 	 * result. Stored fractional precision is always maintained at the level
@@ -275,15 +279,17 @@ public:
 	Decimal& operator+=(Decimal);
 
 	/**
-	 * @exception jewel::UnsafeArithmeticException thrown if
-	 * subtraction would cause overflow, or if fractional precision
+	 * @exception DecimalSubtractionException is thrown if
+	 * subtraction would cause overflow.
+	 *
+	 * @exception DecimalPrecisionException is thrown if fractional precision
 	 * cannot be maintained
 	 * at the same level as that of the more precise of the two numbers
 	 * involved (the minuend and the subrahend).
 	 * This ensures that - unlike in unchecked floating point
 	 * arithmetic - subtracting one non-zero number from another will always
-	 * yield a number that is equal to neither of the original numbers (Or
-	 * else throw an exception).
+	 * yield a number that is equal to neither of the original numbers (or
+	 * else will throw an exception).
 	 *
 	 * Note trailing fractional zeroes are never "rationalized away" from the
 	 * result. Stored fractional precision is always maintained at the level
@@ -298,7 +304,7 @@ public:
 	Decimal& operator-=(Decimal);
 
 	/**
-	 * @exception jewel::UnsafeArithmeticException thrown if multiplication
+	 * @exception DecimalMultiplicationException thrown if multiplication
 	 * would cause overflow.
 	 *
 	 * Currently, for multiplication to be executed safely, it must be
@@ -342,8 +348,11 @@ public:
 	Decimal& operator*=(Decimal);
 
 	/**
-	 * @exception jewel::UnsafeArithmeticException is thrown if
-	 * division would cause overflow.
+	 * @exception DecimalDivisionByZeroException is thrown if division by
+	 * zero is attempted.
+	 *
+	 * @exception DecimalDivisionException is thrown if division would cause
+	 * overflow.
 	 *
 	 * The precision of the returned quotient is never more than
 	 * a number of decimal places to the right
@@ -362,7 +371,7 @@ public:
 	 * point) of the dividend until it equals the fractional precision
 	 * of the divisor. In some cases it is not possible to do this safely,
 	 * in which case an exception
-	 * (jewel::UnsafeArithmeticException) is thrown. You can avoid this
+	 * is thrown. You can avoid this
 	 * possibility by ensuring that you only divide Decimals where the
 	 * fractional precision of the dividend is at least as great as that
 	 * of the divisor; or, failing that, where the sum of the number of
@@ -396,14 +405,14 @@ public:
 	Decimal& operator/=(Decimal);
 
 	/**
-	 * @exception jewel::UnsafeArithmeticException is thrown if incrementing
+	 * @exception DecimalIncrementationException is thrown if incrementing
 	 * would cause overflow.
 	 *
 	 * Incrementing a Decimal never changes its fractional precision.
 	 */
 	Decimal const& operator++();  // prefix version
 
-	/** @exception jewel::UnsafeArithmeticException is throw if decrementing
+	/** @exception DecimalDecrementationException is throw if decrementing
 	 * would cause overflow.
 	 *
 	 * Decrementing a Decimal never changes its fractional precision.
@@ -556,6 +565,9 @@ private:
 	 * the one with the lesser number of places to the same number of places
 	 * as the one with the greater number of places (while rescaling to
 	 * maintain the same order of magnitude).
+	 *
+	 * @throws DecimalPrecisionException if the operation would cause
+	 * overflow.
 	 */
 	static void co_normalize(Decimal&, Decimal&);
 
@@ -590,6 +602,8 @@ private:
 // non-member functions - declarations
 
 /** Write to an output stream.
+ * 
+ * @todo LOW PRIORITY Determine and document throwing behaviour (if any).
  */
 template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
@@ -597,14 +611,19 @@ operator<<(std::basic_ostream<charT, traits>&, Decimal const&);
 
 /** Read from a std::istream
  *
- * @relates jewel::Decimal
+ * @relates Decimal
  *
- * @throws jewel::UnsafeArithmeticException thrown if:\n
- *   Invalid characters are read;\n
- *   There are too many digits; or\n
- *   There are too many places to the right of the decimal point.\n
- *   These mirror the exceptions thrown by Decimal(std::string const&)
- *   constructor - see documentation of constructor for more detail.
+ * If the sequence of characters read from the stream is such that
+ * it cannot be validly converted to a \c Decimal (see the \c Decimal
+ * constructor that takes a \c std::string \c const& parameter, for
+ * the circumstances in which this can occur), an exception is \c not
+ * thrown, but rather \c is is set to an error state (as per the idiom
+ * in the standard library when reading from an error stream), and
+ * \c is still returned from the function. In this case, \c d then retains
+ * the value it had prior to commencement of the read operation.
+ *
+ * @todo HIGH PRIORITY Test the claim that \c d retains its original value
+ * in the event of read failure.
  */
 template <typename charT, typename traits>
 std::basic_istream<charT, traits>&
@@ -612,7 +631,9 @@ operator>>(std::basic_istream<charT, traits>&, Decimal&);
 
 /** Unary minus
  *
- * @throws jewel::UnsafeArithmeticException if you try to apply unary
+ * @relates Decimal
+ *
+ * @throws DecimalUnaryMinusException if you try to apply unary
  * minus to a value for which this is unsafe; for example, where the
  * underlying integral representation is \c long, it will be unsafe
  * to take the negative value of the Decimal corresponding to LONG_MIN
@@ -621,10 +642,14 @@ operator>>(std::basic_istream<charT, traits>&, Decimal&);
 Decimal operator-(Decimal const& d);
 
 /** Unary plus
+ *
+ * @relates Decimal
  */
 Decimal operator+(Decimal const& d);
 
 /** Rounding function
+ *
+ * @relates Decimal
  * 
  * @param x The Decimal number to be rounded.
  * @param decimal_places The number of decimal digits after the
@@ -636,7 +661,7 @@ Decimal operator+(Decimal const& d);
  * If this cannot be safely done an exception will be thrown.
  *
  * @returns A decimal number by value (distinct from x, which is not changed).
- * @exception UnsafeArithmeticException thrown if achieving the requested
+ * @exception DecimalPrecisionException thrown if achieving the requested
  * degree of precision would cause overflow.
  */
 Decimal round(Decimal const& x, Decimal::places_type decimal_places);
@@ -772,6 +797,7 @@ template <typename charT, typename traits>
 std::basic_istream<charT, traits>&
 operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 {
+	Decimal orig = d;
 	std::string str;
 	is >> str;
 	if (is)
@@ -780,8 +806,9 @@ operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 		{	
 			d = Decimal(str);
 		}
-		catch (UnsafeArithmeticException&)
+		catch (DecimalException&)
 		{
+			d = orig;
 			// Record error in stream
 			is.setstate(std::ios::failbit);
 			return is;

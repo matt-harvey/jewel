@@ -83,7 +83,7 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 	{
 		if (x.rescale(y.m_places) != 0)
 		{
-			throw UnsafeArithmeticException
+			throw DecimalPrecisionException
 			(	"Unsafe attempt to set fractional precision in course "
 				"of co-normalization attempt."
 			);
@@ -94,7 +94,7 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 		assert (y.m_places < x.m_places);
 		if (y.rescale(x.m_places) != 0)
 		{
-			throw UnsafeArithmeticException
+			throw DecimalPrecisionException
 			(	"Unsafe attempt to set fractional precision in course "
 				"of co-normalization attempt."
 			);
@@ -198,7 +198,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	{
 		assert (m_intval == 0);
 		assert (m_places == 0);
-		throw UnsafeArithmeticException
+		throw DecimalFromStringException
 		(	"Cannot construct Decimal from an empty string"
 		);
 	}
@@ -227,7 +227,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 		{
 			assert (m_intval == 0);
 			assert (m_places == 0);
-			throw UnsafeArithmeticException
+			throw DecimalFromStringException
 			(	"Invalid string passed "
 				"to Decimal constructor."
 			);
@@ -259,7 +259,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 			{
 				assert (m_intval == 0);
 				assert (m_places == 0);
-				throw UnsafeArithmeticException
+				throw DecimalFromStringException
 				(	"Invalid string passed to"
 					" Decimal constructor."
 				);
@@ -273,7 +273,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	{
 		assert (m_intval == 0);
 		assert (m_places == 0);
-		throw UnsafeArithmeticException
+		throw DecimalPrecisionException
 		(	"Attempt to set m_places "
 			"to a value exceeding that returned by "
 			"Decimal::maximum_precision()."
@@ -289,7 +289,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	{
 		m_intval = 0;
 		assert (m_places == 0);
-		throw UnsafeArithmeticException
+		throw DecimalSizeException
 		(	"Cannot create a Decimal as large as"
 			" is implied by this string."
 		);
@@ -386,7 +386,9 @@ Decimal const& Decimal::operator++()
 	#endif
 	if (addition_is_unsafe(m_intval, implicit_divisor()))
 	{
-		throw UnsafeArithmeticException("Addition may cause overflow.");
+		throw DecimalIncrementationException
+		(	"Incrementation may cause overflow."
+		);
 	}
 	m_intval += implicit_divisor();
 	assert (m_places >= benchmark_places);
@@ -403,8 +405,8 @@ Decimal const& Decimal::operator--()
 	#endif
 	if (subtraction_is_unsafe(m_intval, implicit_divisor()))
 	{
-		throw UnsafeArithmeticException
-		(	"Subtraction may cause "
+		throw DecimalDecrementationException
+		(	"Decrementation may cause "
 			"overflow."
 		);
 	}
@@ -426,7 +428,7 @@ Decimal& Decimal::operator+=(Decimal rhs)
 	if (addition_is_unsafe(m_intval, rhs.m_intval))
 	{
 		*this = orig;
-		throw UnsafeArithmeticException("Addition may cause overflow.");
+		throw DecimalAdditionException("Addition may cause overflow.");
 	}
 	m_intval += rhs.m_intval;
 	assert (m_places >= benchmark_places);
@@ -445,7 +447,7 @@ Decimal& Decimal::operator-=(Decimal rhs)
 	if (subtraction_is_unsafe(m_intval, rhs.m_intval))
 	{
 		*this = orig;
-		throw UnsafeArithmeticException("Subtraction may cause overflow.");
+		throw DecimalSubtractionException("Subtraction may cause overflow.");
 	}
 	m_intval -= rhs.m_intval;
 	assert (m_places >= benchmark_places);
@@ -463,7 +465,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	if (*this == minimum() || rhs == minimum())
 	{
 		assert (*this == orig);
-		throw UnsafeArithmeticException
+		throw DecimalMultiplicationException
 		(	"Cannot multiply smallest possible "
 			"Decimal safely."
 		);
@@ -495,7 +497,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	}
 
 	*this = orig;
-	throw UnsafeArithmeticException("Unsafe multiplication.");
+	throw DecimalMultiplicationException("Unsafe multiplication.");
 	assert (false);  // Execution should never reach here.
 	return *this;    // Silence compiler re. return from non-void function.
 
@@ -514,7 +516,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	if (rhs.m_intval == 0)
 	{
 		assert (*this == orig);
-		throw (UnsafeArithmeticException("Division by zero"));
+		throw (DecimalDivisionByZeroException("Division by zero."));
 	}
 	
 	// To prevent complications
@@ -522,7 +524,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	  rhs.m_intval == numeric_limits<int_type>::min() )
 	{
 		assert (*this == orig);
-		throw UnsafeArithmeticException
+		throw DecimalDivisionException
 		(	"Smallest possible Decimal cannot "
 			"feature in division operation."
 		);
@@ -531,7 +533,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	if (NumDigits::num_digits(rhs.m_intval) == maximum_precision())
 	{
 		assert (*this == orig);
-		throw UnsafeArithmeticException
+		throw DecimalDivisionException
 		(	"Dividend has a number of significant"
 		 	"digits that is greater than or equal to the return value of "
 			"Decimal::maximum_precision(); as a result, division cannot be "
@@ -557,7 +559,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	{
 		// We can't rescale high enough to proceed, so reset and throw
 		*this = orig;
-		throw (UnsafeArithmeticException("Unsafe division."));
+		throw (DecimalDivisionException("Unsafe division."));
 	}
 	assert (m_places >= rhs.m_places);
 
@@ -640,7 +642,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		if (addition_is_unsafe(m_intval, NUM_CAST<int_type>(1)))
 		{
 			*this = orig;
-			throw UnsafeArithmeticException("Unsafe division.");
+			throw DecimalDivisionException("Unsafe division.");
 		}
 		// Do the rounding, it's safe
 		++m_intval;
@@ -768,7 +770,7 @@ Decimal round(Decimal const& x, Decimal::places_type decimal_places)
 	Decimal ret = x;
 	if (ret.rescale(decimal_places) != 0)
 	{	
-		throw UnsafeArithmeticException
+		throw DecimalPrecisionException
 		(	"Decimal number cannot "
 			"safely be rounded to this number of places."
 		);
@@ -781,7 +783,7 @@ Decimal operator-(Decimal const& d)
 {
 	if (d.m_intval == numeric_limits<Decimal::int_type>::min())
 	{
-		throw UnsafeArithmeticException
+		throw DecimalUnaryMinusException
 		(	"Unsafe arithmetic "
 			"operation (unary minus)."
 		);

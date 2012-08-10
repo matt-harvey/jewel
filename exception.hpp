@@ -28,13 +28,13 @@ namespace jewel
  * error message associated with an exception in a \c std::string.
  * Note that instances of this class will store a copy of the
  * entire error message passed to the constructor, not just a pointer thereto.
- *
- * @todo Test exact point of truncation.
+ * 
+ * @todo HIGH PRIORIY Test exact point of truncation.
  */
 class Exception: public virtual std::exception
 {
 	Exception const operator=(Exception const&);
-	static size_t const s_message_buffer_size = 350;
+	static size_t const s_message_buffer_size = 200;
 	static char const* s_truncation_flag;
 	char m_message[s_message_buffer_size];
 public:
