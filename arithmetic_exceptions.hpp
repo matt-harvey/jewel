@@ -34,8 +34,7 @@ namespace jewel
 {
 
 JEWEL_DERIVED_EXCEPTION(DecimalException, Exception);
-	JEWEL_DERIVED_EXCEPTION(DecimalPrecisionException, DecimalException);
-	JEWEL_DERIVED_EXCEPTION(DecimalSizeException, DecimalException);
+	JEWEL_DERIVED_EXCEPTION(DecimalRangeException, DecimalException);
 	JEWEL_DERIVED_EXCEPTION(DecimalAdditionException, DecimalException);
 	JEWEL_DERIVED_EXCEPTION(DecimalSubtractionException, DecimalException);
 	JEWEL_DERIVED_EXCEPTION(DecimalMultiplicationException, DecimalException);

@@ -14,6 +14,17 @@ using boost::lexical_cast;
 using jewel::Decimal;
 using jewel::NumDigits;
 using jewel::DecimalException;
+using jewel::DecimalRangeException;
+using jewel::DecimalAdditionException;
+using jewel::DecimalSubtractionException;
+using jewel::DecimalMultiplicationException;
+using jewel::DecimalDivisionException;
+using jewel::DecimalDivisionByZeroException;
+using jewel::DecimalIncrementationException;
+using jewel::DecimalDecrementationException;
+using jewel::DecimalUnaryMinusException;
+using jewel::DecimalFromStringException;
+using jewel::DecimalStreamReadException;
 using jewel::round;
 using std::cin;
 using std::cout;
@@ -134,6 +145,7 @@ DigitStringFixture::DigitStringFixture()
 	add_digit(s_max_digits_plus_one);
 	assert (s_max_digits_plus_one.size() ==
 	  static_cast<string::size_type>(max_digits + 1));
+	s_neg_max_digits_plus_one = "-" + s_max_digits_plus_one;
 	ostringstream ossmax;
 	ossmax << maxi;
 	s_max_int_type = ossmax.str();
@@ -193,25 +205,37 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	
 	// Test behaviour with empty string
 	CHECK_THROW(Decimal d10(""), DecimalException);
+	CHECK_THROW(Decimal d10(""), DecimalFromStringException);
 
 	// Test behaviour with prohibited characters in string
 	CHECK_THROW(Decimal d11("9.90b0"), DecimalException);
+	CHECK_THROW(Decimal d11("9.90b0"), DecimalFromStringException);
+	CHECK_THROW(Decimal d12("7,8"), DecimalFromStringException);
 	CHECK_THROW(Decimal d12("6,8"), DecimalException);
-	CHECK_THROW(Decimal d13("Llama"), DecimalException);
-	CHECK_THROW(Decimal d13b("9.0.3"), DecimalException);
-	CHECK_THROW(Decimal d13c("-79-"), DecimalException);
-	CHECK_THROW(Decimal d13d("0-0"), DecimalException);
+	CHECK_THROW(Decimal d13("Llama"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13b("9.0.3"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13c("-79-"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13c("-78-"), DecimalException);
+	CHECK_THROW(Decimal d13d("0-0"), DecimalFromStringException);
 	
 	// Test behaviour with attempted Decimal having too large a would-be
 	// underlying integer.
 	CHECK_THROW
 	(	Decimal d100(s_max_digits_plus_one),
+		DecimalRangeException
+	);
+	CHECK_THROW
+	(	Decimal d100(s_max_digits_plus_one),
 		DecimalException
 	);
 	string even_longer = s_max_digits_plus_one + "00";
-	CHECK_THROW(Decimal d101(even_longer), DecimalException);
-	CHECK_THROW(Decimal d102(s_neg_max_digits_plus_one),
-	  DecimalException);
+	CHECK_THROW(Decimal d101(even_longer), DecimalRangeException);
+	CHECK_THROW
+	(	Decimal d102(s_neg_max_digits_plus_one), DecimalRangeException
+	);
+	CHECK_THROW
+	(	Decimal d102(s_neg_max_digits_plus_one), DecimalException
+	);
 	// These should be OK though
 	Decimal d103(s_max_digits_one_and_zeroes);
 	Decimal d104(s_neg_max_digits_one_and_zeroes);
@@ -220,10 +244,15 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	Decimal d107(s_max_int_type);
 	Decimal d108(s_min_int_type);
 	// These should throw
-	CHECK_THROW(Decimal d109(s_max_digits_plus_one_places_2),
-	  DecimalException);
-	CHECK_THROW(Decimal d110(s_neg_max_digits_plus_one_places_2),
-	  DecimalException);
+	CHECK_THROW
+	(	Decimal d109(s_max_digits_plus_one_places_2), DecimalRangeException
+	);
+	CHECK_THROW
+	(	Decimal d110(s_neg_max_digits_plus_one_places_2), DecimalException
+	);
+	CHECK_THROW
+	(	Decimal d110(s_neg_max_digits_plus_one_places_2), DecimalRangeException
+	);
 	// These should be OK
 	Decimal d111(s_max_digits_one_and_zeroes_places_2);
 	Decimal d112(s_neg_max_digits_one_and_zeroes_places_2);

@@ -227,14 +227,18 @@ public:
 	 *   non-digit characters (other than '-' and '.', at the
 	 *   appropriate point) are included in the string.
 	 * 
-	 * @exception DecimalPrecisionException is thrown if \c str is otherwise
+	 * @exception DecimalRangeException is thrown if \c str is otherwise
 	 *   valid, but
 	 *   the position of the decimal point implies a number of decimal places
 	 *   greater than the value returned by Decimal::maximum_precision().
 	 *
-	 * @exception DecimalSizeException thrown if the implied Decimal number
-	 *   would be required to exceed the maximum of the underlying integral
-	 *   representation.
+	 * @exception DecimalRangeException also thrown if the implied Decimal
+	 *   number would be required to exceed the maximum of the underlying
+	 *   integral representation.
+	 *
+	 * @todo The above exceptions are not being thrown exactly as expected.
+	 * Either collapse them all into one exception type, or fix them so they
+	 * throw as expected.
 	 *
 	 * Trailing zeroes to the right of the decimal point in the passed string
 	 * influence the number of digits of fractional precision stored in the
@@ -256,9 +260,9 @@ public:
 
 	/**
 	 * @exception DecimalAdditionException thrown if addition
-	 * would cause overflow
+	 * would cause overflow.
 	 *
-	 * @exception DecimalPrecisionException thrown if fractional precision
+	 * @exception DecimalRangeException thrown if fractional precision
 	 * cannot be maintained at the same level as that of the more precise
 	 * of the two numbers being
 	 * added. This ensures that - unlike in unchecked floating point
@@ -282,7 +286,7 @@ public:
 	 * @exception DecimalSubtractionException is thrown if
 	 * subtraction would cause overflow.
 	 *
-	 * @exception DecimalPrecisionException is thrown if fractional precision
+	 * @exception DecimalRangeException is thrown if fractional precision
 	 * cannot be maintained
 	 * at the same level as that of the more precise of the two numbers
 	 * involved (the minuend and the subrahend).
@@ -566,7 +570,7 @@ private:
 	 * as the one with the greater number of places (while rescaling to
 	 * maintain the same order of magnitude).
 	 *
-	 * @throws DecimalPrecisionException if the operation would cause
+	 * @throws DecimalRangeException if the operation would cause
 	 * overflow.
 	 */
 	static void co_normalize(Decimal&, Decimal&);
@@ -661,7 +665,7 @@ Decimal operator+(Decimal const& d);
  * If this cannot be safely done an exception will be thrown.
  *
  * @returns A decimal number by value (distinct from x, which is not changed).
- * @exception DecimalPrecisionException thrown if achieving the requested
+ * @exception DecimalRangeException thrown if achieving the requested
  * degree of precision would cause overflow.
  */
 Decimal round(Decimal const& x, Decimal::places_type decimal_places);

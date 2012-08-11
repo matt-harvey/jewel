@@ -83,7 +83,7 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 	{
 		if (x.rescale(y.m_places) != 0)
 		{
-			throw DecimalPrecisionException
+			throw DecimalRangeException
 			(	"Unsafe attempt to set fractional precision in course "
 				"of co-normalization attempt."
 			);
@@ -94,7 +94,7 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 		assert (y.m_places < x.m_places);
 		if (y.rescale(x.m_places) != 0)
 		{
-			throw DecimalPrecisionException
+			throw DecimalRangeException
 			(	"Unsafe attempt to set fractional precision in course "
 				"of co-normalization attempt."
 			);
@@ -273,7 +273,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	{
 		assert (m_intval == 0);
 		assert (m_places == 0);
-		throw DecimalPrecisionException
+		throw DecimalRangeException
 		(	"Attempt to set m_places "
 			"to a value exceeding that returned by "
 			"Decimal::maximum_precision()."
@@ -289,9 +289,9 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	{
 		m_intval = 0;
 		assert (m_places == 0);
-		throw DecimalSizeException
-		(	"Cannot create a Decimal as large as"
-			" is implied by this string."
+		throw DecimalRangeException
+		(	"Attempt to create Decimal that is either too large, too small "
+			"or too precise than is supported by the Decimal implementation."
 		);
 	}
 	m_places = NUM_CAST<places_type>(spot_position);
@@ -770,7 +770,7 @@ Decimal round(Decimal const& x, Decimal::places_type decimal_places)
 	Decimal ret = x;
 	if (ret.rescale(decimal_places) != 0)
 	{	
-		throw DecimalPrecisionException
+		throw DecimalRangeException
 		(	"Decimal number cannot "
 			"safely be rounded to this number of places."
 		);
