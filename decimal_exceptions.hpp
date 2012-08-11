@@ -1,25 +1,12 @@
-#ifndef GUARD_arithmetic_exceptions_hpp
-#define GUARD_arithmetic_exceptions_hpp
+#ifndef GUARD_decimal_exceptions_hpp
+#define GUARD_decimal_exceptions_hpp
 
-/** \file arithmetic_exceptions.hpp
+/** \file decimal_exceptions.hpp
  *
  * \brief Exceptions to be used with jewel::Decimal class
  *
  * \author Matthew Harvey
  * \date 15 May 2012
- *
- * Exceptions to be thrown if there is an attempt to perform unsafe
- * arithmetic.
-
- * @todo HIGH PRIORITY Work through decimal.hpp making functions
- * throw the finer-grained exception classes derived from
- * DecimalException. (Done.) Document accordingly (done) and test
- * accordingly (not yet done). (I have tested that the base
- * DecimalException exception is thrown in the right places, but the
- * tests currently do not test the finer grained exception classes.)
- * Then change this header from
- * "arithmetic_exceptions.hpp" to "decimal_exception.hpp". Make sure that
- * no-one other than jewel::Decimal is using this header though!
  *
  * Copyright (c) 2012, Matthew Harvey. All rights reserved.
  */
@@ -53,6 +40,6 @@ JEWEL_DERIVED_EXCEPTION(DecimalException, Exception);
 
 }  // namespace jewel
 
-#endif  // GUARD_arithmetic_exceptions_hpp
+#endif  // GUARD_decimal_exceptions_hpp
 
 

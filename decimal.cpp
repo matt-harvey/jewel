@@ -1,5 +1,5 @@
 #include "decimal.hpp"
-#include "arithmetic_exceptions.hpp"
+#include "decimal_exceptions.hpp"
 #include "checked_arithmetic.hpp"
 #include "num_digits.hpp"  // for num_digits
 

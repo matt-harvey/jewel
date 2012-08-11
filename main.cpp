@@ -1,6 +1,6 @@
 #include <unittest++/UnitTest++.h>
 #include <boost/numeric/conversion/cast.hpp>
-#include "arithmetic_exceptions.hpp"
+#include "decimal_exceptions.hpp"
 #include "checked_arithmetic.hpp"
 #include "decimal.hpp"
 #include "decimal_special_tests.hpp"

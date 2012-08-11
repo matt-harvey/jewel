@@ -13,7 +13,7 @@
 
 
 
-#include "arithmetic_exceptions.hpp"
+#include "decimal_exceptions.hpp"
 #include <boost/archive/xml_oarchive.hpp>  // for BOOST_SERIALIZATION_NVP
 #include <boost/cstdint.hpp>
 #include <boost/exception/all.hpp>

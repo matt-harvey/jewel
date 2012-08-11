@@ -30,7 +30,7 @@ install(TARGETS
 		/home/matthew/lib/jewel)
 
 install(FILES
-        arithmetic_exceptions.hpp
+        decimal_exceptions.hpp
 		checked_arithmetic.hpp
 		checked_arithmetic_detail.hpp
 		debug_log.hpp
