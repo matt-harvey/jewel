@@ -223,7 +223,7 @@ public:
 	 * Examples of non-accepted strings: "10e2", "12312.23413434123424".
 	 *
 	 * @exception DecimalFromStringException is thrown if:\n
-	 *   an empty string is passed to \c str;\n
+	 *   an empty string is passed to \c str; or\n
 	 *   non-digit characters (other than '-' and '.', at the
 	 *   appropriate point) are included in the string.
 	 * 
@@ -235,10 +235,6 @@ public:
 	 * @exception DecimalRangeException also thrown if the implied Decimal
 	 *   number would be required to exceed the maximum of the underlying
 	 *   integral representation.
-	 *
-	 * @todo The above exceptions are not being thrown exactly as expected.
-	 * Either collapse them all into one exception type, or fix them so they
-	 * throw as expected.
 	 *
 	 * Trailing zeroes to the right of the decimal point in the passed string
 	 * influence the number of digits of fractional precision stored in the
