@@ -18,7 +18,7 @@
  * of the line, is effectively compiled away to nothing.
  */
 #ifdef DEBUG
-	#define JEWEL_DEBUG_LOG std::clog
+	#define JEWEL_DEBUG_LOG std::clog << "  LOG: "
 #else
 	#define JEWEL_DEBUG_LOG 0 && std::clog
 #endif
