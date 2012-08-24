@@ -213,6 +213,16 @@ public:
 	 */
 	Decimal();
 
+	/**
+	 * Constructs a Decimal with an underlying integer of
+	 * p_intval and with p_places decimal places to the right
+	 * of the spot.
+	 *
+	 * @exception DecimalRangeException thrown if p_places
+	 * exceeds the value returned by Decimal::maximum_precision().
+	 */
+	Decimal(int_type m_intval, places_type p_places);
+
 	/** Constructs a Decimal from a string.
 	 *
 	 * @param str is the string representation of a Decimal
@@ -673,7 +683,6 @@ Decimal round(Decimal const& x, Decimal::places_type decimal_places);
 // IMPLEMENTATIONS
 
 
-// Contructor with no parameters
 inline
 Decimal::Decimal(): m_intval(0), m_places(0)
 {

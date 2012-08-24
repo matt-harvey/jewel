@@ -175,6 +175,23 @@ Decimal::rationalize(places_type min_places)
 }
 
 
+Decimal::Decimal(int_type p_intval, places_type p_places):
+	m_intval(p_intval),
+	m_places(p_places)
+{
+	if (m_places > s_max_places)
+	{
+		m_intval = 0;
+		m_places = 0;
+		throw DecimalRangeException
+		(	"Attempt to construct Decimal with precision greater"
+			" than maximum precision."
+		);
+	}
+}
+
+
+
 Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 {
 	// Writing through iterators here to make it as fast as I reasonably

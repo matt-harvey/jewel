@@ -190,6 +190,24 @@ TEST(decimal_parameterless_constructor)
 	CHECK_EQUAL(d0 - d0, d0);
 }
 
+
+TEST(decimal_direct_constructor)
+{
+	Decimal d0(0, 1);
+	CHECK_EQUAL(d0.places(), 1);
+	CHECK_EQUAL(d0.intval(), 0);
+	Decimal d1(-123074, 3);
+	CHECK_EQUAL(d1, Decimal("-123.074"));
+	CHECK_THROW
+	(	Decimal(1, Decimal::maximum_precision() + 1),
+		DecimalRangeException
+	);
+	Decimal d2(9000089, Decimal::maximum_precision());
+	CHECK_EQUAL(d2.intval(), 9000089);
+	CHECK_EQUAL(d2.places(), Decimal::maximum_precision());
+}
+
+
 TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 {
 	// Test basic functionality
