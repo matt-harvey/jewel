@@ -25,6 +25,9 @@ namespace jewel
  * Use this class to create a Stopwatch, then later call its log() method
  * or its seconds_elapsed() method to find the number of seconds elapsed since
  * the creation of the Stopwatch.
+ *
+ * @todo HIGH PRIORITY For very long timings (longer than a few seconds) this
+ * seems to be failing.
  */
 class Stopwatch
 {

@@ -3,6 +3,7 @@
 #include "checked_arithmetic.hpp"
 #include "num_digits.hpp"  // for num_digits
 
+#include <boost/lexical_cast.hpp>
 #include <algorithm>
 #include <cassert>
 #include <cmath>    // for pow
