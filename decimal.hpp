@@ -217,6 +217,8 @@ public:
 
 	/** 
 	 * Initializes the Decimal to 0, with 0 decimal places.
+	 *
+	 * Offers the <b>nothrow guarantee</b>.
 	 */
 	Decimal();
 
@@ -227,6 +229,8 @@ public:
 	 *
 	 * @exception DecimalRangeException thrown if p_places
 	 * exceeds the value returned by Decimal::maximum_precision().
+	 *
+	 * Offers the <b>strong exception safety guarantee</b>.
 	 */
 	Decimal(int_type m_intval, places_type p_places);
 
@@ -234,6 +238,12 @@ public:
 	 *
 	 * @param str is the string representation of a Decimal
 	 * number.
+	 *
+	 * Currently str must be a possibly empty series of digits
+	 * between 0 and 9 inclusive, possibly preceded by a minus
+	 * sign, possibly followed by a spot ('.'), possibly followed
+	 * by further digits between 0 and 9 inclusive. There must be
+	 * at least one digit in the string.
 	 * 
 	 * Examples of accepted strings: "10", "0.0012", "-1.3", ".234".
 	 *
@@ -260,6 +270,8 @@ public:
 	 * <tt> Decimal("0.00") == Decimal("0") </tt>.
 	 * Note leading negative signs in front of \c Decimal("0") or its
 	 * equivalents are \e not stored.
+	 *
+	 * Offers the <b>strong exception safety guarantee</b>.
 	 */
 	explicit Decimal(std::string const& str);
 
@@ -267,7 +279,8 @@ public:
 
 	/**
 	 * Assigns by value.
-	 * Does not throw.
+	 *
+	 * Offers the <b>nothrow guarantee</b>.
 	 */
 	Decimal& operator=(Decimal const&);
 

@@ -180,10 +180,13 @@ Decimal::Decimal(int_type p_intval, places_type p_places):
 	m_intval(p_intval),
 	m_places(p_places)
 {
+	assert (s_max_places == maximum_precision());
 	if (m_places > s_max_places)
 	{
-		m_intval = 0;
-		m_places = 0;
+		// There is no point setting m_intval and m_places to 0 (or any other
+		// other valid value) here, since the Decimal instance is not going
+		// to be created - nothing will be able to refer to it after this
+		// exception is thrown.
 		throw DecimalRangeException
 		(	"Attempt to construct Decimal with precision greater"
 			" than maximum precision."
@@ -214,8 +217,6 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	typedef string::size_type sz_t;
 	if (str.empty())
 	{
-		assert (m_intval == 0);
-		assert (m_places == 0);
 		throw DecimalFromStringException
 		(	"Cannot construct Decimal from an empty string"
 		);
@@ -227,7 +228,7 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	// as we won't hold the spot in str_rep.
 	string str_rep(str_size, '\0');
 
-	string::const_iterator si = str.begin();  // We'll through from this
+	string::const_iterator si = str.begin();  // We'll read through from this
 	string::iterator ri = str_rep.begin();    // And write through this
 
 	if (*si == '-')
@@ -243,8 +244,6 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 		assert (si < str_end);
 		if (!isdigit(*si))  // Note: this is fairly cheap.
 		{
-			assert (m_intval == 0);
-			assert (m_places == 0);
 			throw DecimalFromStringException
 			(	"Invalid string passed "
 				"to Decimal constructor."
@@ -289,12 +288,16 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	}
 	if (spot_position > s_max_places)
 	{
-		assert (m_intval == 0);
-		assert (m_places == 0);
 		throw DecimalRangeException
 		(	"Attempt to set m_places "
 			"to a value exceeding that returned by "
 			"Decimal::maximum_precision()."
+		);
+	}
+	if (str_rep.empty() || str_rep == "-")
+	{
+		throw DecimalFromStringException
+		(	"Attempt to create a Decimal without any digits."
 		);
 	}
 	try
@@ -305,8 +308,6 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	}
 	catch (bad_lexical_cast&)
 	{
-		m_intval = 0;
-		assert (m_places == 0);
 		throw DecimalRangeException
 		(	"Attempt to create Decimal that is either too large, too small "
 			"or too precise than is supported by the Decimal implementation."

@@ -205,6 +205,20 @@ TEST(decimal_direct_constructor)
 	Decimal d2(9000089, Decimal::maximum_precision());
 	CHECK_EQUAL(d2.intval(), 9000089);
 	CHECK_EQUAL(d2.places(), Decimal::maximum_precision());
+	Decimal d3(-329, Decimal::maximum_precision());
+	CHECK(d3 != Decimal(0, 0));
+	Decimal d4(1, Decimal::maximum_precision());
+	CHECK(d4 != Decimal(0, 0));
+	Decimal d5(109, 3);
+	try
+	{
+		d5 = Decimal(3, Decimal::maximum_precision() + 100);
+	}
+	catch (DecimalRangeException&)
+	{
+		CHECK_EQUAL(d5, Decimal(109, 3));
+	}
+	CHECK_EQUAL(d5, Decimal(109, 3));
 }
 
 
@@ -220,10 +234,22 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	Decimal d1("-908.234");
 	CHECK(d0 != d1);
 	CHECK_EQUAL(d1, Decimal("-908.23400"));
-	
+
 	// Test behaviour with empty string
 	CHECK_THROW(Decimal d10(""), DecimalException);
 	CHECK_THROW(Decimal d10(""), DecimalFromStringException);
+
+	// Test behaviour with very short digitless strings
+	CHECK_THROW(Decimal d10b("."), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b("."), DecimalException);
+	CHECK_THROW(Decimal d10b("-"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b("-"), DecimalException);
+	CHECK_THROW(Decimal d10b("-."), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b("-."), DecimalException);
+	CHECK_THROW(Decimal d10b(".-"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(".-"), DecimalException);
+	CHECK_THROW(Decimal d10b(".."), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b("--"), DecimalFromStringException);
 
 	// Test behaviour with prohibited characters in string
 	CHECK_THROW(Decimal d11("9.90b0"), DecimalException);
