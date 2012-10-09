@@ -1,7 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
 project (main)
-include_directories (/home/matthew/lib/jewel)
-link_directories (/home/matthew/lib/jewel)
 add_executable (main 
                 main.cpp
                 checked_arithmetic_detail.cpp
