@@ -263,6 +263,10 @@ public:
 	 *   number would be required to exceed the maximum of the underlying
 	 *   integral representation.
 	 *
+	 * @exception std::bad_alloc may be thrown - but this is unlikely - since
+	 * the implementation of this function involves the construction of a
+	 * std::string.
+	 *
 	 * Trailing zeroes to the right of the decimal point in the passed string
 	 * influence the number of digits of fractional precision stored in the
 	 * resulting Decimal. So \c Decimal("0.00") is stored with two digits of
@@ -271,7 +275,7 @@ public:
 	 * Note leading negative signs in front of \c Decimal("0") or its
 	 * equivalents are \e not stored.
 	 *
-	 * Excpetion safety: <em>strong guarantee</em>.
+	 * Exception safety: <em>strong guarantee</em>.
 	 */
 	explicit Decimal(std::string const& str);
 
