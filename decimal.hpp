@@ -286,7 +286,10 @@ public:
 
 	/**
 	 * @exception DecimalAdditionException thrown if addition
-	 * would cause overflow.
+	 * would cause overflow. If this occurs, the left hand operand
+	 * will be unchanged from
+	 * its original value (and the right hand operand, as it is passed by
+	 * value, will also be unchanged).
 	 *
 	 * @exception DecimalRangeException thrown if fractional precision
 	 * cannot be maintained at the same level as that of the more precise
@@ -294,7 +297,9 @@ public:
 	 * added. This ensures that - unlike in unchecked floating point
 	 * arithmetic - adding two non-zero Decimals is always yield a Decimal
 	 * that is equal to neither of the original Decimals (or else will throw
-	 * an exception).
+	 * an exception). If this exception is thrown, the left hand operand will
+	 * be unchanged from its original value (as will the right hand operand,
+	 * since it is passed by value).
 	 * 
 	 * Note trailing fractional zeroes are never "rationalized away" from the
 	 * result. Stored fractional precision is always maintained at the level
@@ -305,6 +310,8 @@ public:
 	 * \b operator+(Decimal, Decimal) is also defined (through the magic of
 	 * Boost). It behaves as expected, and will throw exceptions under
 	 * the same circumstances.
+	 *
+	 * Exception safety: <em>strong guarantee</em>.
 	 */	
 	Decimal& operator+=(Decimal);
 

@@ -395,12 +395,28 @@ TEST_FIXTURE(DigitStringFixture, decimal_plus_equals)
 	}
 	catch (DecimalRangeException&)
 	{
+		CHECK_EQUAL(d13, Decimal("-.900009"));
 	}
 	CHECK_EQUAL(d13, Decimal("-.900009"));
 	Decimal d14("-0." + s_max_digits_less_one);
 	CHECK_THROW(d14 += Decimal("29"), DecimalException);
 	
 	// With straightforward overflow
+	Decimal d15 = Decimal::maximum() - Decimal("100");
+	Decimal const d15_orig = d15;
+	Decimal d15b("101");
+	CHECK_THROW(d15 += d15b, DecimalAdditionException);
+	// Check original value unchanged after exception thrown
+	CHECK_EQUAL(d15, d15_orig);
+	try
+	{
+		d15 += d15b;
+	}
+	catch (DecimalAdditionException&)
+	{
+		CHECK_EQUAL(d15, d15_orig);
+	}
+	CHECK_EQUAL(d15, d15_orig);
 	ostringstream oss;
 	oss << numeric_limits<int_type>::max() / 11;
 	Decimal large_num(oss.str());
