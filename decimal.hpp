@@ -218,7 +218,7 @@ public:
 	/** 
 	 * Initializes the Decimal to 0, with 0 decimal places.
 	 *
-	 * Offers the <b>nothrow guarantee</b>.
+	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
 	Decimal();
 
@@ -230,7 +230,7 @@ public:
 	 * @exception DecimalRangeException thrown if p_places
 	 * exceeds the value returned by Decimal::maximum_precision().
 	 *
-	 * Offers the <b>strong exception safety guarantee</b>.
+	 * Exception safety: <em>strong guarantee</em>.
 	 */
 	Decimal(int_type m_intval, places_type p_places);
 
@@ -271,7 +271,7 @@ public:
 	 * Note leading negative signs in front of \c Decimal("0") or its
 	 * equivalents are \e not stored.
 	 *
-	 * Offers the <b>strong exception safety guarantee</b>.
+	 * Excpetion safety: <em>strong guarantee</em>.
 	 */
 	explicit Decimal(std::string const& str);
 
@@ -280,7 +280,7 @@ public:
 	/**
 	 * Assigns by value.
 	 *
-	 * Offers the <b>nothrow guarantee</b>.
+	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
 	Decimal& operator=(Decimal const&);
 
