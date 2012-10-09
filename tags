@@ -5,6 +5,7 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
 CheckedArithmetic	checked_arithmetic_detail.hpp	/^class CheckedArithmetic$/;"	c	namespace:jewel::detail
+Decimal	decimal.cpp	/^Decimal::Decimal(int_type p_intval, places_type p_places):$/;"	f	class:jewel::Decimal
 Decimal	decimal.cpp	/^Decimal::Decimal(string const& str): m_intval(0), m_places(0)$/;"	f	class:jewel::Decimal
 Decimal	decimal.hpp	/^Decimal::Decimal(): m_intval(0), m_places(0)$/;"	f	class:jewel::Decimal
 Decimal	decimal.hpp	/^class Decimal:$/;"	c	namespace:jewel
@@ -28,7 +29,7 @@ GUARD_stopwatch_hpp	stopwatch.hpp	2;"	d
 JEWEL_DEBUG_LOG	debug_log.hpp	21;"	d
 JEWEL_DEBUG_LOG	debug_log.hpp	23;"	d
 JEWEL_DERIVED_EXCEPTION	exception.hpp	65;"	d
-NUM_CAST	decimal.cpp	23;"	d	file:
+NUM_CAST	decimal.cpp	24;"	d	file:
 NumDigits	num_digits.hpp	/^class NumDigits$/;"	c	namespace:jewel
 PowerVectorFixture1	power_vector_tests.cpp	/^PowerVectorFixture1::PowerVectorFixture1()$/;"	f	class:PowerVectorFixture1
 PowerVectorFixture1	power_vector_tests.cpp	/^struct PowerVectorFixture1$/;"	s	file:
@@ -62,6 +63,7 @@ TEST	checked_arithmetic_tests.cpp	/^TEST(checked_arithmetic_subtraction_is_unsaf
 TEST	checked_arithmetic_tests.cpp	/^TEST(checked_arithmetic_subtraction_is_unsafe_unsigned_short)$/;"	f
 TEST	decimal_tests.cpp	/^TEST(decimal_assignment)$/;"	f
 TEST	decimal_tests.cpp	/^TEST(decimal_decrement)$/;"	f
+TEST	decimal_tests.cpp	/^TEST(decimal_direct_constructor)$/;"	f
 TEST	decimal_tests.cpp	/^TEST(decimal_increment)$/;"	f
 TEST	decimal_tests.cpp	/^TEST(decimal_intval)$/;"	f
 TEST	decimal_tests.cpp	/^TEST(decimal_maximum)$/;"	f

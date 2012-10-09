@@ -603,6 +603,20 @@ TEST_FIXTURE(DigitStringFixture, decimal_minus_equals)
 	Decimal large_neg_num = -large_num;
 	Decimal large_num_b = large_num;
 	Decimal large_neg_num_b = large_neg_num;
+	// Check value unchanged after exception
+	Decimal d14 = Decimal::minimum() + Decimal("999");
+	Decimal const d14_orig = d14;
+	CHECK_THROW(d14 -= Decimal("1000"), DecimalSubtractionException);
+	CHECK_EQUAL(d14, d14_orig);
+	try
+	{
+		d14 -= Decimal("1000");
+	}
+	catch (DecimalSubtractionException&)
+	{
+		CHECK_EQUAL(d14, d14_orig);
+	}
+	CHECK_EQUAL(d14, d14_orig);
 	CHECK_THROW
 	(	for (int i = 0; i != 12; ++i) large_neg_num -= large_num,
 		DecimalSubtractionException

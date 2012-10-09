@@ -27,6 +27,7 @@
 #include <istream>
 #include <ostream>
 #include <string>
+#include <vector>
 
 
 namespace jewel
@@ -341,12 +342,16 @@ public:
 	 * \b operator-(Decimal, Decimal) is also defined (through the magic
 	 * of Boost). It behaves as expected, and will throw the same exceptions
 	 * under the same circumstances.
+	 *
+	 * Exception safety: <em>strong guarantee</em>.
 	 */
 	Decimal& operator-=(Decimal);
 
 	/**
 	 * @exception DecimalMultiplicationException thrown if multiplication
-	 * would cause overflow.
+	 * would cause overflow. If this occurs, the value of the left-hand
+	 * operand will be unchanged from its original value, as will the value
+	 * of the right-hand operand (since it is passed by value).
 	 *
 	 * Currently, for multiplication to be executed safely, it must be
 	 * the case that the underlying integral representations of the Decimals
@@ -370,8 +375,8 @@ public:
 	 * do not count as digits.
 	 *
 	 * Note also the smallest possible Decimal (the value returned by
-	 * Decimal::minimum()) cannot be multiplied, and an exception is thrown
-	 * if this is attempted.
+	 * Decimal::minimum()) cannot be multiplied, and
+	 * DecimalMultiplicationException is thrown if this is attempted.
 	 *
 	 * The fractional precision of the returned product is never more
 	 * than a number of decimal places to the right
@@ -385,6 +390,8 @@ public:
 	 * \b operator*(Decimal, Decimal) is also defined (through the magic of
 	 * Boost). It behaves as expected, and will throw the same exceptions
 	 * under the same circumstances.
+	 *
+	 * Exception safety: <em>strong guarantee</em>.
 	 */
 	Decimal& operator*=(Decimal);
 
@@ -394,6 +401,10 @@ public:
 	 *
 	 * @exception DecimalDivisionException is thrown if division would cause
 	 * overflow.
+	 *
+	 * If an exception is thrown, the left-hand operand will be unchanged
+	 * from its original value, as will the right-hand operand (since it
+	 * is passed by value).
 	 *
 	 * The precision of the returned quotient is never more than
 	 * a number of decimal places to the right
@@ -442,14 +453,19 @@ public:
 	 * \b operator/(Decimal, Decimal) is also defined (through the magic
 	 * of Boost). It behaves as expected, and will through the same exceptions
 	 * under the same circumstances.
+	 *
+	 * Exception safety: <em>strong guarantee</em>.
 	 */
 	Decimal& operator/=(Decimal);
 
 	/**
 	 * @exception DecimalIncrementationException is thrown if incrementing
-	 * would cause overflow.
+	 * would cause overflow. If this happens, the Decimal will be unchanged
+	 * from its original value.
 	 *
 	 * Incrementing a Decimal never changes its fractional precision.
+	 *
+	 * Exception safety: <em>strong guarantee</em>.
 	 */
 	Decimal const& operator++();  // prefix version
 
@@ -457,6 +473,8 @@ public:
 	 * would cause overflow.
 	 *
 	 * Decrementing a Decimal never changes its fractional precision.
+	 *
+	 * Exception safety: <em>strong guarantee</em>.
 	 */
 	Decimal const& operator--();  // prefix version
 
@@ -590,6 +608,12 @@ private:
 	 * The character used for the decimal point.
 	 */
 	static char const s_spot;
+
+	/**
+	 * Vector for looking up the implicit divisor of a Decimal instance
+	 * based on the value of m_places.
+	 */
+	static std::vector<int_type> s_divisor_lookup;
 
 	/**
 	 * Underlying integer representation of Decimal number.

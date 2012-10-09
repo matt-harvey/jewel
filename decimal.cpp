@@ -71,6 +71,10 @@ Decimal::s_max_places = NumDigits::num_digits
 char const
 Decimal::s_spot = '.';
 
+std::vector<Decimal::int_type>
+Decimal::s_divisor_lookup(Decimal::s_max_places, 0);
+
+
 // static member functions
 
 
@@ -110,28 +114,22 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 Decimal::int_type
 Decimal::implicit_divisor() const
 {	
-	// I could do this with a raw array
-	// if I get desperate for speed.
-	// I could even make the raw array a static
-	// member variable.
-	// But the below is more maintainable if I
-	// later change the underlying integral type.
-	static vector<int_type> lookup_table;
 	static bool calculated_already = false;
 	if (calculated_already)
 	{
-		return lookup_table[m_places];
+		return s_divisor_lookup[m_places];
 	}
 	assert (!calculated_already);
 	int_type next_power = 1;
 	for (size_t j = 0; j != s_max_places; ++j)
 	{
-		lookup_table.push_back(next_power);
+		assert (j < s_divisor_lookup.size());
+		s_divisor_lookup[j] = next_power;
 		next_power *= s_base;
 	}
-	assert (lookup_table.size() == s_max_places);
+	assert (s_divisor_lookup.size() == s_max_places);
 	calculated_already = true;
-	return lookup_table[m_places];
+	return s_divisor_lookup[m_places];
 }
 
 
@@ -402,9 +400,11 @@ Decimal const& Decimal::operator++()
 {
 	#ifndef NDEBUG
 		places_type const benchmark_places = m_places;
+		Decimal const orig = *this;
 	#endif
 	if (addition_is_unsafe(m_intval, implicit_divisor()))
 	{
+		assert (*this == orig);
 		throw DecimalIncrementationException
 		(	"Incrementation may cause overflow."
 		);
@@ -421,9 +421,11 @@ Decimal const& Decimal::operator--()
 {
 	#ifndef NDEBUG
 		places_type const benchmark_places = m_places;
+		Decimal const orig = *this;
 	#endif
 	if (subtraction_is_unsafe(m_intval, implicit_divisor()))
 	{
+		assert (*this == orig);
 		throw DecimalDecrementationException
 		(	"Decrementation may cause "
 			"overflow."
@@ -508,7 +510,12 @@ Decimal& Decimal::operator*=(Decimal rhs)
 		while (m_places > s_max_places)
 		{
 			assert (m_places > 0);
-			rescale(m_places - 1);
+			#ifndef NDEBUG
+				int const check = rescale(m_places - 1);
+				assert (check == 0);
+			#else
+				rescale(m_places - 1);
+			#endif
 		}
 		if (signs_differ) m_intval *= -1;
 		rationalize();
