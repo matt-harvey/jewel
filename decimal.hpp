@@ -492,6 +492,11 @@ public:
 	 *
 	 * @todo LOW PRIORITY
 	 * operator<(Decimal) could probably be made more efficient.
+	 *
+	 * @todo HIGH PRIORITY
+	 * The implementation involves declaring ostringstream and string
+	 * instances. These might throw std::bad_alloc. However the
+	 * comparison operator should be non-throwing.
 	 */
 	bool operator<(Decimal) const;
 

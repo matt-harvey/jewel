@@ -146,8 +146,7 @@ Decimal::whole_part() const
 	// First set to fractional precison of 1.
 	// This should be safe.
 	#ifndef NDEBUG
-		int check = 0;
-		check = temp.rescale(1);
+		int const check = temp.rescale(1);
 		assert (check == 0);		// No error occurred
 	#else
 		temp.rescale(1);
@@ -738,6 +737,8 @@ bool Decimal::operator<(Decimal rhs) const
 
 	// Now we're forced to compare
 	// the fractional parts.
+	// WARNING The following involves dynamic memory allocation,
+	// which might throw std::bad_alloc!
 	ostringstream ossleft;
 	ossleft << *this;
 	ostringstream ossright;
