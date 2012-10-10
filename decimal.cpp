@@ -141,21 +141,11 @@ Decimal::whole_part() const
 		return m_intval;
 	}
 	assert (m_places > 0);
-	Decimal temp = *this;
-	
-	// First set to fractional precison of 1.
-	// This should be safe.
-	#ifndef NDEBUG
-		int const check = temp.rescale(1);
-		assert (check == 0);		// No error occurred
-	#else
-		temp.rescale(1);
-	#endif
-	int_type ret = temp.m_intval;
-
-	// Then truncate the fractional digit.
-	// We don't want rounding here!
-	ret /= s_base;
+	int_type ret = m_intval;
+	for (places_type i = m_places; i != 0; --i)
+	{
+		ret /= s_base;
+	}
 	return ret;
 }
 
