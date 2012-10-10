@@ -490,9 +490,6 @@ public:
 	 *
 	 * These all behave as you would expect.
 	 *
-	 * @todo LOW PRIORITY
-	 * operator<(Decimal) could be made a bit more efficient.
-	 *
 	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
 	bool operator<(Decimal) const;
