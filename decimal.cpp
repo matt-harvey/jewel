@@ -55,7 +55,7 @@ using std::endl;  // for logging only
 namespace jewel
 {
 
-// define static member constants
+// initialize static data members
 
 Decimal::int_type const
 Decimal::s_base = 10;
@@ -155,7 +155,7 @@ Decimal::Decimal(int_type p_intval, places_type p_places):
 	{
 		// There is no point setting m_intval and m_places to 0 (or any other
 		// other valid value) here, since the Decimal instance is not going
-		// to be created - nothing will be able to refer to it after this
+		// to be created anyway - nothing will be able to refer to it after this
 		// exception is thrown.
 		throw DecimalRangeException
 		(	"Attempt to construct Decimal with precision greater"
@@ -314,9 +314,9 @@ int Decimal::rescale(places_type p_places)
 			assert (m_intval == DEBUGVARIABLE_orig_intval);
 			return 1;
 		}
-		double base = s_base;  // necessary only as pow needs a double
+		// WARNING Can we guarantee this won't overflow?
 		int_type multiplier = NUM_CAST<int_type>
-		(	pow(base, p_places - m_places)
+		(	pow(s_base, p_places - m_places)
 		);
 
 		if (multiplication_is_unsafe(m_intval, multiplier))
