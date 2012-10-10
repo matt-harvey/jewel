@@ -655,61 +655,35 @@ Decimal& Decimal::operator/=(Decimal rhs)
 
 bool Decimal::operator<(Decimal rhs) const
 {	
-	#ifndef NDEBUG
-		Decimal const orig_lhs = *this;
-	#endif
 	Decimal lhs = *this;
 	lhs.rationalize();
 	rhs.rationalize();
-	if (lhs == rhs)
-	{
-		assert (*this == orig_lhs);
-		return false;
-	}
 	if (lhs.m_places == rhs.m_places)
 	{
-		assert (*this == orig_lhs);
 		return lhs.m_intval < rhs.m_intval;
 	}
-	assert (lhs.m_places != rhs.m_places);
-	Decimal* shorter = &lhs;
-	Decimal* longer = &rhs;
-	if (lhs.m_places > rhs.m_places)
-	{
-		shorter = &rhs;
-		longer = &lhs;
-	}
+	bool const left_is_longer = (lhs.m_places > rhs.m_places);
+	Decimal const *const shorter = (left_is_longer? &rhs: &lhs);
+	Decimal const *const longer = (left_is_longer? &lhs: &rhs);
 	places_type const target_places = shorter->m_places;
-	bool const longer_is_negative = (longer->m_intval < 0);
-	bool const longer_is_zero = (longer->m_intval == 0);
-	while (longer->m_places > target_places)
+	int_type longers_revised_intval = longer->m_intval;
+	int_type const shorters_intval = shorter->m_intval;
+	bool const longer_is_negative = (longers_revised_intval < 0);
+	for
+	(	places_type longers_places = longer->m_places;
+		longers_places != target_places;
+		--longers_places
+	)
 	{
-		longer->m_intval /= s_base;
-		assert (longer->m_places > 0);
-		longer->m_places -= 1;
+		longers_revised_intval /= s_base;
+		assert (longers_places > 0);
 	}
-	bool longer_is_smaller;
-	if (longer_is_negative)
-	{
-		longer_is_smaller = (longer->m_intval <= shorter->m_intval);
-	}
-	else if (longer_is_zero)
-	{
-		assert ( (shorter->m_intval > 0) == (shorter->m_intval >= 0) );
-		longer_is_smaller = (shorter->m_intval > 0);
-	}
-	else
-	{
-		longer_is_smaller = (longer->m_intval < shorter->m_intval);
-	}
-	if (longer_is_smaller)
-	{
-		assert (*this == orig_lhs);
-		return &lhs == longer;
-	}
-	assert (!longer_is_smaller);
-	assert (*this == orig_lhs);
-	return &lhs == shorter;
+	bool longer_is_smaller =
+	(	longer_is_negative?
+		(longers_revised_intval <= shorters_intval):
+		(longers_revised_intval < shorters_intval)
+	);
+	return ( &lhs == (longer_is_smaller? longer: shorter) );
 }
 
 
