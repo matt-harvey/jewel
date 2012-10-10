@@ -1407,6 +1407,7 @@ TEST(decimal_operator_less_than)
 	CHECK(Decimal("1.22390423") < Decimal("1.223904231"));
 	CHECK(Decimal("201060.2234") < Decimal("201060.3"));
 	CHECK(Decimal("201060.2") < Decimal("201060.2234"));
+	CHECK(Decimal("-102349187") < Decimal("-0.000012"));
 }
 
 TEST(decimal_operator_greater_than)

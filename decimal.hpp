@@ -491,12 +491,9 @@ public:
 	 * These all behave as you would expect.
 	 *
 	 * @todo LOW PRIORITY
-	 * operator<(Decimal) could probably be made more efficient.
+	 * operator<(Decimal) could be made a bit more efficient.
 	 *
-	 * @todo HIGH PRIORITY
-	 * The implementation involves declaring ostringstream and string
-	 * instances. These might throw std::bad_alloc. However the
-	 * comparison operator should be non-throwing.
+	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
 	bool operator<(Decimal) const;
 
@@ -645,14 +642,6 @@ private:
 	 * Power of 10 by which the underlying integer is implicitly divided.
 	 */
 	int_type implicit_divisor() const;
-
-	/** 
-	 * Returns an int_type being the value of the whole part of the Decimal,
-	 * i.e. the part "to the left of the decimal point".
-	 * This is like rounding down to nil decimal places, but returning
-	 * an int_type rather than another Decimal.
-	 */
-	 int_type whole_part() const;
 
 	/** This constructor is deliberately unimplemented. Ensures if an int or
 	 * a convertible-to-int is passed to constructor, compilation will fail.

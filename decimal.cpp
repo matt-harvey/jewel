@@ -133,23 +133,6 @@ Decimal::implicit_divisor() const
 }
 
 
-Decimal::int_type
-Decimal::whole_part() const
-{
-	if (m_places == 0)
-	{
-		return m_intval;
-	}
-	assert (m_places > 0);
-	int_type ret = m_intval;
-	for (places_type i = m_places; i != 0; --i)
-	{
-		ret /= s_base;
-	}
-	return ret;
-}
-
-
 void
 Decimal::rationalize(places_type min_places)
 {
@@ -672,101 +655,61 @@ Decimal& Decimal::operator/=(Decimal rhs)
 
 bool Decimal::operator<(Decimal rhs) const
 {	
-	// Take care of the easy cases first
-	if (m_places == rhs.m_places)
+	#ifndef NDEBUG
+		Decimal const orig_lhs = *this;
+	#endif
+	Decimal lhs = *this;
+	lhs.rationalize();
+	rhs.rationalize();
+	if (lhs == rhs)
 	{
-		return m_intval < rhs.m_intval;
-	}
-	if (m_intval < int_type(0) && rhs.m_intval >= int_type(0))
-	{
-		return true;
-	}
-	if (m_intval > 0 && rhs.m_intval <= 0)
-	{
+		assert (*this == orig_lhs);
 		return false;
 	}
-	if (m_intval == 0)
+	if (lhs.m_places == rhs.m_places)
 	{
-		return rhs.m_intval > 0;
+		assert (*this == orig_lhs);
+		return lhs.m_intval < rhs.m_intval;
 	}
-	assert
-	(	(m_intval < 0 && rhs.m_intval < 0) ||
-		(m_intval > 0 && rhs.m_intval > 0)
-	);
-	
-	// Now we're left with the more
-	// difficult cases.
-
-	// Try comparing the whole parts only.
-	int_type const left_whole_part = whole_part();
-	int_type const right_whole_part = rhs.whole_part();
-	if (left_whole_part < right_whole_part)
+	assert (lhs.m_places != rhs.m_places);
+	Decimal* shorter = &lhs;
+	Decimal* longer = &rhs;
+	if (lhs.m_places > rhs.m_places)
 	{
-		return true;
+		shorter = &rhs;
+		longer = &lhs;
 	}
-	assert (left_whole_part >= right_whole_part);
-	if (left_whole_part > right_whole_part)
+	places_type const target_places = shorter->m_places;
+	bool const longer_is_negative = (longer->m_intval < 0);
+	bool const longer_is_zero = (longer->m_intval == 0);
+	while (longer->m_places > target_places)
 	{
-		return false;
+		longer->m_intval /= s_base;
+		assert (longer->m_places > 0);
+		longer->m_places -= 1;
 	}
-	assert (left_whole_part == right_whole_part);
-
-	// Record whether negative
-	bool const is_negative = (m_intval < 0);
-
-	// If one has fractional places but the other doesn't, then
-	// we can compare, as we know the whole parts are equal.
-	if ( (m_places > 0) && (rhs.m_places <= 0) )
+	bool longer_is_smaller;
+	if (longer_is_negative)
 	{
-		return is_negative;
+		longer_is_smaller = (longer->m_intval <= shorter->m_intval);
 	}
-	if ( (rhs.m_places > 0) && (m_places <= 0) )
+	else if (longer_is_zero)
 	{
-		return !is_negative;
+		assert ( (shorter->m_intval > 0) == (shorter->m_intval >= 0) );
+		longer_is_smaller = (shorter->m_intval > 0);
 	}
-
-	// Now we're forced to compare
-	// the fractional parts.
-	// WARNING The following involves dynamic memory allocation,
-	// which might throw std::bad_alloc!
-	ostringstream ossleft;
-	ossleft << *this;
-	ostringstream ossright;
-	ossright << rhs;
-	string leftstr = ossleft.str();
-	string rightstr = ossright.str();
-	assert ( (leftstr[0] == '-') == (rightstr[0] == '-') );
-	string& smallerstring =
-	(	leftstr.size() < rightstr.size() ?
-	    leftstr : rightstr
-	);
-	size_t const greatersize =
-	(	leftstr.size() < rightstr.size() ?
-		rightstr.size() : leftstr.size()
-	);
-	
-	// Get the strings to be the same size by adding zeroes to the
-	// shorter one.
-	while (smallerstring.size() != greatersize)
+	else
 	{
-		smallerstring.push_back('0');
+		longer_is_smaller = (longer->m_intval < shorter->m_intval);
 	}
-	assert (leftstr.size() == rightstr.size());
-	assert (leftstr.size() == greatersize);
-
-	// Now compare digit by digit.
-	for (size_t j = 0; j != greatersize; ++j)
+	if (longer_is_smaller)
 	{
-		if (leftstr[j] < rightstr[j])
-		{
-			return !is_negative;
-		}
-		if (leftstr[j] > rightstr[j])
-		{
-			return is_negative;
-		}
+		assert (*this == orig_lhs);
+		return &lhs == longer;
 	}
-	return false;	
+	assert (!longer_is_smaller);
+	assert (*this == orig_lhs);
+	return &lhs == shorter;
 }
 
 
