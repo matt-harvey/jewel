@@ -737,9 +737,7 @@ Decimal Decimal::minimum()
 		return ret;
 	}
 	assert (!calculated_already);
-	ostringstream oss;
-	oss << numeric_limits<int_type>::min();
-	ret = Decimal(oss.str());
+	ret = Decimal(numeric_limits<int_type>::min(), 0);
 	calculated_already = true;
 	return ret;
 }
@@ -753,9 +751,7 @@ Decimal Decimal::maximum()
 		return ret;
 	}
 	assert (!calculated_already);
-	ostringstream oss;
-	oss << numeric_limits<int_type>::max();
-	ret = Decimal(oss.str());
+	ret = Decimal(numeric_limits<int_type>::max(), 0);
 	calculated_already = true;
 	return ret;
 }

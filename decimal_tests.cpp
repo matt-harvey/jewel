@@ -1669,6 +1669,9 @@ TEST(decimal_maximum)
 	--m;
 	++m;
 	CHECK_THROW(++m, DecimalIncrementationException);
+	ostringstream oss;
+	oss << numeric_limits<int_type>::max();
+	CHECK_EQUAL(Decimal(oss.str()), Decimal::maximum());
 }
 
 TEST(decimal_minimum)
@@ -1677,6 +1680,9 @@ TEST(decimal_minimum)
 	++m;
 	--m;
 	CHECK_THROW(--m, DecimalDecrementationException);
+	ostringstream oss;
+	oss << numeric_limits<int_type>::min();
+	CHECK_EQUAL(Decimal(oss.str()), Decimal::minimum());
 }
 
 TEST(decimal_maximum_precision)

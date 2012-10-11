@@ -498,11 +498,15 @@ public:
 	* Equality operator. Compares Decimals by value.
 	* Note the following evaluates to \c true: \n
 	* Decimal("-0.000") == Decimal("0");
+	*
+	* Exception safety: <em>nothrow guarantee</em>.
 	*/
 	bool operator==(Decimal) const;
 
 	/**
 	 * Return the underlying integer representing the Decimal.
+	 *
+	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
 	int_type intval() const;	
 
@@ -510,21 +514,29 @@ public:
 	 * Return the number of digits of fractional precision in the
 	 * Decimal, i.e. the number of digits to the right of the decimal
 	 * point.
+	 *
+	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
 	places_type places() const;
 
 	/**
 	 * Returns the largest possible Decimal number
+	 *
+	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
 	static Decimal maximum();
 
 	/**
 	 * Returns the smallest possible Decimal number
+	 *
+	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
 	static Decimal minimum();
 
 	/**
 	 * Returns the maximum number of digits of precision
+	 *
+	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
 	static places_type maximum_precision();
 
@@ -659,7 +671,7 @@ private:
 
 /** Write to an output stream.
  * 
- * @todo LOW PRIORITY Determine and document throwing behaviour (if any).
+ * @todo HIGH PRIORITY Determine and document throwing behaviour (if any).
  */
 template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
