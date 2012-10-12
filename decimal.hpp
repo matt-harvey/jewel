@@ -894,6 +894,11 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 	{
 		os.setstate(std::ios::badbit);
 	}
+	catch (...)
+	{
+		// No other exceptions should be thrown
+		std::terminate();
+	}
 	return os;
 }
 
