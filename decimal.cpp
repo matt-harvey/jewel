@@ -421,6 +421,17 @@ Decimal::output_aux(ostringstream& oss) const
 				for ( ; k != slen; ++k) oss << s[k];
 			}
 		}
+		#ifdef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+			// We cause bad memory allocation here to provoke
+			// failure. This is to test how Decimal output
+			// operator<< (which calls this function) handles
+			// failure.
+			std::string grow_me = "a";
+			while (true)
+			{
+				grow_me += grow_me;
+			}
+		#endif
 	}
 	return;
 }

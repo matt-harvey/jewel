@@ -680,13 +680,14 @@ private:
  * 
  * Exception safety: provides <em>nothrow guarantee</em>, \e unless exceptions
  * have been enabled for the output stream. In the
- * unlikely event of output failure, std::ios::badbit will be set on the
+ * event of output failure, std::ios::badbit will be set on the
  * stream; and the setting of this flag will trigger an exception only if
  * the client has enabled exceptions for std::ios::badbit for this stream.
  * (At the time of writing this is not common practice.) The thrown exception
- * will be an instance of std::ios_base::failure.
- *
- * @todo Test throwing behaviour.
+ * will be an instance of std::ios_base::failure. This might be caused by
+ * internal memory allocation failure in the body of this function; or it
+ * might be caused by an "external" error, e.g. a disk being removed during
+ * the course of writing to the disk.
  */
 template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&

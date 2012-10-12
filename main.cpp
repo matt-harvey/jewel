@@ -37,6 +37,19 @@ int main()
 		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
 	#endif
 
+
+	#ifdef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+		cout << "Compiled with JEWEL_DECIMAL_OUTPUT_FAILURE_TEST defined. "
+		     << "Normal tests for jewel::Decimal will be "
+			 << "eschewed in order to test a sabotaged version of the\n"
+			 << "output function, to ensure it handles errors as expected."
+			 << endl;
+	#else
+		cout << "Compiled without JEWEL_DECIMAL_OUTPUT_FAILURE_TEST defined. "
+		     << "Define this to test error handling in stream output operator"
+			 << " for jewel::Decimal." << endl;
+	#endif
+
 	/*
 	cout << std::setprecision(2) << std::showpoint << std::fixed;
 	cout << std::setw(10) << std::right << double(11) << endl

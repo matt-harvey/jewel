@@ -3,6 +3,7 @@
 #include "num_digits.hpp"
 
 #include <limits>
+#include <ios>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -38,6 +39,12 @@ using std::string;
 
 typedef Decimal::int_type int_type;
 typedef Decimal::places_type places_type;
+
+
+#ifndef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+// If the output failure test has been enabled, it is simpler just to
+// exclude all tests for Decimal other than it (see below).
+
 
 // @cond (to hide this from Doxygen-generated docs)
 
@@ -934,7 +941,10 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiplication)
 	// The smallest possible Decimal cannot be multiplied
 	Decimal d10 = Decimal::minimum();
 	CHECK_THROW(Decimal d11 = d10 * Decimal("1"), DecimalException);
-	CHECK_THROW(Decimal d12 = Decimal("1") * d10, DecimalMultiplicationException);
+	CHECK_THROW
+	(	Decimal d12 = Decimal("1") * d10,
+		DecimalMultiplicationException
+	);
 
 	// Test elimination of trailing fractional zeroes
 	Decimal d700("107.0700");
@@ -1469,57 +1479,96 @@ TEST(decimal_operator_inequality)
 	CHECK(Decimal("23.342234") != Decimal("23.34223"));
 }
 
+#endif  // JEWEL DECIMAL_OUTPUT_FAILURE_TEST
+
+
+
 TEST(decimal_operator_output)
 {
-	ostringstream os0;
-	ostringstream os1;
-	ostringstream os1b;
-	os0 << Decimal("3.0001") + Decimal("0.000000");
-	os1 << Decimal("3.000100");
-	os1b << "3.000100";
-	CHECK_EQUAL(os0.str(), os1.str());
-	CHECK_EQUAL(os1b.str(), os1.str());
-	ostringstream os2;
-	os2 << "3";
-	CHECK(os1.str() != os2.str());
-	ostringstream os3;
-	ostringstream os4;
-	os3 << "501.001";
-	Decimal d4("501");
-	d4 += Decimal(".001");
-	os4 << d4;
-	CHECK_EQUAL(os4.str(), os3.str());
-	ostringstream os5;
-	os5 << "-2.001009";
-	ostringstream os6;
-	os6 << Decimal("-2.001009");
-	CHECK_EQUAL(os5.str(), os6.str());
-	ostringstream os7;
-	ostringstream os8;
-	os7 << "0.000000";
-	os8 << Decimal("0");
-	CHECK(os7.str() != os8.str());
-	ostringstream os9;
-	ostringstream os10;
-	os9 << "-3001.09";
-	os10 << Decimal("-3001.09");
-	CHECK_EQUAL(os9.str(), os10.str());
-	ostringstream os11;
-	os11 << numeric_limits<Decimal::int_type>::max();
-	ostringstream os12;
-	os12 << Decimal::maximum();
-	CHECK_EQUAL(os11.str(), os12.str());
-	ostringstream os13;
-	os13 << numeric_limits<Decimal::int_type>::max() * -1;
-	ostringstream os14;
-	os14 << Decimal::maximum() * Decimal("-1");
-	CHECK_EQUAL(os13.str(), os14.str());
-	ostringstream os15;
-	os15 << numeric_limits<Decimal::int_type>::min();
-	ostringstream os16;
-	os16 << Decimal::minimum();
-	CHECK_EQUAL(os15.str(), os16.str());
+	#ifndef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+		// Failure test not enabled. Output should work
+		// as normal
+		ostringstream os0;
+		ostringstream os1;
+		ostringstream os1b;
+		os0 << Decimal("3.0001") + Decimal("0.000000");
+		os1 << Decimal("3.000100");
+		os1b << "3.000100";
+		CHECK_EQUAL(os0.str(), os1.str());
+		CHECK_EQUAL(os1b.str(), os1.str());
+		ostringstream os2;
+		os2 << "3";
+		CHECK(os1.str() != os2.str());
+		ostringstream os3;
+		ostringstream os4;
+		os3 << "501.001";
+		Decimal d4("501");
+		d4 += Decimal(".001");
+		os4 << d4;
+		CHECK_EQUAL(os4.str(), os3.str());
+		ostringstream os5;
+		os5 << "-2.001009";
+		ostringstream os6;
+		os6 << Decimal("-2.001009");
+		CHECK_EQUAL(os5.str(), os6.str());
+		ostringstream os7;
+		ostringstream os8;
+		os7 << "0.000000";
+		os8 << Decimal("0");
+		CHECK(os7.str() != os8.str());
+		ostringstream os9;
+		ostringstream os10;
+		os9 << "-3001.09";
+		os10 << Decimal("-3001.09");
+		CHECK_EQUAL(os9.str(), os10.str());
+		ostringstream os11;
+		os11 << numeric_limits<Decimal::int_type>::max();
+		ostringstream os12;
+		os12 << Decimal::maximum();
+		CHECK_EQUAL(os11.str(), os12.str());
+		ostringstream os13;
+		os13 << numeric_limits<Decimal::int_type>::max() * -1;
+		ostringstream os14;
+		os14 << Decimal::maximum() * Decimal("-1");
+		CHECK_EQUAL(os13.str(), os14.str());
+		ostringstream os15;
+		os15 << numeric_limits<Decimal::int_type>::min();
+		ostringstream os16;
+		os16 << Decimal::minimum();
+		CHECK_EQUAL(os15.str(), os16.str());
+	#else	
+		// JEWEL_DECIMAL_OUTPUT_FAILURE_TEST is defined.
+		// Decimal output should fail. Here we test how the
+		// failure is handled.
+		ostringstream os_e;
+		os_e.exceptions(std::ios::badbit);
+		Decimal d_e(982, 1);
+		bool const os_e_ok = os_e;
+		// CHECK macro has trouble with conversion of stream to bool,
+		// so we do it like this.
+		CHECK(os_e_ok);
+		CHECK_THROW(os_e << d_e, std::ios_base::failure);
+		bool const os_e_ok_now = os_e;
+		CHECK(!os_e_ok_now);
+		CHECK_EQUAL(os_e.str(), string(""));
+		CHECK(os_e.str().empty());
+		ostringstream os2_e;
+		bool const os2_e_ok = os2_e;
+		CHECK(os2_e_ok);
+		os2_e << d_e;
+		bool const os2_e_ok_now = os2_e;
+		CHECK(!os2_e_ok_now);
+		CHECK_EQUAL(os2_e.str(), string(""));
+		CHECK(os2_e.str().empty());
+	#endif
 }
+
+
+
+
+#ifndef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+// If the output failure test has been enabled, it is simpler just to
+// exclude all tests for Decimal other than it.
 
 TEST(decimal_operator_input)
 {
@@ -1699,3 +1748,4 @@ TEST(decimal_maximum_precision)
 	CHECK_THROW(Decimal e(s), DecimalRangeException);
 }
 
+#endif  // JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
