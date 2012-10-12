@@ -111,27 +111,6 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 
 // some member functions
 
-Decimal::int_type
-Decimal::implicit_divisor() const
-{	
-	static bool calculated_already = false;
-	if (calculated_already)
-	{
-		return s_divisor_lookup[m_places];
-	}
-	assert (!calculated_already);
-	int_type next_power = 1;
-	for (size_t j = 0; j != s_max_places; ++j)
-	{
-		assert (j < s_divisor_lookup.size());
-		s_divisor_lookup[j] = next_power;
-		next_power *= s_base;
-	}
-	assert (s_divisor_lookup.size() == s_max_places);
-	calculated_already = true;
-	return s_divisor_lookup[m_places];
-}
-
 
 void
 Decimal::rationalize(places_type min_places)
@@ -364,6 +343,87 @@ int Decimal::rescale(places_type p_places)
 }
 
 
+Decimal::int_type
+Decimal::implicit_divisor() const
+{	
+	static bool calculated_already = false;
+	if (calculated_already)
+	{
+		return s_divisor_lookup[m_places];
+	}
+	assert (!calculated_already);
+	int_type next_power = 1;
+	for (size_t j = 0; j != s_max_places; ++j)
+	{
+		assert (j < s_divisor_lookup.size());
+		s_divisor_lookup[j] = next_power;
+		next_power *= s_base;
+	}
+	assert (s_divisor_lookup.size() == s_max_places);
+	calculated_already = true;
+	return s_divisor_lookup[m_places];
+}
+
+
+void
+Decimal::output_aux(ostringstream& oss) const
+{
+	typedef std::string::size_type str_sz;
+
+	// special case of zero
+	if (m_intval == 0)
+	{
+		oss << '0';
+		if (m_places > 0)
+		{
+			oss << Decimal::s_spot << std::string(m_places, '0');
+		}
+	}
+
+	// special case of smallest possible m_intval - as we
+	// cannot take the absolute value below
+	else if (m_intval == std::numeric_limits<Decimal::int_type>::min())
+	{
+		assert (m_places == 0);
+		oss << m_intval;
+	}
+
+	else
+	{
+		// Our starting point is the string of digits representing
+		// the absolute value of the underlying integer
+		std::string const s =
+			boost::lexical_cast<std::string>(std::abs(m_intval));
+		assert(s != "0");
+		str_sz slen = s.size();
+		
+		// negative sign
+		if (m_intval < 0) oss << '-';
+		
+		// case where the whole part is zero
+		if (slen <= m_places)
+		{
+			oss << '0' << Decimal::s_spot;
+			str_sz stop_here = m_places - slen;
+			for (str_sz i = 0; i != stop_here; ++i) oss << '0';
+			for (str_sz j = 0; j != slen; ++j) oss << s[j];
+		}
+		
+		// case where the whole part is non-zero
+		else
+		{
+			str_sz whole_digits = slen - m_places;
+			str_sz k = 0;
+			for ( ; k != whole_digits; ++k) oss << s[k];
+			if (m_places > 0)
+			{
+				oss << Decimal::s_spot;
+				for ( ; k != slen; ++k) oss << s[k];
+			}
+		}
+	}
+	return;
+}
 
 
 // operators

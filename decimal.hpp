@@ -656,6 +656,13 @@ private:
 	 */
 	explicit Decimal(int);
 
+	/**
+	 * Called by output operator. This is not designed to be called by
+	 * other functions. May throw boost::bad_lexical_cast (would be rare)
+	 * or std::bad_alloc (even if exceptions not enabled on oss).
+	 */
+	void output_aux(std::ostringstream& oss) const;
+
 	friend class boost::serialization::access;
 	/** Provide for serialization via Boost.serialization.
 	 * See Boost documentation for details on how this works.
@@ -663,6 +670,7 @@ private:
 	template <typename Archive>
 	void serialize(Archive& ar, unsigned int const version);
 
+	
 }; // class Decimal
 
 
@@ -804,8 +812,6 @@ template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
 operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 {	
-	typedef std::string::size_type str_sz;
-
 	try
 	{
 		// We will write to a basic_ostringstream initially. Only at the last
@@ -813,65 +819,10 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 		std::basic_ostringstream<charT, traits> ss;
 		
 		// Whatever exception-throwing behaviour the client has set for os
-		// should also be mirrored in ss. This will cause an exception to be
-		// thrown earlier rather than later, if it is to be thrown at all.
+		// should also be mirrored in ss.
 		ss.exceptions(os.exceptions());
 
-		Decimal::places_type const plcs = d.m_places;
-		Decimal::int_type const dintval = d.m_intval;	
-
-		// special case of zero
-		if (dintval == 0)
-		{
-			ss << '0';
-			if (plcs > 0)
-			{
-				ss << Decimal::s_spot << std::string(plcs, '0');	
-			}
-		}
-
-		// special case of smallest possible dintval - as we
-		// cannot take the absolute value below
-		else if (dintval == std::numeric_limits<Decimal::int_type>::min())
-		{
-			assert (plcs == 0);
-			ss << dintval;
-		}
-
-		else
-		{
-			// Our starting point is the string of digits representing
-			// the absolute value of the underlying integer
-			std::string const s =
-				boost::lexical_cast<std::string>(std::abs(dintval));
-					assert(s != "0");
-			str_sz slen = s.size();
-			
-			// negative sign
-			if (dintval < 0) ss << '-';
-			
-			// case where the whole part is zero
-			if (slen <= plcs)
-			{
-				ss << '0' << Decimal::s_spot;
-				str_sz stop_here = plcs - slen;
-				for (str_sz i = 0; i != stop_here; ++i) ss << '0';
-				for (str_sz j = 0; j != slen; ++j) ss << s[j];
-			}
-			
-			// case where the whole part is non-zero
-			else
-			{
-				str_sz whole_digits = slen - plcs;
-				str_sz k = 0;
-				for ( ; k != whole_digits; ++k) ss << s[k];
-				if (plcs > 0)
-				{
-					ss << Decimal::s_spot;
-					for ( ; k != slen; ++k) ss << s[k];
-				}
-			}
-		}
+		d.output_aux(ss);
 		if (!ss)
 		{
 			// If any error flags have been set in ss, we now
@@ -897,6 +848,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 	catch (...)
 	{
 		// No other exceptions should be thrown
+		std::cerr << "Unexpected exception. Program terminated." << std::endl;
 		std::terminate();
 	}
 	return os;

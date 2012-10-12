@@ -190,6 +190,7 @@ operator <<	decimal.hpp	/^operator<<(std::basic_ostream<charT, traits>& os, Deci
 operator =	decimal.hpp	/^Decimal& Decimal::operator=(Decimal const& rhs)$/;"	f	class:jewel::Decimal
 operator ==	decimal.cpp	/^bool Decimal::operator==(Decimal rhs) const$/;"	f	class:jewel::Decimal
 operator >>	decimal.hpp	/^operator>>(std::basic_istream<charT, traits>& is, Decimal& d)$/;"	f	namespace:jewel
+output_aux	decimal.cpp	/^Decimal::output_aux(ostringstream& oss) const$/;"	f	class:jewel::Decimal
 places	decimal.hpp	/^Decimal::places() const$/;"	f	class:jewel::Decimal
 places_type	decimal.hpp	/^	typedef unsigned short places_type;$/;"	t	class:jewel::Decimal
 places_type	decimal_tests.cpp	/^typedef Decimal::places_type places_type;$/;"	t	file:
@@ -201,6 +202,7 @@ rescale	decimal.cpp	/^int Decimal::rescale(places_type p_places)$/;"	f	class:jew
 round	decimal.cpp	/^Decimal round(Decimal const& x, Decimal::places_type decimal_places)$/;"	f	namespace:jewel
 s_base	decimal.cpp	/^Decimal::s_base = 10;$/;"	m	class:jewel::Decimal::Decimal	file:
 s_base	decimal.hpp	/^	static int_type const s_base;$/;"	m	class:jewel::Decimal
+s_divisor_lookup	decimal.hpp	/^	static std::vector<int_type> s_divisor_lookup;$/;"	m	class:jewel::Decimal
 s_max_digits_less_one	decimal_tests.cpp	/^	string s_max_digits_less_one;$/;"	m	struct:DigitStringFixture	file:
 s_max_digits_less_one_places_2	decimal_tests.cpp	/^	string s_max_digits_less_one_places_2;$/;"	m	struct:DigitStringFixture	file:
 s_max_digits_one_and_zeroes	decimal_tests.cpp	/^	string s_max_digits_one_and_zeroes;$/;"	m	struct:DigitStringFixture	file:
@@ -257,7 +259,6 @@ vector0_5	power_vector_tests.cpp	/^	vector<int> vector0_5;$/;"	m	struct:PowerVec
 vector0_6	power_vector_tests.cpp	/^	vector<int> vector0_6;$/;"	m	struct:PowerVectorFixture1	file:
 vector0_7	power_vector_tests.cpp	/^	vector<int> vector0_7;$/;"	m	struct:PowerVectorFixture1	file:
 what	exception.cpp	/^char const* Exception::what() const throw()$/;"	f	class:jewel::Exception
-whole_part	decimal.cpp	/^Decimal::whole_part() const$/;"	f	class:jewel::Decimal
 ~DigitStringFixture	decimal_tests.cpp	/^	~DigitStringFixture()$/;"	f	struct:DigitStringFixture
 ~Exception	exception.cpp	/^Exception::~Exception() throw()$/;"	f	class:jewel::Exception
 ~PowerVectorFixture1	power_vector_tests.cpp	/^	~PowerVectorFixture1()$/;"	f	struct:PowerVectorFixture1
