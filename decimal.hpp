@@ -16,7 +16,6 @@
 #include "decimal_exceptions.hpp"
 #include <boost/archive/xml_oarchive.hpp>  // for BOOST_SERIALIZATION_NVP
 #include <boost/cstdint.hpp>
-#include <boost/exception/all.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
 #include <boost/serialization/access.hpp>
@@ -671,7 +670,15 @@ private:
 
 /** Write to an output stream.
  * 
- * @todo HIGH PRIORITY Determine and document throwing behaviour (if any).
+ * Exception safety: provides <em>nothrow guarantee</em>, \e unless exceptions
+ * have been enabled for the output stream. In the
+ * unlikely event of output failure, std::ios::badbit will be set on the
+ * stream; and the setting of this flag will trigger an exception only if
+ * the client has enabled exceptions for std::ios::badbit for this stream.
+ * (At the time of writing this is not common practice.) The thrown exception
+ * will be an instance of std::ios_base::failure.
+ *
+ * @todo Test throwing behaviour.
  */
 template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
@@ -799,61 +806,94 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 {	
 	typedef std::string::size_type str_sz;
 
-	// We will write to a basic_ostringstream initially. Only at the last
-	// minute will we write to os itself.
-	std::basic_ostringstream<charT, traits> ss;
-	Decimal::places_type const plcs = d.m_places;
-	Decimal::int_type const dintval = d.m_intval;	
-
-	// special case of zero
-	if (dintval == 0)
+	try
 	{
-		ss << '0';
-		if (plcs > 0) ss << Decimal::s_spot << std::string(plcs, '0');
+		// We will write to a basic_ostringstream initially. Only at the last
+		// minute will we write to os itself.
+		std::basic_ostringstream<charT, traits> ss;
+		
+		// Whatever exception-throwing behaviour the client has set for os
+		// should also be mirrored in ss. This will cause an exception to be
+		// thrown earlier rather than later, if it is to be thrown at all.
+		ss.exceptions(os.exceptions());
+
+		Decimal::places_type const plcs = d.m_places;
+		Decimal::int_type const dintval = d.m_intval;	
+
+		// special case of zero
+		if (dintval == 0)
+		{
+			ss << '0';
+			if (plcs > 0)
+			{
+				ss << Decimal::s_spot << std::string(plcs, '0');	
+			}
+		}
+
+		// special case of smallest possible dintval - as we
+		// cannot take the absolute value below
+		else if (dintval == std::numeric_limits<Decimal::int_type>::min())
+		{
+			assert (plcs == 0);
+			ss << dintval;
+		}
+
+		else
+		{
+			// Our starting point is the string of digits representing
+			// the absolute value of the underlying integer
+			std::string const s =
+				boost::lexical_cast<std::string>(std::abs(dintval));
+					assert(s != "0");
+			str_sz slen = s.size();
+			
+			// negative sign
+			if (dintval < 0) ss << '-';
+			
+			// case where the whole part is zero
+			if (slen <= plcs)
+			{
+				ss << '0' << Decimal::s_spot;
+				str_sz stop_here = plcs - slen;
+				for (str_sz i = 0; i != stop_here; ++i) ss << '0';
+				for (str_sz j = 0; j != slen; ++j) ss << s[j];
+			}
+			
+			// case where the whole part is non-zero
+			else
+			{
+				str_sz whole_digits = slen - plcs;
+				str_sz k = 0;
+				for ( ; k != whole_digits; ++k) ss << s[k];
+				if (plcs > 0)
+				{
+					ss << Decimal::s_spot;
+					for ( ; k != slen; ++k) ss << s[k];
+				}
+			}
+		}
+		if (!ss)
+		{
+			// If any error flags have been set in ss, we now
+			// mirror them here in os, and return rather
+			// than potentially corrupt data to os.
+			os.setstate(ss.rdstate());
+			return os;
+		}
+		assert (ss);
 		os << ss.str();
-		return os;
 	}
-
-	// special case of smallest possible dintval - as we
-	// cannot take the absolute value below
-	if (dintval == std::numeric_limits<Decimal::int_type>::min())
+	catch (std::bad_alloc&)
 	{
-		assert (plcs == 0);
-		ss << dintval;
-		os << ss.str();
-		return os;
+		// Exception could be from failed allocation of
+		// ostringstream or string (though both are
+		// extremely unlikely).
+		os.setstate(std::ios::badbit);
 	}
-
-	// Our starting point is the string of digits representing
-	// the absolute value of the underlying integer
-	std::string s = boost::lexical_cast<std::string>(std::abs(dintval));
-	assert(s != "0");
-	str_sz slen = s.size();
-	
-	// negative sign
-	if (dintval < 0) ss << '-';
-	
-	// case where the whole part is zero
-	if (slen <= plcs)
+	catch (boost::bad_lexical_cast&)
 	{
-		ss << '0' << Decimal::s_spot;
-		str_sz stop_here = plcs - slen;
-		for (str_sz i = 0; i != stop_here; ++i) ss << '0';
-		for (str_sz j = 0; j != slen; ++j) ss << s[j];
-		os << ss.str();
-		return os;
+		os.setstate(std::ios::badbit);
 	}
-
-	// case where the whole part is non-zero
-	str_sz whole_digits = slen - plcs;
-	str_sz k = 0;
-	for ( ; k != whole_digits; ++k) ss << s[k];
-	if (plcs > 0)
-	{
-		ss << Decimal::s_spot;
-		for ( ; k != slen; ++k) ss << s[k];
-	}
-	os << ss.str();
 	return os;
 }
 
@@ -877,7 +917,7 @@ operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 		{
 			d = orig;
 			// Record error in stream
-			is.setstate(std::ios::failbit);
+			is.setstate(std::ios::badbit);
 			return is;
 		}
 	}
