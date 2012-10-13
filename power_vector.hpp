@@ -30,6 +30,14 @@
  * are determined by counting from lowest to highest in the series
  * of binary numbers from 0 to the size of the power vector. Each
  * "1" represents an element to be included in one of the subvectors.
+ * 
+ * This function is not particularly efficient as it returns
+ * the std::vector by value.
+ * 
+ * @throws std::bad_alloc in the unlikely event of memory allocation
+ * failure while building the returned vector.
+ *
+ * Exception safety: <em>strong guarantee</em>.
  */
 
 
@@ -49,7 +57,7 @@ namespace jewel
 /** Like a power set function, but for vectors.
  * See file documentation for more detail.
  */
- template <typename T> std::vector< std::vector<T> >
+template <typename T> std::vector< std::vector<T> >
 power_vector(std::vector<T> const& v)
 {
 	// typedefs
@@ -89,7 +97,7 @@ power_vector(std::vector<T> const& v)
 			if (i / j)
 			{
 				assert(i / j == 1);
-				ret_elem.push_back(v[vindex]);
+				ret_elem.push_back(v[vindex]);	
 				i -= j;
 			}
 			j /= 2;

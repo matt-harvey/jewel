@@ -34,6 +34,9 @@
  * unsafe to add \c x and \c y (or subtract \c y from \c x, or multiply \c x
  * by \c y) (i.e. would give rise to overflow), otherwise returns false.
  * The operation being tested is not actually performed.
+ *
+ * Exception safety: <em>nothrow guarantee</em> is offered by all compilable
+ * instantiations of the function templates in this header.
  */
 
 #include <boost/cstdint.hpp>

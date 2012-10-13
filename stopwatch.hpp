@@ -28,6 +28,9 @@ namespace jewel
  *
  * @todo HIGH PRIORITY For very long timings (longer than a few seconds) this
  * seems to be failing.
+ * 
+ * Exception safety: Functions in this class do not offer any particular
+ * exception safety guarantees.
  */
 class Stopwatch
 {

@@ -34,6 +34,9 @@ public:
 	 * (The negative sign is not counted as a digit.)
 	 *@param x the number whose digits we want to count
 	 *@param base the numerical base of representation of x (defaults to 10)
+	 *
+	 * Exception safety: the <em>nothrow guarantee</em> is offered by
+	 * all the public functions in NumDigits.
 	 */
 	static std::size_t num_digits(int x, int base = 10);
 	static std::size_t num_digits(short x, short base = 10);

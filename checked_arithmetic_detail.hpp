@@ -105,7 +105,7 @@ private:
 	// The following "..._is_unsafe" function templates are
 	// deliberately unimplemented. The intention is to capture any
 	// arguments passed to the overloaded "..._is_unsafe" functions
-	// that do not _exactly_ match the types explicitly provided for
+	// that do not \e exactly match the types explicitly provided for
 	// in the overloaded public "..._is_unsafe" functions. A compiler
 	// error will then be raised, in virtue of a private function
 	// being called.
