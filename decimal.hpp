@@ -701,13 +701,24 @@ operator<<(std::basic_ostream<charT, traits>&, Decimal const&);
  * it cannot be validly converted to a \c Decimal (see the \c Decimal
  * constructor that takes a \c std::string \c const& parameter, for
  * the circumstances in which this can occur), an exception is \c not
- * thrown, but rather \c is is set to an error state (as per the idiom
- * in the standard library when reading from an error stream), and
- * \c is still returned from the function. In this case, \c d then retains
- * the value it had prior to commencement of the read operation.
+ * generally thrown, but rather the input stream will have
+ * std::ios_base::failbit set on the stream, per the common convention.
+ * In this case, the Decimal argument then retains
+ * the value it had prior to commencement of the read operation. However,
+ * an exception viz. std::ios_base::failure \e will be thrown if this
+ * occurs where the input stream has had exceptions enabled for
+ * std::ios_base::failbit. This is in
+ * accordance with standard library convention. There is also an (extremely
+ * small) chance of memory allocation failure during the read operation.
+ * Again, std::ios::failbit will be set in this case, and
+ * an exception, again an instance of std::ios_base::failbit, will be thrown
+ * if and only if exceptions have been enabled for failbit for the stream.
  *
- * @todo HIGH PRIORITY Test the claim that \c d retains its original value
- * in the event of read failure.
+ * Exception safety: <em>nothrow guarantee</em>, unless exceptions have
+ * been enabled for std::ios_base::failbit for the stream (see above).
+ *
+ * @todo Test exception handling in the event of std::bad_alloc, and in
+ * the event that the input stream has had exceptions enabled for failbit.
  */
 template <typename charT, typename traits>
 std::basic_istream<charT, traits>&
@@ -813,6 +824,10 @@ template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
 operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 {	
+	if (!os)
+	{
+		return os;
+	}
 	try
 	{
 		// We will write to a basic_ostringstream initially. Only at the last
@@ -862,22 +877,41 @@ template <typename charT, typename traits>
 std::basic_istream<charT, traits>&
 operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 {
-	Decimal orig = d;
-	std::string str;
-	is >> str;
-	if (is)
+	if (!is)
 	{
+		return is;
+	}
+	Decimal temp = d;
+	try
+	{
+		std::string str;
+		is >> str;
+		if (!is)
+		{
+			return is;
+		}
 		try
 		{	
-			d = Decimal(str);
+			temp = Decimal(str);
 		}
 		catch (DecimalException&)
 		{
-			d = orig;
-			// Record error in stream
-			is.setstate(std::ios::badbit);
+			is.setstate(std::ios_base::failbit);
 			return is;
 		}
+		assert (is);
+		d = temp;
+	}
+	catch (std::bad_alloc&)
+	{
+		is.setstate(std::ios_base::failbit);
+		return is;
+	}
+	catch (...)
+	{
+		std::cerr << "Unexpected exception. Terminating program."
+		          << std::endl;
+		std::terminate();
 	}
 	return is;
 }

@@ -176,7 +176,6 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	// We will decrease this size later if there's a spot (decimal point)
 	// as we won't hold the spot in str_rep.
 	string str_rep(str_size, '\0');
-
 	string::const_iterator si = str.begin();  // We'll read through from this
 	string::iterator ri = str_rep.begin();    // And write through this
 
