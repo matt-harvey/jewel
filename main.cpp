@@ -14,7 +14,6 @@ using boost::numeric_cast;
 using jewel::Decimal;
 using jewel::detail::decimal_csv_test;
 using jewel::detail::decimal_speed_test;
-using jewel::detail::decimal_serialization_test;
 using jewel::detail::test_exception_macros;
 using jewel::multiplication_is_unsafe;
 using jewel::NumDigits;

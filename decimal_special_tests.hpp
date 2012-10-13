@@ -28,11 +28,6 @@ bool is_dagger(char c);
  */
 void decimal_csv_test();
 
-/** Test storing and retrieving Decimals to and from disk using
- * Boost.Serialize.
- */
-void decimal_serialization_test();
-
 
 
 }  // namespace detail

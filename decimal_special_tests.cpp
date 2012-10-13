@@ -2,10 +2,17 @@
 #include "decimal_special_tests.hpp"
 #include "stopwatch.hpp"
 #include <boost/algorithm/string.hpp>
+
+
+/*
+ * No longer supporting serialization of Decimals
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
+*/
+
+
 #include <fstream>
 #include <iostream>
 #include <numeric>
@@ -176,6 +183,7 @@ void decimal_csv_test()
 	return;
 }
 
+/*
 void decimal_serialization_test()
 {
 	// Generate sample of Decimals
@@ -337,6 +345,7 @@ void decimal_serialization_test()
 
 	return;
 }
+*/
 
 }  // namespace detail
 

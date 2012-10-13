@@ -14,11 +14,9 @@
 
 
 #include "decimal_exceptions.hpp"
-#include <boost/archive/xml_oarchive.hpp>  // for BOOST_SERIALIZATION_NVP
 #include <boost/cstdint.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
-#include <boost/serialization/access.hpp>
 #include <cassert>
 #include <cctype>   // for isdigit
 #include <cstdlib>  // for abs
@@ -662,14 +660,6 @@ private:
 	 * or std::bad_alloc (even if exceptions not enabled on oss).
 	 */
 	void output_aux(std::ostringstream& oss) const;
-
-	friend class boost::serialization::access;
-	/** Provide for serialization via Boost.serialization.
-	 * See Boost documentation for details on how this works.
-	 */
-	template <typename Archive>
-	void serialize(Archive& ar, unsigned int const version);
-
 	
 }; // class Decimal
 
@@ -716,9 +706,6 @@ operator<<(std::basic_ostream<charT, traits>&, Decimal const&);
  *
  * Exception safety: <em>nothrow guarantee</em>, unless exceptions have
  * been enabled for std::ios_base::failbit for the stream (see above).
- *
- * @todo Test exception handling in the event of std::bad_alloc, and in
- * the event that the input stream has had exceptions enabled for failbit.
  */
 template <typename charT, typename traits>
 std::basic_istream<charT, traits>&
@@ -733,12 +720,18 @@ operator>>(std::basic_istream<charT, traits>&, Decimal&);
  * underlying integral representation is \c long, it will be unsafe
  * to take the negative value of the Decimal corresponding to LONG_MIN
  * (which would then be the value returned by Decimal::minimum()).
+ *
+ * Exception safety: <em>strong guarantee</em>.
  */
 Decimal operator-(Decimal const& d);
 
 /** Unary plus
  *
+ * Does what you would expect.
+ *
  * @relates Decimal
+ *
+ * Exception safety: <em>nothrow guarantee</em>.
  */
 Decimal operator+(Decimal const& d);
 
@@ -758,6 +751,8 @@ Decimal operator+(Decimal const& d);
  * @returns A decimal number by value (distinct from x, which is not changed).
  * @exception DecimalRangeException thrown if achieving the requested
  * degree of precision would cause overflow.
+ *
+ * Exception safety: <em>strong guarantee</em>.
  */
 Decimal round(Decimal const& x, Decimal::places_type decimal_places);
 
@@ -861,12 +856,6 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 	{
 		os.setstate(std::ios_base::badbit);
 	}
-	catch (...)
-	{
-		// No other exceptions should be thrown
-		std::cerr << "Unexpected exception. Program terminated." << std::endl;
-		std::terminate();
-	}
 	return os;
 }
 
@@ -899,7 +888,6 @@ operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 			is.setstate(std::ios_base::failbit);
 			return is;
 		}
-		assert (is);
 		d = temp;
 	}
 	catch (std::bad_alloc&)
@@ -907,32 +895,9 @@ operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 		is.setstate(std::ios_base::failbit);
 		return is;
 	}
-	catch (...)
-	{
-		std::cerr << "Unexpected exception. Terminating program."
-		          << std::endl;
-		std::terminate();
-	}
 	return is;
 }
 
-
-
-// Serialization
-
-template <typename Archive>
-inline
-void Decimal::serialize(Archive& ar, unsigned int const version)
-{
-	ar & BOOST_SERIALIZATION_NVP(m_intval);
-	ar & BOOST_SERIALIZATION_NVP(m_places);
-
-	// Suppress compiler warning about unused parameter. Ugh!
-	unsigned int dummy = version;
-	dummy += 0;
-
-	return;
-}
 
 
 } // namespace jewel

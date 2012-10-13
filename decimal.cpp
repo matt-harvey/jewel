@@ -788,8 +788,7 @@ Decimal operator-(Decimal const& d)
 	if (d.m_intval == numeric_limits<Decimal::int_type>::min())
 	{
 		throw DecimalUnaryMinusException
-		(	"Unsafe arithmetic "
-			"operation (unary minus)."
+		(	"Unsafe arithmetic operation (unary minus)."
 		);
 	}
 	assert (d.m_intval != numeric_limits<Decimal::int_type>::min());

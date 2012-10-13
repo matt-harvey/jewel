@@ -1582,14 +1582,30 @@ TEST(decimal_operator_input)
 	CHECK_EQUAL(d1, Decimal("234.2"));
 	Decimal d3("-8.00000");
 	CHECK_EQUAL(d2, d3);
-	assert (is);  // The UnitTest++ CHECK macro won't compile here, for
-	              // some obscure reason. So using assert.
-
+	// The UnitTest++ CHECK macro need explicit conversion here for
+	// some reason
+	CHECK(static_cast<bool>(is));
 	// What about with wonky reads?
-	istringstream bis("90.00.0");
+	istringstream bis0("90.00.0");
 	Decimal d100;
-	bis >> d100;
-	assert (!bis);
+	CHECK_EQUAL(d100, Decimal("0"));
+	bis0 >> d100;
+	CHECK(!static_cast<bool>(bis0));
+	CHECK(bis0.rdstate() != std::ios::goodbit);
+	// Check value hasn't changed.
+	CHECK_EQUAL(d100, Decimal("0"));
+	// Now with exceptions enabled on stream for failbit
+	Decimal d100b("1");
+	istringstream bis1("90.00.0");
+	CHECK(static_cast<bool>(bis1));
+	CHECK_EQUAL(bis1.rdstate(), std::ios::goodbit);
+	bis1.exceptions(std::ios::failbit);
+	CHECK(static_cast<bool>(bis1));
+	CHECK_THROW(bis1 >> d100b, std::ios_base::failure);
+	CHECK(!static_cast<bool>(bis1));
+	// Check value hasn't changed
+	CHECK_EQUAL(d100b, Decimal("1"));
+		
 	// Check the value has not changed
 	CHECK_EQUAL(d100, Decimal("0"));
 	Decimal d101("1234");
@@ -1678,6 +1694,11 @@ TEST(round_decimal)
 	ostringstream oss;
 	oss << d6;
 	CHECK_EQUAL(oss.str(), "13.49000");
+	Decimal d7(3, 2);
+	CHECK_THROW(round(d7, 2500), DecimalRangeException);
+	CHECK_EQUAL(d7, Decimal(3, 2));
+	CHECK_THROW(round(d7, -1), DecimalRangeException);
+	CHECK_EQUAL(d7, Decimal(3, 2));
 }
 
 
