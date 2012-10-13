@@ -62,7 +62,13 @@ namespace jewel
  * For functions that fall under (a), try to rewrite them so they at least
  * fall under (b). Then, for each function, document in the API docs the
  * guarantee that it offers. Do something similar for the other functions
- * in the Jewel library.
+ * in the Jewel library. UPDATE: I have now completed this task for
+ * the public functions in decimal.hpp. It remains to complete it for the
+ * other functions in the Jewel library. I have inspected the private
+ * functions in decimal.hpp in the same way, but have not tested or
+ * documented private functions re. exception safety as I have with the public
+ * functions. (Note there are no protected functions.) The main thing
+ * is to get the public functions done.
  *
  * @todo HIGH PRIORITY
  * Decimal::minimum() and Decimal::maximum() would be better incorporated
