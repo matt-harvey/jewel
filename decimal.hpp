@@ -106,13 +106,6 @@ namespace jewel
  * obscure) platforms. It may or may not be worth addressing this.
  *
  * @todo LOW PRIORITY
- * My Decimal::minimum() and Decimal::maximum() functions could be made
- * a bit more efficient by creating corresponding class-scope private static
- * variables that are initialized by calling private auxiliary 
- * functions. For the public API the static variables could in turn be
- * exposed via a getter.
- *
- * @todo LOW PRIORITY
  * I should probably allow Decimals to be constructed from strings beginning
  * with unary '+'.
  *
@@ -602,6 +595,16 @@ private:
 	static size_t const s_max_places;
 
 	/**
+	 * Largest possible Decimal.
+	 */
+	static Decimal const s_maximum;
+
+	/**
+	 * Smallest possible Decimal.
+	 */
+	static Decimal const s_minimum;
+
+	/**
 	 * The character used for the decimal point.
 	 */
 	static char const s_spot;
@@ -788,6 +791,20 @@ inline
 Decimal::places_type Decimal::maximum_precision()
 {
 	return s_max_places;
+}
+
+inline
+Decimal
+Decimal::minimum()
+{
+	return s_minimum;
+}
+
+inline
+Decimal
+Decimal::maximum()
+{
+	return s_maximum;
 }
 
 

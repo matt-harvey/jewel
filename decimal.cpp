@@ -71,6 +71,12 @@ Decimal::s_max_places = NumDigits::num_digits
 char const
 Decimal::s_spot = '.';
 
+Decimal const
+Decimal::s_maximum = Decimal(numeric_limits<int_type>::max(), 0);
+
+Decimal const
+Decimal::s_minimum = Decimal(numeric_limits<int_type>::min(), 0);
+
 std::vector<Decimal::int_type>
 Decimal::s_divisor_lookup(Decimal::s_max_places, 0);
 
@@ -801,34 +807,5 @@ Decimal operator-(Decimal const& d)
 	ret.m_intval *= -1;
 	return ret;
 }
-
-Decimal Decimal::minimum()
-{
-	static bool calculated_already = false;
-	static Decimal ret;
-	if (calculated_already)
-	{
-		return ret;
-	}
-	assert (!calculated_already);
-	ret = Decimal(numeric_limits<int_type>::min(), 0);
-	calculated_already = true;
-	return ret;
-}
-
-Decimal Decimal::maximum()
-{
-	static bool calculated_already = false;
-	static Decimal ret;
-	if (calculated_already)
-	{
-		return ret;
-	}
-	assert (!calculated_already);
-	ret = Decimal(numeric_limits<int_type>::max(), 0);
-	calculated_already = true;
-	return ret;
-}
-
 
 }  // namespace jewel
