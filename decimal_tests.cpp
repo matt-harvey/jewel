@@ -241,6 +241,11 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	Decimal d1("-908.234");
 	CHECK(d0 != d1);
 	CHECK_EQUAL(d1, Decimal("-908.23400"));
+	Decimal d0p("+0");
+	CHECK_EQUAL(d0p, d0);
+	Decimal d1p("+908.234");
+	CHECK_EQUAL(d1p, Decimal("908.234"));
+	CHECK_EQUAL(d1p, Decimal(908234, 3));
 
 	// Test behaviour with empty string
 	CHECK_THROW(Decimal d10(""), DecimalException);
@@ -251,12 +256,20 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	CHECK_THROW(Decimal d10b("."), DecimalException);
 	CHECK_THROW(Decimal d10b("-"), DecimalFromStringException);
 	CHECK_THROW(Decimal d10b("-"), DecimalException);
+	CHECK_THROW(Decimal d10b("+"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b("+"), DecimalFromStringException);
 	CHECK_THROW(Decimal d10b("-."), DecimalFromStringException);
 	CHECK_THROW(Decimal d10b("-."), DecimalException);
+	CHECK_THROW(Decimal d10b("+."), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b("+."), DecimalException);
 	CHECK_THROW(Decimal d10b(".-"), DecimalFromStringException);
 	CHECK_THROW(Decimal d10b(".-"), DecimalException);
+	CHECK_THROW(Decimal d10b(".+"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(".+"), DecimalException);
 	CHECK_THROW(Decimal d10b(".."), DecimalFromStringException);
 	CHECK_THROW(Decimal d10b("--"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b("++"), DecimalFromStringException);
+
 
 	// Test behaviour with prohibited characters in string
 	CHECK_THROW(Decimal d11("9.90b0"), DecimalException);
@@ -268,6 +281,11 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	CHECK_THROW(Decimal d13c("-79-"), DecimalFromStringException);
 	CHECK_THROW(Decimal d13c("-78-"), DecimalException);
 	CHECK_THROW(Decimal d13d("0-0"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13e("0+0"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13f("+79+"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13g("++88"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13h("+-88"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13i("-+88"), DecimalFromStringException);
 	
 	// Test behaviour with attempted Decimal having too large a would-be
 	// underlying integer.
@@ -319,6 +337,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	Decimal d21(".0000430");
 	Decimal d22("-.99489");
 	Decimal d23(".00000");
+	Decimal d23b("+.000000");
 
 	// Test retention of fractional precision implied by string
 	Decimal d24("90.100");
@@ -335,6 +354,13 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	ostringstream oss1;
 	oss1 << d25;
 	CHECK_EQUAL(oss1.str(), "0.0");
+
+	// Test elimination of pointless positive
+	Decimal d26("+10987");
+	ostringstream oss2;
+	oss2 << d26;
+	CHECK_EQUAL(oss2.str(), "10987");
+
 }
 
 TEST(decimal_assignment)
@@ -368,7 +394,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_plus_equals)
 	d2 += d3;
 	CHECK_EQUAL(d2, Decimal("14.590971"));
 	CHECK_EQUAL(d3, Decimal("5.7"));
-	Decimal d200("23042.12");
+	Decimal d200("+23042.12");
 	Decimal d201("0.88");
 	d200 += d201;
 	CHECK_EQUAL(d200, Decimal("23043"));
@@ -389,7 +415,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_plus_equals)
 	CHECK_THROW(d10 += d11, DecimalRangeException);
 	CHECK_THROW(d10 += d11, DecimalException);
 	Decimal d12(s_max_digits_less_one);
-	CHECK_THROW(d12 += Decimal(".001"), DecimalRangeException);
+	CHECK_THROW(d12 += Decimal("0.001"), DecimalRangeException);
 	Decimal d13("-.900009");
 	Decimal d13b(s_max_digits_less_one_places_2);
 	CHECK_THROW(d13 += d13b, DecimalRangeException);
@@ -443,7 +469,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_plus_equals)
 	d17 += Decimal("24.24");
 	Decimal d18("1000000");
 	d18 += Decimal("9284792");
-	Decimal d19(".0242234");
+	Decimal d19("+.0242234");
 	d19 += Decimal("19.12");
 	Decimal d20("100000");
 	d20 += Decimal(".001");
@@ -453,7 +479,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_plus_equals)
 
 	// Test retention of fractional precision
 	Decimal d21("0.99");
-	Decimal d22("0.01");
+	Decimal d22("+0.01");
 	ostringstream oss22;
 	d21 += d22;
 	oss22 << d21;

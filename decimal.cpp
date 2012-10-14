@@ -185,13 +185,17 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 	string::const_iterator si = str.begin();  // We'll read through from this
 	string::iterator ri = str_rep.begin();    // And write through this
 
-	if (*si == '-')
+	switch (*si)
 	{
+	case '-':
+	case '+':
 		assert (ri < str_rep.end());
-		*ri = '-';
-		++si;
-		++ri;
+		*ri++ = *si++;
+		break;
+	default:
+		;  // Do nothing
 	}
+
 	string::const_iterator const str_end = str.end();
 	for ( ; *si != s_spot && si != str_end; ++si, ++ri)
 	{
@@ -248,11 +252,14 @@ Decimal::Decimal(string const& str): m_intval(0), m_places(0)
 			"Decimal::maximum_precision()."
 		);
 	}
-	if (str_rep.empty() || str_rep == "-")
+	if (str_rep.size() <= 1)
 	{
-		throw DecimalFromStringException
-		(	"Attempt to create a Decimal without any digits."
-		);
+		if (str_rep.empty() || str_rep == "-" || str_rep == "+")
+		{
+			throw DecimalFromStringException
+			(	"Attempt to create a Decimal without any digits."
+			);
+		}
 	}
 	try
 	{	

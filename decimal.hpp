@@ -94,10 +94,6 @@ namespace jewel
  * obscure) platforms. It may or may not be worth addressing this.
  *
  * @todo LOW PRIORITY
- * I should probably allow Decimals to be constructed from strings beginning
- * with unary '+'.
- *
- * @todo LOW PRIORITY
  * Multiplication and division throw exceptions in some cases where
  * they should be able to calculate an answer. I have documented these
  * behaviours in the API docs. I don't believe this is a \e very serious
