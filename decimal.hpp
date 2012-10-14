@@ -48,11 +48,6 @@ namespace jewel
  * complicate output and input. I would also need to change things
  * everywhere where it relies on m_places always being positive.
  *
- * @todo LOW PRIORITY
- * I have a hack in the serialization function to suppress compiler warning
- * about unused parameter. I should find a better way and/or see if it has
- * been reported to the Boost developers.
- *
  * There are two concepts of precision in regards to this Decimal class. The
  * \e total \e precision of an instance of this class is the total number of
  * decimal digits, to either the left or the right of the decimal point,
