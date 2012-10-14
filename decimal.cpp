@@ -292,7 +292,12 @@ int Decimal::rescale(places_type p_places)
 			assert (m_intval == DEBUGVARIABLE_orig_intval);
 			return 1;
 		}
-		// WARNING Can we guarantee this won't overflow?
+		assert (p_places <= s_max_places);
+		// This should never cause overflow, as p_places is never greater
+		// than s_max_places, and s_base raised to a number equal to or
+		// greater than p_places will always be less than
+		// numeric_limits<int_type>::max(), given that s_max_places is
+		// equal to the number of digits in numeric_limits<int_type>::min().
 		int_type multiplier = NUM_CAST<int_type>
 		(	pow(s_base, p_places - m_places)
 		);

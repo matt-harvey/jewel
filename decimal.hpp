@@ -54,23 +54,6 @@ namespace jewel
  * been reported to the Boost developers.
  *
  * @todo HIGH PRIORITY
- * Go through the code assessing, for each function, whether it:\n
- * (a) offers on exception safety guarantee;\n
- * (b) offers the basic guarantee;\n
- * (c) offers the strong guarantee; or\n
- * (d) offers the nothrow guarantee.
- * For functions that fall under (a), try to rewrite them so they at least
- * fall under (b). Then, for each function, document in the API docs the
- * guarantee that it offers. Do something similar for the other functions
- * in the Jewel library. UPDATE: I have now completed this task for
- * the public functions in decimal.hpp. It remains to complete it for the
- * other functions in the Jewel library. I have inspected the private
- * functions in decimal.hpp in the same way, but have not tested or
- * documented private functions re. exception safety as I have with the public
- * functions. (Note there are no protected functions.) The main thing
- * is to get the public functions done.
- *
- * @todo HIGH PRIORITY
  * Decimal::minimum() and Decimal::maximum() would be better incorporated
  * into the std::numeric_limits framework - that's what it's there for. This
  * is a high priority because it involves changing the public interface. This
