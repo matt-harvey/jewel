@@ -21,7 +21,8 @@ namespace jewel
  * can be initialized with either a \c char \c const* \c (representing
  * an error message), or with no parameters. The char const*, if lengthier
  * than the length returned by the static member function
- * \c max_message_size(), will be truncated to that maximum length.
+ * \c max_message_size(), will be truncated to that maximum length, with
+ * the text "[TRUNCATED]" appended to indicate truncation has occurred.
  * This mechanism is used to avoid the
  * dynamic memory allocation associated with \c std::string. Since dynamic
  * memory allocation could fail, it is arguably a bad idea to store the
@@ -31,8 +32,6 @@ namespace jewel
  *
  * Exception safety: all of the functions in this class offer
  * the <em>nothrow guarantee</em>.
- * 
- * @todo HIGH PRIORIY Test exact point of truncation.
  */
 class Exception: public virtual std::exception
 {
