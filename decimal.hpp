@@ -53,13 +53,6 @@ namespace jewel
  * about unused parameter. I should find a better way and/or see if it has
  * been reported to the Boost developers.
  *
- * @todo HIGH PRIORITY
- * Decimal::minimum() and Decimal::maximum() would be better incorporated
- * into the std::numeric_limits framework - that's what it's there for. This
- * is a high priority because it involves changing the public interface. This
- * is better done sooner rather than later, when other code may be relying on
- * it.
- *
  * There are two concepts of precision in regards to this Decimal class. The
  * \e total \e precision of an instance of this class is the total number of
  * decimal digits, to either the left or the right of the decimal point,
