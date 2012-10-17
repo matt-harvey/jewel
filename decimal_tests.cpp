@@ -751,7 +751,12 @@ TEST_FIXTURE(DigitStringFixture, decimal_subtraction)
 			large_num - large_neg_num,
 		DecimalSubtractionException
 	);
+	CHECK_THROW
+	(	Decimal("0") - Decimal::minimum(),
+		DecimalSubtractionException
+	);
 	// But these shouldn't throw
+	Decimal d16b = Decimal("0") - Decimal::maximum();
 	Decimal d17(".9324");
 	d17 = d17 - Decimal("-24.24");
 	Decimal d18("1000000");
@@ -1477,6 +1482,7 @@ TEST(decimal_operator_equality)
 	Decimal const d0c = d0;
 	Decimal const d1c = d1;
 	CHECK_EQUAL(d0, d1);
+	CHECK_EQUAL(Decimal("2837.9900"), Decimal("2837.99"));
 	// Check values unchanged after comparison
 	CHECK_EQUAL(d0, d0c);
 	CHECK_EQUAL(d1, d1c);
@@ -1661,6 +1667,8 @@ TEST(decimal_operator_unary_minus)
 	ostringstream oss4;
 	oss4 << -d4;
 	CHECK_EQUAL(oss4.str(), "-34.712000");
+	CHECK_EQUAL(-Decimal("98774.09"), Decimal("0") - Decimal("98774.09"));
+	CHECK_EQUAL(-Decimal("900"), Decimal("0.000") - Decimal("900.0"));
 }
 
 TEST(decimal_operator_unary_plus)
