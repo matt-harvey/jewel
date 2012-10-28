@@ -385,7 +385,7 @@ Decimal::implicit_divisor() const
 void
 Decimal::output_aux(ostringstream& oss) const
 {
-	typedef std::string::size_type str_sz;
+	typedef string::size_type str_sz;
 
 	// special case of zero
 	if (m_intval == 0)
@@ -393,7 +393,7 @@ Decimal::output_aux(ostringstream& oss) const
 		oss << '0';
 		if (m_places > 0)
 		{
-			oss << Decimal::s_spot << std::string(m_places, '0');
+			oss << s_spot << string(m_places, '0');
 		}
 	}
 
@@ -409,8 +409,7 @@ Decimal::output_aux(ostringstream& oss) const
 	{
 		// Our starting point is the string of digits representing
 		// the absolute value of the underlying integer
-		std::string const s =
-			boost::lexical_cast<std::string>(std::abs(m_intval));
+		string const s = lexical_cast<std::string>(std::abs(m_intval));
 		assert(s != "0");
 		str_sz slen = s.size();
 		
@@ -420,7 +419,7 @@ Decimal::output_aux(ostringstream& oss) const
 		// case where the whole part is zero
 		if (slen <= m_places)
 		{
-			oss << '0' << Decimal::s_spot;
+			oss << '0' << s_spot;
 			str_sz stop_here = m_places - slen;
 			for (str_sz i = 0; i != stop_here; ++i) oss << '0';
 			for (str_sz j = 0; j != slen; ++j) oss << s[j];
@@ -434,7 +433,7 @@ Decimal::output_aux(ostringstream& oss) const
 			for ( ; k != whole_digits; ++k) oss << s[k];
 			if (m_places > 0)
 			{
-				oss << Decimal::s_spot;
+				oss << s_spot;
 				for ( ; k != slen; ++k) oss << s[k];
 			}
 		}
@@ -443,7 +442,7 @@ Decimal::output_aux(ostringstream& oss) const
 			// failure. This is to test how Decimal output
 			// operator<< (which calls this function) handles
 			// failure.
-			std::string grow_me = "a";
+			string grow_me = "a";
 			while (true)
 			{
 				grow_me += grow_me;
@@ -534,6 +533,7 @@ Decimal& Decimal::operator-=(Decimal rhs)
 	assert (m_places >= benchmark_places);
 	return *this;
 }
+
 
 Decimal& Decimal::operator*=(Decimal rhs)
 {
