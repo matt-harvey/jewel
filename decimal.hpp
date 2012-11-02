@@ -203,7 +203,7 @@ public:
 	 * @param str is the string representation of a Decimal
 	 * number.
 	 *
-	 * Currently str must be a possibly empty series of digits
+	 * Currently str must be a non-empty series of digits
 	 * between 0 and 9 inclusive, possibly preceded by a minus
 	 * sign, possibly followed by a spot ('.'), possibly followed
 	 * by further digits between 0 and 9 inclusive. There must be
