@@ -12,6 +12,7 @@ add_executable (main
 				exception_tests.cpp
 				num_digits.cpp
 		        num_digits_tests.cpp
+				optional_tests.cpp
 		        stopwatch_tests.cpp
 		        power_vector_tests.cpp)
 add_library(jewel
@@ -37,6 +38,7 @@ install(FILES
 		exception.hpp
 		Doxyfile
 		num_digits.hpp
+		optional.hpp
 		overview.dox
 		power_vector.hpp
 		stopwatch.hpp
