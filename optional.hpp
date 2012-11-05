@@ -26,12 +26,12 @@ namespace jewel
  * @throws UninitializedOptionalException if x is
  * uninitialized.
  *
- * This provides a wrapper around the operator* which
- * is provided by boost::optional. Using this operator without
- * the wrapper to obtain the value of x will result in an assertion
+ * This provides a wrapper around boost::optional<T>::operator*.
+ * Using boost::optional<T>::operator* without
+ * this wrapper to obtain the value of x will result in an assertion
  * failure (rather than an exception being thrown) in the event that
- * x is uninitialized. There is a small performance penalty from using
- * this wrapper, however.
+ * x is uninitialized. This wrapper throws an exception instead. There
+ * is a small performance penalty from using this wrapper, however.
  */
 template <typename T>
 T
