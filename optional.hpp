@@ -29,7 +29,7 @@ namespace jewel
  * This provides a wrapper around boost::optional<T>::operator*.
  * Using boost::optional<T>::operator* without
  * this wrapper to obtain the value of x will result in an assertion
- * failure (rather than an exception being thrown) in the event that
+ * failure in the event that
  * x is uninitialized. This wrapper throws an exception instead. There
  * is a small performance penalty from using this wrapper, however.
  */
