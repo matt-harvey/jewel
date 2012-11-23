@@ -20,11 +20,9 @@
  * Supported types are:\n
  * <tt>
  * int\n
- * long\n
  * boost::int64_t\n
  * short\n
  * unsigned int\n
- * unsigned long\n
  * boost::uint64_t\n
  * unsigned short\n
  * </tt>
@@ -34,6 +32,11 @@
  * unsafe to add \c x and \c y (or subtract \c y from \c x, or multiply \c x
  * by \c y) (i.e. would give rise to overflow), otherwise returns false.
  * The operation being tested is not actually performed.
+ *
+ * Note long and unsigned long are no longer specifically supported as these
+ * cause redefinition errors on machines where boost::int64_t and boost::uint64_t
+ * are defined as long. However long / unsigned long with be equivalent to
+ * boost::int64_t / boost::uint64_t on these machines anyway.
  *
  * Exception safety: <em>nothrow guarantee</em> is offered by all compilable
  * instantiations of the function templates in this header.

@@ -25,6 +25,12 @@ namespace jewel
  * Only the parameter types specifically provided for in the overloads can be
  * passed to the num_digits function. Passing other types will cause
  * compilation failure, rather than conversion to the allowed types.
+ *
+ * Note long and unsigned long are no longer specifically supported as these
+ * cause redefinition errors on machines where boost::int64_t and boost::uint64_t
+ * are defined as long. However long / unsigned long with be equivalent to
+ * boost::int64_t / boost::uint64_t on these machines anyway.
+ *
  */
 class NumDigits
 {
