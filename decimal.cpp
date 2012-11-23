@@ -538,7 +538,6 @@ Decimal& Decimal::operator-=(Decimal rhs)
 Decimal& Decimal::operator*=(Decimal rhs)
 {
 	Decimal orig = *this;
-	Decimal orig_rhs = rhs;
 	rationalize();
 	rhs.rationalize();
 
@@ -594,7 +593,6 @@ Decimal& Decimal::operator/=(Decimal rhs)
 {
 	// Record original dividend and divisor
 	Decimal const orig = *this;
-	Decimal const orig_rhs = rhs;
 
 	rhs.rationalize();
 

@@ -55,11 +55,11 @@ public:
 	// functions in checked_arithmetic.hpp needs to be updated
 	// accordingly.
 	static bool addition_is_unsafe(int, int);
-	static bool addition_is_unsafe(long, long);
+	// static bool addition_is_unsafe(long, long);
 	static bool addition_is_unsafe(boost::int64_t, boost::int64_t);
 	static bool addition_is_unsafe(short, short);
 	static bool addition_is_unsafe(unsigned int, unsigned int);
-	static bool addition_is_unsafe(unsigned long, unsigned long);
+	// static bool addition_is_unsafe(unsigned long, unsigned long);
 	static bool addition_is_unsafe(boost::uint64_t, boost::uint64_t);
 	static bool addition_is_unsafe(unsigned short, unsigned short);
 	//@}
@@ -70,11 +70,11 @@ public:
 	// functions in checked_arithmetic.hpp needs to be updated
 	// accordingly.
 	static bool subtraction_is_unsafe(int, int);
-	static bool subtraction_is_unsafe(long, long);
+	// static bool subtraction_is_unsafe(long, long);
 	static bool subtraction_is_unsafe(boost::int64_t, boost::int64_t);
 	static bool subtraction_is_unsafe(short, short);
 	static bool subtraction_is_unsafe(unsigned int, unsigned int);
-	static bool subtraction_is_unsafe(unsigned long, unsigned long);
+	// static bool subtraction_is_unsafe(unsigned long, unsigned long);
 	static bool subtraction_is_unsafe(boost::uint64_t, boost::uint64_t);
 	static bool subtraction_is_unsafe(unsigned short, unsigned short);
 	//@}
@@ -85,11 +85,11 @@ public:
 	// functions in checked_arithmetic.hpp needs to be updated
 	// accordingly.
 	static bool multiplication_is_unsafe(int, int);
-	static bool multiplication_is_unsafe(long, long);
+	// static bool multiplication_is_unsafe(long, long);
 	static bool multiplication_is_unsafe(boost::int64_t, boost::int64_t);
 	static bool multiplication_is_unsafe(short, short);
 	static bool multiplication_is_unsafe(unsigned int, unsigned int);
-	static bool multiplication_is_unsafe(unsigned long, unsigned long);
+	// static bool multiplication_is_unsafe(unsigned long, unsigned long);
 	static bool multiplication_is_unsafe(boost::uint64_t, boost::uint64_t);
 	static bool multiplication_is_unsafe(unsigned short, unsigned short);
 	//@}
