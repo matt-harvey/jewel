@@ -5,6 +5,7 @@
 
 using boost::optional;
 using jewel::UninitializedOptionalException;
+using jewel::clear;
 using jewel::value;
 using std::string;
 using std::vector;
@@ -65,4 +66,29 @@ TEST(value)
 	optional<Dummy> d2(Dummy(3, "Hello"));
 	CHECK(*d2 == value(d2));
 }
+
+TEST(clear)
+{
+	optional<int> x = 3;
+	CHECK_EQUAL(*x, 3);
+	CHECK_EQUAL(value(x), 3);
+	clear(x);
+	CHECK_THROW(value(x), UninitializedOptionalException);
+	x = 4;
+	CHECK_EQUAL(value(x), 4);
+
+	string const sentence("Hello.");
+	optional<string> s(sentence);
+	CHECK_EQUAL(value(s), "Hello.");
+	clear(s);
+	CHECK_THROW(value(s), UninitializedOptionalException);
+	s = "Yes";
+	CHECK_EQUAL(value(s), "Yes");
+
+	optional<Dummy> d(Dummy(3, "Yo!"));
+	CHECK(*d == value(d));
+	clear(d);
+	CHECK_THROW(value(d), UninitializedOptionalException);
+}
+
 
