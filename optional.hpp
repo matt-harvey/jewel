@@ -44,7 +44,8 @@ value(boost::optional<T> const& x);
  * Reverts x to an uninitialized state. (If is already in an
  * uninitialized state, this has no effect.)
  *
- * Exception safety: <em>nothrow guarantee</em>.
+ * Exception safety: <em>nothrow guarantee</em>, provided the
+ * <em>destructor</em> of T never throws.
  */
 template <typename T>
 void
