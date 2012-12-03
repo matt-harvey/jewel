@@ -14,6 +14,8 @@
 
 
 #include <ctime>
+#include <iomanip>
+#include <ios>
 #include <iostream>
 #include <string>
 
@@ -75,9 +77,9 @@ double Stopwatch::seconds_elapsed() const
 inline
 std::ostream& Stopwatch::log(std::ostream& os) const
 {
-	os << seconds_elapsed()
-		     << " seconds elapsed."
-		     << std::endl;
+	std::streamsize const prec = os.precision();
+	os << std::setprecision(6) << seconds_elapsed() << " seconds elapsed."
+	   << std::setprecision(prec) << std::endl;
 	return os;
 }
 
