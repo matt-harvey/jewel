@@ -123,6 +123,13 @@ namespace jewel
  * from the internationalization task which is a separate todo.
  *
  * @todo HIGH PRIORITY
+ * Support internationalization of output. Currently Decimal supports
+ * internationization of numpunct, but other facets are ignored.
+ * Determine if it is a problem for immediate use cases. If it is
+ * such a problem, fix it as a high priority. If it is not such a
+ * problem, demote this todo to "low priority".
+ *
+ * @todo HIGH PRIORITY
  * Support internationalization of input.
  *
  * @todo HIGH PRIORITY
@@ -142,6 +149,9 @@ namespace jewel
  * @todo LOW PRIORITY
  * Stop Doxygen from spewing all those warnings. They relate only to Doxygen
  * markup.
+ *
+ * @todo LOW PRIORITY
+ * Deal with compiler warnings about unused variables in tests.
  *
   @todo LOW PRIORITY
  * Division now incorporates rounding but: (a) it is a bit inefficient;
