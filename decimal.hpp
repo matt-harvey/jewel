@@ -17,6 +17,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
+#include <algorithm>
 #include <cassert>
 #include <cctype>   // for isdigit
 #include <cstdlib>  // for abs
@@ -120,11 +121,6 @@ namespace jewel
  * those flags to format the string in accordance with those flags.
  * I should probably define this in a separate file. Note this is different
  * from the internationalization task which is a separate todo.
- *
- * @todo LOW PRIORITY
- * Support internationalization of output for locales in which
- * whole digits can be grouped in different numbers of digits, e.g.
- * Nepalese.
  *
  * @todo HIGH PRIORITY
  * Support internationalization of input.
@@ -652,9 +648,12 @@ private:
 	 * Called by output operator. This is not designed to be called by
 	 * other functions. May throw boost::bad_lexical_cast (would be rare)
 	 * or std::bad_alloc (even if exceptions not enabled on oss).
+	 * Writes a Decimal number backwards on a stream. (Backwards is
+	 * easier.)
 	 */
 	template <typename charT, typename traits>
 	void output_aux(std::basic_ostream<charT, traits>& oss) const;
+
 	
 }; // class Decimal
 
@@ -842,9 +841,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 		// should also be mirrored in ss.
 		ss.exceptions(os.exceptions());
 
-		// Imbue os locale to ss
 		ss.imbue(os.getloc());
-
 		d.output_aux(ss);
 		if (!ss)
 		{
@@ -855,7 +852,12 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 			return os;
 		}
 		assert (ss);
-		os << ss.str();
+		std::basic_string<charT> s = ss.str();
+		std::reverse_copy
+		(	s.begin(),
+			s.end(),
+			std::ostream_iterator<charT, charT, traits>(os)
+		);
 	}
 	catch (std::exception&)
 	{
@@ -876,10 +878,12 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 {
 	using std::locale;
 	using std::numpunct;
-	using std::ostringstream;
-	using std::string;
+	using std::reverse_copy;
 	using std::use_facet;
-	typedef string::size_type str_sz;
+	typedef typename std::basic_string<charT> stringT;
+	typedef typename stringT::size_type str_sz;
+	typedef typename std::basic_ostringstream<charT> ostringstreamT;
+	typedef typename std::ostream_iterator<charT, charT, traits> ostream_itT;
 
 	// Record target locale
 	locale const loc(oss.getloc());
@@ -893,14 +897,19 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 	// our manual labours.
 	oss.imbue(locale(locale::classic()));
 
+	// Now we write the number BACKWARDS onto oss. It's easier
+	// this way, especially when it comes to processing
+	// "thousands separators" for locales with unusual digit
+	// groupings.
+
 	// special case of zero
 	if (m_intval == 0)
 	{
-		oss << '0';
 		if (m_places > 0)
 		{
-			oss << decimal_point << string(m_places, '0');
+			oss << stringT(m_places, charT('0')) << decimal_point;
 		}
+		oss << charT('0');
 	}
 
 	// special case of smallest possible m_intval - as we
@@ -908,91 +917,116 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 	else if (m_intval == std::numeric_limits<Decimal::int_type>::min())
 	{
 		assert (m_places == 0);
-		oss << m_intval;
+		ostringstreamT tempstream;
+		tempstream.imbue(loc);
+		tempstream << m_intval;
+		stringT const tempstring = tempstream.str();
+		reverse_copy
+		(	tempstring.begin(),
+			tempstring.end(),
+			ostream_itT(oss)
+		);
 	}
 
 	else
 	{
-		// Our starting point is the string of digits representing
+		// Our starting point is the stringT of digits representing
 		// the absolute value of the underlying integer.
-		ostringstream tempstream;
+		ostringstreamT tempstream;
 		tempstream.imbue(locale::classic());
 		tempstream << std::abs(m_intval);
-		string const s = tempstream.str();
-
-		assert(s != "0");
-		str_sz slen = s.size();
-		
-		// Deal with sign
-		if (m_intval < 0) oss << '-';
-			
-		// case where the whole part is zero
-		if (slen <= m_places)
+		stringT s = tempstream.str();
+		str_sz const slen = s.length();
+	
+		// Write the fractional part
+		typename stringT::const_reverse_iterator const rend = s.rend();
+		typename stringT::const_reverse_iterator rit = s.rbegin();
+		str_sz digits_written  = 0;
+		for
+		(	;
+			(digits_written != m_places) && (rit != rend);
+			++rit, ++digits_written
+		)
 		{
-			oss << '0' << decimal_point;
-			str_sz stop_here = m_places - slen;
-			for (str_sz i = 0; i != stop_here; ++i) oss << '0';
-			for (str_sz j = 0; j != slen; ++j) oss << s[j];
+			oss << *rit;
 		}
+
+		// Deal with any "filler zeroes" required in the
+		// fractional part
+		while (digits_written != m_places)
+		{
+			oss << charT('0');
+			++digits_written;
+		}
+
+		// Write the decimal point if required
+		if (m_places != 0) oss << decimal_point;
+			
+		// Write the whole part
 		
-		// case where the whole part is non-zero
+		// Get format specifier for digit grouping
+		std::string const grouping =
+			use_facet< numpunct<charT> >(loc).grouping();
+		if (grouping.empty())
+		{
+			// We don't have to deal with digit grouping
+			for
+			(	;
+				rit != rend;
+				++rit, ++digits_written
+			)
+			{
+				oss << *rit;
+			}
+		}
 		else
 		{
-			str_sz const whole_digits = slen - m_places;
-			str_sz k = 0;
-			bool const using_thousands_separator =
-				(use_facet< numpunct<charT> >(loc).grouping()[0] != 0);
-			if (using_thousands_separator)
+			// We have to deal with digit grouping
+			charT const separator =
+				use_facet<numpunct<charT> >(loc).thousands_sep();
+			std::string::const_iterator grouping_it = grouping.begin();
+			std::string::const_iterator const last_group_datum
+				= grouping.end() - 1;
+			str_sz digits_written_this_group = 0;
+			for
+			(	;
+				rit != rend;
+				++rit, ++digits_written, ++digits_written_this_group
+			)
 			{
-				assert (k == 0);
-				str_sz const group_size =
-					static_cast<str_sz>
-					(	use_facet< numpunct<charT> >(loc).grouping()[0]
-					);
-
-				str_sz const max_separators = whole_digits / group_size;
-				str_sz const mod = whole_digits % group_size;
-				charT const thousands_separator =
-					use_facet< numpunct<charT> >(loc).thousands_sep();
-				str_sz separators_so_far = 0;
-				for ( ; k != whole_digits; ++k)
+				if
+				(	digits_written_this_group ==
+					static_cast<str_sz>(*grouping_it)
+				)
 				{
-					if
-					(	(separators_so_far != max_separators) &&
-						(k % group_size == mod) &&
-						(k != 0)
-					)
-					{
-						oss << thousands_separator;
-						++separators_so_far;
-					}
-					oss << s[k];
+					oss << separator;
+					digits_written_this_group = 0;
+					if (grouping_it != last_group_datum) ++grouping_it;
 				}
-			}
-			else
-			{
-				assert (k == 0);
-				for ( ; k != whole_digits; ++k) oss << s[k];
-			}
-			if (m_places > 0)
-			{
-				oss << decimal_point;
-				for ( ; k != slen; ++k) oss << s[k];
+				oss << *rit;
 			}
 		}
-	
-		#ifdef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
-			// We cause bad memory allocation here to provoke
-			// failure. This is to test how Decimal output
-			// operator<< (which calls this function) handles
-			// failure.
-			string grow_me = "a";
-			while (true)
-			{
-				grow_me += grow_me;
-			}
-		#endif
+
+		// Write a leading zero if required
+		if (digits_written == m_places)
+		{
+			oss << charT('0');
+		}
+		
+		// Write negative sign if required
+		if (m_intval < 0) oss << '-';
 	}
+	#ifdef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+		// We cause bad memory allocation here to provoke
+		// failure. This is to test how Decimal output
+		// operator<< (which calls this function) handles
+		// failure.
+		std::string grow_me("a");
+		while (true)
+		{
+			grow_me += grow_me;
+		}
+	#endif
 	return;
 }
 

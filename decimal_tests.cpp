@@ -1569,6 +1569,15 @@ TEST(decimal_operator_output)
 		CHECK_EQUAL(os13.str(), os14.str());
 		ostringstream os15;
 		os15 << numeric_limits<Decimal::int_type>::min();
+		ostringstream os15b;
+		os15b << Decimal("0.01");
+		CHECK_EQUAL(os15b.str(), "0.01");
+		ostringstream os15c;
+		os15c << Decimal("0.001");
+		CHECK_EQUAL(os15c.str(), "0.001");
+		ostringstream os15d;
+		os15d << Decimal("-.00030");
+		CHECK_EQUAL(os15d.str(), "-0.00030");
 		ostringstream os16;
 		os16 << Decimal::minimum();
 		CHECK_EQUAL(os15.str(), os16.str());
@@ -1587,17 +1596,16 @@ TEST(decimal_operator_output)
 
 		locale const german = locale("german");
 		locale const french = locale("fr_FR");
+		locale const nepali = locale("ne_NP"); 
 
+		// German locale
 		locale::global(german);
-		assert
-		(	use_facet< numpunct<char> >(german).grouping()[0] == 3
-		);
-		assert
-		(	use_facet< numpunct<char> >(german).thousands_sep() == '.'
-		);
-		assert
-		(	use_facet< numpunct<char> >(german).decimal_point() == ','
-		);
+		assert (use_facet< numpunct<char> >(german).grouping()[0] == 3);
+		assert (use_facet< numpunct<char> >(german).grouping().size() == 2);
+		assert (use_facet< numpunct<char> >(german).grouping()[0] == 3);
+		assert (use_facet< numpunct<char> >(german).grouping()[1] == 3);
+		assert (use_facet< numpunct<char> >(german).thousands_sep() == '.');
+		assert (use_facet< numpunct<char> >(german).decimal_point() == ',');
 		ostringstream os17;
 		os17 << Decimal("9300700.958");
 		CHECK_EQUAL(os17.str(), "9.300.700,958");
@@ -1613,29 +1621,60 @@ TEST(decimal_operator_output)
 		ostringstream os20;
 		os20 << Decimal("-50800.5");
 		CHECK_EQUAL(os20.str(), "-50.800,5");
-		locale::global(locale(locale::classic()));
+		ostringstream os20b;
+		os20b << Decimal("1000000000000");
+		ostringstream os20c;
+		os20c << 1000000000000;
+		CHECK_EQUAL(os20b.str(), os20c.str());
+		locale::global(locale::classic());
 		
+		// French locale
 		locale::global(french);
-		assert
-		(	use_facet< numpunct<char> >(french).grouping()[0] == 3
-		);
-		assert
-		(	use_facet< numpunct<char> >(french).thousands_sep() == ' '
-		);
-		assert
-		(	use_facet< numpunct<char> >(french).decimal_point() == ','
-		);
+		assert (use_facet< numpunct<char> >(french).grouping()[0] == 3);
+		assert (use_facet< numpunct<char> >(french).grouping().size() == 1);
+		assert (use_facet< numpunct<char> >(french).grouping()[0] == 3);
+		assert (use_facet< numpunct<char> >(french).thousands_sep() == ' ');
+		assert (use_facet< numpunct<char> >(french).decimal_point() == ',');
 		ostringstream os24;
 		os24 << Decimal("898234.2983");
 		CHECK_EQUAL(os24.str(), "898 234,2983");
 		ostringstream os25;
 		os25 << Decimal("-50000000.000");
+		ostringstream os25b;
 		CHECK_EQUAL(os25.str(), "-50 000 000,000");
-		locale::global(locale(locale::classic()));
+		locale::global(locale::classic());
 		ostringstream os26;
 		os26.imbue(french);
 		os26 << Decimal("7909");
+		ostringstream os27;
+		os27.imbue(os26.getloc());
+		os27 << 7909;
+		CHECK_EQUAL(os26.str(), os27.str());
 		CHECK_EQUAL(os26.str(), "7 909");
+
+		// Nepali locale
+		locale::global(nepali);
+		assert (use_facet< numpunct<char> >(nepali).grouping().size() == 1);
+		assert (use_facet< numpunct<char> >(nepali).grouping() == "\3");
+		assert (use_facet< numpunct<char> >(nepali).decimal_point() == '.');
+		assert (use_facet< numpunct<char> >(nepali).thousands_sep() == ',');
+		string const nepali_grouping =
+			use_facet< numpunct<char> >(nepali).grouping();
+		ostringstream os28;
+		os28 << 2003678376;
+		ostringstream os29;
+		os29 << Decimal("2003678376");
+		cout.imbue(nepali);
+		cout << "Nepali:" << endl;
+		cout << 2003678376 << endl;
+		cout << -2000000.5555 << endl;
+		cout.imbue(locale::classic());
+		CHECK_EQUAL(os28.str(), os29.str());
+		ostringstream os30;
+		os30 << Decimal("-2000000.5555");
+		CHECK_EQUAL(os30.str(), "-2,000,000.5555");
+		locale::global(locale::classic());
+
 
 
 	#else	
