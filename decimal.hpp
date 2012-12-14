@@ -22,6 +22,7 @@
 #include <cstdlib>  // for abs
 #include <cmath>
 #include <istream>
+#include <locale>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -117,8 +118,25 @@ namespace jewel
  * representation of a number, and the set of all the formatting flags
  * of an ostream (or a basic_ostream<>?), and use
  * those flags to format the string in accordance with those flags.
- * I should probably define this in a separate file. It could include
- * currency formats and so forth, too.
+ * I should probably define this in a separate file. Note this is different
+ * from the internationalization task which is a separate todo.
+ *
+ * @todo LOW PRIORITY
+ * Support internationalization of output for locales in which
+ * whole digits can be grouped in different numbers of digits, e.g.
+ * Nepalese.
+ *
+ * @todo HIGH PRIORITY
+ * Support internationalization of input.
+ *
+ * @todo HIGH PRIORITY
+ * Either use moneypunct, or provide a custom manipulator, to enable
+ * input to parsed, and output to be formatted, in "financial" format
+ * e.g.  with parentheses
+ * for negatives. Note also that thousands separators might be
+ * absent from the user's locale, but we probably still want
+ * thousands separators for monetary input and output even when the user's
+ * locale does not include these.
  *
  * @todo LOW PRIORITY
  * Make Doxygen apidocs build and install as part of make install, and then
@@ -635,7 +653,8 @@ private:
 	 * other functions. May throw boost::bad_lexical_cast (would be rare)
 	 * or std::bad_alloc (even if exceptions not enabled on oss).
 	 */
-	void output_aux(std::ostringstream& oss) const;
+	template <typename charT, typename traits>
+	void output_aux(std::basic_ostream<charT, traits>& oss) const;
 	
 }; // class Decimal
 
@@ -823,6 +842,9 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 		// should also be mirrored in ss.
 		ss.exceptions(os.exceptions());
 
+		// Imbue os locale to ss
+		ss.imbue(os.getloc());
+
 		d.output_aux(ss);
 		if (!ss)
 		{
@@ -835,18 +857,143 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 		assert (ss);
 		os << ss.str();
 	}
-	catch (std::bad_alloc&)
+	catch (std::exception&)
 	{
-		// Exception could be from failed allocation of
+		// Exception could be std::bad_alloc from failed allocation of
 		// ostringstream or string (though both are
 		// extremely unlikely).
-		os.setstate(std::ios_base::badbit);
-	}
-	catch (boost::bad_lexical_cast&)
-	{
+		// Possibly others? Catch std::exception to be sure.
+		// If oss has not got exceptions enabled, then we should NOT
+		// throw.
 		os.setstate(std::ios_base::badbit);
 	}
 	return os;
+}
+
+template <typename charT, typename traits>
+void
+Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
+{
+	using std::locale;
+	using std::numpunct;
+	using std::ostringstream;
+	using std::string;
+	using std::use_facet;
+	typedef string::size_type str_sz;
+
+	// Record target locale
+	locale const loc(oss.getloc());
+	charT const decimal_point =
+		use_facet< numpunct<charT> >(loc).decimal_point();
+
+	// We will be "manually" reflecting the locale's numpunct facet
+	// in what we write to oss. If there is already a non-C
+	// locale on oss, we get rid of it now. We don't want
+	// some other locale's numpunct facet interfering with
+	// our manual labours.
+	oss.imbue(locale(locale::classic()));
+
+	// special case of zero
+	if (m_intval == 0)
+	{
+		oss << '0';
+		if (m_places > 0)
+		{
+			oss << decimal_point << string(m_places, '0');
+		}
+	}
+
+	// special case of smallest possible m_intval - as we
+	// cannot take the absolute value below
+	else if (m_intval == std::numeric_limits<Decimal::int_type>::min())
+	{
+		assert (m_places == 0);
+		oss << m_intval;
+	}
+
+	else
+	{
+		// Our starting point is the string of digits representing
+		// the absolute value of the underlying integer.
+		ostringstream tempstream;
+		tempstream.imbue(locale::classic());
+		tempstream << std::abs(m_intval);
+		string const s = tempstream.str();
+
+		assert(s != "0");
+		str_sz slen = s.size();
+		
+		// Deal with sign
+		if (m_intval < 0) oss << '-';
+			
+		// case where the whole part is zero
+		if (slen <= m_places)
+		{
+			oss << '0' << decimal_point;
+			str_sz stop_here = m_places - slen;
+			for (str_sz i = 0; i != stop_here; ++i) oss << '0';
+			for (str_sz j = 0; j != slen; ++j) oss << s[j];
+		}
+		
+		// case where the whole part is non-zero
+		else
+		{
+			str_sz const whole_digits = slen - m_places;
+			str_sz k = 0;
+			bool const using_thousands_separator =
+				(use_facet< numpunct<charT> >(loc).grouping()[0] != 0);
+			if (using_thousands_separator)
+			{
+				assert (k == 0);
+				str_sz const group_size =
+					static_cast<str_sz>
+					(	use_facet< numpunct<charT> >(loc).grouping()[0]
+					);
+
+				str_sz const max_separators = whole_digits / group_size;
+				str_sz const mod = whole_digits % group_size;
+				charT const thousands_separator =
+					use_facet< numpunct<charT> >(loc).thousands_sep();
+				str_sz separators_so_far = 0;
+				for ( ; k != whole_digits; ++k)
+				{
+					if
+					(	(separators_so_far != max_separators) &&
+						(k % group_size == mod) &&
+						(k != 0)
+					)
+					{
+						oss << thousands_separator;
+						++separators_so_far;
+					}
+					oss << s[k];
+				}
+			}
+			else
+			{
+				assert (k == 0);
+				for ( ; k != whole_digits; ++k) oss << s[k];
+			}
+			if (m_places > 0)
+			{
+				oss << decimal_point;
+				for ( ; k != slen; ++k) oss << s[k];
+			}
+		}
+	
+		#ifdef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+			// We cause bad memory allocation here to provoke
+			// failure. This is to test how Decimal output
+			// operator<< (which calls this function) handles
+			// failure.
+			string grow_me = "a";
+			while (true)
+			{
+				grow_me += grow_me;
+			}
+		#endif
+	}
+	return;
 }
 
 

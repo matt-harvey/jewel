@@ -25,6 +25,9 @@ using std::ostringstream;
 using std::setprecision;
 using std::string;
 
+// TEMP
+#include <locale>
+using std::locale;
 
 int main()
 {
@@ -48,6 +51,7 @@ int main()
 		     << "Define this to test error handling in stream output operator"
 			 << " for jewel::Decimal." << endl;
 	#endif
+
 
 	/*
 	cout << std::setprecision(2) << std::showpoint << std::fixed;

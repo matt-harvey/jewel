@@ -5,6 +5,7 @@
 #include <limits>
 #include <ios>
 #include <iostream>
+#include <locale>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -32,10 +33,13 @@ using std::cout;
 using std::cerr;
 using std::endl;
 using std::istringstream;
+using std::locale;
 using std::ostringstream;
 using std::numeric_limits;
+using std::numpunct;
 using std::ostringstream;
 using std::string;
+using std::use_facet;
 
 typedef Decimal::int_type int_type;
 typedef Decimal::places_type places_type;
@@ -1568,6 +1572,72 @@ TEST(decimal_operator_output)
 		ostringstream os16;
 		os16 << Decimal::minimum();
 		CHECK_EQUAL(os15.str(), os16.str());
+
+		// Test internationalization support
+
+		// C locale
+		ostringstream os16b;
+		os16b << Decimal("9300700.95838");
+		CHECK_EQUAL(os16b.str(), "9300700.95838");
+
+		// WARNING This test is implementation-dependant, because
+		// locale names are implementation-dependant.
+		// (However
+		// the code these tests are testing is NOT implementation-dependant.)
+
+		locale const german = locale("german");
+		locale const french = locale("fr_FR");
+
+		locale::global(german);
+		assert
+		(	use_facet< numpunct<char> >(german).grouping()[0] == 3
+		);
+		assert
+		(	use_facet< numpunct<char> >(german).thousands_sep() == '.'
+		);
+		assert
+		(	use_facet< numpunct<char> >(german).decimal_point() == ','
+		);
+		ostringstream os17;
+		os17 << Decimal("9300700.958");
+		CHECK_EQUAL(os17.str(), "9.300.700,958");
+		ostringstream os17b;
+		os17b << Decimal("1000");
+		CHECK_EQUAL(os17b.str(), "1.000");
+		ostringstream os18;
+		os18 << Decimal("900");
+		CHECK_EQUAL(os18.str(), "900");
+		ostringstream os19;
+		os19 << Decimal("0");
+		CHECK_EQUAL(os19.str(), "0");
+		ostringstream os20;
+		os20 << Decimal("-50800.5");
+		CHECK_EQUAL(os20.str(), "-50.800,5");
+		locale::global(locale(locale::classic()));
+		
+		locale::global(french);
+		assert
+		(	use_facet< numpunct<char> >(french).grouping()[0] == 3
+		);
+		assert
+		(	use_facet< numpunct<char> >(french).thousands_sep() == ' '
+		);
+		assert
+		(	use_facet< numpunct<char> >(french).decimal_point() == ','
+		);
+		ostringstream os24;
+		os24 << Decimal("898234.2983");
+		CHECK_EQUAL(os24.str(), "898 234,2983");
+		ostringstream os25;
+		os25 << Decimal("-50000000.000");
+		CHECK_EQUAL(os25.str(), "-50 000 000,000");
+		locale::global(locale(locale::classic()));
+		ostringstream os26;
+		os26.imbue(french);
+		os26 << Decimal("7909");
+		CHECK_EQUAL(os26.str(), "7 909");
+
+
 	#else	
 		// JEWEL_DECIMAL_OUTPUT_FAILURE_TEST is defined.
 		// Decimal output should fail. Here we test how the

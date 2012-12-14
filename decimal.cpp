@@ -35,12 +35,12 @@
 using boost::lexical_cast;
 using boost::bad_lexical_cast;
 using std::accumulate;
+using std::basic_ostream;
+using std::basic_ostringstream;
 using std::find;
 using std::isdigit;
 using std::istream;
 using std::numeric_limits;
-using std::basic_ostream;
-using std::basic_ostringstream;
 using std::max_element;
 using std::ostream;
 using std::ostringstream;
@@ -381,76 +381,6 @@ Decimal::implicit_divisor() const
 	return s_divisor_lookup[m_places];
 }
 
-
-void
-Decimal::output_aux(ostringstream& oss) const
-{
-	typedef string::size_type str_sz;
-
-	// special case of zero
-	if (m_intval == 0)
-	{
-		oss << '0';
-		if (m_places > 0)
-		{
-			oss << s_spot << string(m_places, '0');
-		}
-	}
-
-	// special case of smallest possible m_intval - as we
-	// cannot take the absolute value below
-	else if (m_intval == std::numeric_limits<Decimal::int_type>::min())
-	{
-		assert (m_places == 0);
-		oss << m_intval;
-	}
-
-	else
-	{
-		// Our starting point is the string of digits representing
-		// the absolute value of the underlying integer
-		string const s = lexical_cast<std::string>(std::abs(m_intval));
-		assert(s != "0");
-		str_sz slen = s.size();
-		
-		// negative sign
-		if (m_intval < 0) oss << '-';
-		
-		// case where the whole part is zero
-		if (slen <= m_places)
-		{
-			oss << '0' << s_spot;
-			str_sz stop_here = m_places - slen;
-			for (str_sz i = 0; i != stop_here; ++i) oss << '0';
-			for (str_sz j = 0; j != slen; ++j) oss << s[j];
-		}
-		
-		// case where the whole part is non-zero
-		else
-		{
-			str_sz whole_digits = slen - m_places;
-			str_sz k = 0;
-			for ( ; k != whole_digits; ++k) oss << s[k];
-			if (m_places > 0)
-			{
-				oss << s_spot;
-				for ( ; k != slen; ++k) oss << s[k];
-			}
-		}
-		#ifdef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
-			// We cause bad memory allocation here to provoke
-			// failure. This is to test how Decimal output
-			// operator<< (which calls this function) handles
-			// failure.
-			string grow_me = "a";
-			while (true)
-			{
-				grow_me += grow_me;
-			}
-		#endif
-	}
-	return;
-}
 
 
 // operators
