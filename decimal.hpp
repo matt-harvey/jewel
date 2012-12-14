@@ -133,7 +133,7 @@ namespace jewel
  * Support internationalization of input.
  *
  * @todo HIGH PRIORITY
- * Either use moneypunct, or provide a custom manipulator, to enable
+ * Either use moneypunct, or provide a custom manipulator or facet, to enable
  * input to parsed, and output to be formatted, in "financial" format
  * e.g.  with parentheses
  * for negatives. Note also that thousands separators might be

@@ -1,6 +1,7 @@
 #include "decimal.hpp"
 #include "decimal_exceptions.hpp"
 #include "num_digits.hpp"
+#include "decimal_tests_weird_punct.hpp"
 
 #include <limits>
 #include <ios>
@@ -10,9 +11,11 @@
 #include <stdexcept>
 #include <string>
 #include <boost/lexical_cast.hpp>
+#include <boost/shared_ptr.hpp>
 #include <unittest++/UnitTest++.h>
 
 using boost::lexical_cast;
+using boost::shared_ptr;
 using jewel::Decimal;
 using jewel::NumDigits;
 using jewel::DecimalException;
@@ -40,6 +43,7 @@ using std::numpunct;
 using std::ostringstream;
 using std::string;
 using std::use_facet;
+using weird_punct::WeirdPunct;
 
 typedef Decimal::int_type int_type;
 typedef Decimal::places_type places_type;
@@ -107,6 +111,7 @@ struct DigitStringFixture
 	string s_min_int_type_places_2;
 };
 // @endcond
+
 
 // To add a "randomish" digit to a string of digits
 void add_digit(string& s)
@@ -1664,10 +1669,6 @@ TEST(decimal_operator_output)
 		os28 << 2003678376;
 		ostringstream os29;
 		os29 << Decimal("2003678376");
-		cout.imbue(nepali);
-		cout << "Nepali:" << endl;
-		cout << 2003678376 << endl;
-		cout << -2000000.5555 << endl;
 		cout.imbue(locale::classic());
 		CHECK_EQUAL(os28.str(), os29.str());
 		ostringstream os30;
@@ -1675,7 +1676,15 @@ TEST(decimal_operator_output)
 		CHECK_EQUAL(os30.str(), "-2,000,000.5555");
 		locale::global(locale::classic());
 
-
+		// WeirdPunct locale
+		// Apparently WeirdPunct needs to be newed here. And
+		// if we delete it later it actually crashes.
+		locale const weird_locale(locale(""), new WeirdPunct(""));
+		locale::global(weird_locale);
+		ostringstream os31;
+		os31 << Decimal("-453709876.090");
+		CHECK_EQUAL(os31.str(), "-453w709w87w6^090");
+		locale::global(locale::classic());
 
 	#else	
 		// JEWEL_DECIMAL_OUTPUT_FAILURE_TEST is defined.
