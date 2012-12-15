@@ -123,12 +123,16 @@ namespace jewel
  * from the internationalization task which is a separate todo.
  *
  * @todo HIGH PRIORITY
- * Support internationalization of input.
+ * Internationalized output is working using the std::numpunct facilities.
+ * But it doesn't support Boost.Locale. If the client uses Boost.Locale
+ * instead of the standard library facilities, Decimal will
+ * not do any formatting. Considering that
+ * Boost.Locale _seems_ to be necessary to get things working on Windows
+ * properly, do I want to provide support for Boost.Locale in
+ * jewel::Decimal?
  *
  * @todo HIGH PRIORITY
- * Either use moneypunct, money_put and money_get, OR provide a custom
- * manipulator or facet, to enable input to parsed, and output to be
- * formatted, in "financial" format e.g.  with parentheses for negatives.
+ * Support internationalization of input.
  *
  * @todo LOW PRIORITY
  * Make Doxygen apidocs build and install as part of make install, and then
@@ -671,6 +675,13 @@ private:
  * caused by internal memory allocation failure in the body of this function
  * (extremely unlikely); or it might be caused by an "external" error, e.g.
  * a disk being removed during the course of writing to the disk.
+ *
+ * Output is sensitive to the std::numpunct facet of the locale of the
+ * stream being written to. "Thousands" separators, digit groupings and
+ * the decimal point sign will adjust according to the facet. However,
+ * jewel::Decimal does NOT currently support locales set by Boost.Locale.
+ * This is a significant shortcoming, since Boost.Locale offers superior
+ * localization facilities to those of the standard library.
  */
 template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&

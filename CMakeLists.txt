@@ -21,8 +21,8 @@ add_library(jewel
 			exception.cpp
 			num_digits.cpp)
 target_link_libraries (main
-                       unittest++
-					   boost_serialization)
+					   boost_locale-mt
+                       unittest++)
 
 install(TARGETS
 		jewel
