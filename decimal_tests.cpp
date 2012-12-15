@@ -44,6 +44,7 @@ using std::ostringstream;
 using std::string;
 using std::use_facet;
 using std::wostringstream;
+using std::wstring;
 using weird_punct::WeirdPunct;
 
 typedef Decimal::int_type int_type;
@@ -1686,6 +1687,28 @@ TEST(decimal_operator_output)
 		os31 << Decimal("-453709876.090");
 		CHECK_EQUAL(os31.str(), "-453w709w87w6^090");
 		locale::global(locale::classic());
+
+		// With wide char
+		wostringstream os32;
+		os32 << Decimal(".897");
+		wstring const ws32(os32.str());
+		wstring const ws32b(L"0.897");
+		// Note UnitTest++ macro CHECK_EQUAL breaks here
+		bool const ok32 = (ws32 == ws32b);
+		CHECK(ok32);
+		wostringstream os33;
+		os33 << Decimal("-8908.550");
+		wstring const ws33(os33.str());
+		wstring const ws33b(L"-8908.550");
+		bool const ok33 = (ws33 == ws33b);
+		CHECK(ok33);
+		wostringstream os34;
+		os34.imbue(french);
+		os34 << Decimal("-88750.550");
+		wstring const ws34(os34.str());
+		wstring const ws34b(L"-88 750,550");
+		bool const ok34 = (ws34 == ws34b);
+		CHECK(ok34);
 
 	#else	
 		// JEWEL_DECIMAL_OUTPUT_FAILURE_TEST is defined.
