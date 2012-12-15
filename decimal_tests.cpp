@@ -43,6 +43,7 @@ using std::numpunct;
 using std::ostringstream;
 using std::string;
 using std::use_facet;
+using std::wostringstream;
 using weird_punct::WeirdPunct;
 
 typedef Decimal::int_type int_type;

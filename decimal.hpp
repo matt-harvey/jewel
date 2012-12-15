@@ -123,23 +123,12 @@ namespace jewel
  * from the internationalization task which is a separate todo.
  *
  * @todo HIGH PRIORITY
- * Support internationalization of output. Currently Decimal supports
- * internationization of numpunct, but other facets are ignored.
- * Determine if it is a problem for immediate use cases. If it is
- * such a problem, fix it as a high priority. If it is not such a
- * problem, demote this todo to "low priority".
- *
- * @todo HIGH PRIORITY
  * Support internationalization of input.
  *
  * @todo HIGH PRIORITY
- * Either use moneypunct, or provide a custom manipulator or facet, to enable
- * input to parsed, and output to be formatted, in "financial" format
- * e.g.  with parentheses
- * for negatives. Note also that thousands separators might be
- * absent from the user's locale, but we probably still want
- * thousands separators for monetary input and output even when the user's
- * locale does not include these.
+ * Either use moneypunct, money_put and money_get, OR provide a custom
+ * manipulator or facet, to enable input to parsed, and output to be
+ * formatted, in "financial" format e.g.  with parentheses for negatives.
  *
  * @todo LOW PRIORITY
  * Make Doxygen apidocs build and install as part of make install, and then
@@ -875,8 +864,6 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 		// ostringstream or string (though both are
 		// extremely unlikely).
 		// Possibly others? Catch std::exception to be sure.
-		// If oss has not got exceptions enabled, then we should NOT
-		// throw.
 		os.setstate(std::ios_base::badbit);
 	}
 	return os;
@@ -905,12 +892,11 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 	// locale on oss, we get rid of it now. We don't want
 	// some other locale's numpunct facet interfering with
 	// our manual labours.
-	oss.imbue(locale(locale::classic()));
+	oss.imbue(locale::classic());
 
 	// Now we write the number BACKWARDS onto oss. It's easier
 	// this way, especially when it comes to processing
-	// "thousands separators" for locales with unusual digit
-	// groupings.
+	// "thousands separators".
 
 	// special case of zero
 	if (m_intval == 0)
