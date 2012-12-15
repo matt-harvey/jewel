@@ -914,9 +914,9 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 	{
 		if (m_places > 0)
 		{
-			oss << stringT(m_places, charT('0')) << decimal_point;
+			oss << stringT(m_places, oss.widen('0')) << decimal_point;
 		}
-		oss << charT('0');
+		oss << oss.widen('0');
 	}
 
 	// special case of smallest possible m_intval - as we
@@ -962,7 +962,7 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 		// fractional part
 		while (digits_written != m_places)
 		{
-			oss << charT('0');
+			oss << oss.widen('0');
 			++digits_written;
 		}
 
@@ -1017,7 +1017,7 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 		// Write a leading zero if required
 		if (digits_written == m_places)
 		{
-			oss << charT('0');
+			oss << oss.widen('0');
 		}
 		
 		// Write negative sign if required
