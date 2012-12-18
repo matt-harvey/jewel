@@ -1,4 +1,5 @@
 
+
 NOTES ON EFFICIENCY AND COMPARISON WITH DECIMAL WITH STATIC PLACES
 
 Reading from the underlying integer, and then the number of places, from a

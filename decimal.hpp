@@ -25,6 +25,7 @@
 #include <istream>
 #include <locale>
 #include <ostream>
+#include <sstream>
 #include <string>
 #include <vector>
 
