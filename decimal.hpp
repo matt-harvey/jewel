@@ -34,7 +34,7 @@ namespace jewel
 {
 
 /**
- * @class Decimal
+  @class Decimal
  * @brief A "constrained floating point" decimal number class.
  *
  * Each number is represented as an integer (of int_type), and a number of
@@ -863,7 +863,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 			return os;
 		}
 		assert (ss);
-		std::basic_string<charT> s = ss.str();
+		std::basic_string<charT> const s = ss.str();
 		std::reverse_copy
 		(	s.begin(),
 			s.end(),
