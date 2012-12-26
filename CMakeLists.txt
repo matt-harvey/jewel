@@ -39,6 +39,7 @@ install(FILES
 		Doxyfile
 		num_digits.hpp
 		optional.hpp
+		output_aux.hpp
 		overview.dox
 		power_vector.hpp
 		stopwatch.hpp
