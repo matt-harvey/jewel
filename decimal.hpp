@@ -14,7 +14,6 @@
 
 
 #include "decimal_exceptions.hpp"
-#include <boost/cstdint.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/operators.hpp>
 #include <algorithm>
@@ -93,10 +92,6 @@ namespace jewel
  * trailing '3's as are permitted by the implementation.
  *
  * @todo LOW PRIORITY
- * My use of boost::int64_t may compromise portability on some (probably
- * obscure) platforms. It may or may not be worth addressing this.
- *
- * @todo LOW PRIORITY
  * Multiplication and division throw exceptions in some cases where
  * they should be able to calculate an answer. I have documented these
  * behaviours in the API docs. I don't believe this is a \e very serious
@@ -172,7 +167,7 @@ public:
 	/** The type of the underlying integer representation of the
 	 * Decimal number.
 	 */
-	typedef boost::int64_t int_type;
+	typedef long long int_type;
 
 	/** The type of the integer representation of the number of
 	 * decimal places (scale).
