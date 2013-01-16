@@ -12,7 +12,6 @@
  */
 
 
-#include <boost/cstdint.hpp>
 #include <cstddef>
 
 
@@ -25,12 +24,6 @@ namespace jewel
  * Only the parameter types specifically provided for in the overloads can be
  * passed to the num_digits function. Passing other types will cause
  * compilation failure, rather than conversion to the allowed types.
- *
- * Note long and unsigned long are no longer specifically supported as these
- * cause redefinition errors on machines where boost::int64_t and boost::uint64_t
- * are defined as long. However long / unsigned long with be equivalent to
- * boost::int64_t / boost::uint64_t on these machines anyway.
- *
  */
 class NumDigits
 {
@@ -46,13 +39,15 @@ public:
 	 */
 	static std::size_t num_digits(int x, int base = 10);
 	static std::size_t num_digits(short x, short base = 10);
-	// static std::size_t num_digits(long x, long base = 10);
-	static std::size_t num_digits(boost::int64_t x, boost::int64_t base = 10);
+	static std::size_t num_digits(long x, long base = 10);
+	static std::size_t num_digits(long long x, long long base = 10);
 	static std::size_t num_digits(unsigned int x, unsigned int base = 10);
 	static std::size_t num_digits(unsigned short x, unsigned short base = 10);
-	// static std::size_t num_digits(unsigned long x, unsigned long base = 10);
-	static std::size_t num_digits(boost::uint64_t x,
-	  boost::uint64_t base = 10);
+	static std::size_t num_digits(unsigned long x, unsigned long base = 10);
+	static std::size_t num_digits
+	(	unsigned long long x,
+		unsigned long long base = 10
+	);
 private:
 	
 	// Constructor is private and unimplemented, to prevent this class

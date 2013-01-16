@@ -1,5 +1,4 @@
 #include "checked_arithmetic_detail.hpp"
-#include <boost/cstdint.hpp>
 
 namespace jewel
 {
@@ -12,14 +11,12 @@ bool CheckedArithmetic::addition_is_unsafe(int x, int y)
 	return addition_is_unsafe_signed_integral_types(x, y);
 }
 
-/*
 bool CheckedArithmetic::addition_is_unsafe(long x, long y)
 {
 	return addition_is_unsafe_signed_integral_types(x, y);
 }
-*/
 
-bool CheckedArithmetic::addition_is_unsafe(boost::int64_t x, boost::int64_t y)
+bool CheckedArithmetic::addition_is_unsafe(long long x, long long y)
 {
 	return addition_is_unsafe_signed_integral_types(x, y);
 }
@@ -34,16 +31,16 @@ bool CheckedArithmetic::addition_is_unsafe(unsigned int x, unsigned int y)
 	return addition_is_unsafe_unsigned_integral_types(x, y);
 }
 
-/*
 bool CheckedArithmetic::addition_is_unsafe(unsigned long x, unsigned long y)
 {
 	return addition_is_unsafe_unsigned_integral_types(x, y);
 }
-*/
 
 bool
-CheckedArithmetic::addition_is_unsafe(boost::uint64_t x,
-  boost::uint64_t y)
+CheckedArithmetic::addition_is_unsafe
+(	unsigned long long x,
+	unsigned long long y
+)
 {
 	return addition_is_unsafe_unsigned_integral_types(x, y);
 }
@@ -58,17 +55,12 @@ bool CheckedArithmetic::subtraction_is_unsafe(int x, int y)
 	return subtraction_is_unsafe_signed_integral_types(x, y);
 }
 
-/*
 bool CheckedArithmetic::subtraction_is_unsafe(long x, long y)
 {
 	return subtraction_is_unsafe_signed_integral_types(x, y);
 }
-*/
 
-bool CheckedArithmetic::subtraction_is_unsafe
-(	boost::int64_t x,
-	boost::int64_t y
-)
+bool CheckedArithmetic::subtraction_is_unsafe(long long x, long long y)
 {
 	return subtraction_is_unsafe_signed_integral_types(x, y);
 }
@@ -83,17 +75,17 @@ bool CheckedArithmetic::subtraction_is_unsafe(unsigned int x, unsigned int y)
 	return subtraction_is_unsafe_unsigned_integral_types(x, y);
 }
 
-/*
 bool
 CheckedArithmetic::subtraction_is_unsafe(unsigned long x, unsigned long y)
 {
 	return subtraction_is_unsafe_unsigned_integral_types(x, y);
 }
-*/
 
 bool
-CheckedArithmetic::subtraction_is_unsafe(boost::uint64_t x,
-  boost::uint64_t y)
+CheckedArithmetic::subtraction_is_unsafe
+(	unsigned long long x,
+	unsigned long long y
+)
 {
 	return subtraction_is_unsafe_unsigned_integral_types(x, y);
 }
@@ -109,16 +101,14 @@ bool CheckedArithmetic::multiplication_is_unsafe(int x, int y)
 	return multiplication_is_unsafe_signed_integral_types(x, y);
 }
 
-/*
 bool CheckedArithmetic::multiplication_is_unsafe(long x, long y)
 {
 	return multiplication_is_unsafe_signed_integral_types(x, y);
 }
-*/
 
 bool CheckedArithmetic::multiplication_is_unsafe
-(	boost::int64_t x,
-	boost::int64_t y
+(	long long x,
+	long long y
 )
 {
 	return multiplication_is_unsafe_signed_integral_types(x, y);
@@ -135,17 +125,17 @@ CheckedArithmetic::multiplication_is_unsafe(unsigned int x, unsigned int y)
 	return multiplication_is_unsafe_unsigned_integral_types(x, y);
 }
 
-/*
 bool
 CheckedArithmetic::multiplication_is_unsafe(unsigned long x, unsigned long y)
 {
 	return multiplication_is_unsafe_unsigned_integral_types(x, y);
 }
-*/
 
 bool
-CheckedArithmetic::multiplication_is_unsafe(boost::uint64_t x,
-  boost::uint64_t y)
+CheckedArithmetic::multiplication_is_unsafe
+(	unsigned long long x,
+ 	unsigned long long y
+)
 {
 	return multiplication_is_unsafe_unsigned_integral_types(x, y);
 }

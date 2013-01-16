@@ -1,5 +1,4 @@
 #include "num_digits.hpp"
-#include <boost/cstdint.hpp>
 
 namespace jewel
 {
@@ -18,17 +17,15 @@ NumDigits::num_digits(short x, short base)
 	return num_digits_aux(x, base);
 }
 
-/*
 std::size_t
 NumDigits::num_digits(long x, long base)
 {
 	if (x < 0) x = -x;
 	return num_digits_aux(x, base);
 }
-*/
 
 std::size_t
-NumDigits::num_digits(boost::int64_t x, boost::int64_t base)
+NumDigits::num_digits(long long x, long long base)
 {
 	if (x < 0) x = -x;
 	return num_digits_aux(x, base);
@@ -46,16 +43,14 @@ NumDigits::num_digits(unsigned short x, unsigned short base)
 	return num_digits_aux(x, base);
 }
 
-/*
 std::size_t
 NumDigits::num_digits(unsigned long x, unsigned long base)
 {
 	return num_digits_aux(x, base);
 }
-*/
 
 std::size_t
-NumDigits::num_digits(boost::uint64_t x, boost::uint64_t base)
+NumDigits::num_digits(unsigned long long x, unsigned long long base)
 {
 	return num_digits_aux(x, base);
 }
