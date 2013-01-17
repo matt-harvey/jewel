@@ -31,6 +31,9 @@ target_link_libraries (jewel_test
 install(TARGETS jewel
        LIBRARY DESTINATION usr/lib)
 
+install(DIRECTORY jewel
+        DESTINATION usr/include)
+
 install(FILES
         decimal_exceptions.hpp
 		checked_arithmetic.hpp
