@@ -22,14 +22,14 @@ set (test_sources
 
 add_executable (jewel_test ${library_sources} ${test_sources})
 
-add_library(jewel MODULE ${library_sources})
+add_library(jewel ${library_sources})
 
 target_link_libraries (jewel_test
 					   boost_locale-mt
                        unittest++)
 
 install(TARGETS jewel
-       LIBRARY DESTINATION lib)
+       ARCHIVE DESTINATION lib)
 
 install(DIRECTORY jewel DESTINATION include)
 
