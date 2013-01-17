@@ -29,10 +29,9 @@ target_link_libraries (jewel_test
                        unittest++)
 
 install(TARGETS jewel
-       LIBRARY DESTINATION usr/lib)
+       LIBRARY DESTINATION lib)
 
-install(DIRECTORY jewel
-        DESTINATION usr/include)
+install(DIRECTORY jewel DESTINATION include)
 
 install(FILES
         decimal_exceptions.hpp
@@ -48,6 +47,6 @@ install(FILES
 		power_vector.hpp
 		stopwatch.hpp
 		DESTINATION
-		usr/include/jewel)
+		include/jewel)
 
 
