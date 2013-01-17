@@ -12,7 +12,7 @@
 #include <string>
 #include <boost/lexical_cast.hpp>
 #include <boost/shared_ptr.hpp>
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++/UnitTest++.h>
 
 using boost::lexical_cast;
 using boost::shared_ptr;

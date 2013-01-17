@@ -3,7 +3,7 @@
 #include <ctime>
 #include <iostream>
 
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++/UnitTest++.h>
 #include "stopwatch.hpp"
 
 using std::ostringstream;

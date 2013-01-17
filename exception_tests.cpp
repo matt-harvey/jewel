@@ -2,7 +2,7 @@
 #include <cassert>
 #include <cstring>
 #include <string>
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++/UnitTest++.h>
 
 using jewel::Exception;
 using std::string;

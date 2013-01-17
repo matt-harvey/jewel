@@ -1,4 +1,4 @@
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++/UnitTest++.h>
 #include <boost/numeric/conversion/cast.hpp>
 #include "decimal_exceptions.hpp"
 #include "checked_arithmetic.hpp"

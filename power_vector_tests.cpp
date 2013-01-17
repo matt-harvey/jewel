@@ -5,7 +5,7 @@
 #include <string>
 
 #include <boost/foreach.hpp>
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++/UnitTest++.h>
 #include "power_vector.hpp"
 
 using std::cerr;

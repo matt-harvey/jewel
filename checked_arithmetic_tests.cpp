@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 #include <limits>
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++/UnitTest++.h>
 #include "checked_arithmetic.hpp"
 
 

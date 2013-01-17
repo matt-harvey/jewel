@@ -1,5 +1,5 @@
 #include "num_digits.hpp"
-#include <unittest++/UnitTest++.h>
+#include <UnitTest++/UnitTest++.h>
 
 using jewel::NumDigits;
 
