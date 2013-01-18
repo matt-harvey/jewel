@@ -533,22 +533,19 @@ TEST_FIXTURE(DigitStringFixture, decimal_addition)
 	s11[s11.size() - 1] = '1';
 	Decimal d10(s10);
 	Decimal d11(s11);
-	CHECK_THROW(Decimal d10p11 = d10 + d11, DecimalRangeException);
+	Decimal d10p11;
+	CHECK_THROW(d10p11 = d10 + d11, DecimalRangeException);
 	Decimal d12(s_max_digits_less_one);
 	Decimal d12p("12.3");
 	CHECK_THROW(d12p = d12 + Decimal("0.001"), DecimalRangeException);
 	Decimal d13("-.129774");
 	Decimal d13b(s_max_digits_less_one_places_2);
-	CHECK_THROW(Decimal d13p = d13 + d13b, DecimalRangeException);
+	Decimal d13p;
+	CHECK_THROW(d13p = d13 + d13b, DecimalRangeException);
 	Decimal d14("-0." + s_max_digits_less_one);
-	CHECK_THROW
-	(	Decimal d14p = d14 + Decimal("29"),
-		DecimalException
-	);
-	CHECK_THROW
-	(	Decimal d14p = d14 + Decimal("29"),
-		DecimalRangeException
-	);
+	Decimal d14p;
+	CHECK_THROW(d14p = d14 + Decimal("29"), DecimalException);
+	CHECK_THROW(d14p = d14 + Decimal("29"), DecimalRangeException);
 	
 	// With straightforward overflow
 	ostringstream oss;
@@ -570,13 +567,16 @@ TEST_FIXTURE(DigitStringFixture, decimal_addition)
 	Decimal d17(".9324");
 	d17 += Decimal("24.24");
 	Decimal d18("1000000");
-	Decimal d18b = d18 + Decimal("9284792");
+	Decimal d18b;
+	d18b = d18 + Decimal("9284792");
 	Decimal d19(".0242234");
-	Decimal d19b = d19 + Decimal("19.12");
+	Decimal d19b;
+	d19b = d19 + Decimal("19.12");
 	Decimal d20("100000");
 	d20 = d20 + Decimal(".001");
 	large_num_b = large_num_b + Decimal("10");
-	Decimal large_neg_num_c = large_neg_num_b + large_num_b;
+	Decimal large_neg_num_c;
+	large_neg_num_c = large_neg_num_b + large_num_b;
 	large_num_b = large_num_b + (-large_num_b);
 
 	// Test retention of fractional precision
@@ -721,13 +721,16 @@ TEST_FIXTURE(DigitStringFixture, decimal_subtraction)
 	string s11 = "0.00001";
 	Decimal d10(s10);
 	Decimal d11(s11);
-	CHECK_THROW(Decimal d11b = d10 - d11, DecimalRangeException);
+	Decimal d11b;
+	CHECK_THROW(d11b = d10 - d11, DecimalRangeException);
 	Decimal d12("7927439");
 	Decimal d12b("-." + string(Decimal::maximum_precision() - 4, '0') + "1");
-	CHECK_THROW(Decimal d12c = d12 - d12b, DecimalRangeException);
+	Decimal d12c;
+	CHECK_THROW(d12c = d12 - d12b, DecimalRangeException);
 	Decimal d13("1.900009");
 	Decimal d13b(s_max_digits_one_and_zeroes_places_2);
-	CHECK_THROW(Decimal d13c = d13 - d13b, DecimalException);
+	Decimal d13c;
+	CHECK_THROW(d13c = d13 - d13b, DecimalException);
 	Decimal d14("09.009423");
 	CHECK_THROW
 	(	d14 = d14 - Decimal(s_max_digits_less_one),
@@ -767,7 +770,8 @@ TEST_FIXTURE(DigitStringFixture, decimal_subtraction)
 		DecimalSubtractionException
 	);
 	// But these shouldn't throw
-	Decimal d16b = Decimal("0") - Decimal::maximum();
+	Decimal d16b;
+	d16b = Decimal("0") - Decimal::maximum();
 	Decimal d17(".9324");
 	d17 = d17 - Decimal("-24.24");
 	Decimal d18("1000000");
@@ -869,9 +873,10 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiply_equals)
 	}
 
 	// But these should shouldn't throw
-	Decimal d101 = large_num * Decimal("0");
-	Decimal d102 = -large_num * Decimal("1");
-	Decimal d103 = large_num * Decimal("-1.000");
+	Decimal d101, d102, d103;
+	d101 = large_num * Decimal("0");
+	d102 = -large_num * Decimal("1");
+	d103 = large_num * Decimal("-1.000");
 
 	// Test elimination of trailing fractional zeroes
 	Decimal d104("2.00");
@@ -929,8 +934,9 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiplication)
 	oss << numeric_limits<int_type>::max() / 11;
 	Decimal large_num(oss.str());
 	Decimal large_neg_num = -large_num;
+	Decimal large_num_b;
 	CHECK_THROW
-	(	Decimal large_num_b = large_num * large_num,
+	(	large_num_b = large_num * large_num,
 		DecimalMultiplicationException
 	);
 	// Check value unchanged after exception using standard try/catch
@@ -948,12 +954,14 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiplication)
 	CHECK_EQUAL(large_num_b2, Decimal(oss.str()));
 	CHECK_EQUAL(large_num, Decimal(oss.str()));
 	// End check of value preservation
+	Decimal large_num_c;
 	CHECK_THROW
-	(	Decimal large_num_c = Decimal("-29") * large_num,
+	(	large_num_c = Decimal("-29") * large_num,
 		DecimalMultiplicationException
 	);
+	Decimal large_neg_num_b;
 	CHECK_THROW
-	(	Decimal large_neg_num_b = large_neg_num * large_num,
+	(	large_neg_num_b = large_neg_num * large_num,
 		DecimalMultiplicationException
 	);
 
@@ -982,9 +990,11 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiplication)
 
 	// The smallest possible Decimal cannot be multiplied
 	Decimal d10 = Decimal::minimum();
-	CHECK_THROW(Decimal d11 = d10 * Decimal("1"), DecimalException);
+	Decimal d11;
+	CHECK_THROW(d11 = d10 * Decimal("1"), DecimalException);
+	Decimal d12;
 	CHECK_THROW
-	(	Decimal d12 = Decimal("1") * d10,
+	(	d12 = Decimal("1") * d10,
 		DecimalMultiplicationException
 	);
 
@@ -1218,7 +1228,8 @@ TEST_FIXTURE(DigitStringFixture, decimal_division)
 	Decimal d2000(s2000);
 	string s2001 = "0.000023";
 	Decimal d2001(s2001);
-	CHECK_THROW(Decimal d2002 = d2000 / d2001, DecimalDivisionException);
+	Decimal d2002;
+	CHECK_THROW(d2002 = d2000 / d2001, DecimalDivisionException);
 	Decimal d2003("20");
 	CHECK_THROW(d2003 = Decimal("-1901") / Decimal("0"),
 	  DecimalDivisionException);

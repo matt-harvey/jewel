@@ -36,6 +36,16 @@ namespace jewel
 namespace detail
 {
 
+namespace
+{
+	void reset(Decimal& x, Decimal& y)
+	{
+		x = Decimal(0, 0);
+		y = Decimal(0, 0);
+		return;
+	}
+}
+
 void decimal_speed_test()
 {
 	int const lim = 1000000;
@@ -46,33 +56,37 @@ void decimal_speed_test()
 		vec.push_back(Decimal("98.35"));
 	}
 
+	Decimal d0, d1;
+
 	// Base case... we will factor this out when
 	// measuring the speed of the arithmetic operations
 	Stopwatch sw_base_case;
 	for (int i = 0; i != lim; ++i)
 	{
-		Decimal d0 = vec[i];
-		Decimal d1 = vec[i + 1];
+		d0 = vec[i];
+		d1 = vec[i + 1];
 	}
 	double const base_case = sw_base_case.seconds_elapsed();
 
 
+	reset(d0, d1);
 	Stopwatch sw_multiplication;
 	for (int i = 0; i != lim; ++i)
 	{
-		Decimal d0 = vec[i];
-		Decimal d1 = vec[i + 1];
+		d0 = vec[i];
+		d1 = vec[i + 1];
 		d0 *= d1;
 	}
 	cout << lim << " multiplications take "
 	     << sw_multiplication.seconds_elapsed() - base_case
 	     << " seconds." << endl;
 
+	reset(d0, d1);
 	Stopwatch sw_division;
 	for (int i = 0; i != lim; ++i)
 	{
-		Decimal d0 = vec[i];
-		Decimal d1 = vec[i + 1];
+		d0 = vec[i];
+		d1 = vec[i + 1];
 		d0 /= d1;
 	}
 	cout << lim << " divisions take "
@@ -80,11 +94,12 @@ void decimal_speed_test()
 		 << " seconds." << endl;
 
 	
+	reset(d0, d1);
 	Stopwatch sw_addition;
 	for (int i = 0; i != lim; ++i)
 	{
-		Decimal d0 = vec[i];
-		Decimal d1 = vec[i + 1];
+		d0 = vec[i];
+		d1 = vec[i + 1];
 		d0 += d1;
 	}
 	cout << lim << " additions take "
@@ -92,11 +107,12 @@ void decimal_speed_test()
 	     << " seconds." << endl;
 
 		
+	reset(d0, d1);
 	Stopwatch sw_subtraction;
 	for (int i = 0; i != lim; ++i)
 	{
-		Decimal d0 = vec[i];
-		Decimal d1 = vec[i + 1];
+		d0 = vec[i];
+		d1 = vec[i + 1];
 		d0 -= d1;
 	}
 	cout << lim << " subtractions take "
@@ -125,6 +141,7 @@ void decimal_speed_test()
 		string s = *it;
 	}
 	double const ctest_base_case = sw_ctest_base.seconds_elapsed();
+	reset(d0, d1);
 	Stopwatch sw_ctest;
 	for
 	(	vector<string>::const_iterator it = ctest_vec.begin();
@@ -132,7 +149,7 @@ void decimal_speed_test()
 		++it
 	)
 	{
-		Decimal d0(*it);
+		d0 = Decimal(*it);
 	}
 	cout << ctest_lim * 5 << " calls to Decimal constructor-from-string"
 	     << " take " << sw_ctest.seconds_elapsed() - ctest_base_case
