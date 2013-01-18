@@ -1596,8 +1596,12 @@ TEST(decimal_operator_output)
 		os16b << Decimal("9300700.95838");
 		CHECK_EQUAL(os16b.str(), "9300700.95838");
 
+	      #ifndef __WIN32__ 
+
 		// WARNING This test is implementation-dependant, because
 		// locale names are implementation-dependant.
+		// We don't compile here if on WIN32
+		// WARNNG This sucks.
 		// (However
 		// the code these tests are testing is NOT implementation-dependant.)
 
@@ -1709,6 +1713,8 @@ TEST(decimal_operator_output)
 		wstring const ws34b(L"-88 750,550");
 		bool const ok34 = (ws34 == ws34b);
 		CHECK(ok34);
+
+	    #endif /* __WIN32__ */
 
 	#else	
 		// JEWEL_DECIMAL_OUTPUT_FAILURE_TEST is defined.

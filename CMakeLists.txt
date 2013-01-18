@@ -2,6 +2,12 @@ cmake_minimum_required (VERSION 2.6)
 
 project (jewel)
 
+
+if (MSYS)
+	include_directories(C:/MSYS/1.0/local/include)
+	link_directories(C:/MSYS/1.0/local/lib)
+endif ()
+
 set (library_sources
      checked_arithmetic_detail.cpp
 	 decimal.cpp
@@ -24,14 +30,31 @@ add_executable (jewel_test ${library_sources} ${test_sources})
 
 add_library(jewel ${library_sources})
 
+if (MSYS)
+	set (boost_locale_lib boost_locale)
+else ()
+	set (boost_locale_lib boost_locale-mt)
+endif ()
+
 target_link_libraries (jewel_test
-					   boost_locale-mt
+		       ${boost_locale_lib}
                        unittest++)
+if (MSYS)
+	set (lib_installation_dir C:/MSYS/1.0/local/lib)
+else ()
+	set (lib_installation_dir /usr/local/lib)
+endif ()
 
 install(TARGETS jewel
-       ARCHIVE DESTINATION lib)
+	ARCHIVE DESTINATION ${lib_installation_dir})
 
-install(DIRECTORY jewel DESTINATION include)
+if (MSYS)
+	set (header_installation_dir C:/MSYS/1.0/local/include)
+else ()
+	set (header_installation_dir /usr/local/include)
+endif ()
+
+install(DIRECTORY jewel DESTINATION ${header_installation_dir})
 
 install(FILES
         decimal_exceptions.hpp
@@ -47,6 +70,6 @@ install(FILES
 		power_vector.hpp
 		stopwatch.hpp
 		DESTINATION
-		include/jewel)
+		"${header_installation_dir}/jewel")
 
 
