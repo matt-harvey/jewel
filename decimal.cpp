@@ -18,13 +18,32 @@
 
 #include <iostream>   // For logging only
 
+/*
 #ifndef NDEBUG
+*/
+	// TODO High priority. I have made NUM_CAST ALWAYS
+	// be boost::numeric_cast even on Release builds. This
+	// is inefficient. However, if I used static_cast with
+	// TDM-GCC 4.6.1 on Windows 7, there is a mysterious error
+	// when casting from unsigned short to long long (even with
+	// -std=c++0x flag). This error goes away if I use
+	// numeric_cast. The task is to figure out what the
+	// heck is going on there - it appears to be a compiler bug -
+	// and fix it preferably by recompiling everything on my
+	// Windows installation with a more recent version of GCC -
+	// rather than by having to live with numeric_cast on release
+	// builds (especially since I don't understand why it works
+	// with numeric_cast and not static_cast). Note that, the error
+	// ALSO goes away on Windows if I do cout << "Any string" << endl
+	// just after the offending cast. It is utterly bizarre.
 	#include <boost/numeric/conversion/cast.hpp>
 	using boost::numeric_cast;
 	#define NUM_CAST numeric_cast          // Safer
+/*
 #else
 	#define NUM_CAST static_cast           // Faster
 #endif
+*/
 
 /*
  * Don't rely on the exceptions thrown by boost::numeric_cast.
