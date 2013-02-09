@@ -3,9 +3,13 @@ cmake_minimum_required (VERSION 2.6)
 project (jewel)
 
 
-if (MSYS)
-	include_directories(C:/MSYS/1.0/local/include)
-	link_directories(C:/MSYS/1.0/local/lib)
+if (WIN32)
+	include_directories(C:/Dev-Cpp
+	                    C:/Dev-Cpp/include/common
+						C:/include)
+	link_directories(C:/Dev-Cpp/lib
+	                 C:/Dev-Cpp/MinGW/lib
+					 C:/lib)
 endif ()
 
 set (library_sources
@@ -30,17 +34,17 @@ add_executable (jewel_test ${library_sources} ${test_sources})
 
 add_library(jewel ${library_sources})
 
-if (MSYS)
-	set (boost_locale_lib boost_locale)
+if (WIN32)
+	set (boost_locale_lib boost_locale-mgw46-mt-1_53)
 else ()
 	set (boost_locale_lib boost_locale-mt)
 endif ()
 
 target_link_libraries (jewel_test
 		       ${boost_locale_lib}
-                       unittest++)
-if (MSYS)
-	set (lib_installation_dir C:/MSYS/1.0/local/lib)
+                       UnitTest++)
+if (WIN32)
+	set (lib_installation_dir C:/lib)
 else ()
 	set (lib_installation_dir /usr/local/lib)
 endif ()
@@ -48,8 +52,8 @@ endif ()
 install(TARGETS jewel
 	ARCHIVE DESTINATION ${lib_installation_dir})
 
-if (MSYS)
-	set (header_installation_dir C:/MSYS/1.0/local/include)
+if (WIN32)
+	set (header_installation_dir C:/include)
 else ()
 	set (header_installation_dir /usr/local/include)
 endif ()
