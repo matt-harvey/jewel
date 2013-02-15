@@ -261,11 +261,12 @@ public:
 	explicit Decimal(std::basic_string<charT, traits, Alloc> const& str);
 
 	/**
-	 * WARNING quick fix.. 
-	 * 
 	 * Precondition: the string must be null-terminated.
 	 *
-	 * @todo Documentation and testing.
+	 * @todo Documentation esp. re. exception-safety.
+	 *
+	 * @todo Implement this more efficiently, and move implementation out of class
+	 * body.
 	 */
 	explicit Decimal(char const* str)
 	{
@@ -273,11 +274,12 @@ public:
 	}
 
 	/**
-	 * WARNING quick fix.
-	 *
 	 * Precondition: the string must be null-terminated.
 	 * 
-	 * @todo Documentation and testing.
+	 * @todo Documentation esp. re. exception-safety.
+	 * 
+	 * @todo Implement this more efficiently, and move implementation out of
+	 * class body.
 	 */
 	explicit Decimal(wchar_t const* str)
 	{
