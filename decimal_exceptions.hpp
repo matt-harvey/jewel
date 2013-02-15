@@ -13,8 +13,6 @@
 
 
 #include "exception.hpp"
-#include <stdexcept>
-#include <string>
 
 
 namespace jewel

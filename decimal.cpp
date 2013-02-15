@@ -87,9 +87,6 @@ Decimal::s_max_places = NumDigits::num_digits
 (	numeric_limits<int_type>::min()
 );
 
-char const
-Decimal::s_spot = '.';
-
 Decimal const
 Decimal::s_maximum = Decimal(numeric_limits<int_type>::max(), 0);
 
@@ -169,132 +166,6 @@ Decimal::Decimal(int_type p_intval, places_type p_places):
 }
 
 
-
-Decimal::Decimal(string const& str): m_intval(0), m_places(0)
-{
-	// Writing through iterators here to make it as fast as I reasonably
-	// can.
-	//
-	// This seems to be about as fast as using indexing, but roughly 25%
-	// faster than using push_back.
-	//
-	// I've got plentiful asserts to ensure I don't read or write off the
-	// end.
-	//
-	// Note the lexical cast near the end accounts for a huge chunk of the
-	// execution time.
-	//
-	// Of course, if I want extremely fast construction of a Decimal,
-	// the constructor-from-string is not the best constructor to achieve
-	// that.
-	
-	typedef string::size_type sz_t;
-	if (str.empty())
-	{
-		throw DecimalFromStringException
-		(	"Cannot construct Decimal from an empty string"
-		);
-	}
-	sz_t const str_size = str.size();
-	
-	// To hold string representation of underlying integer...
-	// We will decrease this size later if there's a spot (decimal point)
-	// as we won't hold the spot in str_rep.
-	string str_rep(str_size, '\0');
-	string::const_iterator si = str.begin();  // We'll read through from this
-	string::iterator ri = str_rep.begin();    // And write through this
-
-	switch (*si)
-	{
-	case '-':
-	case '+':
-		assert (ri < str_rep.end());
-		*ri++ = *si++;
-		break;
-	default:
-		;  // Do nothing
-	}
-
-	string::const_iterator const str_end = str.end();
-	for ( ; *si != s_spot && si != str_end; ++si, ++ri)
-	{
-		assert (si < str_end);
-		if (!isdigit(*si))  // Note: this is fairly cheap.
-		{
-			throw DecimalFromStringException
-			(	"Invalid string passed "
-				"to Decimal constructor."
-			);
-		}
-		assert (ri < str_rep.end());
-		*ri = *si;
-	}
-	sz_t spot_position = 0;   // for the position of decimal point	
-	if (*si == s_spot)
-	{
-		// We have a spot.
-		// We have a str_rep that's one too big
-		sz_t reduced_size = str_size;
-		str_rep.resize(--reduced_size);
-		assert (reduced_size == str_rep.size());	
-		assert (reduced_size < str_size);
-		assert (str_size >= 1);
-
-		// Jump over the spot in str
-		++si;
-
-		// Now let's get the remaining the digits
-		assert (str_end == str.end());
-		for ( ; si != str_end; ++si, ++ri)
-		{
-			++spot_position;        // To count no. of fractional places
-			assert (si < str_end);
-			if (!isdigit(*si))  // Note: this is fairly cheap.
-			{
-				assert (m_intval == 0);
-				assert (m_places == 0);
-				throw DecimalFromStringException
-				(	"Invalid string passed to"
-					" Decimal constructor."
-				);
-			}
-			assert (reduced_size == str_rep.size());
-			assert (ri < str_rep.end());
-			*ri = *si;
-		}
-	}
-	if (spot_position > s_max_places)
-	{
-		throw DecimalRangeException
-		(	"Attempt to set m_places "
-			"to a value exceeding that returned by "
-			"Decimal::maximum_precision()."
-		);
-	}
-	if (str_rep.size() <= 1)
-	{
-		if (str_rep.empty() || str_rep == "-" || str_rep == "+")
-		{
-			throw DecimalFromStringException
-			(	"Attempt to create a Decimal without any digits."
-			);
-		}
-	}
-	try
-	{	
-		// This lexical cast accounted for over half of the execution
-		// time in this function last time I checked.
-		m_intval = lexical_cast<int_type>(str_rep);
-	}
-	catch (bad_lexical_cast&)
-	{
-		throw DecimalRangeException
-		(	"Attempt to create Decimal that is either too large, too small "
-			"or too precise than is supported by the Decimal implementation."
-		);
-	}
-	m_places = NUM_CAST<places_type>(spot_position);
-}
 
 
 int Decimal::rescale(places_type p_places)
@@ -761,5 +632,17 @@ Decimal operator-(Decimal const& d)
 	ret.m_intval *= -1;
 	return ret;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 }  // namespace jewel

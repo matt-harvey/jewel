@@ -15,6 +15,7 @@
 
 #include "decimal_exceptions.hpp"
 #include <boost/lexical_cast.hpp>
+#include <boost/numeric/conversion/cast.hpp>
 #include <boost/operators.hpp>
 #include <algorithm>
 #include <cassert>
@@ -23,6 +24,7 @@
 #include <cmath>
 #include <istream>
 #include <locale>
+#include <memory>  // for allocator
 #include <ostream>
 #include <sstream>
 #include <string>
@@ -254,7 +256,8 @@ public:
 	 *
 	 * Exception safety: <em>strong guarantee</em>.
 	 */
-	explicit Decimal(std::string const& str);
+	template <typename stringT>
+	explicit Decimal(stringT const& str);
 
 	// use compiler-generated copy constructor and destructor
 
@@ -602,11 +605,6 @@ private:
 	static Decimal const s_minimum;
 
 	/**
-	 * The character used for the decimal point.
-	 */
-	static char const s_spot;
-
-	/**
 	 * Vector for looking up the implicit divisor of a Decimal instance
 	 * based on the value of m_places.
 	 */
@@ -640,8 +638,9 @@ private:
 
 	/** This constructor is deliberately unimplemented. Ensures if an int or
 	 * a convertible-to-int is passed to constructor, compilation will fail.
-	 */
+	 * TODO uncomment
 	explicit Decimal(int);
+	*/
 
 	/**
 	 * Called by output operator. This is not designed to be called by
@@ -653,8 +652,49 @@ private:
 	template <typename charT, typename traits>
 	void output_aux(std::basic_ostream<charT, traits>& oss) const;
 
-	
+
+
+	// Auxiliary class to help with char and wchar_t literals
+	// TODO Low priority. Provide specializations for character
+	// types other than char and wchar_t.
+	template <typename charT>
+	class CharacterProvider
+	{
+	};
+
+
 }; // class Decimal
+
+
+
+// Specializations
+
+template <> char
+class Decimal::CharacterProvider<char>
+{
+	static char null = '\0';
+	static char plus = '+';
+	static char minus = '-';
+	static char full_stop = '.';
+	static char comma = ',';
+};
+
+template <> wchar_t
+class Decimal::CharacterProvider<wchar_t>
+{
+	static wchar_t null = L'\0';
+	static wchar_t plus = L'+';
+	static wchar_t minus = L'-';
+	static wchar_t full_stop = L'.';
+	static wchar_t comma = L',';
+};
+
+
+
+// Explicit instantiations
+template Decimal::Decimal(std::string const& str);
+template Decimal::Decimal(std::wstring const& str);
+
 
 
 // non-member functions - declarations
@@ -767,6 +807,150 @@ inline
 Decimal::Decimal(): m_intval(0), m_places(0)
 {
 }
+
+
+// TODO High priority. Ensure this works with wchar_t.
+// TODO High priority make spot work across locales.
+template <typename stringT>
+Decimal::Decimal(stringT const& str):
+	m_intval(0),
+	m_places(0)
+{
+	typedef typename stringT::size_type sz_t;
+	typedef typename stringT::value_type charT;
+	
+	// TODO High priority. Localize these properly
+	// TODO These aren't const - apparently wouldn't compile as const.
+	// This is a bit unsatisfactory.
+	charT const null_char = CharacterProvider<charT>::null;
+	charT const spot_char = CharacterProvider<charT>::full_stop;
+	charT const separator_char = CharacterProvider<charT>::comma;
+	charT const plus_char = CharacterProvider<charT>::plus;
+	charT const minus_char = CharacterProvider<charT>::minus;
+
+	// Writing through iterators here to make it as fast as I reasonably
+	// can.
+	//
+	// This seems to be about as fast as using indexing, but roughly 25%
+	// faster than using push_back.
+	//
+	// I've got plentiful asserts to ensure I don't read or write off the
+	// end.
+	//
+	// Note the lexical cast near the end accounts for a huge chunk of the
+	// execution time.
+	//
+	// Of course, if I want extremely fast construction of a Decimal,
+	// the constructor-from-string is not the best constructor to achieve
+	// that.
+	
+	if (str.empty())
+	{
+		throw DecimalFromStringException
+		(	"Cannot construct Decimal from an empty string"
+		);
+	}
+	sz_t const str_size = str.size();
+	
+	// To hold string representation of underlying integer...
+	// We will decrease this size later if there's a spot (decimal point)
+	// as we won't hold the spot in str_rep.
+	stringT str_rep(str_size, null_char);
+	typename stringT::const_iterator si = str.begin();  // Read through this
+	typename stringT::iterator ri = str_rep.begin();    // Write through this
+
+	switch (*si)
+	{
+	case minus_char:
+	case plus_char:
+		assert (ri < str_rep.end());
+		*ri++ = *si++;
+		break;
+	default:
+		;  // Do nothing
+	}
+
+	typename stringT::const_iterator const str_end = str.end();
+	for ( ; *si != spot_char && si != str_end; ++si, ++ri)
+	{
+		assert (si < str_end);
+		if (!isdigit(*si))  // Note: this is fairly cheap.
+		{
+			throw DecimalFromStringException
+			(	"Invalid string passed "
+				"to Decimal constructor."
+			);
+		}
+		assert (ri < str_rep.end());
+		*ri = *si;
+	}
+	sz_t spot_position = 0;   // for the position of decimal point	
+	if (*si == spot_char)
+	{
+		// We have a spot.
+		// We have a str_rep that's one too big
+		sz_t reduced_size = str_size;
+		str_rep.resize(--reduced_size);
+		assert (reduced_size == str_rep.size());	
+		assert (reduced_size < str_size);
+		assert (str_size >= 1);
+
+		// Jump over the spot in str
+		++si;
+
+		// Now let's get the remaining the digits
+		assert (str_end == str.end());
+		for ( ; si != str_end; ++si, ++ri)
+		{
+			++spot_position;        // To count no. of fractional places
+			assert (si < str_end);
+			if (!isdigit(*si))  // Note: this is fairly cheap.
+			{
+				assert (m_intval == 0);
+				assert (m_places == 0);
+				throw DecimalFromStringException
+				(	"Invalid string passed to"
+					" Decimal constructor."
+				);
+			}
+			assert (reduced_size == str_rep.size());
+			assert (ri < str_rep.end());
+			*ri = *si;
+		}
+	}
+	if (spot_position > s_max_places)
+	{
+		throw DecimalRangeException
+		(	"Attempt to set m_places "
+			"to a value exceeding that returned by "
+			"Decimal::maximum_precision()."
+		);
+	}
+	if (str_rep.size() <= 1)
+	{
+		if (str_rep.empty() || str_rep == minus_char || str_rep == plus_char)
+		{
+			throw DecimalFromStringException
+			(	"Attempt to create a Decimal without any digits."
+			);
+		}
+	}
+	try
+	{	
+		// This lexical cast accounted for over half of the execution
+		// time in this function last time I checked.
+		m_intval = boost::lexical_cast<int_type>(str_rep);
+	}
+	catch (boost::bad_lexical_cast&)
+	{
+		throw DecimalRangeException
+		(	"Attempt to create Decimal that is either too large, too small "
+			"or too precise than is supported by the Decimal implementation."
+		);
+	}
+	m_places = boost::numeric_cast<places_type>(spot_position);
+}
+
 
 
 inline
