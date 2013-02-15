@@ -8,6 +8,7 @@
 #include <cassert>
 #include <cmath>    // for pow
 #include <cstdlib>  // for abs
+#include <cctype>  // for isdigit(char) and iswdigit(wchar_t)
 #include <istream>
 #include <limits>
 #include <numeric>  // for accumulate
@@ -637,16 +638,41 @@ Decimal operator-(Decimal const& d)
 
 // Specializations
 
-template <> char const Decimal::CharacterProvider<char>::null = '\0';
-template <> char const Decimal::CharacterProvider<char>::plus = '+';
-template <> char const Decimal::CharacterProvider<char>::minus = '-';
-template <> char const Decimal::CharacterProvider<char>::full_stop = '.';
+template <>
+char const Decimal::CharacterProvider<char>::null = '\0';
 
-template <> wchar_t const Decimal::CharacterProvider<wchar_t>::null = '\0';
-template <> wchar_t const Decimal::CharacterProvider<wchar_t>::plus = '+';
-template <> wchar_t const Decimal::CharacterProvider<wchar_t>::minus = '-';
-template <> wchar_t const Decimal::CharacterProvider<wchar_t>::full_stop = '.';
+template <>
+char const Decimal::CharacterProvider<char>::plus = '+';
 
+template <>
+char const Decimal::CharacterProvider<char>::minus = '-';
+
+template <>
+char const Decimal::CharacterProvider<char>::full_stop = '.';
+
+template <>
+bool Decimal::CharacterProvider<char>::is_digit(char c)
+{
+	return isdigit(c);
+}
+
+template <>
+wchar_t const Decimal::CharacterProvider<wchar_t>::null = '\0';
+
+template <>
+wchar_t const Decimal::CharacterProvider<wchar_t>::plus = '+';
+
+template <>
+wchar_t const Decimal::CharacterProvider<wchar_t>::minus = '-';
+
+template <>
+wchar_t const Decimal::CharacterProvider<wchar_t>::full_stop = '.';
+
+template <>
+bool Decimal::CharacterProvider<wchar_t>::is_digit(wchar_t c)
+{
+	return iswdigit(c);
+}
 
 
 }  // namespace jewel

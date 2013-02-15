@@ -29,9 +29,11 @@ using std::string;
 #include <locale>
 using std::locale;
 
+
 int main()
 {
 
+	
 	#ifndef NDEBUG
 		cout << "Compiled in debugging mode (NDEBUG not defined)."
 		     << endl;

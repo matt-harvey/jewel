@@ -93,6 +93,8 @@ struct DigitStringFixture
 	string s_max_digits_plus_one;
 	string s_neg_max_digits_plus_one;
 
+	wstring ws_max_digits_plus_one;
+
 	// A string version of the maximum value of Decimal::int_type
 	string s_max_int_type;
 	string s_neg_max_int_type;  // Negative of same
@@ -240,27 +242,39 @@ TEST(decimal_direct_constructor)
 }
 
 
-TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
+TEST_FIXTURE(DigitStringFixture, decimal_string_constructors)
 {
 	// Test basic functionality
 	Decimal d0("0");
 	Decimal d0b;
 	Decimal d0c("-0.0");
+	string s0("-0.0");
+	Decimal d0c_s(s0);
 	CHECK_EQUAL(d0, Decimal("0"));
 	CHECK_EQUAL(d0b, d0);
 	CHECK_EQUAL(d0c, d0);
+	CHECK_EQUAL(d0c_s, d0c);
 	Decimal d1("-908.234");
 	CHECK(d0 != d1);
+	string s1("-908.234");
+	CHECK_EQUAL(d1, Decimal(s1));	
 	CHECK_EQUAL(d1, Decimal("-908.23400"));
 	Decimal d0p("+0");
 	CHECK_EQUAL(d0p, d0);
-	Decimal d1p("+908.234");
+	string s1p("+908.234");
+	Decimal d1p(s1p.c_str());
 	CHECK_EQUAL(d1p, Decimal("908.234"));
 	CHECK_EQUAL(d1p, Decimal(908234, 3));
+	Decimal d1p_s(s1p);
+	CHECK_EQUAL(d1p_s, Decimal(908234, 3));
 
 	// Test behaviour with empty string
 	CHECK_THROW(Decimal d10(""), DecimalException);
 	CHECK_THROW(Decimal d10(""), DecimalFromStringException);
+	string s10("");
+	CHECK_THROW(Decimal d10(s10), DecimalException);
+	CHECK_THROW(Decimal d10(s10), DecimalFromStringException);
+	string s10_s(0, 'c');
 
 	// Test behaviour with very short digitless strings
 	CHECK_THROW(Decimal d10b("."), DecimalFromStringException);
@@ -280,12 +294,24 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	CHECK_THROW(Decimal d10b(".."), DecimalFromStringException);
 	CHECK_THROW(Decimal d10b("--"), DecimalFromStringException);
 	CHECK_THROW(Decimal d10b("++"), DecimalFromStringException);
-
+	CHECK_THROW(Decimal d10b((string("."))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((string(","))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((string(","))), DecimalException);
+	CHECK_THROW(Decimal d10b((string("-"))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((string("-"))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((string("+"))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((string("+"))), DecimalException);
+	CHECK_THROW(Decimal d10b((string("-."))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((string("-."))), DecimalException);
+	CHECK_THROW(Decimal d10b((string("+."))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((string("+."))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((string("++"))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((string("--"))), DecimalFromStringException);
 
 	// Test behaviour with prohibited characters in string
 	CHECK_THROW(Decimal d11("9.90b0"), DecimalException);
 	CHECK_THROW(Decimal d11("9.90b0"), DecimalFromStringException);
-	CHECK_THROW(Decimal d12("7,8"), DecimalFromStringException);
+	CHECK_THROW(Decimal d12((string("7,8"))), DecimalFromStringException);
 	CHECK_THROW(Decimal d12("6,8"), DecimalException);
 	CHECK_THROW(Decimal d13("Llama"), DecimalFromStringException);
 	CHECK_THROW(Decimal d13b("9.0.3"), DecimalFromStringException);
@@ -295,7 +321,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	CHECK_THROW(Decimal d13e("0+0"), DecimalFromStringException);
 	CHECK_THROW(Decimal d13f("+79+"), DecimalFromStringException);
 	CHECK_THROW(Decimal d13g("++88"), DecimalFromStringException);
-	CHECK_THROW(Decimal d13h("+-88"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13h((string("+-88"))), DecimalFromStringException);
 	CHECK_THROW(Decimal d13i("-+88"), DecimalFromStringException);
 	
 	// Test behaviour with attempted Decimal having too large a would-be
@@ -344,11 +370,14 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	Decimal d18("1000030");
 	Decimal d19("1.000030");
 	Decimal d20("-1.000030");
-	Decimal d20b("0000001");
+	string s20b("0000001");
+	Decimal d20b_s(s20b);
 	Decimal d21(".0000430");
 	Decimal d22("-.99489");
 	Decimal d23(".00000");
 	Decimal d23b("+.000000");
+	string s23b("+.000000");
+	Decimal d23b_s(s23b);
 
 	// Test retention of fractional precision implied by string
 	Decimal d24("90.100");
@@ -361,9 +390,10 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	CHECK_EQUAL(oss402.str(), "0.0");
 
 	// Test elimination of pointless negative
-	Decimal d25("-0.0");
+	string s25("-0.0");
+	Decimal d25_s(s25);
 	ostringstream oss1;
-	oss1 << d25;
+	oss1 << d25_s;
 	CHECK_EQUAL(oss1.str(), "0.0");
 
 	// Test elimination of pointless positive
@@ -373,6 +403,147 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructor)
 	CHECK_EQUAL(oss2.str(), "10987");
 
 }
+
+
+
+TEST_FIXTURE(DigitStringFixture, decimal_wstring_constructors)
+{
+	// Test basic functionality
+	Decimal d0(L"0");
+	Decimal d0b;
+	Decimal d0c(L"-0.0");
+	wstring s0(L"-0.0");
+	Decimal d0c_s(s0);
+	CHECK_EQUAL(d0, Decimal(L"0"));
+	CHECK_EQUAL(d0b, d0);
+	CHECK_EQUAL(d0c, d0);
+	CHECK_EQUAL(d0c_s, d0c);
+	Decimal d1(L"-908.234");
+	CHECK(d0 != d1);
+	wstring s1(L"-908.234");
+	CHECK_EQUAL(d1, Decimal(s1));	
+	CHECK_EQUAL(d1, Decimal(L"-908.23400"));
+	Decimal d0p(L"+0");
+	CHECK_EQUAL(d0p, d0);
+	wstring s1p(L"+908.234");
+	Decimal d1p(s1p.c_str());
+	CHECK_EQUAL(d1p, Decimal(L"908.234"));
+	CHECK_EQUAL(d1p, Decimal(908234, 3));
+	Decimal d1p_s(s1p);
+	CHECK_EQUAL(d1p_s, Decimal(908234, 3));
+
+	// Test behaviour with empty wstring
+	CHECK_THROW(Decimal d10(L""), DecimalException);
+	CHECK_THROW(Decimal d10(L""), DecimalFromStringException);
+	wstring s10(L"");
+	CHECK_THROW(Decimal d10(s10), DecimalException);
+	CHECK_THROW(Decimal d10(s10), DecimalFromStringException);
+	wstring s10_s(0, L'c');
+
+	// Test behaviour with very short digitless wstring
+	CHECK_THROW(Decimal d10b(L"."), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(L"."), DecimalException);
+	CHECK_THROW(Decimal d10b(L"-"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(L"-"), DecimalException);
+	CHECK_THROW(Decimal d10b(L"+"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(L"+"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(L"-."), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(L"-."), DecimalException);
+	CHECK_THROW(Decimal d10b(L"+."), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(L"+."), DecimalException);
+	CHECK_THROW(Decimal d10b(L".-"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(L".-"), DecimalException);
+	CHECK_THROW(Decimal d10b(L".+"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(L".+"), DecimalException);
+	CHECK_THROW(Decimal d10b(L".."), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(L"--"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b(L"++"), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((wstring(L"."))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((wstring(L","))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((wstring(L","))), DecimalException);
+	CHECK_THROW(Decimal d10b((wstring(L"-"))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((wstring(L"-"))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((wstring(L"+"))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((wstring(L"+"))), DecimalException);
+	CHECK_THROW(Decimal d10b((wstring(L"-."))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((wstring(L"-."))), DecimalException);
+	CHECK_THROW(Decimal d10b((wstring(L"+."))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((wstring(L"+."))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((wstring(L"++"))), DecimalFromStringException);
+	CHECK_THROW(Decimal d10b((wstring(L"--"))), DecimalFromStringException);
+
+	// Test behaviour with prohibited characters in wstring
+	CHECK_THROW(Decimal d11(L"9.90b0"), DecimalException);
+	CHECK_THROW(Decimal d11(L"9.90b0"), DecimalFromStringException);
+	CHECK_THROW(Decimal d12((wstring(L"7,8"))), DecimalFromStringException);
+	CHECK_THROW(Decimal d12(L"6,8"), DecimalException);
+	CHECK_THROW(Decimal d13(L"Llama"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13b(L"9.0.3"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13c(L"-79-"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13c(L"-78-"), DecimalException);
+	CHECK_THROW(Decimal d13d(L"0-0"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13e(L"0+0"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13f(L"+79+"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13g(L"++88"), DecimalFromStringException);
+	CHECK_THROW(Decimal d13h((wstring(L"+-88"))), DecimalFromStringException);
+	CHECK_THROW(Decimal d13i(L"-+88"), DecimalFromStringException);
+	
+	// These should't throw
+	Decimal d18(L"1000030");
+	Decimal d19(L"1.000030");
+	Decimal d20(L"-1.000030");
+	wstring s20b(L"0000001");
+	Decimal d20b_s(s20b);
+	Decimal d21(L".0000430");
+	Decimal d22(L"-.99489");
+	Decimal d23(L".00000");
+	Decimal d23b(L"+.000000");
+	wstring s23b(L"+.000000");
+	Decimal d23b_s(s23b);
+
+	// Note UnitTest++ macro "CHECK_EQUAL" fell apart in the below here. Hence
+	// just using "==" here.
+
+	// Test retention of fractional precision implied by wstring
+	Decimal d24(L"90.100");
+	wostringstream oss0;
+	oss0 << d24;
+	CHECK(oss0.str() == L"90.100");
+	Decimal d402(L".0");
+	wostringstream oss402;
+	oss402 << d402;
+	CHECK(oss402.str() == L"0.0");
+
+	// Test elimination of pointless negative
+	wstring s25(L"-0.0");
+	Decimal d25_s(s25);
+	wostringstream oss1;
+	oss1 << d25_s;
+	CHECK(oss1.str() == L"0.0");
+
+	// Test elimination of pointless positive
+	Decimal d26(L"+10987");
+	wostringstream oss2;
+	oss2 << d26;
+	CHECK(oss2.str() == L"10987");
+
+
+}
+
+
+TEST(decimal_string_and_wstring_constructed_equivalence)
+{
+	Decimal d0(L"-609078.9870");
+	Decimal d1("-609078.9870");
+	string s2("-609078.9870");
+	wstring s3(L"-609078.9870");
+	Decimal d2(s2);
+	Decimal d3(s3);
+	CHECK_EQUAL(d0, d1);
+	CHECK_EQUAL(d2, d3);
+	CHECK_EQUAL(d3, d0);
+}
+
 
 TEST(decimal_assignment)
 {

@@ -19,7 +19,6 @@
 #include <boost/operators.hpp>
 #include <algorithm>
 #include <cassert>
-#include <cctype>   // for isdigit
 #include <cstdlib>  // for abs
 #include <cmath>
 #include <istream>
@@ -263,6 +262,8 @@ public:
 
 	/**
 	 * WARNING quick fix.. 
+	 * 
+	 * Precondition: the string must be null-terminated.
 	 *
 	 * @todo Documentation and testing.
 	 */
@@ -273,6 +274,8 @@ public:
 
 	/**
 	 * WARNING quick fix.
+	 *
+	 * Precondition: the string must be null-terminated.
 	 * 
 	 * @todo Documentation and testing.
 	 */
@@ -687,6 +690,7 @@ private:
 		static charT const plus;
 		static charT const minus;
 		static charT const full_stop;
+		static bool is_digit(charT c);
 	};
 
 
@@ -810,6 +814,7 @@ Decimal::Decimal(): m_intval(0), m_places(0)
 }
 
 
+
 // TODO High priority. Ensure this works with wchar_t.
 // TODO High priority make spot work across locales.
 template <typename charT, typename traits, typename Alloc>
@@ -869,7 +874,7 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	for ( ; *si != spot_char && si != str_end; ++si, ++ri)
 	{
 		assert (si < str_end);
-		if (!isdigit(*si))  // Note: this is fairly cheap.
+		if (!CharacterProvider<charT>::is_digit(*si))
 		{
 			throw DecimalFromStringException
 			(	"Invalid string passed "
@@ -899,7 +904,7 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 		{
 			++spot_position;        // To count no. of fractional places
 			assert (si < str_end);
-			if (!isdigit(*si))  // Note: this is fairly cheap.
+			if (!CharacterProvider<charT>::is_digit(*si))
 			{
 				assert (m_intval == 0);
 				assert (m_places == 0);
