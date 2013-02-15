@@ -255,18 +255,27 @@ public:
 	 * equivalents are \e not stored.
 	 *
 	 * Exception safety: <em>strong guarantee</em>.
+	 *
+	 * @todo High priority. Test with types other than std::string.
 	 */
 	template <typename charT, typename traits, typename Alloc>
 	explicit Decimal(std::basic_string<charT, traits, Alloc> const& str);
 
 	/**
 	 * WARNING quick fix.. 
+	 *
+	 * @todo Documentation and testing.
 	 */
 	explicit Decimal(char const* str)
 	{
 		*this = Decimal(std::string(str));
 	}
 
+	/**
+	 * WARNING quick fix.
+	 * 
+	 * @todo Documentation and testing.
+	 */
 	explicit Decimal(wchar_t const* str)
 	{
 		*this = Decimal(std::wstring(str));
