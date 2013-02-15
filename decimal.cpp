@@ -635,13 +635,17 @@ Decimal operator-(Decimal const& d)
 
 
 
+// Specializations
 
+template <> char const Decimal::CharacterProvider<char>::null = '\0';
+template <> char const Decimal::CharacterProvider<char>::plus = '+';
+template <> char const Decimal::CharacterProvider<char>::minus = '-';
+template <> char const Decimal::CharacterProvider<char>::full_stop = '.';
 
-
-
-
-
-
+template <> wchar_t const Decimal::CharacterProvider<wchar_t>::null = '\0';
+template <> wchar_t const Decimal::CharacterProvider<wchar_t>::plus = '+';
+template <> wchar_t const Decimal::CharacterProvider<wchar_t>::minus = '-';
+template <> wchar_t const Decimal::CharacterProvider<wchar_t>::full_stop = '.';
 
 
 

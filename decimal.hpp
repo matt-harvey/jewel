@@ -256,8 +256,22 @@ public:
 	 *
 	 * Exception safety: <em>strong guarantee</em>.
 	 */
-	template <typename stringT>
-	explicit Decimal(stringT const& str);
+	template <typename charT, typename traits, typename Alloc>
+	explicit Decimal(std::basic_string<charT, traits, Alloc> const& str);
+
+	/**
+	 * WARNING quick fix.. 
+	 */
+	explicit Decimal(char const* str)
+	{
+		*this = Decimal(std::string(str));
+	}
+
+	explicit Decimal(wchar_t const* str)
+	{
+		*this = Decimal(std::wstring(str));
+	}
+
 
 	// use compiler-generated copy constructor and destructor
 
@@ -658,8 +672,12 @@ private:
 	// TODO Low priority. Provide specializations for character
 	// types other than char and wchar_t.
 	template <typename charT>
-	class CharacterProvider
+	struct CharacterProvider
 	{
+		static charT const null;
+		static charT const plus;
+		static charT const minus;
+		static charT const full_stop;
 	};
 
 
@@ -667,33 +685,7 @@ private:
 
 
 
-// Specializations
 
-template <> char
-class Decimal::CharacterProvider<char>
-{
-	static char null = '\0';
-	static char plus = '+';
-	static char minus = '-';
-	static char full_stop = '.';
-	static char comma = ',';
-};
-
-template <> wchar_t
-class Decimal::CharacterProvider<wchar_t>
-{
-	static wchar_t null = L'\0';
-	static wchar_t plus = L'+';
-	static wchar_t minus = L'-';
-	static wchar_t full_stop = L'.';
-	static wchar_t comma = L',';
-};
-
-
-
-// Explicit instantiations
-template Decimal::Decimal(std::string const& str);
-template Decimal::Decimal(std::wstring const& str);
 
 
 
@@ -811,20 +803,19 @@ Decimal::Decimal(): m_intval(0), m_places(0)
 
 // TODO High priority. Ensure this works with wchar_t.
 // TODO High priority make spot work across locales.
-template <typename stringT>
-Decimal::Decimal(stringT const& str):
+template <typename charT, typename traits, typename Alloc>
+Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	m_intval(0),
 	m_places(0)
 {
+	typedef typename std::basic_string<charT> stringT;
 	typedef typename stringT::size_type sz_t;
-	typedef typename stringT::value_type charT;
 	
 	// TODO High priority. Localize these properly
 	// TODO These aren't const - apparently wouldn't compile as const.
 	// This is a bit unsatisfactory.
 	charT const null_char = CharacterProvider<charT>::null;
 	charT const spot_char = CharacterProvider<charT>::full_stop;
-	charT const separator_char = CharacterProvider<charT>::comma;
 	charT const plus_char = CharacterProvider<charT>::plus;
 	charT const minus_char = CharacterProvider<charT>::minus;
 
@@ -859,15 +850,10 @@ Decimal::Decimal(stringT const& str):
 	typename stringT::const_iterator si = str.begin();  // Read through this
 	typename stringT::iterator ri = str_rep.begin();    // Write through this
 
-	switch (*si)
+	if (*si == minus_char || *si == plus_char)
 	{
-	case minus_char:
-	case plus_char:
 		assert (ri < str_rep.end());
 		*ri++ = *si++;
-		break;
-	default:
-		;  // Do nothing
 	}
 
 	typename stringT::const_iterator const str_end = str.end();
@@ -928,7 +914,11 @@ Decimal::Decimal(stringT const& str):
 	}
 	if (str_rep.size() <= 1)
 	{
-		if (str_rep.empty() || str_rep == minus_char || str_rep == plus_char)
+		if
+		(	str_rep.empty() ||
+			str_rep == stringT(1, minus_char) ||
+			str_rep == stringT(1, plus_char)
+		)
 		{
 			throw DecimalFromStringException
 			(	"Attempt to create a Decimal without any digits."
