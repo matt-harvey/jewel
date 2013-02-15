@@ -3,18 +3,13 @@
 #include "checked_arithmetic.hpp"
 #include "num_digits.hpp"  // for num_digits
 
-#include <boost/lexical_cast.hpp>
 #include <algorithm>
 #include <cassert>
 #include <cmath>    // for pow
 #include <cstdlib>  // for abs
 #include <cctype>  // for isdigit(char) and iswdigit(wchar_t)
-#include <istream>
 #include <limits>
 #include <numeric>  // for accumulate
-#include <ostream>
-#include <sstream>
-#include <string>
 #include <vector>
 
 #include <iostream>   // For logging only
@@ -52,21 +47,13 @@
  * with the program!
  */
 
-using boost::lexical_cast;
-using boost::bad_lexical_cast;
 using std::accumulate;
-using std::basic_ostream;
-using std::basic_ostringstream;
 using std::find;
 using std::isdigit;
-using std::istream;
 using std::numeric_limits;
 using std::max_element;
-using std::ostream;
-using std::ostringstream;
 using std::max;
 using std::pow;
-using std::string;
 using std::vector;
 
 using std::cerr;  // for logging only
