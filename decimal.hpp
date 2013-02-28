@@ -1129,7 +1129,6 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 		tempstream.imbue(locale::classic());
 		tempstream << std::abs(m_intval);
 		stringT s = tempstream.str();
-		str_sz const slen = s.length();
 	
 		// Write the fractional part
 		typename stringT::const_reverse_iterator const rend = s.rend();
