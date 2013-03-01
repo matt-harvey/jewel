@@ -25,6 +25,7 @@
  * written to std::clog. This might throw under conditions of
  * memory shortage; but it is extremely unlikely.
  */ 
+
 #ifdef DEBUG
 	#define JEWEL_DEBUG_LOG std::clog << "  LOG: "
 #else

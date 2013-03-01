@@ -26,6 +26,7 @@ set (test_sources
 		exception_special_tests.cpp
 		exception_tests.cpp
 		num_digits_tests.cpp
+		on_windows_tests.cpp
 		optional_tests.cpp
 		stopwatch_tests.cpp
 		power_vector_tests.cpp)
