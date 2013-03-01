@@ -69,6 +69,7 @@ install(FILES
 		decimal.hpp
 		exception.hpp
 		num_digits.hpp
+		on_windows.hpp
 		optional.hpp
 		output_aux.hpp
 		overview.dox
