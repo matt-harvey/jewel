@@ -7,34 +7,35 @@
 
 TEST(on_windows_test)
 {
+	bool on_windows = false;
 #	if defined(_WIN32)
-		bool const on_windows = JEWEL_ON_WINDOWS;
+		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
 
 #	if _WIN32
-		bool const on_windows = JEWEL_ON_WINDOWS;
-		CHECK(on_windows)
+		on_windows = JEWEL_ON_WINDOWS;
+		CHECK(on_windows);
 #	endif
 
 #	if defined(__WIN32__)
-		bool const on_windows = JEWEL_ON_WINDOWS;
+		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
 
 #	if __WIN32__
-		bool const on_windows = JEWEL_ON_WINDOWS;
-		CHECK(on_windows)
+		on_windows = JEWEL_ON_WINDOWS;
+		CHECK(on_windows);
 #	endif
 
 #	if defined(WIN32)
-		bool const on_windows = JEWEL_ON_WINDOWS;
+		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
 
 #	if WIN32
-		bool const on_windows = JEWEL_ON_WINDOWS;
-		CHECK(on_windows)
+		on_windows = JEWEL_ON_WINDOWS;
+		CHECK(on_windows);
 #	endif
 
 #	ifdef JEWEL_ON_WINDOWS
