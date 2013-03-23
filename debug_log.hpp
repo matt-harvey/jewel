@@ -11,14 +11,22 @@
 #include <iostream>
 
 
-/**Macro to print to std::clog iff DEBUG is defined.
+/**Macros to print to std::clog iff DEBUG is defined.
  *
- * If DEBUG is defined, JEWEL_DEBUG_LOG acts like std::clog;
+ * If DEBUG is defined, JEWEL_DEBUG_LOG acts like std::clog
+ * (but prints "  LOG: " before the rest of the output),
  * but if DEBUG is not defined, JEWEL_DEBUG_LOG, and the rest
  * of the line, is effectively compiled away to nothing.
  *
+ * If DEBUG is defined JEWEL_DEBUG_LOG_LOCATION prints the
+ * file and line number to std::clog; otherwise, it is
+ * effectively compiled away to nothing.
+ *
+ * Note a semicolon must still be included by client code
+ * at the end of a statement using either of these macros.
+ *
  * No particular exception safety guarantee is offered by
- * this macro. It is not intended for use in release builds.
+ * these macros. They are not intended for use in release builds.
  * But note that all it does is write to std::clog; so unless
  * exceptions have been enabled on std::clog, the only part of this
  * function that could throw is in initialization of the string being
@@ -28,8 +36,10 @@
 
 #ifdef DEBUG
 	#define JEWEL_DEBUG_LOG std::clog << "  LOG: "
+	#define JEWEL_DEBUG_LOG_LOCATION std::clog << __FILE__ << ": " << __LINE__ << std::endl;
 #else
 	#define JEWEL_DEBUG_LOG 0 && std::clog
+	#define JEWEL_DEBUG_LOG_LOCATION 0
 #endif
 
 
