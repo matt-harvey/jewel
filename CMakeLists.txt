@@ -74,6 +74,7 @@ install(FILES
 		output_aux.hpp
 		overview.dox
 		power_vector.hpp
+		signature.hpp
 		stopwatch.hpp
 		DESTINATION
 		"${header_installation_dir}/jewel")
