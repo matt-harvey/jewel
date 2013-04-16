@@ -26,6 +26,8 @@ class Signature:
 	private boost::noncopyable
 {
 public:
+	// WARNING this is non-conformant prior to C++11; although
+	// some C++98 compilers neverthless allow it.
 	friend T;
 private:
 	Signature();
