@@ -683,8 +683,6 @@ private:
 	template <typename charT, typename traits>
 	void output_aux(std::basic_ostream<charT, traits>& oss) const;
 
-
-
 	// Auxiliary class to help with char and wchar_t literals
 	// TODO Low priority. Provide specializations for character
 	// types other than char and wchar_t.
@@ -831,8 +829,6 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	typedef typename stringT::size_type sz_t;
 	
 	// TODO High priority. Localize these properly
-	// TODO These aren't const - apparently wouldn't compile as const.
-	// This is a bit unsatisfactory.
 	charT const null_char = CharacterProvider<charT>::null;
 	charT const spot_char = CharacterProvider<charT>::full_stop;
 	charT const plus_char = CharacterProvider<charT>::plus;
