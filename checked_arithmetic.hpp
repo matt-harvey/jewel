@@ -46,7 +46,6 @@
 namespace jewel
 {
 
-using detail::CheckedArithmetic;
 
 // INTERFACE
 
@@ -78,21 +77,21 @@ template <typename T>
 inline
 bool addition_is_unsafe(T x, T y)
 {
-	return CheckedArithmetic::addition_is_unsafe(x, y);
+	return detail::CheckedArithmetic::addition_is_unsafe(x, y);
 }
 
 template <typename T>
 inline
 bool subtraction_is_unsafe(T x, T y)
 {
-	return CheckedArithmetic::subtraction_is_unsafe(x, y);
+	return detail::CheckedArithmetic::subtraction_is_unsafe(x, y);
 }
 
 template <typename T>
 inline
 bool multiplication_is_unsafe(T x, T y)
 {
-	return CheckedArithmetic::multiplication_is_unsafe(x, y);
+	return detail::CheckedArithmetic::multiplication_is_unsafe(x, y);
 }
 
 //@endcond
