@@ -1,3 +1,5 @@
+// Copyright (c) 2013, Matthew Harvey. All rights reserved.
+
 #include "exception_special_tests.hpp"
 #include <cassert>
 #include <iostream>

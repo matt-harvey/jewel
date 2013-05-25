@@ -1,3 +1,5 @@
+// Copyright (c) 2013, Matthew Harvey. All rights reserved.
+
 #ifndef GUARD_output_aux_hpp
 #define GUARD_output_aux_hpp
 

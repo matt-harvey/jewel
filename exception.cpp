@@ -1,3 +1,5 @@
+// Copyright (c) 2013, Matthew Harvey. All rights reserved.
+
 #include "exception.hpp"
 
 #include "debug_log.hpp"

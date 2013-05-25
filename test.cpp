@@ -1,3 +1,5 @@
+// Copyright (c) 2013, Matthew Harvey. All rights reserved.
+
 #include <UnitTest++/UnitTest++.h>
 #include <boost/numeric/conversion/cast.hpp>
 #include "decimal_exceptions.hpp"
