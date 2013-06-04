@@ -63,11 +63,12 @@ endif ()
 install(DIRECTORY jewel DESTINATION ${header_installation_dir})
 
 install(FILES
-        decimal_exceptions.hpp
 		checked_arithmetic.hpp
 		checked_arithmetic_detail.hpp
 		debug_log.hpp
 		decimal.hpp
+        decimal_exceptions.hpp
+		decimal_fwd.hpp
 		exception.hpp
 		num_digits.hpp
 		on_windows.hpp
