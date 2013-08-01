@@ -63,6 +63,7 @@ endif ()
 install(DIRECTORY jewel DESTINATION ${header_installation_dir})
 
 install(FILES
+		array_utilities.hpp
 		checked_arithmetic.hpp
 		checked_arithmetic_detail.hpp
 		debug_log.hpp
