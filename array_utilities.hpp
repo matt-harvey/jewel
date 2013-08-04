@@ -26,7 +26,7 @@ namespace jewel
  * @todo Test.
  */
 template <typename Elem, std::size_t sz>
-std::size_t size(Elem const (&p_array)[sz]);
+std::size_t num_elements(Elem const (&p_array)[sz]);
 
 /**
  * @returns a pointer the first element of the array \e p_array.
@@ -63,7 +63,7 @@ Elem const* end(Elem const (&p_array)[sz]);
 template <typename Elem, std::size_t sz>
 inline
 std::size_t
-size(Elem const (&p_array)[sz])
+num_elements(Elem const (&p_array)[sz])
 {
 	(void)p_array;  // silence compiler re. unused parameter
 	return sz;
