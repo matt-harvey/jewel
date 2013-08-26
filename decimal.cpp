@@ -138,8 +138,8 @@ Decimal::rationalize(places_type min_places)
 
 
 Decimal::Decimal(int_type p_intval, places_type p_places):
-	m_intval(p_intval),
-	m_places(p_places)
+	m_places(p_places),
+	m_intval(p_intval)
 {
 	assert (s_max_places == maximum_precision());
 	if (m_places > s_max_places)

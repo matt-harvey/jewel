@@ -642,14 +642,14 @@ private:
 	static std::vector<int_type> s_divisor_lookup;
 
 	/**
-	 * Underlying integer representation of Decimal number.
-	 */
-	int_type m_intval;
-
-	/**
 	 * Number of digits of precision to the right of the decimal point.
 	 */
 	places_type m_places;
+
+	/**
+	 * Underlying integer representation of Decimal number.
+	 */
+	int_type m_intval;
 
 	/** 
 	 * Convert two Decimal objects to the same number of places by converting
@@ -812,7 +812,7 @@ Decimal round(Decimal const& x, Decimal::places_type decimal_places);
 
 
 inline
-Decimal::Decimal(): m_intval(0), m_places(0)
+Decimal::Decimal(): m_places(0), m_intval(0)
 {
 }
 
@@ -822,8 +822,8 @@ Decimal::Decimal(): m_intval(0), m_places(0)
 // TODO High priority make spot work across locales.
 template <typename charT, typename traits, typename Alloc>
 Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
-	m_intval(0),
-	m_places(0)
+	m_places(0),
+	m_intval(0)
 {
 	typedef typename std::basic_string<charT> stringT;
 	typedef typename stringT::size_type sz_t;
@@ -907,8 +907,8 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 			assert (si < str_end);
 			if (!CharacterProvider<charT>::is_digit(*si))
 			{
-				assert (m_intval == 0);
 				assert (m_places == 0);
+				assert (m_intval == 0);
 				throw DecimalFromStringException
 				(	"Invalid string passed to"
 					" Decimal constructor."
@@ -961,8 +961,8 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 inline
 Decimal& Decimal::operator=(Decimal const& rhs)
 {
-	m_intval = rhs.m_intval;
 	m_places = rhs.m_places;
+	m_intval = rhs.m_intval;
 	return *this;
 }
 
