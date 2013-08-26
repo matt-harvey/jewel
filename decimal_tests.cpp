@@ -2061,7 +2061,7 @@ TEST(round_decimal)
 	oss << d6;
 	CHECK_EQUAL(oss.str(), "13.49000");
 	Decimal d7(3, 2);
-	CHECK_THROW(round(d7, 2500), DecimalRangeException);
+	CHECK_THROW(round(d7, 120), DecimalRangeException);
 	CHECK_EQUAL(d7, Decimal(3, 2));
 	CHECK_THROW(round(d7, -1), DecimalRangeException);
 	CHECK_EQUAL(d7, Decimal(3, 2));

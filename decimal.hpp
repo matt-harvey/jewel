@@ -176,7 +176,7 @@ public:
 	/** The type of the integer representation of the number of
 	 * decimal places (scale).
 	 */
-	typedef unsigned short places_type;
+	typedef unsigned char places_type;
 
 	// Output
 	template <typename charT, typename traits>
