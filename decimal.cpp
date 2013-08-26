@@ -19,7 +19,7 @@
 /*
 #ifndef NDEBUG
 */
-	// TODO High priority. I have made NUM_CAST ALWAYS
+	// TODO HIGH PRIORITY. I have made NUM_CAST ALWAYS
 	// be boost::numeric_cast even on Release builds. This
 	// is inefficient. However, if I used static_cast with
 	// TDM-GCC 4.6.1 on Windows 7, there is a mysterious error

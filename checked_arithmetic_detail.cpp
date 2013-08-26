@@ -28,6 +28,11 @@ bool CheckedArithmetic::addition_is_unsafe(short x, short y)
 	return addition_is_unsafe_signed_integral_types(x, y);
 }
 
+bool CheckedArithmetic::addition_is_unsafe(signed char x, signed char y)
+{
+	return addition_is_unsafe_signed_integral_types(x, y);
+}
+
 bool CheckedArithmetic::addition_is_unsafe(unsigned int x, unsigned int y)
 {
 	return addition_is_unsafe_unsigned_integral_types(x, y);
@@ -52,6 +57,11 @@ bool CheckedArithmetic::addition_is_unsafe(unsigned short x, unsigned short y)
 	return addition_is_unsafe_unsigned_integral_types(x, y);
 }
 
+bool CheckedArithmetic::addition_is_unsafe(unsigned char x, unsigned char y)
+{
+	return addition_is_unsafe_unsigned_integral_types(x, y);
+}
+
 bool CheckedArithmetic::subtraction_is_unsafe(int x, int y)
 {
 	return subtraction_is_unsafe_signed_integral_types(x, y);
@@ -68,6 +78,11 @@ bool CheckedArithmetic::subtraction_is_unsafe(long long x, long long y)
 }
 
 bool CheckedArithmetic::subtraction_is_unsafe(short x, short y)
+{
+	return subtraction_is_unsafe_signed_integral_types(x, y);
+}
+
+bool CheckedArithmetic::subtraction_is_unsafe(signed char x, signed char y)
 {
 	return subtraction_is_unsafe_signed_integral_types(x, y);
 }
@@ -98,6 +113,12 @@ CheckedArithmetic::subtraction_is_unsafe(unsigned short x, unsigned short y)
 	return subtraction_is_unsafe_unsigned_integral_types(x, y);
 }
 
+bool
+CheckedArithmetic::subtraction_is_unsafe(unsigned char x, unsigned char y)
+{
+	return subtraction_is_unsafe_unsigned_integral_types(x, y);
+}
+
 bool CheckedArithmetic::multiplication_is_unsafe(int x, int y)
 {
 	return multiplication_is_unsafe_signed_integral_types(x, y);
@@ -117,6 +138,11 @@ bool CheckedArithmetic::multiplication_is_unsafe
 }
 
 bool CheckedArithmetic::multiplication_is_unsafe(short x, short y)
+{
+	return multiplication_is_unsafe_signed_integral_types(x, y);
+}
+
+bool CheckedArithmetic::multiplication_is_unsafe(signed char x, signed char y)
 {
 	return multiplication_is_unsafe_signed_integral_types(x, y);
 }
@@ -145,6 +171,13 @@ CheckedArithmetic::multiplication_is_unsafe
 bool
 CheckedArithmetic::
   multiplication_is_unsafe(unsigned short x, unsigned short y)
+{
+	return multiplication_is_unsafe_unsigned_integral_types(x, y);
+}
+
+bool
+CheckedArithmetic::
+  multiplication_is_unsafe(unsigned char x, unsigned char y)
 {
 	return multiplication_is_unsafe_unsigned_integral_types(x, y);
 }

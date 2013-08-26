@@ -23,10 +23,12 @@
  * short\n
  * long\n
  * long long\n
+ * signed char\n
  * unsigned int\n
  * unsigned long\n
  * unsigned long long\n
  * unsigned short\n
+ * unsigned char\n
  * </tt>
  * @param x first number that would be added (or subtracted, or multiplied).
  * @param y second number that would be added (or subtracted, or multiplied).

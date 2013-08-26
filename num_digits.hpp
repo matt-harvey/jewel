@@ -41,6 +41,7 @@ public:
 	static std::size_t num_digits(short x, short base = 10);
 	static std::size_t num_digits(long x, long base = 10);
 	static std::size_t num_digits(long long x, long long base = 10);
+	static std::size_t num_digits(signed char x, signed char base = 10);
 	static std::size_t num_digits(unsigned int x, unsigned int base = 10);
 	static std::size_t num_digits(unsigned short x, unsigned short base = 10);
 	static std::size_t num_digits(unsigned long x, unsigned long base = 10);
@@ -48,6 +49,7 @@ public:
 	(	unsigned long long x,
 		unsigned long long base = 10
 	);
+	static std::size_t num_digits(unsigned char x, unsigned char base = 10);
 private:
 	
 	// Constructor is private and unimplemented, to prevent this class

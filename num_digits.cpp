@@ -34,6 +34,13 @@ NumDigits::num_digits(long long x, long long base)
 }
 
 std::size_t
+NumDigits::num_digits(signed char x, signed char base)
+{
+	if (x < 0) x = -x;
+	return num_digits_aux(x, base);
+}
+
+std::size_t
 NumDigits::num_digits(unsigned int x, unsigned int base)
 {
 	return num_digits_aux(x, base);
@@ -53,6 +60,12 @@ NumDigits::num_digits(unsigned long x, unsigned long base)
 
 std::size_t
 NumDigits::num_digits(unsigned long long x, unsigned long long base)
+{
+	return num_digits_aux(x, base);
+}
+
+std::size_t
+NumDigits::num_digits(unsigned char x, unsigned char base)
 {
 	return num_digits_aux(x, base);
 }

@@ -26,8 +26,6 @@ void test_exception_macros()
 	{
 	}
 
-	
-
 	try
 	{
 		throw TrialException1("Here's a TrialException1.");

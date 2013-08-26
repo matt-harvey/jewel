@@ -265,6 +265,67 @@ TEST(checked_arithmetic_addition_is_unsafe_short)
 	CHECK(!addition_is_unsafe(i23, i22));
 }
 
+
+TEST(checked_arithmetic_addition_is_unsafe_signed_char)
+{
+	// Test reaction to unsafe operations
+	signed char i0 = SCHAR_MAX - 3;
+	signed char i1 = 10;
+	CHECK(addition_is_unsafe(i0, i1));
+	CHECK(addition_is_unsafe(i1, i0));
+	signed char i2 = SCHAR_MAX;
+	signed char i3 = 1;
+	CHECK(addition_is_unsafe(i2, i3));
+	CHECK(addition_is_unsafe(i3, i2));
+	signed char i4 = SCHAR_MIN + 3;
+	signed char i5 = -10;
+	CHECK(addition_is_unsafe(i4, i5));
+	CHECK(addition_is_unsafe(i5, i4));
+	signed char i6 = SCHAR_MIN;
+	signed char i7 = -1;
+	CHECK(addition_is_unsafe(i6, i7));
+	CHECK(addition_is_unsafe(i7, i6));
+	signed char i8 = SCHAR_MAX / (signed char)(2);
+	signed char i9 = SCHAR_MAX / (signed char)(4);
+	i8 += i9;
+	signed char i9b = i9 + 3;
+	CHECK(addition_is_unsafe(i8, i9b));
+	CHECK(addition_is_unsafe(i9b, i8));
+	signed char i200 = SCHAR_MAX;
+	signed char i201 = SCHAR_MAX;
+	CHECK(addition_is_unsafe(i200, i201));
+	CHECK(addition_is_unsafe(i201, i200));
+
+	// Test reaction to safe operations
+	signed char i10 = 0;
+	signed char i11 = 1;
+	CHECK(!addition_is_unsafe(i10, i11));
+	CHECK(!addition_is_unsafe(i11, i10));
+	signed char i12 = 0;
+	signed char i13 = -1;
+	CHECK(!addition_is_unsafe(i12, i13));
+	CHECK(!addition_is_unsafe(i13, i12));
+	signed char i14 = SCHAR_MAX - 10;
+	signed char i15 = 9;
+	CHECK(!addition_is_unsafe(i14, i15));
+	CHECK(!addition_is_unsafe(i15, i14));
+	signed char i16 = SCHAR_MIN + 10;
+	signed char i17 = -9;
+	CHECK(!addition_is_unsafe(i16, i17));
+	CHECK(!addition_is_unsafe(i17, i16));
+	signed char i18 = SCHAR_MAX / 2;
+	signed char i19 = SCHAR_MAX / 2;
+	CHECK(!addition_is_unsafe(i18, i19));
+	CHECK(!addition_is_unsafe(i19, i18));
+	signed char i20 = SCHAR_MIN + 10;
+	signed char i21 = -10;
+	CHECK(!addition_is_unsafe(i20, i21));
+	CHECK(!addition_is_unsafe(i21, i20));	
+	signed char i22 = SCHAR_MAX - 10;
+	signed char i23 = 10;
+	CHECK(!addition_is_unsafe(i22, i23));
+	CHECK(!addition_is_unsafe(i23, i22));
+}
 	
 
 TEST(checked_arithmetic_addition_is_unsafe_unsigned_int)
@@ -435,6 +496,47 @@ TEST(checked_arithmetic_addition_is_unsafe_unsigned_short)
 	CHECK(!addition_is_unsafe(i23, i22));
 }
 	
+TEST(checked_arithmetic_addition_is_unsafe_unsigned_char)
+{
+	// Test reaction to unsafe operations
+	unsigned char i0 = UCHAR_MAX - 3;
+	unsigned char i1 = 10;
+	CHECK(addition_is_unsafe(i0, i1));
+	CHECK(addition_is_unsafe(i1, i0));
+	unsigned char i2 = UCHAR_MAX;
+	unsigned char i3 = 1;
+	CHECK(addition_is_unsafe(i2, i3));
+	CHECK(addition_is_unsafe(i3, i2));
+	unsigned char i8 = UCHAR_MAX / 2;
+	unsigned char i9 = UCHAR_MAX / 4;
+	i8 += i9;
+	unsigned char i9b = i9 + 3;
+	CHECK(addition_is_unsafe(i8, i9b));
+	CHECK(addition_is_unsafe(i9b, i8));
+	unsigned char i200 = UCHAR_MAX;
+	unsigned char i201 = UCHAR_MAX;
+	CHECK(addition_is_unsafe(i200, i201));
+	CHECK(addition_is_unsafe(i201, i200));
+
+	// Test reaction to safe operations
+	unsigned char i10 = 0;
+	unsigned char i11 = 1;
+	CHECK(!addition_is_unsafe(i10, i11));
+	CHECK(!addition_is_unsafe(i11, i10));
+	unsigned char i14 = UCHAR_MAX - 10;
+	unsigned char i15 = 9;
+	CHECK(!addition_is_unsafe(i14, i15));
+	CHECK(!addition_is_unsafe(i15, i14));
+	unsigned char i18 = UCHAR_MAX / 2;
+	unsigned char i19 = UCHAR_MAX / 2;
+	CHECK(!addition_is_unsafe(i18, i19));
+	CHECK(!addition_is_unsafe(i19, i18));
+	unsigned char i22 = UCHAR_MAX - 10;
+	unsigned char i23 = 10;
+	CHECK(!addition_is_unsafe(i22, i23));
+	CHECK(!addition_is_unsafe(i23, i22));
+}
+
 
 // TEST SUBTRACTION SAFETY CHECKERS
 
@@ -666,6 +768,61 @@ TEST(checked_arithmetic_subtraction_is_unsafe_short)
 }
 	
 
+TEST(checked_arithmetic_subtraction_is_unsafe_signed_char)
+{
+	// Test reaction to unsafe operations
+	signed char i0 = SCHAR_MAX - 3;
+	signed char i1 = -10;
+	CHECK(subtraction_is_unsafe(i0, i1));
+	CHECK(subtraction_is_unsafe(i1, i0));
+	signed char i2 = SCHAR_MAX;
+	signed char i3 = -2;
+	CHECK(subtraction_is_unsafe(i2, i3));
+	CHECK(subtraction_is_unsafe(i3, i2));
+	signed char i4 = SCHAR_MIN + 3;
+	signed char i5 = 10;
+	CHECK(subtraction_is_unsafe(i4, i5));
+	CHECK(subtraction_is_unsafe(i5, i4));
+	signed char i6 = SCHAR_MIN;
+	signed char i7 = 1;
+	CHECK(subtraction_is_unsafe(i6, i7));
+	CHECK(subtraction_is_unsafe(i7, i6));
+
+	// Test reaction to safe operations
+	signed char i10 = 0;
+	signed char i11 = -1;
+	CHECK(!subtraction_is_unsafe(i10, i11));
+	CHECK(!subtraction_is_unsafe(i11, i10));
+	signed char i12 = 0;
+	signed char i13 = 1;
+	CHECK(!subtraction_is_unsafe(i12, i13));
+	CHECK(!subtraction_is_unsafe(i13, i12));
+	signed char i14 = SCHAR_MAX - 10;
+	signed char i15 = -9;
+	CHECK(!subtraction_is_unsafe(i14, i15));
+	CHECK(!subtraction_is_unsafe(i15, i14));
+	signed char i16 = SCHAR_MIN + 10;
+	signed char i17 = 9;
+	CHECK(!subtraction_is_unsafe(i16, i17));
+	CHECK(!subtraction_is_unsafe(i17, i16));
+	signed char i18 = SCHAR_MAX / 2;
+	signed char i19 = -(SCHAR_MAX / 2);
+	CHECK(!subtraction_is_unsafe(i18, i19));
+	CHECK(!subtraction_is_unsafe(i19, i18));
+	signed char i20 = SCHAR_MIN + 10;
+	signed char i21 = 10;
+	CHECK(!subtraction_is_unsafe(i20, i21));
+	signed char i22 = SCHAR_MAX - 10;
+	signed char i23 = -10;
+	CHECK(!subtraction_is_unsafe(i22, i23));
+	CHECK(!subtraction_is_unsafe(i23, i22));
+	signed char i24 = -SCHAR_MAX;
+	signed char i25 = 1;
+	// Remember the absolute value of SCHAR_MAX is 1 less than that
+	// of SCHAR_MIN - so the following operation should be safe
+	CHECK(!subtraction_is_unsafe(i24, i25));
+}
+
 TEST(checked_arithmetic_subtraction_is_unsafe_unsigned_int)
 {
 	// Test reaction to unsafe operations
@@ -771,6 +928,33 @@ TEST(checked_arithmetic_subtraction_is_unsafe_unsigned_short)
 	unsigned short k4 = USHRT_MAX;
 	CHECK(!subtraction_is_unsafe(k3, k4));
 }
+
+
+TEST(checked_arithmetic_subtraction_is_unsafe_unsigned_char)
+{
+	// Test reaction to unsafe operations
+	unsigned char i0 = 0;
+	unsigned char i1 = 1;
+	CHECK(subtraction_is_unsafe(i0, i1));
+	unsigned char i2 = 103;
+	unsigned char i3 = 110;
+	CHECK(subtraction_is_unsafe(i2, i3));
+	unsigned char i4 = UCHAR_MAX - 1;
+	unsigned char i5 = UCHAR_MAX;
+	CHECK(subtraction_is_unsafe(i4, i5));
+	
+	// Test reaction to safe operations
+	CHECK(!subtraction_is_unsafe(i1, i0));
+	CHECK(!subtraction_is_unsafe(i3, i2));
+	CHECK(!subtraction_is_unsafe(i5, i4));
+	unsigned char k1 = 0;
+	unsigned char k2 = 0;
+	CHECK(!subtraction_is_unsafe(k1, k2));
+	unsigned char k3 = UCHAR_MAX;
+	unsigned char k4 = UCHAR_MAX;
+	CHECK(!subtraction_is_unsafe(k3, k4));
+}
+
 
 
 // TEST MULTIPLICATION SAFETY CHECKERS
@@ -995,8 +1179,6 @@ TEST(checked_arithmetic_multiplication_is_unsafe_long_long)
 }
 
 
-
-
 TEST(checked_arithmetic_multiplication_is_unsafe_short)
 {
 	// Test reaction to unsafe operations
@@ -1059,6 +1241,71 @@ TEST(checked_arithmetic_multiplication_is_unsafe_short)
 	CHECK(!multiplication_is_unsafe(i36, i37));
 	CHECK(!multiplication_is_unsafe(i37, i36));
 }
+
+
+TEST(checked_arithmetic_multiplication_is_unsafe_signed_char)
+{
+	// Test reaction to unsafe operations
+	signed char i0 = 3;
+	signed char i1 = SCHAR_MAX / 2;
+	CHECK(multiplication_is_unsafe(i0, i1));
+	CHECK(multiplication_is_unsafe(i1, i0));
+	signed char i2 = 3;
+	signed char i3 = SCHAR_MIN / -2;
+	CHECK(multiplication_is_unsafe(i2, i3));
+	CHECK(multiplication_is_unsafe(i3, i2));
+	signed char i4 = SCHAR_MAX / 10;
+	signed char i5 = -50;
+	CHECK(multiplication_is_unsafe(i4, i5));
+	CHECK(multiplication_is_unsafe(i5, i4));
+	signed char i6 = SCHAR_MAX - 1;
+	signed char i7 = SCHAR_MAX - 1;
+	CHECK(multiplication_is_unsafe(i6, i7));
+	CHECK(multiplication_is_unsafe(i7, i6));
+	signed char i8 = SCHAR_MIN;
+	signed char i9 = SCHAR_MAX;
+	CHECK(multiplication_is_unsafe(i8, i9));
+	CHECK(multiplication_is_unsafe(i9, i8));
+	signed char i10 = SCHAR_MIN / 20;
+	signed char i11 = 30;
+	CHECK(multiplication_is_unsafe(i10, i11));
+	CHECK(multiplication_is_unsafe(i11, i10));
+	signed char i200 = SCHAR_MIN;
+	signed char i201 = -1;
+	CHECK(multiplication_is_unsafe(i200, i201));
+	CHECK(multiplication_is_unsafe(i201, i200));
+	signed char i202 = SCHAR_MIN;
+	signed char i203 = -2;
+	CHECK(multiplication_is_unsafe(i202, i203));
+	CHECK(multiplication_is_unsafe(i203, i202));
+	
+	// Test reaction to safe operations
+	signed char i12 = 0;
+	signed char i13 = 0;
+	CHECK(!multiplication_is_unsafe(i12, i13));
+	CHECK(!multiplication_is_unsafe(i13, i12));
+	signed char i14 = -0;
+	signed char i15 = 0;
+	CHECK(!multiplication_is_unsafe(i14, i15));
+	CHECK(!multiplication_is_unsafe(i15, i14));
+	signed char i16 = -9;
+	signed char i17 = 8;
+	CHECK(!multiplication_is_unsafe(i16, i17));
+	CHECK(!multiplication_is_unsafe(i17, i16));
+	signed char i32 = 100;
+	signed char i33 = 1;
+	CHECK(!multiplication_is_unsafe(i32, i33));
+	CHECK(!multiplication_is_unsafe(i33, i32));
+	signed char i34 = SCHAR_MAX / 10;
+	signed char i35 = 6;
+	CHECK(!multiplication_is_unsafe(i34, i35));
+	CHECK(!multiplication_is_unsafe(i35, i34));
+	signed char i36 = SCHAR_MIN / 10;
+	signed char i37 = 6;
+	CHECK(!multiplication_is_unsafe(i36, i37));
+	CHECK(!multiplication_is_unsafe(i37, i36));
+}
+
 
 TEST(checked_arithmetic_multiplication_is_unsafe_unsigned_int)
 {
@@ -1195,7 +1442,6 @@ TEST(checked_arithmetic_multiplication_is_unsafe_unsigned_long_long)
 }
 
 
-
 TEST(checked_arithmetic_multiplication_is_unsafe_unsigned_short)
 {
 	// Test reaction to unsafe operations
@@ -1235,6 +1481,50 @@ TEST(checked_arithmetic_multiplication_is_unsafe_unsigned_short)
 	CHECK(!multiplication_is_unsafe(i35, i34));
 	unsigned short i36 = 100;
 	unsigned short i37 = 30;
+	CHECK(!multiplication_is_unsafe(i36, i37));
+	CHECK(!multiplication_is_unsafe(i37, i36));
+}
+
+
+TEST(checked_arithmetic_multiplication_is_unsafe_unsigned_char)
+{
+	// Test reaction to unsafe operations
+	unsigned char i0 = 3;
+	unsigned char i1 = UCHAR_MAX / 2;
+	CHECK(multiplication_is_unsafe(i0, i1));
+	CHECK(multiplication_is_unsafe(i1, i0));
+	unsigned char i4 = UCHAR_MAX / 10;
+	unsigned char i5 = 15;
+	CHECK(multiplication_is_unsafe(i4, i5));
+	CHECK(multiplication_is_unsafe(i5, i4));
+	unsigned char i6 = UCHAR_MAX - 1;
+	unsigned char i7 = UCHAR_MAX - 1;
+	CHECK(multiplication_is_unsafe(i6, i7));
+	CHECK(multiplication_is_unsafe(i7, i6));
+	unsigned char i8 = UCHAR_MAX;
+	unsigned char i9 = UCHAR_MAX;
+	CHECK(multiplication_is_unsafe(i8, i9));
+	CHECK(multiplication_is_unsafe(i9, i8));
+	unsigned char i10 = UCHAR_MAX / 20;
+	unsigned char i11 = 30;
+	CHECK(multiplication_is_unsafe(i10, i11));
+	CHECK(multiplication_is_unsafe(i11, i10));
+	
+	// Test reaction to safe operations
+	unsigned char i12 = 0;
+	unsigned char i13 = 0;
+	CHECK(!multiplication_is_unsafe(i12, i13));
+	CHECK(!multiplication_is_unsafe(i13, i12));
+	unsigned char i32 = 10;
+	unsigned char i33 = 9;
+	CHECK(!multiplication_is_unsafe(i32, i33));
+	CHECK(!multiplication_is_unsafe(i33, i32));
+	unsigned char i34 = UCHAR_MAX / 10;
+	unsigned char i35 = 6;
+	CHECK(!multiplication_is_unsafe(i34, i35));
+	CHECK(!multiplication_is_unsafe(i35, i34));
+	unsigned char i36 = 25;
+	unsigned char i37 = 3;
 	CHECK(!multiplication_is_unsafe(i36, i37));
 	CHECK(!multiplication_is_unsafe(i37, i36));
 }
