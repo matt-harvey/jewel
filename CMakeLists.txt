@@ -71,6 +71,7 @@ install(FILES
         decimal_exceptions.hpp
 		decimal_fwd.hpp
 		exception.hpp
+		flag_set.hpp
 		num_digits.hpp
 		on_windows.hpp
 		optional.hpp
