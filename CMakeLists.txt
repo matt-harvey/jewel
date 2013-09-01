@@ -64,6 +64,7 @@ install(DIRECTORY jewel DESTINATION ${header_installation_dir})
 
 install(FILES
 		array_utilities.hpp
+		assert.hpp
 		checked_arithmetic.hpp
 		checked_arithmetic_detail.hpp
 		debug_log.hpp
@@ -72,6 +73,7 @@ install(FILES
 		decimal_fwd.hpp
 		exception.hpp
 		flag_set.hpp
+		helper_macros.hpp
 		num_digits.hpp
 		on_windows.hpp
 		optional.hpp

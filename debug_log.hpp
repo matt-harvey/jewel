@@ -13,6 +13,7 @@
 #ifndef GUARD_debug_log_hpp
 #define GUARD_debug_log_hpp
 
+#include "helper_macros.hpp"
 #include <exception>
 #include <iostream>
 
@@ -63,16 +64,16 @@ private:
 
 #ifdef DEBUG
 
-	#define JEWEL_TEST_FATAL(level) \
-			if (level >= jewel::Log::fatal) \
-			{ \
-				std::clog << "OBITUARY:\t"\
-				          << "Application terminated due to Log::fatal." \
-				          << std::endl; \
-				std::terminate(); \
-			}
+#	define JEWEL_TEST_FATAL(level) \
+		if (level >= jewel::Log::fatal) \
+		{ \
+			std::clog << "OBITUARY:\t"\
+					  << "Application terminated due to Log::fatal." \
+					  << std::endl; \
+			std::terminate(); \
+		}
 
-	#define JEWEL_LOG(level, msg) \
+#	define JEWEL_LOG(level, msg) \
 		if (level >= jewel::Log::threshold()) \
 		{ \
 			std::clog << "SEVERITY:\t" << level \
@@ -81,18 +82,18 @@ private:
 			JEWEL_TEST_FATAL(level); \
 		}
 
-	#define JEWEL_LOG_LOCATION(level) \
+#	define JEWEL_LOG_LOCATION(level) \
 		if (level >= jewel::Log::threshold()) \
 		{ \
 			std::clog << "SEVERITY:\t" << level \
-			          << "\tFUNCTION:\t" << __func__ \
+			          << "\tFUNCTION:\t" << JEWEL_FUNCTION \
 			          << "\tFILE:\t" << __FILE__ \
 					  << "\tLINE:\t" << __LINE__ \
 					  << "\n"; \
 			JEWEL_TEST_FATAL(level); \
 		} 
 	
-	#define JEWEL_LOG_VALUE(level, val) \
+#	define JEWEL_LOG_VALUE(level, val) \
 		if (level >= jewel::Log::threshold()) \
 		{ \
 			std::clog << "SEVERITY:\t" << level \
@@ -104,12 +105,11 @@ private:
 
 #else
 
-	#define JEWEL_TEST_FATAL(level) 0
-	#define JEWEL_LOG(level, msg) 0
-	#define JEWEL_LOG_LOCATION(level) 0
-	#define JEWEL_LOG_VALUE(level, val) 0
+#	define JEWEL_LOG(level, msg) 0
+#	define JEWEL_LOG_LOCATION(level) 0
+#	define JEWEL_LOG_VALUE(level, val) 0
 
-#endif
+#endif   // DEBUG
 
 
 
