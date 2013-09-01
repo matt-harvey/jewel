@@ -10,6 +10,9 @@
  * @todo Documentation and testing.
  */
 
+#ifndef GUARD_debug_log_hpp
+#define GUARD_debug_log_hpp
+
 #include <iostream>
 
 namespace jewel
@@ -111,4 +114,4 @@ private:
 }  // namespace jewel
 
 
-
+#endif  // GUARD_debug_log_hpp
