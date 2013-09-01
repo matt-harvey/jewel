@@ -4,11 +4,9 @@
 #include <boost/numeric/conversion/cast.hpp>
 #include "decimal_exceptions.hpp"
 #include "checked_arithmetic.hpp"
-#include "debug_log.hpp"
 #include "decimal.hpp"
 #include "decimal_special_tests.hpp"
 #include "exception_special_tests.hpp"
-#include "assert.hpp"
 #include "num_digits.hpp"
 #include <iomanip>
 #include <iostream>
@@ -36,9 +34,6 @@ using std::locale;
 
 int main()
 {
-	JEWEL_LOG_LOCATION(jewel::Log::info);
-	JEWEL_ASSERT (false);
-	
 	#ifndef NDEBUG
 		cout << "Compiled in debugging mode (NDEBUG not defined)."
 		     << endl;

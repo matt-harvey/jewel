@@ -23,13 +23,16 @@ namespace jewel
 class Log
 {
 public:
+
+	// Note if we add levels, we also need to update the
+	// severity_string function.
 	enum Level
 	{
 		info,
 		warning,
 		error
 	};
-	
+
 	static Level threshold()
 	{
 		return threshold_aux();
@@ -47,6 +50,19 @@ public:
 		return;
 	}
 
+	/**
+	 * For use by JEWEL_LOG... macros only - not for use in client code.
+	 */
+	static char const* severity_string(Level p_level)
+	{
+		static char const* strings[] =
+		{	"info",
+			"warning",
+			"error"
+		};
+		return strings[p_level];
+	}
+
 private:
 
 	static Level& threshold_aux()
@@ -54,6 +70,7 @@ private:
 		static Level ret = info;
 		return ret;
 	}
+
 };
 
 }  // namespace jewel
@@ -64,7 +81,7 @@ private:
 #	define JEWEL_LOG(level, msg) \
 		if (level >= jewel::Log::threshold()) \
 		{ \
-			std::clog << "SEVERITY:\t" << level \
+			std::clog << "SEVERITY:\t" << jewel::Log::severity_string(level) \
 					  << "\tMESSAGE:\t" msg \
 					  << "\n"; \
 		}
@@ -72,7 +89,7 @@ private:
 #	define JEWEL_LOG_LOCATION(level) \
 		if (level >= jewel::Log::threshold()) \
 		{ \
-			std::clog << "SEVERITY:\t" << level \
+			std::clog << "SEVERITY:\t" << jewel::Log::severity_string(level) \
 			          << "\tFUNCTION:\t" << __func__ \
 			          << "\tFILE:\t" << __FILE__ \
 					  << "\tLINE:\t" << __LINE__ \
@@ -82,7 +99,7 @@ private:
 #	define JEWEL_LOG_VALUE(level, val) \
 		if (level >= jewel::Log::threshold()) \
 		{ \
-			std::clog << "SEVERITY:\t" << level \
+			std::clog << "SEVERITY:\t" << jewel::Log::severity_string(level) \
 			          << "\tEXPRESSION:\t" << #val \
 					  << "\tVALUE:\t" << val \
 					  << "\n"; \
