@@ -1,58 +1,114 @@
-// Copyright (c) 2013, Matthew Harvey. All rights reserved.
-
-#ifndef GUARD_debug_log_hpp
-#define GUARD_debug_log_hpp
-
 /** @file debug_log.hpp
  *
- * @brief Provides macro for printing to std::clog in debug builds.
+ * @brief Debug logging facilities
  *
- * From someone called "snstrnd" on Stack Overflow.
+ * @author Matthew Harvey
+ * @date 01 September 2013
+ *
+ * Copyright (c) 2013, Matthew Harvey. All rights reserved.
+ *
+ * @todo Documentation and testing.
  */
 
 #include <iostream>
 
+namespace jewel
+{
 
-/**Macros to print to std::clog if DEBUG is defined, or else to compile
- * away to nothing if DEBUG is not defined.
- *
- * If DEBUG is defined, JEWEL_DEBUG_LOG acts like std::clog
- * (but prints "LOG: " before the rest of the output),
- * but if DEBUG is not defined, JEWEL_DEBUG_LOG, and the rest
- * of the line, is effectively compiled away to nothing.
- *
- * If DEBUG is defined JEWEL_DEBUG_LOG_LOCATION prints the
- * file and line number to std::clog; otherwise, it is
- * effectively compiled away to nothing.
- *
- * If DEBUG is defined JEWEL_DEBUG_LOG_VALUE(x) prints a string
- * of the form "x: [value of x]". E.g. if x == 3, then
- * JEWEL_DEBUG_LOG_VALUE(x) will print "x: 3".
- *
- * Note a semicolon must still be included by client code
- * at the end of a statement using either of these macros.
- *
- * No particular exception safety guarantee is offered by
- * these macros. They are not intended for use in release builds.
- * But note that all it does is write to std::clog; so unless
- * exceptions have been enabled on std::clog, the only part of this
- * function that could throw is in initialization of the string being
- * written to std::clog. This might throw under conditions of
- * memory shortage; but it is extremely unlikely.
- */ 
+class Log
+{
+public:
+	enum Level
+	{
+		trace,
+		info,
+		debug,
+		warning,
+		error,
+		fatal
+	};
+	
+	static Level threshold()
+	{
+		return threshold_aux();
+	}
+	
+	static void set_threshold(Level p_level)
+	{
+		threshold_aux() = p_level;
+		return;
+	}
+
+	static void flush()
+	{
+		std::clog.flush();
+		return;
+	}
+
+private:
+
+	static Level& threshold_aux()
+	{
+		static Level ret = debug;
+		return ret;
+	}
+};
+
+
+
 
 #ifdef DEBUG
-	#define JEWEL_DEBUG_LOG std::clog << "LOG: "
-	#define JEWEL_DEBUG_LOG_LOCATION std::clog << __FILE__ << ": " << __LINE__ << std::endl;
-	#define JEWEL_DEBUG_LOG_VALUE(x) std::clog << #x ": " << x << std::endl;
+
+	#define JEWEL_TEST_FATAL(level) \
+			if (level >= Log::fatal) \
+			{ \
+				std::clog << "OBITUARY:\t"\
+				          << "Application terminated due to Log::fatal." \
+				          << std::endl; \
+				std::terminate(); \
+			}
+
+	#define JEWEL_LOG(level, msg) \
+		if (level >= Log::threshold()) \
+		{ \
+			std::clog << "SEVERITY:\t" << level \
+					  << "\tMESSAGE:\t" msg \
+					  << "\n"; \
+			JEWEL_TEST_FATAL(level); \
+		}
+
+	#define JEWEL_LOG_LOCATION(level) \
+		if (level >= Log::threshold()) \
+		{ \
+			std::clog << "SEVERITY:\t" << level \
+			          << "\tFUNCTION:\t" << __func__ \
+			          << "\tFILE:\t" << __FILE__ \
+					  << "\tLINE:\t" << __LINE__ \
+					  << "\n"; \
+			JEWEL_TEST_FATAL(level); \
+		} 
+	
+	#define JEWEL_LOG_VALUE(level, val) \
+		if (level >= Log::threshold()) \
+		{ \
+			std::clog << "SEVERITY:\t" \
+			          << "\tEXPRESSION:\t" << #val \
+					  << "\tVALUE:\t" << x \
+					  << "\n"; \
+			JEWEL_TEST_FATAL(level); \
+		}
+
 #else
-	#define JEWEL_DEBUG_LOG 0 && std::clog
-	#define JEWEL_DEBUG_LOG_LOCATION 0
-	#define JEWEL_DEBUG_LOG_VALUE(X) 0
+
+	#define JEWEL_TEST_FATAL(level) 0
+	#define JEWEL_LOG(level, msg) 0
+	#define JEWEL_LOG_LOCATION(level) 0
+	#define JEWEL_LOG_VALUE(level, val) 0
+
 #endif
 
 
+}  // namespace jewel
 
 
 
-#endif  // GUARD_debug_log_hpp
