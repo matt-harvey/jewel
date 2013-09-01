@@ -2,7 +2,7 @@
 
 #include "exception.hpp"
 
-#include "debug_log.hpp"
+#include "log.hpp"
 #include <cassert>
 #include <cstring>
 #include <iostream>

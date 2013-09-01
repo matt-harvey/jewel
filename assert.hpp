@@ -1,6 +1,7 @@
 #ifndef GUARD_assert_hpp
 #define GUARD_assert_hpp
 
+#include "log.hpp"
 #include "helper_macros.hpp"
 #include <jewel/debug_log.hpp>
 #include <jewel/exception.hpp>
@@ -33,12 +34,10 @@ JEWEL_DERIVED_EXCEPTION(AssertionFailure, Exception);
 #	define JEWEL_ASSERT(p) \
 		if (!(p)) \
 		{ \
-			JEWEL_LOG \
+			JEWEL_LOG_MESSAGE \
 			(	jewel::Log::error, \
-				"Throwing FailedAssertion instance" \
-				" from the following location..." \
-			) \
-			JEWEL_LOG_LOCATION(jewel::Log::error) \
+				"Throwing FailedAssertion"\
+			); \
 			char const* msg = \
 				"Failed assertion (" #p ") " \
 				"in file \"" __FILE__ "\" at line " \

@@ -16,6 +16,7 @@ set (library_sources
      checked_arithmetic_detail.cpp
 	 decimal.cpp
 	 exception.cpp
+	 log.cpp
 	 num_digits.cpp)
 
 set (test_sources
@@ -67,7 +68,7 @@ install(FILES
 		assert.hpp
 		checked_arithmetic.hpp
 		checked_arithmetic_detail.hpp
-		debug_log.hpp
+		log.hpp
 		decimal.hpp
         decimal_exceptions.hpp
 		decimal_fwd.hpp
