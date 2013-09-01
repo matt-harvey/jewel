@@ -93,7 +93,7 @@ private:
 
 #	define JEWEL_LOG_TRACE() 0
 #	define JEWEL_LOG_MESSAGE(severity, message) 0
-#	define JEWEL_LOG_VALUE(expression) 0
+#	define JEWEL_LOG_VALUE(severity, expression) 0
 
 #endif  // JEWEL_DISABLE_LOGGING
 
