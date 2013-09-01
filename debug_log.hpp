@@ -94,9 +94,9 @@ private:
 	#define JEWEL_LOG_VALUE(level, val) \
 		if (level >= jewel::Log::threshold()) \
 		{ \
-			std::clog << "SEVERITY:\t" \
+			std::clog << "SEVERITY:\t" << level \
 			          << "\tEXPRESSION:\t" << #val \
-					  << "\tVALUE:\t" << x \
+					  << "\tVALUE:\t" << val \
 					  << "\n"; \
 			JEWEL_TEST_FATAL(level); \
 		}
