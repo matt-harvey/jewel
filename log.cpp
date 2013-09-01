@@ -69,7 +69,8 @@ char const*
 Log::severity_string(Level p_level)
 {
 	static char const* strings[] =
-	{	"info",
+	{	"trace",
+		"info",
 		"warning",
 		"error"
 	};

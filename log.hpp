@@ -36,6 +36,7 @@ public:
 	// severity_string function.
 	enum Level
 	{
+		trace,
 		info,
 		warning,
 		error
@@ -74,14 +75,14 @@ private:
 #ifndef JEWEL_DISABLE_LOGGING
 
 #	define JEWEL_LOG_TRACE() \
-		jewel::Log::log(jewel::Log::info, 0, __FILE__, __LINE__)
+		jewel::Log::log(jewel::Log::trace, 0, __FILE__, __LINE__)
 
 #	define JEWEL_LOG_MESSAGE(severity, message) \
 		jewel::Log::log(severity, message, __FILE__, __LINE__)
 
-#	define JEWEL_LOG_VALUE(expression) \
+#	define JEWEL_LOG_VALUE(severity, expression) \
 		jewel::Log::log \
-		(	jewel::Log::info, \
+		(	severity, \
 			std::string("the value of (" #expression ") is ") + \
 				boost::lexical_cast<std::string>(expression), \
 			__FILE__, \
