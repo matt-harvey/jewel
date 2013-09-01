@@ -13,6 +13,7 @@
 #ifndef GUARD_debug_log_hpp
 #define GUARD_debug_log_hpp
 
+#include <exception>
 #include <iostream>
 
 namespace jewel
