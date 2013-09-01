@@ -57,13 +57,13 @@ private:
 	}
 };
 
-
+}  // namespace jewel
 
 
 #ifdef DEBUG
 
 	#define JEWEL_TEST_FATAL(level) \
-			if (level >= Log::fatal) \
+			if (level >= jewel::Log::fatal) \
 			{ \
 				std::clog << "OBITUARY:\t"\
 				          << "Application terminated due to Log::fatal." \
@@ -72,7 +72,7 @@ private:
 			}
 
 	#define JEWEL_LOG(level, msg) \
-		if (level >= Log::threshold()) \
+		if (level >= jewel::Log::threshold()) \
 		{ \
 			std::clog << "SEVERITY:\t" << level \
 					  << "\tMESSAGE:\t" msg \
@@ -81,7 +81,7 @@ private:
 		}
 
 	#define JEWEL_LOG_LOCATION(level) \
-		if (level >= Log::threshold()) \
+		if (level >= jewel::Log::threshold()) \
 		{ \
 			std::clog << "SEVERITY:\t" << level \
 			          << "\tFUNCTION:\t" << __func__ \
@@ -92,7 +92,7 @@ private:
 		} 
 	
 	#define JEWEL_LOG_VALUE(level, val) \
-		if (level >= Log::threshold()) \
+		if (level >= jewel::Log::threshold()) \
 		{ \
 			std::clog << "SEVERITY:\t" \
 			          << "\tEXPRESSION:\t" << #val \
@@ -110,8 +110,6 @@ private:
 
 #endif
 
-
-}  // namespace jewel
 
 
 #endif  // GUARD_debug_log_hpp
