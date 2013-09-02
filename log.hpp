@@ -64,13 +64,7 @@ namespace jewel
  *
  * @todo Testing.
  *
- * Note these logging facilities are guaranteed never to throw an exception.
- * If the logging stream has exceptions enabled, then logging
- * will simply not occur. The reason for this behaviour is to ensure that
- * client code need not be concerned that the mere act of logging from
- * inside a given function might in any way compromise the exception safety
- * of that function. Note that if any error flags are detected on the logging
- * stream, then logging will also cease.
+ * These logging facilities are guaranteed never to throw an exception.
  */
 class Log
 {
@@ -93,15 +87,14 @@ public:
 	};
 
 	/**
-	 * Pass a pointer to a heap-allocated (newed) std::ostream*. Note:
-	 * do \e not delete the pointer; Log will take care of the memory.
-	 * If this is not called, then by default this will write to \e std::clog.
+	 * Tell the logging engine the file you want log messages written to.
+	 * This must be called or logging will not occur at all.
 	 */
-	static void set_stream(std::ostream* p_os);
+	static void set_filepath(std::string const& p_filepath);
 
 	/**
-	 * Sets the logging threshold so that logging events will be writting
-	 * to the stream if and only if their severity is greater than or
+	 * Sets the logging threshold so that logging events will be written
+	 * to the file if and only if their severity is greater than or
 	 * equal to \e p_level. By default, the threshold is \e info.
 	 */
 	static void set_threshold(Level p_level);

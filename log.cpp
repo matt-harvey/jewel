@@ -8,7 +8,10 @@
 // circularity here.
 #include <cassert>
 
+#include <fstream>
+#include <ios>
 #include <iostream>
+#include <string>
 
 using boost::noncopyable;
 using jewel::num_elements;
@@ -16,7 +19,10 @@ using std::cerr;
 using std::clog;
 using std::cout;
 using std::endl;
+using std::ios;
+using std::ofstream;
 using std::ostream;
+using std::string;
 
 
 namespace jewel
@@ -46,25 +52,18 @@ namespace
 	void
 	StreamHolder::kill()
 	{
-		try
+		if (os)
 		{
-			if (os)
+			os->flush();
+			if ((os != &cerr) && (os != &clog) && (os != &cout))
 			{
-				os->flush();
-				if ((os != &cerr) && (os != &clog) && (os != &cout))
-				{
-					JEWEL_LOG_MESSAGE
-					(	Log::info,
-						"Deleting underlying logging stream."
-					);
-					delete os;
-				}
-				os = 0;
+				JEWEL_LOG_MESSAGE
+				(	Log::info,
+					"Deleting underlying logging stream."
+				);
+				delete os;
 			}
-		}
-		catch (...)
-		{
-			// Yes this is deliberate.
+			os = 0;
 		}
 		assert (0 == os);
 		return;
@@ -75,9 +74,19 @@ namespace
 }  // end anonymous namespace
 
 void
-Log::set_stream(ostream* p_os)
+Log::set_filepath(string const& p_filepath)
 {
-	stream_aux(p_os);
+	static string filepath = "";
+	if (p_filepath != filepath)
+	{
+		filepath = p_filepath;
+		if (!filepath.empty())
+		{
+			ofstream* f = new ofstream(p_filepath.c_str());
+			f->exceptions(ios::iostate(0));
+			stream_aux(f);
+		}
+	}
 	return;
 }
 
@@ -91,12 +100,12 @@ Log::set_threshold(Level p_level)
 void
 Log::log
 (	Level p_severity,
-	std::string const& p_message,
-	std::string const& p_function,
-	std::string const& p_file,
+	string const& p_message,
+	string const& p_function,
+	string const& p_file,
 	int p_line,
-	std::string const& p_compilation_date,
-	std::string const& p_compilation_time
+	string const& p_compilation_date,
+	string const& p_compilation_time
 )
 {
 	log
@@ -129,7 +138,7 @@ Log::log
 		{
 			return;
 		}
-		assert (osp->good());  // guaranteed by stream_aux().
+		assert (!osp->bad());  // guaranteed by stream_aux().
 		assert (!osp->exceptions());  // guaranteed by stream_aux().
 		*osp << "{\n"
 			<< "\tseverity: \"" << severity_string(p_severity) << "\"\n"
@@ -165,11 +174,7 @@ Log::severity_string(Level p_level)
 std::ostream*
 Log::stream_aux(std::ostream* p_stream)
 {
-	// Things get a bit paranoid in here but I think it's worth it to
-	// ensure that the mere act of logging doesn't compromise the safety
-	// of client code in any way.
-
-	static StreamHolder holder(&std::clog);
+	static StreamHolder holder(0);
 
 	if (p_stream != 0)
 	{
@@ -178,34 +183,16 @@ Log::stream_aux(std::ostream* p_stream)
 		holder.os = p_stream;
 	}
 
-	// If the stream has exceptions enabled, we refuse to work with it.
-	if (holder.os && holder.os->exceptions())
-	{
-		holder.kill();
-		assert (0 == holder.os);
-	}
-
 	// Make sure the stream isn't in a bad state.
-	if (holder.os && !holder.os->good())
+	if (holder.os && holder.os->bad())
 	{
-		if (!holder.os->bad() && !holder.os->eof())
-		{
-			assert (holder.os->fail());
-			*(holder.os) << "Failbit set on logging stream. Logging "
-						 << "discontinued." << endl;
-		}
-		else
-		{
-			// We shouldn't write if ios::eof or ios::bad is set.
-			// Too dangerous. Do nothing.
-		}
 		holder.kill();
 		assert (0 == holder.os);
 	}
 
 	assert
 	(	(0 == holder.os) ||
-		(holder.os->good() && !holder.os->exceptions())
+		(!holder.os->bad() && !holder.os->exceptions())
 	);
 
 	return holder.os;
