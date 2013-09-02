@@ -73,10 +73,8 @@ public:
 
 	/**
 	 * Pass a pointer to a heap-allocated (newed) std::ostream*. Note:
-	 * do \e not delete the pointer. The memory should remain allocated
-	 * for the life of the application. (You normally should not call
-	 * this more than once.) If this is not called, then by default
-	 * this will write to \e std::clog.
+	 * do \e not delete the pointer; Log will take care of the memory.
+	 * If this is not called, then by default this will write to \e std::clog.
 	 */
 	static void set_stream(std::ostream* p_os);
 
@@ -148,15 +146,6 @@ private:
 namespace jewel
 {
 
-inline
-std::ostream*
-Log::stream_aux(std::ostream* p_stream)
-{
-	static std::ostream* ret = &std::clog;
-	if (p_stream) ret = p_stream;
-	assert (ret);
-	return ret;
-}
 
 inline
 Log::Level&

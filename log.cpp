@@ -1,13 +1,49 @@
 #include "log.hpp"
 #include "array_utilities.hpp"
+#include <boost/noncopyable.hpp>
+#include <cassert>
 #include <iostream>
 
+using boost::noncopyable;
 using jewel::num_elements;
+using std::cerr;
+using std::clog;
+using std::cout;
 using std::endl;
 using std::ostream;
 
+
 namespace jewel
 {
+
+namespace
+{
+
+struct StreamHolder: noncopyable
+{
+	explicit StreamHolder(ostream* p_os): m_os(p_os)
+	{
+	}
+	~StreamHolder()
+	{
+		kill();
+	}
+	void kill()
+	{
+		assert (m_os);
+		m_os->flush();
+		if ((m_os != &cerr) && (m_os != &clog) && (m_os != &cout))
+		{
+			delete m_os;
+		}
+		m_os = 0;
+		return;
+	}
+	ostream* m_os;
+};
+
+
+}  // end anonymous namespace
 
 void
 Log::set_stream(ostream* p_os)
@@ -79,6 +115,19 @@ Log::severity_string(Level p_level)
 		return "unrecognized";
 	}
 	return strings[p_level];
+}
+
+std::ostream*
+Log::stream_aux(std::ostream* p_stream)
+{
+	static StreamHolder holder(&std::clog);
+	if (p_stream)
+	{
+		holder.kill();	
+		holder.m_os = p_stream;
+	}
+	assert (holder.m_os);
+	return holder.m_os;
 }
 
 
