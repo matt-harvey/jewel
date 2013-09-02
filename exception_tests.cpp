@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include "exception.hpp"
-#include <cassert>
+#include "assert.hpp"
 #include <cstring>
 #include <string>
 #include <UnitTest++/UnitTest++.h>

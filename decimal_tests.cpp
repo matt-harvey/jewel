@@ -123,7 +123,7 @@ struct DigitStringFixture
 void add_digit(string& s)
 {
 	string digit_source = "3422988137";
-	assert (digit_source.size() == 10);
+	JEWEL_ASSERT (digit_source.size() == 10);
 	s += digit_source[s.size() % 10];
 	return;
 }
@@ -146,26 +146,26 @@ DigitStringFixture::DigitStringFixture()
 	{
 		add_digit(s_max_digits_less_one);
 	}
-	assert (s_max_digits_less_one.size() ==
+	JEWEL_ASSERT (s_max_digits_less_one.size() ==
 	  static_cast<string::size_type>(max_digits - 1));
 	s_neg_max_digits_less_one = "-" + s_max_digits_less_one;
-	assert (s_neg_max_digits_less_one.size() == max_digits);
-	assert (s_neg_max_digits_less_one[0] == '-');
+	JEWEL_ASSERT (s_neg_max_digits_less_one.size() == max_digits);
+	JEWEL_ASSERT (s_neg_max_digits_less_one[0] == '-');
 	s_max_digits_one_and_zeroes = "1";
 	for (places_type i = 1; i != max_digits; ++i)
 	{
 		s_max_digits_one_and_zeroes += '0';
 	}
-	assert (s_max_digits_one_and_zeroes.size() == max_digits);
-	assert (s_max_digits_one_and_zeroes[0] == '1');
-	assert (s_max_digits_one_and_zeroes[max_digits - 1] == '0');
+	JEWEL_ASSERT (s_max_digits_one_and_zeroes.size() == max_digits);
+	JEWEL_ASSERT (s_max_digits_one_and_zeroes[0] == '1');
+	JEWEL_ASSERT (s_max_digits_one_and_zeroes[max_digits - 1] == '0');
 	s_neg_max_digits_one_and_zeroes = "-" + s_max_digits_one_and_zeroes;
-	assert (s_neg_max_digits_one_and_zeroes.size() ==
+	JEWEL_ASSERT (s_neg_max_digits_one_and_zeroes.size() ==
 	  static_cast<string::size_type>(max_digits + 1));
 	s_max_digits_plus_one = s_max_digits_less_one;
 	add_digit(s_max_digits_plus_one);
 	add_digit(s_max_digits_plus_one);
-	assert (s_max_digits_plus_one.size() ==
+	JEWEL_ASSERT (s_max_digits_plus_one.size() ==
 	  static_cast<string::size_type>(max_digits + 1));
 	s_neg_max_digits_plus_one = "-" + s_max_digits_plus_one;
 	ostringstream ossmax;
@@ -175,15 +175,15 @@ DigitStringFixture::DigitStringFixture()
 	ostringstream ossmin;
 	ossmin << mini;
 	s_min_int_type = ossmin.str();
-	assert
+	JEWEL_ASSERT
 	(	s_min_int_type.size() ==
 		static_cast<string::size_type>(max_digits + 1)
 	);
-	assert (s_min_int_type[0] == '-');
+	JEWEL_ASSERT (s_min_int_type[0] == '-');
 
 	s_max_digits_less_one_places_2 = s_max_digits_less_one;
 	insert_from_end('.', s_max_digits_less_one_places_2, 2);
-	assert
+	JEWEL_ASSERT
 	(	s_max_digits_less_one_places_2.size() ==
 		s_max_digits_less_one.size() + 1
 	);
@@ -1795,12 +1795,12 @@ TEST(decimal_operator_output)
 
 		// German locale
 		locale::global(german);
-		assert (use_facet< numpunct<char> >(german).grouping()[0] == 3);
-		assert (use_facet< numpunct<char> >(german).grouping().size() == 2);
-		assert (use_facet< numpunct<char> >(german).grouping()[0] == 3);
-		assert (use_facet< numpunct<char> >(german).grouping()[1] == 3);
-		assert (use_facet< numpunct<char> >(german).thousands_sep() == '.');
-		assert (use_facet< numpunct<char> >(german).decimal_point() == ',');
+		JEWEL_ASSERT (use_facet< numpunct<char> >(german).grouping()[0] == 3);
+		JEWEL_ASSERT (use_facet< numpunct<char> >(german).grouping().size() == 2);
+		JEWEL_ASSERT (use_facet< numpunct<char> >(german).grouping()[0] == 3);
+		JEWEL_ASSERT (use_facet< numpunct<char> >(german).grouping()[1] == 3);
+		JEWEL_ASSERT (use_facet< numpunct<char> >(german).thousands_sep() == '.');
+		JEWEL_ASSERT (use_facet< numpunct<char> >(german).decimal_point() == ',');
 		ostringstream os17;
 		os17 << Decimal("9300700.958");
 		CHECK_EQUAL(os17.str(), "9.300.700,958");
@@ -1825,11 +1825,11 @@ TEST(decimal_operator_output)
 		
 		// French locale
 		locale::global(french);
-		assert (use_facet< numpunct<char> >(french).grouping()[0] == 3);
-		assert (use_facet< numpunct<char> >(french).grouping().size() == 1);
-		assert (use_facet< numpunct<char> >(french).grouping()[0] == 3);
-		assert (use_facet< numpunct<char> >(french).thousands_sep() == ' ');
-		assert (use_facet< numpunct<char> >(french).decimal_point() == ',');
+		JEWEL_ASSERT (use_facet< numpunct<char> >(french).grouping()[0] == 3);
+		JEWEL_ASSERT (use_facet< numpunct<char> >(french).grouping().size() == 1);
+		JEWEL_ASSERT (use_facet< numpunct<char> >(french).grouping()[0] == 3);
+		JEWEL_ASSERT (use_facet< numpunct<char> >(french).thousands_sep() == ' ');
+		JEWEL_ASSERT (use_facet< numpunct<char> >(french).decimal_point() == ',');
 		ostringstream os24;
 		os24 << Decimal("898234.2983");
 		CHECK_EQUAL(os24.str(), "898 234,2983");
@@ -1849,10 +1849,10 @@ TEST(decimal_operator_output)
 
 		// Nepali locale
 		locale::global(nepali);
-		assert (use_facet< numpunct<char> >(nepali).grouping().size() == 1);
-		assert (use_facet< numpunct<char> >(nepali).grouping() == "\3");
-		assert (use_facet< numpunct<char> >(nepali).decimal_point() == '.');
-		assert (use_facet< numpunct<char> >(nepali).thousands_sep() == ',');
+		JEWEL_ASSERT (use_facet< numpunct<char> >(nepali).grouping().size() == 1);
+		JEWEL_ASSERT (use_facet< numpunct<char> >(nepali).grouping() == "\3");
+		JEWEL_ASSERT (use_facet< numpunct<char> >(nepali).decimal_point() == '.');
+		JEWEL_ASSERT (use_facet< numpunct<char> >(nepali).thousands_sep() == ',');
 		string const nepali_grouping =
 			use_facet< numpunct<char> >(nepali).grouping();
 		ostringstream os28;
@@ -1975,7 +1975,7 @@ TEST(decimal_operator_input)
 	Decimal d101("1234");
 	istringstream bis2("8979ab");
 	bis2 >> d101;
-	assert (!bis2);
+	JEWEL_ASSERT (!bis2);
 	// Check the value has not changed
 	CHECK_EQUAL(d101, Decimal("1234"));
 }
@@ -2022,7 +2022,7 @@ TEST(decimal_value_preservation)
 	{
 		total += double(1) / double(10);
 	}
-	assert (total != double(1));
+	JEWEL_ASSERT (total != double(1));
 
 	Decimal totaldecs("0");
 	for (int i = 0; i != 10; ++i)
@@ -2129,7 +2129,7 @@ TEST(decimal_maximum_precision)
 	{
 		s += "0";
 	}
-	assert (s.size() == static_cast<string::size_type>(m));
+	JEWEL_ASSERT (s.size() == static_cast<string::size_type>(m));
 	Decimal d(s);
 	s += "0";
 	CHECK_THROW(Decimal e(s), DecimalRangeException);

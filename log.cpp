@@ -1,7 +1,13 @@
 #include "log.hpp"
 #include "array_utilities.hpp"
 #include <boost/noncopyable.hpp>
+
+// We deliberately do NOT use "jewel/assert.hpp" here,
+// as we might one day want a call the assert to invoke
+// logging facilities, and we don't want to create
+// circularity here.
 #include <cassert>
+
 #include <iostream>
 
 using boost::noncopyable;
@@ -19,33 +25,51 @@ namespace jewel
 namespace
 {
 
-struct StreamHolder: noncopyable
-{
-	explicit StreamHolder(ostream* p_os): m_os(p_os)
+	struct StreamHolder: noncopyable
+	{
+		explicit StreamHolder(ostream* p_os);
+		~StreamHolder();
+		void kill();
+		ostream* os;
+	};
+
+	StreamHolder::StreamHolder(ostream* p_os): os(p_os)
 	{
 	}
-	~StreamHolder()
+
+	StreamHolder::~StreamHolder()
 	{
 		JEWEL_LOG_MESSAGE(Log::info, "Destroying logging StreamHolder.");
 		kill();
 	}
-	void kill()
+
+	void
+	StreamHolder::kill()
 	{
-		assert (m_os);
-		m_os->flush();
-		if ((m_os != &cerr) && (m_os != &clog) && (m_os != &cout))
+		try
 		{
-			JEWEL_LOG_MESSAGE
-			(	Log::info,
-				"Deleting underlying logging stream."
-			);
-			delete m_os;
+			if (os)
+			{
+				os->flush();
+				if ((os != &cerr) && (os != &clog) && (os != &cout))
+				{
+					JEWEL_LOG_MESSAGE
+					(	Log::info,
+						"Deleting underlying logging stream."
+					);
+					delete os;
+				}
+				os = 0;
+			}
 		}
-		m_os = 0;
+		catch (...)
+		{
+			// Yes this is deliberate.
+		}
+		assert (0 == os);
 		return;
 	}
-	ostream* m_os;
-};
+
 
 
 }  // end anonymous namespace
@@ -105,6 +129,8 @@ Log::log
 		{
 			return;
 		}
+		assert (osp->good());  // guaranteed by stream_aux().
+		assert (!osp->exceptions());  // guaranteed by stream_aux().
 		*osp << "{\n"
 			<< "\tseverity: \"" << severity_string(p_severity) << "\"\n"
 			<< "\tmessage: \"" << p_message << "\",\n"
@@ -118,6 +144,7 @@ Log::log
 	}
 	return;
 }
+
 
 char const*
 Log::severity_string(Level p_level)
@@ -138,14 +165,50 @@ Log::severity_string(Level p_level)
 std::ostream*
 Log::stream_aux(std::ostream* p_stream)
 {
+	// Things get a bit paranoid in here but I think it's worth it to
+	// ensure that the mere act of logging doesn't compromise the safety
+	// of client code in any way.
+
 	static StreamHolder holder(&std::clog);
-	if (p_stream)
+
+	if (p_stream != 0)
 	{
+		// Then set the stream.
 		holder.kill();	
-		holder.m_os = p_stream;
+		holder.os = p_stream;
 	}
-	assert (holder.m_os);
-	return holder.m_os;
+
+	// If the stream has exceptions enabled, we refuse to work with it.
+	if (holder.os && holder.os->exceptions())
+	{
+		holder.kill();
+		assert (0 == holder.os);
+	}
+
+	// Make sure the stream isn't in a bad state.
+	if (holder.os && !holder.os->good())
+	{
+		if (!holder.os->bad() && !holder.os->eof())
+		{
+			assert (holder.os->fail());
+			*(holder.os) << "Failbit set on logging stream. Logging "
+						 << "discontinued." << endl;
+		}
+		else
+		{
+			// We shouldn't write if ios::eof or ios::bad is set.
+			// Too dangerous. Do nothing.
+		}
+		holder.kill();
+		assert (0 == holder.os);
+	}
+
+	assert
+	(	(0 == holder.os) ||
+		(holder.os->good() && !holder.os->exceptions())
+	);
+
+	return holder.os;
 }
 
 

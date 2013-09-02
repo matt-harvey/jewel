@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include "exception_special_tests.hpp"
-#include <cassert>
+#include "assert.hpp"
 #include <iostream>
 #include <string>
 
@@ -75,7 +75,7 @@ void test_exception_macros()
 	{
 		// This should not be reached as TrialException0 should not
 		// catch TrialException1_0.
-		assert (false);
+		JEWEL_HARD_ASSERT (false);
 	}
 	catch (TrialException1&)
 	{
@@ -112,7 +112,7 @@ void test_exception_macros()
 	}
 	catch (TrialException1_0_1& e)
 	{
-		assert (string(e.what()) == string("Here's a TrialException1_0_1."));
+		JEWEL_ASSERT (string(e.what()) == string("Here's a TrialException1_0_1."));
 	}
 
 	try

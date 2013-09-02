@@ -3,15 +3,18 @@
 
 #include "log.hpp"
 #include "helper_macros.hpp"
+#include <exception>
 #include <jewel/exception.hpp>
 
 /** @file assert.hpp
  *
- * @brief Contains assertion macro which is like the one is
- * <cassert> except it throws an exception
- * rather than than simply calling std::abort. In addition,
- * it writes to the log via jewel::Log, just before throwing
- * the exception.
+ * @brief Contains assertion macro JEWEL_ASSERT which is like the
+ * one in <cassert> except that it calls std::terminate rather than
+ * std::abort.
+ *
+ * There is also a JEWEL_HARD_ASSERT macro, which is
+ * like JEWEL_ASSERT except that it is always "on",
+ * even in release builds.
  *
  * @author Matthew Harvey
  * @date 01 Sep 2013.
@@ -27,27 +30,20 @@ JEWEL_DERIVED_EXCEPTION(AssertionFailure, Exception);
 
 }  // namespace jewel
 
+#define JEWEL_HARD_ASSERT(p) \
+	if (!(p)) \
+	{ \
+		std::cerr << \
+			"Failed assertion (" #p ") " \
+			"in file \"" __FILE__ "\" at line " \
+			JEWEL_MAKE_STRING_B(__LINE__) "."; \
+		std::terminate(); \
+	}
 
 #ifndef NDEBUG
-
-#	define JEWEL_ASSERT(p) \
-		if (!(p)) \
-		{ \
-			JEWEL_LOG_MESSAGE \
-			(	jewel::Log::error, \
-				"Throwing FailedAssertion"\
-			); \
-			char const* msg = \
-				"Failed assertion (" #p ") " \
-				"in file \"" __FILE__ "\" at line " \
-				JEWEL_MAKE_STRING_B(__LINE__) "."; \
-			throw jewel::AssertionFailure(msg); \
-		}
-
+#	define JEWEL_ASSERT(p) JEWEL_HARD_ASSERT(p)
 #else
-
 #	define JEWEL_ASSERT(p)
-
 #endif
 	
 

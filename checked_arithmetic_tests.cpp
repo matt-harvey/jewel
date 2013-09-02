@@ -1,10 +1,10 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include <cassert>
+#include "assert.hpp"
+#include "checked_arithmetic.hpp"
 #include <iostream>
 #include <limits>
 #include <UnitTest++/UnitTest++.h>
-#include "checked_arithmetic.hpp"
 
 
 using std::cerr;

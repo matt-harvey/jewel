@@ -1,12 +1,12 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include "decimal.hpp"
+#include "assert.hpp"
 #include "decimal_exceptions.hpp"
 #include "checked_arithmetic.hpp"
 #include "num_digits.hpp"  // for num_digits
 
 #include <algorithm>
-#include <cassert>
 #include <cmath>    // for pow
 #include <cstdlib>  // for abs
 #include <cctype>  // for isdigit(char) and iswdigit(wchar_t)
@@ -108,7 +108,7 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 	}
 	else
 	{
-		assert (y.m_places < x.m_places);
+		JEWEL_ASSERT (y.m_places < x.m_places);
 		if (y.rescale(x.m_places) != 0)
 		{
 			throw DecimalRangeException
@@ -129,7 +129,7 @@ Decimal::rationalize(places_type min_places)
 {
 	while ((m_places > min_places) && (m_intval % s_base == 0))
 	{
-		assert (m_places > 0);
+		JEWEL_ASSERT (m_places > 0);
 		m_intval /= s_base;
 		--m_places;
 	}
@@ -141,7 +141,7 @@ Decimal::Decimal(int_type p_intval, places_type p_places):
 	m_places(p_places),
 	m_intval(p_intval)
 {
-	assert (s_max_places == maximum_precision());
+	JEWEL_ASSERT (s_max_places == maximum_precision());
 	if (m_places > s_max_places)
 	{
 		// There is no point setting m_intval and m_places to 0 (or any other
@@ -181,11 +181,11 @@ int Decimal::rescale(places_type p_places)
 	{	
 		if (p_places > s_max_places)
 		{
-			assert (m_places == DEBUGVARIABLE_orig_places);
-			assert (m_intval == DEBUGVARIABLE_orig_intval);
+			JEWEL_ASSERT (m_places == DEBUGVARIABLE_orig_places);
+			JEWEL_ASSERT (m_intval == DEBUGVARIABLE_orig_intval);
 			return 1;
 		}
-		assert (p_places <= s_max_places);
+		JEWEL_ASSERT (p_places <= s_max_places);
 		// This should never cause overflow, as p_places is never greater
 		// than s_max_places, and s_base raised to a number equal to or
 		// greater than p_places will always be less than
@@ -197,15 +197,15 @@ int Decimal::rescale(places_type p_places)
 
 		if (multiplication_is_unsafe(m_intval, multiplier))
 		{
-			assert (m_places == DEBUGVARIABLE_orig_places);
-			assert (m_intval == DEBUGVARIABLE_orig_intval);
+			JEWEL_ASSERT (m_places == DEBUGVARIABLE_orig_places);
+			JEWEL_ASSERT (m_intval == DEBUGVARIABLE_orig_intval);
 			return 1;
 	 	}
 		m_intval *= multiplier;
 	}
 	else
 	{
-		assert(p_places < m_places);
+		JEWEL_ASSERT(p_places < m_places);
 
 		// truncate all but one of the required places
 		for (unsigned int j = m_places - 1; j != p_places; --j)
@@ -229,8 +229,8 @@ int Decimal::rescale(places_type p_places)
 			if (is_positive) ++m_intval;
 			else
 			{
-				assert (is_negative);
-				assert (!is_zero);
+				JEWEL_ASSERT (is_negative);
+				JEWEL_ASSERT (!is_zero);
 				--m_intval;
 			}
 		}
@@ -248,15 +248,15 @@ Decimal::implicit_divisor() const
 	{
 		return s_divisor_lookup[m_places];
 	}
-	assert (!calculated_already);
+	JEWEL_ASSERT (!calculated_already);
 	int_type next_power = 1;
 	for (size_t j = 0; j != s_max_places; ++j)
 	{
-		assert (j < s_divisor_lookup.size());
+		JEWEL_ASSERT (j < s_divisor_lookup.size());
 		s_divisor_lookup[j] = next_power;
 		next_power *= s_base;
 	}
-	assert (s_divisor_lookup.size() == s_max_places);
+	JEWEL_ASSERT (s_divisor_lookup.size() == s_max_places);
 	calculated_already = true;
 	return s_divisor_lookup[m_places];
 }
@@ -273,13 +273,13 @@ Decimal const& Decimal::operator++()
 	#endif
 	if (addition_is_unsafe(m_intval, implicit_divisor()))
 	{
-		assert (*this == orig);
+		JEWEL_ASSERT (*this == orig);
 		throw DecimalIncrementationException
 		(	"Incrementation may cause overflow."
 		);
 	}
 	m_intval += implicit_divisor();
-	assert (m_places >= benchmark_places);
+	JEWEL_ASSERT (m_places >= benchmark_places);
 	return *this;
 }
 
@@ -294,14 +294,14 @@ Decimal const& Decimal::operator--()
 	#endif
 	if (subtraction_is_unsafe(m_intval, implicit_divisor()))
 	{
-		assert (*this == orig);
+		JEWEL_ASSERT (*this == orig);
 		throw DecimalDecrementationException
 		(	"Decrementation may cause "
 			"overflow."
 		);
 	}
 	m_intval -= implicit_divisor();
-	assert (m_places >= benchmark_places);
+	JEWEL_ASSERT (m_places >= benchmark_places);
 	return *this;
 }
 
@@ -321,7 +321,7 @@ Decimal& Decimal::operator+=(Decimal rhs)
 		throw DecimalAdditionException("Addition may cause overflow.");
 	}
 	m_intval += rhs.m_intval;
-	assert (m_places >= benchmark_places);
+	JEWEL_ASSERT (m_places >= benchmark_places);
 	return *this;
 }
 
@@ -340,7 +340,7 @@ Decimal& Decimal::operator-=(Decimal rhs)
 		throw DecimalSubtractionException("Subtraction may cause overflow.");
 	}
 	m_intval -= rhs.m_intval;
-	assert (m_places >= benchmark_places);
+	JEWEL_ASSERT (m_places >= benchmark_places);
 	return *this;
 }
 
@@ -354,7 +354,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	// Rule out problematic smallest Decimal
 	if (*this == minimum() || rhs == minimum())
 	{
-		assert (*this == orig);
+		JEWEL_ASSERT (*this == orig);
 		throw DecimalMultiplicationException
 		(	"Cannot multiply smallest possible "
 			"Decimal safely."
@@ -370,18 +370,18 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	if (rhs.m_intval < 0) rhs.m_intval *= -1;
 
 	// Do "unchecked multiply" if we can
-	assert (m_intval >= 0 && rhs.m_intval >= 0);	
+	JEWEL_ASSERT (m_intval >= 0 && rhs.m_intval >= 0);	
 	if (!multiplication_is_unsafe(m_intval, rhs.m_intval))
 	{
-		assert (!addition_is_unsafe(m_places, rhs.m_places));
+		JEWEL_ASSERT (!addition_is_unsafe(m_places, rhs.m_places));
 		m_intval *= rhs.m_intval;
 		m_places += rhs.m_places;
 		while (m_places > s_max_places)
 		{
-			assert (m_places > 0);
+			JEWEL_ASSERT (m_places > 0);
 			#ifndef NDEBUG
 				int const check = rescale(m_places - 1);
-				assert (check == 0);
+				JEWEL_ASSERT (check == 0);
 			#else
 				rescale(m_places - 1);
 			#endif
@@ -393,7 +393,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 
 	*this = orig;
 	throw DecimalMultiplicationException("Unsafe multiplication.");
-	assert (false);  // Execution should never reach here.
+	JEWEL_ASSERT (false);  // Execution should never reach here.
 	return *this;    // Silence compiler re. return from non-void function.
 
 }
@@ -409,7 +409,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	// Capture division by zero
 	if (rhs.m_intval == 0)
 	{
-		assert (*this == orig);
+		JEWEL_ASSERT (*this == orig);
 		throw (DecimalDivisionByZeroException("Division by zero."));
 	}
 	
@@ -417,16 +417,16 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	if ( m_intval == numeric_limits<int_type>::min() ||
 	  rhs.m_intval == numeric_limits<int_type>::min() )
 	{
-		assert (*this == orig);
+		JEWEL_ASSERT (*this == orig);
 		throw DecimalDivisionException
 		(	"Smallest possible Decimal cannot "
 			"feature in division operation."
 		);
 	}
-	assert (NumDigits::num_digits(rhs.m_intval) <= maximum_precision());
+	JEWEL_ASSERT (NumDigits::num_digits(rhs.m_intval) <= maximum_precision());
 	if (NumDigits::num_digits(rhs.m_intval) == maximum_precision())
 	{
-		assert (*this == orig);
+		JEWEL_ASSERT (*this == orig);
 		throw DecimalDivisionException
 		(	"Dividend has a number of significant"
 		 	"digits that is greater than or equal to the return value of "
@@ -455,7 +455,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		*this = orig;
 		throw (DecimalDivisionException("Unsafe division."));
 	}
-	assert (m_places >= rhs.m_places);
+	JEWEL_ASSERT (m_places >= rhs.m_places);
 
 	// Proceed with basic division algorithm
 	m_places -= rhs.m_places;
@@ -465,7 +465,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	// Deal with any remainder using "long division"
 	while (remainder != 0 && rescale(m_places + 1) == 0)
 	{
-		assert (!multiplication_is_unsafe(remainder, s_base));
+		JEWEL_ASSERT (!multiplication_is_unsafe(remainder, s_base));
 
 		/*
 		 * Previously this commented-out section of code dealt
@@ -489,7 +489,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			rhs.m_intval /= s_base;
 			if (add_rounding_right)
 			{
-				assert (!addition_is_unsafe(rhs.m_intval,
+				JEWEL_ASSERT (!addition_is_unsafe(rhs.m_intval,
 				  NUM_CAST<int_type>(1)));
 				++(rhs.m_intval);
 			}
@@ -497,7 +497,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			// Redo the Decimal division on a "safe scale"
 			Decimal lhs = orig;
 			if (lhs.m_intval < 0) lhs.m_intval *= -1;
-			assert (rhs.m_intval >= 0);
+			JEWEL_ASSERT (rhs.m_intval >= 0);
 			lhs /= rhs;
 			bool add_rounding_left = false;
 			if (lhs.m_intval % s_base >= s_rounding_threshold)
@@ -507,7 +507,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			lhs.m_intval /= s_base;
 			if (add_rounding_left)
 			{
-				assert (!addition_is_unsafe(lhs.m_intval,
+				JEWEL_ASSERT (!addition_is_unsafe(lhs.m_intval,
 				  NUM_CAST<int_type>(1)));
 				++(lhs.m_intval);
 			}
@@ -519,15 +519,15 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		*/
 
 		// It's safe to proceed with ordinary "long division"
-		assert(!multiplication_is_unsafe(remainder, s_base));
+		JEWEL_ASSERT(!multiplication_is_unsafe(remainder, s_base));
 		remainder *= s_base;
 		int_type temp_remainder = remainder % rhs.m_intval;
 		m_intval += remainder / rhs.m_intval;
 		remainder = temp_remainder;
 	}
 
-	assert (rhs.m_intval >= remainder);
-	assert (!subtraction_is_unsafe(rhs.m_intval, remainder));
+	JEWEL_ASSERT (rhs.m_intval >= remainder);
+	JEWEL_ASSERT (!subtraction_is_unsafe(rhs.m_intval, remainder));
 	
 	// Do rounding if required
 	if (rhs.m_intval - remainder <= remainder)
@@ -572,7 +572,7 @@ bool Decimal::operator<(Decimal rhs) const
 	)
 	{
 		longers_revised_intval /= s_base;
-		assert (longers_places > 0);
+		JEWEL_ASSERT (longers_places > 0);
 	}
 	bool longer_is_smaller =
 	(	longer_is_negative?
@@ -617,7 +617,7 @@ Decimal operator-(Decimal const& d)
 		(	"Unsafe arithmetic operation (unary minus)."
 		);
 	}
-	assert (d.m_intval != numeric_limits<Decimal::int_type>::min());
+	JEWEL_ASSERT (d.m_intval != numeric_limits<Decimal::int_type>::min());
 	Decimal ret = d;
 	ret.m_intval *= -1;
 	return ret;

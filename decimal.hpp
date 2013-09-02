@@ -14,11 +14,11 @@
 
 
 #include "decimal_exceptions.hpp"
+#include "assert.hpp"
 #include <boost/lexical_cast.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/operators.hpp>
 #include <algorithm>
-#include <cassert>
 #include <cstdlib>  // for abs
 #include <cmath>
 #include <istream>
@@ -867,14 +867,14 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 
 	if (*si == minus_char || *si == plus_char)
 	{
-		assert (ri < str_rep.end());
+		JEWEL_ASSERT (ri < str_rep.end());
 		*ri++ = *si++;
 	}
 
 	typename stringT::const_iterator const str_end = str.end();
 	for ( ; *si != spot_char && si != str_end; ++si, ++ri)
 	{
-		assert (si < str_end);
+		JEWEL_ASSERT (si < str_end);
 		if (!CharacterProvider<charT>::is_digit(*si))
 		{
 			throw DecimalFromStringException
@@ -882,7 +882,7 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 				"to Decimal constructor."
 			);
 		}
-		assert (ri < str_rep.end());
+		JEWEL_ASSERT (ri < str_rep.end());
 		*ri = *si;
 	}
 	sz_t spot_position = 0;   // for the position of decimal point	
@@ -892,30 +892,30 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 		// We have a str_rep that's one too big
 		sz_t reduced_size = str_size;
 		str_rep.resize(--reduced_size);
-		assert (reduced_size == str_rep.size());	
-		assert (reduced_size < str_size);
-		assert (str_size >= 1);
+		JEWEL_ASSERT (reduced_size == str_rep.size());	
+		JEWEL_ASSERT (reduced_size < str_size);
+		JEWEL_ASSERT (str_size >= 1);
 
 		// Jump over the spot in str
 		++si;
 
 		// Now let's get the remaining the digits
-		assert (str_end == str.end());
+		JEWEL_ASSERT (str_end == str.end());
 		for ( ; si != str_end; ++si, ++ri)
 		{
 			++spot_position;        // To count no. of fractional places
-			assert (si < str_end);
+			JEWEL_ASSERT (si < str_end);
 			if (!CharacterProvider<charT>::is_digit(*si))
 			{
-				assert (m_places == 0);
-				assert (m_intval == 0);
+				JEWEL_ASSERT (m_places == 0);
+				JEWEL_ASSERT (m_intval == 0);
 				throw DecimalFromStringException
 				(	"Invalid string passed to"
 					" Decimal constructor."
 				);
 			}
-			assert (reduced_size == str_rep.size());
-			assert (ri < str_rep.end());
+			JEWEL_ASSERT (reduced_size == str_rep.size());
+			JEWEL_ASSERT (ri < str_rep.end());
 			*ri = *si;
 		}
 	}
@@ -1046,7 +1046,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Decimal const& d)
 			os.setstate(ss.rdstate());
 			return os;
 		}
-		assert (ss);
+		JEWEL_ASSERT (ss);
 		std::basic_string<charT> const s = ss.str();
 		std::reverse_copy
 		(	s.begin(),
@@ -1108,7 +1108,7 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 	// cannot take the absolute value below
 	else if (m_intval == std::numeric_limits<Decimal::int_type>::min())
 	{
-		assert (m_places == 0);
+		JEWEL_ASSERT (m_places == 0);
 		ostringstreamT tempstream;
 		tempstream.imbue(loc);
 		tempstream << m_intval;

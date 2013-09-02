@@ -18,7 +18,7 @@
  * Copyright (c) 2012, Matthew Harvey. All rights reserved.
  */
 
-#include <cassert>
+#include "assert.hpp"
 #include <climits>
 #include <cstdlib>
 #include <cmath>
@@ -223,7 +223,7 @@ CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)
 		return false;
 	}
 	T const tmin = std::numeric_limits<T>::min();
-	assert ((x != 0) && (y != 0) && (x != 1) && (y != 1));
+	JEWEL_ASSERT ((x != 0) && (y != 0) && (x != 1) && (y != 1));
 	// Deal with case of smallest possible number
 	// It's dangerous to multiply this by anything except 1 or 0!
 	if ((x == tmin) || (y == tmin))
@@ -235,17 +235,17 @@ CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)
 		// Then multiplication is safe given tmin is not involved
 		return false;
 	}
-	assert ((x != tmin) && (y != tmin));
+	JEWEL_ASSERT ((x != tmin) && (y != tmin));
 	// Deal with ordinary cases
 	T const tmax = std::numeric_limits<T>::max();
-	assert ((x != -1) && (y != -1));  // Avoids errors with tmin below
+	JEWEL_ASSERT ((x != -1) && (y != -1));  // Avoids errors with tmin below
 	if (x > 0)
 	{
 		if (y > 0)
 		{
 			return y > tmax / x;
 		}
-		assert (y < 0);
+		JEWEL_ASSERT (y < 0);
 		return y < tmin / x;
 	}
 	if (x < 0)
@@ -255,7 +255,7 @@ CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)
 			return y < tmax / x;
 		}
 	}
-	assert ((x < 0) && (y > 0));
+	JEWEL_ASSERT ((x < 0) && (y > 0));
 	return y > tmin / x;
 }
 
@@ -270,8 +270,8 @@ CheckedArithmetic::multiplication_is_unsafe_unsigned_integral_types(T x, T y)
 		return false;
 	}
 	// Deal with general cases
-	assert (x != 0);
-	assert (y != 0);
+	JEWEL_ASSERT (x != 0);
+	JEWEL_ASSERT (y != 0);
 	return std::numeric_limits<T>::max() / x < y;
 }
 

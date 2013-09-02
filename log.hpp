@@ -13,7 +13,7 @@
 
 #include "helper_macros.hpp"
 #include <boost/lexical_cast.hpp>
-#include <cassert>
+#include "assert.hpp"
 #include <exception>
 #include <string>
 
@@ -63,6 +63,14 @@ namespace jewel
  * NOTE These logging facilities are not thread-safe.
  *
  * @todo Testing.
+ *
+ * Note these logging facilities are guaranteed never to throw an exception.
+ * If the logging stream has exceptions enabled, then logging
+ * will simply not occur. The reason for this behaviour is to ensure that
+ * client code need not be concerned that the mere act of logging from
+ * inside a given function might in any way compromise the exception safety
+ * of that function. Note that if any error flags are detected on the logging
+ * stream, then logging will also cease.
  */
 class Log
 {
@@ -129,8 +137,13 @@ public:
 	);
 
 private:
+
 	static char const* severity_string(Level p_level);
+
+	// Pass a stream pointer to set the static stream pointer that lives
+	// inside the function. Pass nothing to simply retrieve that pointer.
 	static std::ostream* stream_aux(std::ostream* p_stream = 0);
+
 	static Level& threshold_aux();
 
 };

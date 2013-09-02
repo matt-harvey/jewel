@@ -42,7 +42,7 @@
 
 
 
-#include <cassert>
+#include "assert.hpp"
 #include <cmath>
 #include <iostream>
 #include <vector>
@@ -96,7 +96,7 @@ power_vector(std::vector<T> const& v)
 		{
 			if (i / j)
 			{
-				assert(i / j == 1);
+				JEWEL_ASSERT (i / j == 1);
 				ret_elem.push_back(v[vindex]);	
 				i -= j;
 			}
@@ -108,7 +108,7 @@ power_vector(std::vector<T> const& v)
 		++subvec_num;
 	}
 
-	assert(ret.size() == p_size);
+	JEWEL_ASSERT (ret.size() == p_size);
 	return ret;
 }
 

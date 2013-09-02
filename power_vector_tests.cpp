@@ -1,6 +1,6 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include <cassert>
+#include "assert.hpp"
 #include <cmath>
 #include <iostream>
 #include <vector>
@@ -56,44 +56,44 @@ PowerVectorFixture1::PowerVectorFixture1()
 	vector0.push_back(3);
 	vector0.push_back(40);
 	vector0.push_back(-8);
-	assert(vector0.size() == 3);
+	JEWEL_ASSERT (vector0.size() == 3);
 	
 	// build vector0_0
 	// It's empty - nothing to push_back
-	assert(vector0_0.size() == 0);
+	JEWEL_ASSERT (vector0_0.size() == 0);
 
 	// build vector0_1
 	vector0_1.push_back(-8);
-	assert(vector0_1.size() == 1);
+	JEWEL_ASSERT (vector0_1.size() == 1);
 
 	// build vector0_2
 	vector0_2.push_back(40);
-	assert(vector0_2.size() == 1);
+	JEWEL_ASSERT (vector0_2.size() == 1);
 
 	// build vector0_3
 	vector0_3.push_back(40);
 	vector0_3.push_back(-8);
-	assert(vector0_3.size() == 2);
+	JEWEL_ASSERT (vector0_3.size() == 2);
 
 	// build vector0_4
 	vector0_4.push_back(3);
-	assert(vector0_4.size() == 1);
+	JEWEL_ASSERT (vector0_4.size() == 1);
 
 	// build vector0_5
 	vector0_5.push_back(3);
 	vector0_5.push_back(-8);
-	assert(vector0_5.size() == 2);
+	JEWEL_ASSERT (vector0_5.size() == 2);
 
 	// build vector0_6
 	vector0_6.push_back(3);
 	vector0_6.push_back(40);
-	assert(vector0_6.size() == 2);
+	JEWEL_ASSERT (vector0_6.size() == 2);
 
 	// build vector0_7
 	vector0_7.push_back(3);
 	vector0_7.push_back(40);
 	vector0_7.push_back(-8);
-	assert(vector0_7.size() == 3);
+	JEWEL_ASSERT (vector0_7.size() == 3);
 
 	// build power_vector0;
 	power_vector0.push_back(vector0_0);
@@ -104,7 +104,7 @@ PowerVectorFixture1::PowerVectorFixture1()
 	power_vector0.push_back(vector0_5);
 	power_vector0.push_back(vector0_6);
 	power_vector0.push_back(vector0_7);
-	assert(power_vector0.size() == 8);
+	JEWEL_ASSERT (power_vector0.size() == 8);
 
 }
 
@@ -171,31 +171,31 @@ PowerVectorFixture2::PowerVectorFixture2()
 	// build vector0
 	vector0.push_back("One");
 	vector0.push_back("Two");
-	assert(vector0.size() == 2);
+	JEWEL_ASSERT (vector0.size() == 2);
 	
 	// build vector0_0
 	// It's empty - nothing to push_back
-	assert(vector0_0.size() == 0);
+	JEWEL_ASSERT (vector0_0.size() == 0);
 
 	// build vector0_1
 	vector0_1.push_back("Two");
-	assert(vector0_1.size() == 1);
+	JEWEL_ASSERT (vector0_1.size() == 1);
 
 	// build vector0_2
 	vector0_2.push_back("One");
-	assert(vector0_2.size() == 1);
+	JEWEL_ASSERT (vector0_2.size() == 1);
 
 	// build vector0_3
 	vector0_3.push_back("One");
 	vector0_3.push_back("Two");
-	assert(vector0_3.size() == 2);
+	JEWEL_ASSERT (vector0_3.size() == 2);
 	
 	// built power_vector0;
 	power_vector0.push_back(vector0_0);
 	power_vector0.push_back(vector0_1);
 	power_vector0.push_back(vector0_2);
 	power_vector0.push_back(vector0_3);
-	assert(power_vector0.size() == 4);
+	JEWEL_ASSERT (power_vector0.size() == 4);
 
 }
 

@@ -1,9 +1,8 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include "exception.hpp"
-
+#include "assert.hpp"
 #include "log.hpp"
-#include <cassert>
 #include <cstring>
 #include <iostream>
 #include <string>
@@ -37,12 +36,12 @@ Exception::Exception(char const* p_message) throw()
 	m_message[i] = '\0';
 	if (*it != '\0')
 	{
-		assert (i == max_message_size());
-		assert (i + strlen(s_truncation_flag) + 1 == s_message_buffer_size);
+		JEWEL_ASSERT (i == max_message_size());
+		JEWEL_ASSERT (i + strlen(s_truncation_flag) + 1 == s_message_buffer_size);
 		strcpy(m_message + i, s_truncation_flag);
-		assert (strlen(m_message) + 1 == s_message_buffer_size);
+		JEWEL_ASSERT (strlen(m_message) + 1 == s_message_buffer_size);
 	}
-	assert (strlen(m_message) < s_message_buffer_size);
+	JEWEL_ASSERT (strlen(m_message) < s_message_buffer_size);
 }
 
 Exception::~Exception() throw()
@@ -65,7 +64,7 @@ size_t Exception::max_message_size() throw()
 Exception::Exception(Exception const& rhs) throw()
 {
 	strcpy(m_message, rhs.m_message);
-	assert (strlen(m_message) < s_message_buffer_size);
+	JEWEL_ASSERT (strlen(m_message) < s_message_buffer_size);
 }
 
 

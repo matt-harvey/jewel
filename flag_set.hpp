@@ -11,9 +11,9 @@
  * Copyright (c) 2013, Matthew Harvey. All rights reserved.
  */
 
+#include "assert.hpp"
 #include <boost/static_assert.hpp>
 #include <jewel/exception.hpp>
-#include <cassert>
 
 
 namespace jewel
