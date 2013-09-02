@@ -26,6 +26,7 @@ struct StreamHolder: noncopyable
 	}
 	~StreamHolder()
 	{
+		JEWEL_LOG_MESSAGE(Log::info, "Destroying logging StreamHolder.");
 		kill();
 	}
 	void kill()
@@ -34,6 +35,10 @@ struct StreamHolder: noncopyable
 		m_os->flush();
 		if ((m_os != &cerr) && (m_os != &clog) && (m_os != &cout))
 		{
+			JEWEL_LOG_MESSAGE
+			(	Log::info,
+				"Deleting underlying logging stream."
+			);
 			delete m_os;
 		}
 		m_os = 0;
@@ -82,19 +87,19 @@ Log::log
 	if (p_severity >= threshold_aux())
 	{
 		ostream& os = *(stream_aux());
-		os << "{\"severity\": \"" << severity_string(p_severity)
+		os << "{severity: \"" << severity_string(p_severity)
 			<< "\"";
 		if (p_message)
 		{
-			os << ", \"message\": \"" << p_message << "\"";
+			os << ", message: \"" << p_message << "\"";
 		}
 		if (p_file)
 		{
-			os << ", \"file\": \"" << p_file << "\"";
+			os << ", file: \"" << p_file << "\"";
 		}
 		if (p_line != -1)
 		{
-			os << ", \"line\": " << p_line;
+			os << ", line: " << p_line;
 		}
 		os << "}," << endl;
 	}
