@@ -34,8 +34,6 @@ using std::string;
 using jewel::Log;
 using std::locale;
 
-
-
 int main()
 {
 

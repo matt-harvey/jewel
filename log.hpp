@@ -179,16 +179,27 @@ private:
 #	define JEWEL_LOG_VALUE(severity, expression) \
 		if (severity < JEWEL_HARD_LOGGING_THRESHOLD) ; \
 		else \
-			jewel::Log::log \
-			(	severity, \
-				std::string("the value of (" #expression ") is ") + \
-					boost::lexical_cast<std::string>(expression), \
-				__func__, \
-				__FILE__, \
-				__LINE__, \
-				__DATE__, \
-				__TIME__ \
-			)
+			try \
+			{ \
+				jewel::Log::log \
+				(	severity, \
+					std::string("the value of (" #expression ") is ") + \
+						boost::lexical_cast<std::string>(expression), \
+					__func__, \
+					__FILE__, \
+					__LINE__, \
+					__DATE__, \
+					__TIME__ \
+				); \
+			} \
+			catch (...) \
+			{ \
+				JEWEL_LOG_MESSAGE \
+				( \
+					severity, \
+					"Could not log value of expression (" #expression ")." \
+				); \
+			}
 #else
 #	define JEWEL_LOG_TRACE() 0
 #	define JEWEL_LOG_MESSAGE(severity, message) 0
