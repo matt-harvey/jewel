@@ -51,28 +51,44 @@ struct EnumTraits
  * specify that their options must be of a given instantiation
  * of FlagSet.
  *
+ *
  * TEMPLATE PARAMETERS:
  *
- * \e EnumT is an enum defined in client code, which meets certain
- * specifications, in which the total universe of flags is
- * specified. The enumerators must be initialized with progressive powers of
- * 2, i.e.: 1, 2, 4 etc..
+ * \e EnumT is an enum defined in client code, in which the enumerators are
+ * initialized with progressive powers of 2, i.e.: 1, 2, 4 etc.. Each
+ * enumerator represents a boolean flag.
  *
- * \e mask is an integer mask of those flags that are relevant for this
- * instantiation of \e FlagSet. E.g. suppose \e EnumT is \e Color;
- * then \e mask might be <em>red | blue</em>, which
- * expresses that only red and blue are relevant for this instantiation
+ * \e mask is an integer mask of those enumerators in EnumT that are
+ * considered relevant for this
+ * instantiation of \e FlagSet. E.g. suppose \e EnumT is: \n
+ *
+ * <tt>
+ * Enum \n
+ * { \n
+ * \t red = 1, \n
+ * \t blue = 2, \n
+ * \t green = 4, \n
+ * \t orange = 8 \n
+ * }; \n
+ * </tt>.
+ *
+ * Then \e mask might be <em>(red | green)</em>, which
+ * expresses that only red and green are relevant for this instantiation
  * of \e FlagSet.
  *
- * \e default_value is the set of flags which an instance of FlagSet will
- * hold if it is constructed with the default parameter. This must either
+ * \e default_value determines the set of flags which an instance of this
+ * instantiation of FlagSet
+ * will hold if it is constructed with the default constructor. This must
+ * either
  * be 0, or else be some combination of the flags in EnumT such that
- * all flags are in \e mask (compilation will fail if not).
+ * all flags are in \e mask (compilation will fail if not). If this
+ * template parameter is not specified, it will default to 0, so
+ * that a default-constructed instance will have no flags set.
  *
  * By default, the underlying integer value holding the flags is stored in
- * an <em>unsigned int</em>. If this is not big enough to encompass EnumT,
+ * an <em>unsigned int</em>. If this is not big enough to encompass \e EnumT,
  * compilation will fail. An alternative underlying integral type can
- * be supplied be specializing EmumTraits for \e EnumT.
+ * be supplied be specializing \e EnumTraits for \e EnumT.
  *
  * @todo HIGH PRIORITY testing
  */
@@ -259,6 +275,7 @@ FlagSet<EnumT, mask, default_value>::underlying() const
 {
 	return m_value;
 }
+
 
 
 }  // namespace jewel
