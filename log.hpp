@@ -47,6 +47,19 @@ namespace jewel
  * statements <em>which use these macros</em> will then be compiled away
  * to nothing.
  *
+ * JEWEL_HARD_LOGGING_THRESHOLD is by default defined as 0, which means that
+ * there is no
+ * <em>compile-time</em> restriction on what is logged. If you want to
+ * restrict which statements are logged at <em>compile-time</em>, so that
+ * statements below a certain severity level are not logged regardless of
+ * the runtime threshold passed to <em>Log::set_threshold(...), you can
+ * do so by setting <em>JEWEL_HARD_LOGGING_THRESHOLD</em> to a higher
+ * severity level, e.g. <em>jewel::Log::warning</em>. On most compilers,
+ * with optimization on,
+ * should mean that logging statements below this "hard" threshold are
+ * compiled away to nothing. You should of course make sure that this is
+ * defined prior to including <jewel/log.hpp>.
+ *
  * @todo Testing.
  *
  * @todo Incorporate __func__ or __PRETTY_FUNCTION__ into log messages; but
@@ -66,7 +79,7 @@ public:
 	{
 		// Note if we add levels, we also need to update the
 		// severity_string function.
-		trace,
+		trace = 0,  // Must be zero.
 		info,
 		warning,
 		error
@@ -128,38 +141,49 @@ private:
 
 // MACROS
 
+
 #ifndef JEWEL_DISABLE_LOGGING
+
+#	ifndef JEWEL_HARD_LOGGING_THRESHOLD
+#		define JEWEL_HARD_LOGGING_THRESHOLD 0
+#	endif
 #	define JEWEL_LOG_TRACE() \
-		jewel::Log::log \
-		(	jewel::Log::trace, \
-			"(none)", \
-			__func__, \
-			__FILE__, \
-			__LINE__, \
-			__DATE__, \
-			__TIME__ \
-		)
+		if (jewel::Log::trace < JEWEL_HARD_LOGGING_THRESHOLD) ; \
+		else \
+			jewel::Log::log \
+			(	jewel::Log::trace, \
+				"(none)", \
+				__func__, \
+				__FILE__, \
+				__LINE__, \
+				__DATE__, \
+				__TIME__ \
+			)
 #	define JEWEL_LOG_MESSAGE(severity, message) \
-		jewel::Log::log \
-		(	severity, \
-			message, \
-			__func__, \
-			__FILE__, \
-			__LINE__, \
-			__DATE__, \
-			__TIME__ \
-		)
+		if (severity < JEWEL_HARD_LOGGING_THRESHOLD) ; \
+		else \
+			jewel::Log::log \
+			(	severity, \
+				message, \
+				__func__, \
+				__FILE__, \
+				__LINE__, \
+				__DATE__, \
+				__TIME__ \
+			)
 #	define JEWEL_LOG_VALUE(severity, expression) \
-		jewel::Log::log \
-		(	severity, \
-			std::string("the value of (" #expression ") is ") + \
-				boost::lexical_cast<std::string>(expression), \
-			__func__, \
-			__FILE__, \
-			__LINE__, \
-			__DATE__, \
-			__TIME__ \
-		)
+		if (severity < JEWEL_HARD_LOGGING_THRESHOLD) ; \
+		else \
+			jewel::Log::log \
+			(	severity, \
+				std::string("the value of (" #expression ") is ") + \
+					boost::lexical_cast<std::string>(expression), \
+				__func__, \
+				__FILE__, \
+				__LINE__, \
+				__DATE__, \
+				__TIME__ \
+			)
 #else
 #	define JEWEL_LOG_TRACE() 0
 #	define JEWEL_LOG_MESSAGE(severity, message) 0

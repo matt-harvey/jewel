@@ -113,7 +113,7 @@ Log::log
 			<< "\tline: " << p_line << ",\n"
 			<< "\tcompilation_date: \"" << p_compilation_date << "\",\n"
 			<< "\tcompilation_time: \"" << p_compilation_time << "\"\n"
-			<< "},\n"
+			<< "},"
 			<< endl;
 	}
 	return;
