@@ -68,11 +68,22 @@ void
 Log::log
 (	Level p_severity,
 	std::string const& p_message,
+	std::string const& p_function,
 	std::string const& p_file,
-	int p_line
+	int p_line,
+	std::string const& p_compilation_date,
+	std::string const& p_compilation_time
 )
 {
-	log(p_severity, p_message.c_str(), p_file.c_str(), p_line);
+	log
+	(	p_severity,
+		p_message.c_str(),
+		p_function.c_str(),
+		p_file.c_str(),
+		p_line,
+		p_compilation_date.c_str(),
+		p_compilation_time.c_str()
+	);
 	return;
 }
 
@@ -80,8 +91,11 @@ void
 Log::log
 (	Level p_severity,
 	char const* p_message,
+	char const* p_function,
 	char const* p_file,
-	int p_line
+	int p_line,
+	char const* p_compilation_date,
+	char const* p_compilation_time
 )
 {
 	if (p_severity >= threshold_aux())
@@ -91,21 +105,16 @@ Log::log
 		{
 			return;
 		}
-		*osp << "{severity: \"" << severity_string(p_severity)
-			<< "\"";
-		if (p_message)
-		{
-			*osp << ", message: \"" << p_message << "\"";
-		}
-		if (p_file)
-		{
-			*osp << ", file: \"" << p_file << "\"";
-		}
-		if (p_line != -1)
-		{
-			*osp << ", line: " << p_line;
-		}
-		*osp << "}," << endl;
+		*osp << "{\n"
+			<< "\tseverity: \"" << severity_string(p_severity) << "\"\n"
+			<< "\tmessage: \"" << p_message << "\",\n"
+			<< "\tfunction: \"" << p_function << "\",\n"
+			<< "\tfile: \"" << p_file << "\",\n"
+			<< "\tline: " << p_line << ",\n"
+			<< "\tcompilation_date: \"" << p_compilation_date << "\",\n"
+			<< "\tcompilation_time: \"" << p_compilation_time << "\"\n"
+			<< "},\n"
+			<< endl;
 	}
 	return;
 }

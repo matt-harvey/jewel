@@ -27,20 +27,21 @@ namespace jewel
  * To fire logging events using the \e Log class, client code should call the
  * following macros.
  *
- * JEWEL_LOG_TRACE() will fire a logging event that simply displays the file
- * and line number where it appeared, with a severity level of \e trace.
+ * JEWEL_LOG_TRACE() will fire a logging event that simply displays the name
+ * of the function, file and line number where it appeared, with a severity
+ * level of \e trace.
  *
  * JEWEL_LOG_MESSAGE(severity, message) will fire a logging event will
  * severity of \e severity and with a message \e message, which should be
  * a string (either C-style, or std::string will do). The log will also show
- * the file and line number in the source code where it appears.
+ * the function, file and line number in the source code where it appears.
  *
  * JEWEL_LOG_VALUE(severity, expression) will fire a logging event which
  * describes the value of \e expression, which should be C++ expression
  * that may be written to a std::ostream, e.g. "1 + 2" or "x" (assuming x
  * is defined). Do not include quotes around the expression when passing
- * it to the macro. The log will also show the file and line number in the
- * source code where is appears.
+ * it to the macro. The log will also show the function, file and line number
+ * in the source code where is appears.
  *
  * JEWEL_DISABLE_LOGGING if defined will disable logging entirely. All logging
  * statements <em>which use these macros</em> will then be compiled away
@@ -93,8 +94,11 @@ public:
 	static void log
 	(	Level p_severity,
 		std::string const& p_message,
+		std::string const& p_function,
 		std::string const& p_file,
-		int p_line
+		int p_line,
+		std::string const& p_compilation_date,
+		std::string const& p_compilation_time
 	);
 
 	/**
@@ -104,9 +108,12 @@ public:
 	 */
 	static void log
 	(	Level p_severity,
-		char const* p_message = 0,
-		char const* p_file = 0,
-		int p_line = -1
+		char const* p_message,
+		char const* p_function,
+		char const* p_file,
+		int p_line,
+		char const* p_compilation_date,
+		char const* p_compilation_time
 	);
 
 private:
@@ -123,16 +130,35 @@ private:
 
 #ifndef JEWEL_DISABLE_LOGGING
 #	define JEWEL_LOG_TRACE() \
-		jewel::Log::log(jewel::Log::trace, 0, __FILE__, __LINE__)
+		jewel::Log::log \
+		(	jewel::Log::trace, \
+			"(none)", \
+			__func__, \
+			__FILE__, \
+			__LINE__, \
+			__DATE__, \
+			__TIME__ \
+		)
 #	define JEWEL_LOG_MESSAGE(severity, message) \
-		jewel::Log::log(severity, message, __FILE__, __LINE__)
+		jewel::Log::log \
+		(	severity, \
+			message, \
+			__func__, \
+			__FILE__, \
+			__LINE__, \
+			__DATE__, \
+			__TIME__ \
+		)
 #	define JEWEL_LOG_VALUE(severity, expression) \
 		jewel::Log::log \
 		(	severity, \
 			std::string("the value of (" #expression ") is ") + \
 				boost::lexical_cast<std::string>(expression), \
+			__func__, \
 			__FILE__, \
-			__LINE__ \
+			__LINE__, \
+			__DATE__, \
+			__TIME__ \
 		)
 #else
 #	define JEWEL_LOG_TRACE() 0

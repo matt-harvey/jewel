@@ -37,6 +37,11 @@ using std::locale;
 
 int main()
 {
+	Log::set_threshold(Log::trace);
+	JEWEL_LOG_TRACE();
+	JEWEL_LOG_TRACE();
+	JEWEL_LOG_TRACE();
+	return 0;
 
 	#ifndef NDEBUG
 		cout << "Compiled in debugging mode (NDEBUG not defined)."
