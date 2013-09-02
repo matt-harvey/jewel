@@ -10,9 +10,9 @@ namespace jewel
 {
 
 void
-Log::set_stream(ostream* os)
+Log::set_stream(ostream* p_os)
 {
-	stream_aux(os);
+	stream_aux(p_os);
 	return;
 }
 
@@ -80,7 +80,6 @@ Log::severity_string(Level p_level)
 	}
 	return strings[p_level];
 }
-
 
 
 }  // namespace jewel

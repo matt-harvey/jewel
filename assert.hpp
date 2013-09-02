@@ -3,7 +3,6 @@
 
 #include "log.hpp"
 #include "helper_macros.hpp"
-#include <jewel/debug_log.hpp>
 #include <jewel/exception.hpp>
 
 /** @file assert.hpp
