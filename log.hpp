@@ -60,10 +60,9 @@ namespace jewel
  * compiled away to nothing. You should of course make sure that this is
  * defined prior to including <jewel/log.hpp>.
  *
- * @todo Testing.
+ * NOTE These logging facilities are not thread-safe.
  *
- * @todo Incorporate __func__ or __PRETTY_FUNCTION__ into log messages; but
- * make sure it's portable.
+ * @todo Testing.
  */
 class Log
 {
