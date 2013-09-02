@@ -27,21 +27,29 @@ namespace jewel
  * To fire logging events using the \e Log class, client code should call the
  * following macros.
  *
+ * JEWEL_LOG_TRACE() will fire a logging event that simply displays the file
+ * and line number where it appeared, with a severity level of \e trace.
+ *
  * JEWEL_LOG_MESSAGE(severity, message) will fire a logging event will
  * severity of \e severity and with a message \e message, which should be
- * a string (either C-style, or std::string will do).
+ * a string (either C-style, or std::string will do). The log will also show
+ * the file and line number in the source code where it appears.
  *
  * JEWEL_LOG_VALUE(severity, expression) will fire a logging event which
  * describes the value of \e expression, which should be C++ expression
  * that may be written to a std::ostream, e.g. "1 + 2" or "x" (assuming x
  * is defined). Do not include quotes around the expression when passing
- * it to the macro.
+ * it to the macro. The log will also show the file and line number in the
+ * source code where is appears.
  *
  * JEWEL_DISABLE_LOGGING if defined will disable logging entirely. All logging
  * statements <em>which use these macros</em> will then be compiled away
  * to nothing.
  *
  * @todo Testing.
+ *
+ * @todo Incorporate __func__ or __PRETTY_FUNCTION__ into log messages; but
+ * make sure it's portable.
  */
 class Log
 {
