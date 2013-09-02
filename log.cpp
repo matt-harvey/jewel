@@ -86,22 +86,26 @@ Log::log
 {
 	if (p_severity >= threshold_aux())
 	{
-		ostream& os = *(stream_aux());
-		os << "{severity: \"" << severity_string(p_severity)
+		ostream* const osp = stream_aux();
+		if (!osp)
+		{
+			return;
+		}
+		*osp << "{severity: \"" << severity_string(p_severity)
 			<< "\"";
 		if (p_message)
 		{
-			os << ", message: \"" << p_message << "\"";
+			*osp << ", message: \"" << p_message << "\"";
 		}
 		if (p_file)
 		{
-			os << ", file: \"" << p_file << "\"";
+			*osp << ", file: \"" << p_file << "\"";
 		}
 		if (p_line != -1)
 		{
-			os << ", line: " << p_line;
+			*osp << ", line: " << p_line;
 		}
-		os << "}," << endl;
+		*osp << "}," << endl;
 	}
 	return;
 }
