@@ -75,7 +75,7 @@ public:
 	/**
 	 * Sets the logging threshold so that logging events will be writting
 	 * to the stream if and only if their severity is greater than or
-	 * equal to \e p_level.
+	 * equal to \e p_level. By default, the threshold is \e info.
 	 */
 	static void set_threshold(Level p_level);
 
