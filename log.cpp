@@ -59,8 +59,8 @@ namespace
 	{
 		if (os)
 		{
-			*os << "{RECORD}[" << next_id()
-			    << "]\n{FIELD}[message]End log\n"
+			*os << "{RECORD}\n{FIELD}[id]" << next_id()
+			    << "\n{FIELD}[message]End log\n"
 				<< endl;
 			if ((os != &cerr) && (os != &clog) && (os != &cout))
 			{
@@ -88,9 +88,6 @@ Log::set_filepath(string const& p_filepath)
 			ofstream* f = new ofstream(p_filepath.c_str());
 			f->exceptions(ios::iostate(0));
 			stream_aux(f);
-			*(stream_aux()) << "{RECORD}[" << next_id()
-			                << "]\n{FIELD}[message]Begin log\n" << endl;
-			stream_aux()->flush();
 		}
 	}
 	return;
@@ -146,7 +143,8 @@ Log::log
 		}
 		assert (!osp->bad());  // guaranteed by stream_aux().
 		assert (!osp->exceptions());  // guaranteed by stream_aux().
-		*osp << "{RECORD}[" << next_id() << "]\n"
+		*osp << "{RECORD}\n"
+			<< "{FIELD}[id]" << next_id() << "\n"
 			<< "{FIELD}[severity]" << severity_string(p_severity) << "\n";
 		if (p_message)
 		{
