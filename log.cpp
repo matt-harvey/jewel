@@ -30,6 +30,11 @@ namespace jewel
 
 namespace
 {
+	long long next_id()
+	{
+		static long long ret = -1;
+		return ++ret;
+	}
 
 	struct StreamHolder: noncopyable
 	{
@@ -54,7 +59,9 @@ namespace
 	{
 		if (os)
 		{
-			*os << "[RECORD]\n[FIELD][message]End log\n" << endl;
+			*os << "{RECORD}[" << next_id()
+			    << "]\n{FIELD}[message]End log\n"
+				<< endl;
 			if ((os != &cerr) && (os != &clog) && (os != &cout))
 			{
 				delete os;
@@ -64,7 +71,7 @@ namespace
 		assert (0 == os);
 		return;
 	}
-
+	
 
 
 }  // end anonymous namespace
@@ -81,7 +88,8 @@ Log::set_filepath(string const& p_filepath)
 			ofstream* f = new ofstream(p_filepath.c_str());
 			f->exceptions(ios::iostate(0));
 			stream_aux(f);
-			*(stream_aux()) << "[FIELD][message]Begin log\n" << endl;
+			*(stream_aux()) << "{RECORD}[" << next_id()
+			                << "]\n{FIELD}[message]Begin log\n" << endl;
 			stream_aux()->flush();
 		}
 	}
@@ -138,17 +146,17 @@ Log::log
 		}
 		assert (!osp->bad());  // guaranteed by stream_aux().
 		assert (!osp->exceptions());  // guaranteed by stream_aux().
-		*osp << "[RECORD]\n"
-			<< "[severity]" << severity_string(p_severity) << "\n";
+		*osp << "{RECORD}[" << next_id() << "]\n"
+			<< "{FIELD}[severity]" << severity_string(p_severity) << "\n";
 		if (p_message)
 		{
-			*osp << "[FIELD][message]" << p_message << "\n";
+			*osp << "{FIELD}[message]" << p_message << "\n";
 		}
-		*osp << "[FIELD][function]" << p_function << "\n"
-			<< "[FIELD][file]" << p_file << "\n"
-			<< "[FIELD][line]" << p_line << "\n"
-			<< "[FIELD][compilation_date]" << p_compilation_date << "\n"
-			<< "[FIELD][compilation_time]" << p_compilation_time << "\n"
+		*osp << "{FIELD}[function]" << p_function << "\n"
+			<< "{FIELD}[file]" << p_file << "\n"
+			<< "{FIELD}[line]" << p_line << "\n"
+			<< "{FIELD}[compilation_date]" << p_compilation_date << "\n"
+			<< "{FIELD}[compilation_time]" << p_compilation_time << "\n"
 			<< endl;
 	}
 	return;
