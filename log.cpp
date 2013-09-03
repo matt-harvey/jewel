@@ -141,13 +141,13 @@ Log::log
 		assert (!osp->bad());  // guaranteed by stream_aux().
 		assert (!osp->exceptions());  // guaranteed by stream_aux().
 		*osp << "{\n"
-			<< "\tseverity: \"" << severity_string(p_severity) << "\"\n"
-			<< "\tmessage: \"" << p_message << "\",\n"
-			<< "\tfunction: \"" << p_function << "\",\n"
-			<< "\tfile: \"" << p_file << "\",\n"
-			<< "\tline: " << p_line << ",\n"
-			<< "\tcompilation_date: \"" << p_compilation_date << "\",\n"
-			<< "\tcompilation_time: \"" << p_compilation_time << "\"\n"
+			<< "\t\"severity\": \"" << severity_string(p_severity) << "\",\n"
+			<< "\t\"message\": \"" << p_message << "\",\n"
+			<< "\t\"function\": \"" << p_function << "\",\n"
+			<< "\t\"file\": \"" << p_file << "\",\n"
+			<< "\t\"line\": " << p_line << ",\n"
+			<< "\t\"compilation_date\": \"" << p_compilation_date << "\",\n"
+			<< "\t\"compilation_time\": \"" << p_compilation_time << "\"\n"
 			<< "},"
 			<< endl;
 	}
