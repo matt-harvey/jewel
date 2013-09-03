@@ -135,7 +135,9 @@ public:
 		char const* p_file,
 		int p_line,
 		char const* p_compilation_date,
-		char const* p_compilation_time
+		char const* p_compilation_time,
+		char const* p_expression = 0,
+		char const* p_value = 0
 	);
 
 private:
@@ -192,13 +194,14 @@ private:
 			{ \
 				jewel::Log::log \
 				(	severity, \
-					std::string("the value of (" #expression ") is ") + \
-						boost::lexical_cast<std::string>(expression), \
+					0, \
 					__func__, \
 					__FILE__, \
 					__LINE__, \
 					__DATE__, \
-					__TIME__ \
+					__TIME__, \
+					#expression, \
+					boost::lexical_cast<std::string>(expression).c_str() \
 				); \
 			} \
 			catch (boost::bad_lexical_cast) \

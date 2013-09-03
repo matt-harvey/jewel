@@ -131,7 +131,9 @@ Log::log
 	char const* p_file,
 	int p_line,
 	char const* p_compilation_date,
-	char const* p_compilation_time
+	char const* p_compilation_time,
+	char const* p_expression,
+	char const* p_value
 )
 {
 	if (p_severity >= threshold_aux())
@@ -154,8 +156,16 @@ Log::log
 			<< "{FIELD}[file]" << p_file << "\n"
 			<< "{FIELD}[line]" << p_line << "\n"
 			<< "{FIELD}[compilation_date]" << p_compilation_date << "\n"
-			<< "{FIELD}[compilation_time]" << p_compilation_time << "\n"
-			<< endl;
+			<< "{FIELD}[compilation_time]" << p_compilation_time << "\n";
+		if (p_expression)
+		{
+			*osp << "{FIELD}[expression]" << p_expression << "\n";
+		}
+		if (p_value)
+		{
+			*osp << "{FIELD}[value]" << p_value << "\n";
+		}
+		*osp << endl;
 	}
 	return;
 }

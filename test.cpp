@@ -39,7 +39,8 @@ int main()
 
 	Log::set_filepath("scratch.log");
 	Log::set_threshold(Log::trace);
-	JEWEL_LOG_VALUE(Log::info, 3);
+	int x = 3;
+	JEWEL_LOG_VALUE(Log::info, x + 5);
 	JEWEL_LOG_TRACE();
 
 	#ifndef NDEBUG
