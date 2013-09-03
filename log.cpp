@@ -54,14 +54,18 @@ namespace
 	{
 		if (os)
 		{
-			os->flush();
 			if ((os != &cerr) && (os != &clog) && (os != &cout))
 			{
 				JEWEL_LOG_MESSAGE
 				(	Log::info,
 					"Deleting underlying logging stream."
 				);
+				*os << "];" << endl;
 				delete os;
+			}
+			else
+			{
+				*os << "];" << endl;
 			}
 			os = 0;
 		}
@@ -85,6 +89,8 @@ Log::set_filepath(string const& p_filepath)
 			ofstream* f = new ofstream(p_filepath.c_str());
 			f->exceptions(ios::iostate(0));
 			stream_aux(f);
+			*(stream_aux()) << "[" << endl;
+
 		}
 	}
 	return;
@@ -140,15 +146,15 @@ Log::log
 		}
 		assert (!osp->bad());  // guaranteed by stream_aux().
 		assert (!osp->exceptions());  // guaranteed by stream_aux().
-		*osp << "{\n"
-			<< "\t\"severity\": \"" << severity_string(p_severity) << "\",\n"
-			<< "\t\"message\": \"" << p_message << "\",\n"
-			<< "\t\"function\": \"" << p_function << "\",\n"
-			<< "\t\"file\": \"" << p_file << "\",\n"
-			<< "\t\"line\": " << p_line << ",\n"
-			<< "\t\"compilation_date\": \"" << p_compilation_date << "\",\n"
-			<< "\t\"compilation_time\": \"" << p_compilation_time << "\"\n"
-			<< "},"
+		*osp << "\t{\n"
+			<< "\t\t\"severity\": \"" << severity_string(p_severity) << "\",\n"
+			<< "\t\t\"message\": \"" << p_message << "\",\n"
+			<< "\t\t\"function\": \"" << p_function << "\",\n"
+			<< "\t\t\"file\": \"" << p_file << "\",\n"
+			<< "\t\t\"line\": " << p_line << ",\n"
+			<< "\t\t\"compilation_date\": \"" << p_compilation_date << "\",\n"
+			<< "\t\t\"compilation_time\": \"" << p_compilation_time << "\"\n"
+			<< "\t},"
 			<< endl;
 	}
 	return;
