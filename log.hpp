@@ -166,7 +166,7 @@ private:
 		else \
 			jewel::Log::log \
 			(	jewel::Log::trace, \
-				"(none)", \
+				0, \
 				__func__, \
 				__FILE__, \
 				__LINE__, \

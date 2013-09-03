@@ -54,10 +54,7 @@ namespace
 	{
 		if (os)
 		{
-			*os << ",\n\t{\n"
-				<< "\t\t\"message\": \"End log\"\n"
-				<< "\t}\n]"
-				<< endl;
+			*os << "[RECORD]\n[FIELD][message]End log\n" << endl;
 			if ((os != &cerr) && (os != &clog) && (os != &cout))
 			{
 				delete os;
@@ -84,10 +81,7 @@ Log::set_filepath(string const& p_filepath)
 			ofstream* f = new ofstream(p_filepath.c_str());
 			f->exceptions(ios::iostate(0));
 			stream_aux(f);
-			*(stream_aux()) << "[\n"
-			                << "\t{\n"
-							<< "\t\t\"message\": \"Begin log\"\n"
-							<< "\t}";
+			*(stream_aux()) << "[FIELD][message]Begin log\n" << endl;
 			stream_aux()->flush();
 		}
 	}
@@ -144,16 +138,18 @@ Log::log
 		}
 		assert (!osp->bad());  // guaranteed by stream_aux().
 		assert (!osp->exceptions());  // guaranteed by stream_aux().
-		*osp << ",\n\t{\n"
-			<< "\t\t\"severity\": \"" << severity_string(p_severity) << "\",\n"
-			<< "\t\t\"message\": \"" << p_message << "\",\n"
-			<< "\t\t\"function\": \"" << p_function << "\",\n"
-			<< "\t\t\"file\": \"" << p_file << "\",\n"
-			<< "\t\t\"line\": " << p_line << ",\n"
-			<< "\t\t\"compilation_date\": \"" << p_compilation_date << "\",\n"
-			<< "\t\t\"compilation_time\": \"" << p_compilation_time << "\"\n"
-			<< "\t}";
-		osp->flush();
+		*osp << "[RECORD]\n"
+			<< "[severity]" << severity_string(p_severity) << "\n";
+		if (p_message)
+		{
+			*osp << "[FIELD][message]" << p_message << "\n";
+		}
+		*osp << "[FIELD][function]" << p_function << "\n"
+			<< "[FIELD][file]" << p_file << "\n"
+			<< "[FIELD][line]" << p_line << "\n"
+			<< "[FIELD][compilation_date]" << p_compilation_date << "\n"
+			<< "[FIELD][compilation_time]" << p_compilation_time << "\n"
+			<< endl;
 	}
 	return;
 }

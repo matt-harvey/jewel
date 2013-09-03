@@ -37,7 +37,7 @@ using std::locale;
 int main()
 {
 
-	Log::set_filepath("scratch.log.json");
+	Log::set_filepath("scratch.log");
 	Log::set_threshold(Log::trace);
 	JEWEL_LOG_VALUE(Log::info, 3);
 	JEWEL_LOG_TRACE();
