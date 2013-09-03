@@ -12,9 +12,10 @@
  */
 
 #include "helper_macros.hpp"
-#include <boost/lexical_cast.hpp>
 #include "assert.hpp"
+#include <boost/lexical_cast.hpp>
 #include <exception>
+#include <new>
 #include <string>
 
 namespace jewel
@@ -64,7 +65,15 @@ namespace jewel
  *
  * @todo Testing.
  *
- * These logging facilities are guaranteed never to throw an exception.
+ * These logging facilities are guaranteed never to throw an exception, with
+ * the following proviso. The JEWEL_LOG_VALUE macro makes use of
+ * boost::lexical_cast, the implementation of which inserts the passed
+ * expression onto a std::ostream during the casting process. If this process
+ * of calling boost::lexical_cast results in either boost::bad_lexical_cast or
+ * std::bad_alloc being thrown, then that exception will be swallowed rather
+ * than propagated. But if any other exception is thrown during the insertion
+ * of the passed expression onto the std::ostream, then that exception will
+ * not be caught.
  */
 class Log
 {
@@ -192,12 +201,22 @@ private:
 					__TIME__ \
 				); \
 			} \
-			catch (...) \
+			catch (boost::bad_lexical_cast) \
 			{ \
 				JEWEL_LOG_MESSAGE \
 				( \
 					severity, \
-					"Could not log value of expression (" #expression ")." \
+					"Could not log value of expression (" #expression "): " \
+					"caught boost::bad_lexical_cast." \
+				); \
+			} \
+			catch (std::bad_alloc) \
+			{ \
+				JEWEL_LOG_MESSAGE \
+				( \
+					severity, \
+					"Could not log value of expression (" #expression "): " \
+					"caught std::bad_alloc." \
 				); \
 			}
 #else
