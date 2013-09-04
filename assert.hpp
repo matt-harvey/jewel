@@ -43,7 +43,7 @@ JEWEL_DERIVED_EXCEPTION(AssertionFailure, Exception);
 #ifndef NDEBUG
 #	define JEWEL_ASSERT(p) JEWEL_HARD_ASSERT(p)
 #else
-#	define JEWEL_ASSERT(p)
+#	define JEWEL_ASSERT(p) (void)(p)  // Silence compiler warning re. unused variables.
 #endif
 	
 
