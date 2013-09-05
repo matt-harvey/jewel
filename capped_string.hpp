@@ -94,7 +94,6 @@ public:
 	size_type size() const;
 	bool empty() const;
 
-	// TODO Up to here with unit testing.
 	bool is_truncated() const;
 
 	void clear();

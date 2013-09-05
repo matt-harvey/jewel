@@ -2,11 +2,16 @@
 
 #include "assert.hpp"
 #include "capped_string.hpp"
+#include "log.hpp"
 #include <UnitTest++/UnitTest++.h>
 #include <cstring>
+#include <iostream>
 #include <string>
 
 using jewel::CappedString;
+using jewel::Log;
+using std::cout;
+using std::endl;
 using std::strcmp;
 using std::strlen;
 
@@ -473,4 +478,55 @@ TEST(capped_string_empty)
 	CHECK(c4.empty());
 	CHECK(CappedString<682>("").empty());
 	CHECK(CappedString<0>(std::string()).empty());
+}
+
+TEST(capped_string_truncated)
+{
+	// Log::set_filepath("~/Workbench/versioned/jewel/scratch.log");
+	// Log::set_threshold(Log::trace);
+
+	CappedString<3> c("xxx");
+	CHECK(!c.is_truncated());
+	c = "xxxx";
+	CHECK(c.is_truncated());
+	c = "xxx";
+	CHECK(!c.is_truncated());
+	c = CappedString<3>();
+	CHECK(!c.is_truncated());
+	CappedString<0> d;
+	CHECK(!d.is_truncated());
+	d = "";
+	CHECK(!d.is_truncated());
+	d = "x";
+	CHECK(d.is_truncated());
+	d = "\0alsdkasdfljasdlfk";
+	CHECK(!d.is_truncated());
+	CappedString<456> e("lasdfk");
+	CHECK(!e.is_truncated());
+	std::string const s(456, 'x');
+	e = s.c_str();
+	CHECK(!e.is_truncated());
+	std::string const t = s + "x";
+	e = t.c_str();
+	CHECK(e.is_truncated());
+}
+
+TEST(capped_string_clear)
+{
+	typedef CappedString<907776> CS;
+	CS a("asdfy");
+	CHECK(!a.empty());
+	CHECK_EQUAL(a.size(), 5);
+	a.clear();
+	CHECK_EQUAL(a.size(), 0);
+	CHECK_EQUAL(a, CS());
+	CHECK(a.empty());
+	a = CS(std::string(8907777, 'h'));
+	CHECK(a.size() > 0);
+	a.clear();
+	CHECK(a.size() == 0);
+
+	CappedString<0> b;
+	b.clear();
+	CHECK(b.empty());
 }

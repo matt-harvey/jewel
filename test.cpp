@@ -37,11 +37,6 @@ using std::locale;
 int main()
 {
 
-	Log::set_filepath("scratch.log");
-	Log::set_threshold(Log::trace);
-	int x = 3;
-	JEWEL_LOG_VALUE(Log::info, x + 5);
-	JEWEL_LOG_TRACE();
 
 	#ifndef NDEBUG
 		cout << "Compiled in debugging mode (NDEBUG not defined)."
