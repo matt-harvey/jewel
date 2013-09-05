@@ -80,7 +80,9 @@ public:
 
 	CappedString(CappedString const& rhs);
 
-	~CappedString();
+	// Use compiler-generated destructor.
+
+	// TODO Up to here with unit testing.
 
 	CappedString& operator=(CappedString const& rhs);
 	bool operator==(CappedString const& rhs) const;
@@ -160,13 +162,6 @@ inline
 CappedString<N>::CappedString(CappedString const& rhs)
 {
 	unchecked_assign(rhs);
-}
-
-template <std::size_t N>
-inline
-CappedString<N>::~CappedString()
-{
-	// nothing to do
 }
 
 template <std::size_t N>
