@@ -1254,7 +1254,7 @@ operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 	}
 	catch (std::bad_alloc&)
 	{
-		is.setstate(std::ios_base::failbit);
+		is.setstate(std::ios_base::failbit);  // TODO Should this be badbit?
 		return is;
 	}
 	return is;

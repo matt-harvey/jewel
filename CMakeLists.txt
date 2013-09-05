@@ -21,6 +21,7 @@ set (library_sources
 
 set (test_sources
 		test.cpp
+		capped_string_tests.cpp
 		checked_arithmetic_tests.cpp
 		decimal_special_tests.cpp
 		decimal_tests.cpp
@@ -66,6 +67,7 @@ install(DIRECTORY jewel DESTINATION ${header_installation_dir})
 install(FILES
 		array_utilities.hpp
 		assert.hpp
+		capped_string.hpp
 		checked_arithmetic.hpp
 		checked_arithmetic_detail.hpp
 		log.hpp
@@ -82,6 +84,7 @@ install(FILES
 		overview.dox
 		power_vector.hpp
 		signature.hpp
+		smallest_sufficient_unsigned_type.hpp
 		stopwatch.hpp
 		DESTINATION
 		"${header_installation_dir}/jewel")

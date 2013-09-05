@@ -1,0 +1,5 @@
+CappedString<a> s0;
+		
+
+
+}
