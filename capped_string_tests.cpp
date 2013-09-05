@@ -7,6 +7,7 @@
 #include <string>
 
 using jewel::CappedString;
+using std::strcmp;
 using std::strlen;
 
 typedef CappedString<0> CappedString0;
@@ -282,4 +283,194 @@ TEST(capped_string_copy_constructor)
 	CHECK_EQUAL(d1.size(), c1.size());
 	CHECK_EQUAL(e303.size(), c303.size());
 
+}
+
+TEST(capped_string_assignment)
+{
+	char const* const nc1("890jk'12j\n\n\n\"");
+	CappedString0 const c0("heoa");
+	CappedString1 c1(nc1);
+	CappedString50 const c2("yes");
+	CappedString303 c3(std::string(688, ' '));
+	CappedString40938 const c4("lkuioasdfhjkasdf'asdfasdfhjk'asdasdfhasdf'");
+	CappedString<1000000> c5(std::string(2000000, 'x'));
+	CappedString40938 c6;
+	CappedString303 c7;
+	CappedString0 c8;
+	CappedString1 c9("                 ");
+
+	c1 = c1;
+	CHECK_EQUAL(c1, CappedString1(nc1));
+	c3 = c7;
+	CHECK_EQUAL(c3 = c3, c3);
+	CHECK_EQUAL(c0, CappedString0());
+	CHECK_EQUAL(c3.size(), 0);
+	CHECK_EQUAL(c3.capacity(), 303);
+	c6 = CappedString40938(c3.c_str());
+	CHECK_EQUAL(c6, CappedString40938());
+	CHECK_EQUAL
+	(	(c6 = CappedString40938(c2.c_str())),
+		CappedString40938("yes")
+	);
+	c7 = CappedString<303>(c2.c_str());
+	CHECK_EQUAL(c7, CappedString303(c6.c_str()));
+	c9 = c1;
+	CHECK_EQUAL(c9, CappedString1(std::string(nc1)));
+	CHECK(c9.is_truncated());
+	char const* const nc9 = c9.c_str();
+	CappedString303 cc9(nc9);
+	c7 = CappedString303(cc9);
+	CHECK_EQUAL(c7, CappedString303("8"));
+	CHECK(!c7.is_truncated());
+	c5 = CappedString<1000000>(nc1);
+	CHECK(!c5.is_truncated());
+	CHECK_EQUAL(CappedString<1000000>(nc1), c5);
+
+}
+
+TEST(capped_string_equality_and_inequality)
+{
+	std::string const s0("heoa");
+	std::string const s1("890jk'l2j\n\n\n\"");
+	std::string const s2("yes");
+	std::string const s3(688, ' ');
+	std::string const s4("lkuioasdfhjkasdf'asdfasdfhjk'asdasdfhasdf'");
+
+	CappedString<9> c0a(s0);
+	CappedString<9> c0b(s0);
+	CappedString<9> c1a(s1);
+	CappedString<9> c1b(s1.c_str());
+	CappedString<9> c2a(s2);
+	CappedString<9> c2b(s2);
+	CappedString<7000> const c3a(s3);
+	CappedString<7000> const c3b(s3);
+	CappedString<12> const c4a(s4);
+	CappedString<12> const c4b(s4);
+	CappedString<12> const c5;
+
+	CHECK(c0a == c0b);
+	CHECK(c0b == c0a);
+	CHECK(c1a != c0a);
+	CHECK(c1a == c1b);
+	CHECK(c1b != c0b);
+	CHECK(c2b == c2a);
+	CHECK(c2b != c0a);
+	CHECK(c3a == c3b);
+	CHECK(c4b != c5);
+	CHECK(c4a == c4b);
+}
+
+TEST(capped_string_c_str)
+{
+	char const* const s0("heoa");
+	char const* const s1("890jk'l2j\n\n\n\"");
+	std::string const s2("yes");
+	std::string const s3(688, ' ');
+ 	char const* const s4("lkuioasdfhjkasdf'asdfasdfhjk'asdasdfhasdf'");
+
+	CappedString<9> c0(s0);
+	CappedString<9> c1(s1);
+	CappedString<9> c2(s2);
+	CappedString<7000> const c3(s3);
+	CappedString<12> const c4(s4);
+	CappedString<12> const c5;
+
+	CHECK_EQUAL(strcmp(c0.c_str(), s0), 0);
+	CHECK_EQUAL(strcmp(c1.c_str(), std::string(s1, s1 + 9).c_str()), 0);
+	CHECK_EQUAL(strcmp(c2.c_str(), s2.c_str()), 0);
+	CHECK_EQUAL(strcmp(c3.c_str(), s3.c_str()), 0);
+	CHECK_EQUAL(strcmp(c4.c_str(), std::string(s4, s4 + 12).c_str()), 0);
+	CHECK_EQUAL(strcmp(c5.c_str(), ""), 0);
+	
+}
+
+TEST(capped_string_capacity)
+{
+	char const* const s0("heoa");
+	char const* const s1("890jk'l2j\n\n\n\"");
+	std::string const s2("yes");
+	std::string const s3(688, ' ');
+ 	char const* const s4("lkuioasdfhjkasdf'asdfasdfhjk'asdasdfhasdf'");
+
+	CappedString<9> c0(s0);
+	CappedString<9> const c1(s1);
+	CappedString<9> c2(s2);
+	CappedString<7000> const c3(s3);
+	CappedString<12> const c4(s4);
+	CappedString<12> c5;
+
+	CHECK_EQUAL(c0.capacity(), 9);
+	CHECK_EQUAL(c1.capacity(), 9);
+	CHECK_EQUAL(c2.capacity(), 9);
+	CHECK_EQUAL(c3.capacity(), 7000);
+	CHECK_EQUAL(c4.capacity(), 12);
+	CHECK_EQUAL(c5.capacity(), 12);
+
+	c5 = CappedString<12>
+	(	std::string("lasdfjkflkajsl;dfkjasl;dfjas") +
+		std::string(60238, '\n')
+	);
+	CHECK_EQUAL(c5.capacity(), 12);
+	c5 = CappedString<12>();
+	CHECK_EQUAL(c5.capacity(), 12);
+}
+
+TEST(capped_string_size)
+{
+	char const* const s0("heoa");
+	char const* const s1("890jk'l2j\n\n\n\"");
+	std::string const s2("yes");
+	std::string const s3(688, ' ');
+ 	char const* const s4("lkuioasdfhjkasdf'asdfasdfhjk'asdasdfhasdf'");
+
+	CappedString<9> c0(s0);
+	CappedString<9> const c1(s1);
+	CappedString<9> const c2(s2);
+	CappedString<7000> c3(s3);
+	CappedString<12> const c4(s4);
+	CappedString<12> c5;
+
+	CHECK_EQUAL(c0.size(), 4);
+	CHECK_EQUAL(c1.size(), 9);
+	CHECK_EQUAL(c2.size(), 3);
+	CHECK_EQUAL(c3.size(), 688);
+	CHECK_EQUAL(c4.size(), 12);
+	CHECK_EQUAL(c5.size(), 0);
+	c5 = CappedString<12>(c0.c_str());
+	CHECK_EQUAL(c5.size(), 4);
+	c3 = CappedString<7000>(std::string(7001, '\0'));
+	CHECK_EQUAL(c3.size(), 0);
+	c3 = CappedString<7000>(std::string(7001, '9'));
+	CHECK_EQUAL(c3.size(), 7000);
+	c3 = CappedString<7000>("Lkjlg\n");
+	CHECK_EQUAL(c3.size(), 6);
+}
+
+TEST(capped_string_empty)
+{
+	char const* const s0("heoa");
+	char const* const s1("890jk'l2j\n\n\n\"");
+	std::string const s2("yes");
+	std::string const s3(688, ' ');
+ 	char const* const s4("lkuioasdfhjkasdf'asdfasdfhjk'asdasdfhasdf'");
+
+	CappedString<9> c0(s0);
+	CappedString<9> const c1(s1);
+	CappedString<9> const c2(s2);
+	CappedString<7000> c3(s3);
+	CappedString<12> c4(s4);
+	CappedString<12> c5;
+	CappedString<0> c6(s4);
+
+	CHECK(!c0.empty());
+	CHECK(!c1.empty());
+	CHECK(!c2.empty());
+	CHECK(!c3.empty());
+	CHECK(!c4.empty());
+	CHECK(c5.empty());
+	CHECK(c6.empty());
+	c4 = c5;
+	CHECK(c4.empty());
+	CHECK(CappedString<682>("").empty());
+	CHECK(CappedString<0>(std::string()).empty());
 }

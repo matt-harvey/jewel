@@ -28,7 +28,8 @@ namespace jewel
  * No heap allocation is performed by CappedString.
  *
  * None of the member functions of this class will ever throw an exception.
- * (The only possible source of runtime failure is stack overflow.)
+ * (The only possible source of runtime failure is stack overflow or exploding
+ * computer.)
  *
  * If an attempt is made to initialize a CappedString<N> from a built-in
  * string or std::string that exceeds N in length, then the resulting
@@ -52,11 +53,12 @@ namespace jewel
  * an implementation detail). This is the same number that is returned by
  * the member function \e capacity().
  *
- * TODO Allow a CappedString<N> to be initialized and/or copied
- * a CappedString<M> where M != N.
+ * TODO Allow a CappedString<N> to be initialized and/or copied from
+ * a CappedString<M> where M != N. We might also allow two such strings
+ * to be compared.
  *
  * TODO Implement indexing operator functions. (Should also implement
- * at(); but note this will mean we will have to qualify blanket
+ * at(); but note this will mean we would have to qualify blanket
  * guarantee that no member functions throw.)
  *
  * TODO HIGH PRIORITY Testing.
@@ -82,8 +84,6 @@ public:
 
 	// Use compiler-generated destructor.
 
-	// TODO Up to here with unit testing.
-
 	CappedString& operator=(CappedString const& rhs);
 	bool operator==(CappedString const& rhs) const;
 	bool operator!=(CappedString const& rhs) const;
@@ -94,6 +94,7 @@ public:
 	size_type size() const;
 	bool empty() const;
 
+	// TODO Up to here with unit testing.
 	bool is_truncated() const;
 
 	void clear();
@@ -250,10 +251,10 @@ CappedString<N>::initialize_from_c_string(char const* p_string)
 	m_len = 0;
 	while ((m_data[m_len] = p_string[m_len]) != '\0')
 	{
-		if (m_len == N)
+		if (m_len == capacity())
 		{
-			m_is_truncated = true;
 			m_data[m_len] = '\0';
+			m_is_truncated = true;
 			return;
 		}
 		++m_len;
@@ -275,10 +276,8 @@ CappedString<N>::unchecked_assign(CappedString const& rhs)
 	return;
 }
 
-/**
- * Write to an output stream.
- */
 template <typename traits, std::size_t N>
+inline
 std::basic_ostream<typename CappedString<N>::value_type, traits>&
 operator<<
 (	std::basic_ostream<typename CappedString<N>::value_type, traits>& os,
