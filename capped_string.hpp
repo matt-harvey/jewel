@@ -86,11 +86,7 @@ namespace jewel
  * for placement inside exception objects) we're not going to need more
  * than about a CappedString<1000> tops, so it should be fine. The
  * non-throwing heap-based solution would be more complex to implement -
- * it's not worth it. Besides, you might want to use CappedString for
- * reasons other than avoiding exceptions, e.g. for efficiency reasons
- * when dealing with very short strings.
- * (On a typical desktop machine, I gather that stack overflow starts
- * threatening only once you get in the order of CappedString<1000000>).
+ * it's not worth it.
  */
 template <std::size_t N>
 class CappedString
