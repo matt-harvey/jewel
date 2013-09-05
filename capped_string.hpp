@@ -61,7 +61,36 @@ namespace jewel
  * at(); but note this will mean we would have to qualify blanket
  * guarantee that no member functions throw.)
  *
- * TODO HIGH PRIORITY Testing.
+ * THOUGHTS... A major motivation for using CappedString instead of
+ * std::string is
+ * that std::string can throw an exception, viz. std::bad_alloc, in case of
+ * memory allocation failure e.g. while being copied, whereas CappedString
+ * cannot throw an exception.
+ * There are contexts in which an exception being thrown would result in
+ * undefined behaviour (e.g. after another exception has already been thrown),
+ * and in these cases it is good to rule out even the slightest possibility
+ * of an exception being thrown. Hence a non-throwing string class,
+ * CappedString. However, a CappedString<N> cannot have a very large N without
+ * blowing the stack and crashing the program. Crashing is better than
+ * undefined behaviour but - could we have the best of both worlds by using
+ * new(std::nothrow), or std::malloc, to attempt whatever dynamic allocation
+ * we need without danger of an exception being thrown? If the returned
+ * pointer is null, then
+ * we can set the truncation flag, and try again with a lower size, etc..
+ * until we allocate the largest reasonably possible amount of memory.. etc..
+ * So we could achieve the non-throwing-ness of CappedString, while allowing
+ * for much larger possible strings (as the upper limit on the size of
+ * heap-allocable objects appears to be much larger than the upper limit on
+ * the size of stack-allocable objects). BUT: CappedString is a pretty
+ * simple solution, and for the use case I have in mind (error messages
+ * for placement inside exception objects) we're not going to need more
+ * than about a CappedString<1000> tops, so it should be fine. The
+ * non-throwing heap-based solution would be more complex to implement -
+ * it's not worth it. Besides, you might want to use CappedString for
+ * reasons other than avoiding exceptions, e.g. for efficiency reasons
+ * when dealing with very short strings.
+ * (On a typical desktop machine, I gather that stack overflow starts
+ * threatening only once you get in the order of CappedString<1000000>).
  */
 template <std::size_t N>
 class CappedString

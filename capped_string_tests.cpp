@@ -513,7 +513,7 @@ TEST(capped_string_truncated)
 
 TEST(capped_string_clear)
 {
-	typedef CappedString<907776> CS;
+	typedef CappedString<101115> CS;
 	CS a("asdfy");
 	CHECK(!a.empty());
 	CHECK_EQUAL(a.size(), 5);
