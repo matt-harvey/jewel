@@ -17,7 +17,8 @@ set (library_sources
 	 decimal.cpp
 	 exception.cpp
 	 log.cpp
-	 num_digits.cpp)
+	 num_digits.cpp
+	 tolerant_string.cpp)
 
 set (test_sources
 		test.cpp
@@ -86,6 +87,7 @@ install(FILES
 		signature.hpp
 		smallest_sufficient_unsigned_type.hpp
 		stopwatch.hpp
+		tolerant_string.hpp
 		DESTINATION
 		"${header_installation_dir}/jewel")
 
