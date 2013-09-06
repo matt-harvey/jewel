@@ -6,12 +6,15 @@
 #include <UnitTest++/UnitTest++.h>
 #include <cstring>
 #include <iostream>
+#include <sstream>
 #include <string>
 
 using jewel::CappedString;
 using jewel::Log;
 using std::cout;
+using std::clog;
 using std::endl;
+using std::ostringstream;
 using std::strcmp;
 using std::strlen;
 
@@ -529,4 +532,31 @@ TEST(capped_string_clear)
 	CappedString<0> b;
 	b.clear();
 	CHECK(b.empty());
+}
+
+TEST(capped_string_output)
+{
+	typedef CappedString<1000> CS;
+	std::string const s0(1000, 'a');
+	CS cs0(s0);
+	ostringstream oss0;
+	oss0 << cs0;
+	CHECK_EQUAL(oss0.str(), s0);
+	oss0 << CS("Hello");
+	CHECK_EQUAL(oss0.str(), s0 + "Hello");
+
+	ostringstream oss1;
+	oss1 << CS("Hello") << CS("Hello");
+	CHECK_EQUAL(oss1.str(), std::string("HelloHello"));
+
+	ostringstream oss2;
+	oss2 << CS();
+	CHECK_EQUAL(oss2.str(), std::string());
+
+	std::string s1(1001, 'b');
+	CS cs(s1);
+	ostringstream oss3;
+	oss3 << cs;
+	CHECK_EQUAL(oss3.str(), std::string(1000, 'b'));
+
 }

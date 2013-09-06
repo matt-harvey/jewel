@@ -149,13 +149,13 @@ operator<<
  * Read from an output stream.
  *
  * TODO Implement this.
- */
 template <typename traits, std::size_t N>
 std::basic_istream<typename CappedString<N>::value_type, traits>&
 operator>>
 (	std::basic_istream<typename CappedString<N>::value_type, traits> p_is,
 	CappedString<N> const& p_str
 );
+*/
 
 
 
