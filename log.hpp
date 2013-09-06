@@ -223,11 +223,11 @@ private:
 				); \
 			}
 #else
-#	define JEWEL_LOG_TRACE() (void)0
+#	define JEWEL_LOG_TRACE() 0
 #	define JEWEL_LOG_MESSAGE(severity, message) \
-		(void)(severity); (void)(message)  // Silence compiler warnings re. unused variables.
+		if (false) { (void)(severity); (void)(message); }  // Silence compiler warnings re. unused variables, and prevent them from being evaluated.
 #	define JEWEL_LOG_VALUE(severity, expression) \
-		(void)(severity); (void)(expression)  // Silence compiler warnings re. unused variables.
+		if (false) { (void)(severity); (void)(expression); } // Silence compiler warnings re. unused variables, and prevent them from being evaluated.
 		
 #endif  // JEWEL_DISABLE_LOGGING
 
