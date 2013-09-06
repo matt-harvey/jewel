@@ -4,6 +4,7 @@
 #include "capped_string.hpp"
 #include <cstddef>
 #include <cstdlib>
+#include <ios>
 
 namespace jewel
 {
@@ -21,8 +22,6 @@ namespace jewel
  * cases where we want a string class that cannot possibly throw, for
  * example as the member variable of an exception class representing
  * an error message.
- *
- * @todo HIGH PRIORITY Testing.
  */
 class TolerantString
 {
@@ -35,6 +34,8 @@ public:
 
 	TolerantString();
 	TolerantString(char const* p_string);
+
+	// TODO HIGH PRIORITY Write unit tests for functions below here.
 	TolerantString(TolerantString const& rhs);
 	~TolerantString();
 	TolerantString& operator=(TolerantString const& rhs);
@@ -78,9 +79,45 @@ private:
 	bool m_is_valid;
 	size_type m_len;
 	char* m_data;
-	CappedString<1> m_standby;
+	CappedString<1> m_standby;  // TODO LOW PRIORITY This is clunky.
 
 };  // class TolerantString
+
+
+// NON MEMBER FUNCTIONS
+
+/**
+ * Write to an output stream.
+ */
+template <typename traits>
+std::basic_ostream<TolerantString::value_type, traits>&
+operator<<
+(	std::basic_ostream<TolerantString::value_type, traits>& p_os,
+	TolerantString const& p_str
+);
+
+/**
+ * TODO Provide stream input operator.
+ */
+
+
+// IMPLEMENT INLINE FUNCTIONS AND FUNCTION TEMPLATES
+
+template <typename traits>
+std::basic_ostream<TolerantString::value_type, traits>&
+operator<<
+(	std::basic_ostream<TolerantString::value_type, traits>& p_os,
+	TolerantString const& p_str
+)
+{
+	if (!p_str.is_valid())
+	{
+		p_os.setstate(std::ios_base::failbit);
+		return p_os;
+	}
+	return p_os << p_str.c_str();
+}
+
 
 }  // namespace jewel
 

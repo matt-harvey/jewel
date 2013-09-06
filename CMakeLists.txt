@@ -31,8 +31,9 @@ set (test_sources
 		num_digits_tests.cpp
 		on_windows_tests.cpp
 		optional_tests.cpp
+		power_vector_tests.cpp
 		stopwatch_tests.cpp
-		power_vector_tests.cpp)
+		tolerant_string_tests.cpp)
 
 add_executable (jewel_test ${library_sources} ${test_sources})
 

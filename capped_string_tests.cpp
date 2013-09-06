@@ -2,7 +2,6 @@
 
 #include "assert.hpp"
 #include "capped_string.hpp"
-#include "log.hpp"
 #include <UnitTest++/UnitTest++.h>
 #include <cstring>
 #include <iostream>
@@ -10,7 +9,6 @@
 #include <string>
 
 using jewel::CappedString;
-using jewel::Log;
 using std::cout;
 using std::clog;
 using std::endl;
