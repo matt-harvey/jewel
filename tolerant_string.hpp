@@ -1,7 +1,6 @@
 #ifndef GUARD_tolerant_string_hpp
 #define GUARD_tolerant_string_hpp
 
-#include "capped_string.hpp"
 #include <cstddef>
 #include <cstdlib>
 #include <ios>
@@ -79,7 +78,7 @@ private:
 	bool m_is_valid;
 	size_type m_len;
 	char* m_data;
-	CappedString<1> m_standby;  // TODO LOW PRIORITY This is clunky.
+	char m_standby[1];
 
 };  // class TolerantString
 

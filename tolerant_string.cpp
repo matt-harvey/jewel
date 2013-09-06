@@ -17,26 +17,26 @@ namespace jewel
 TolerantString::TolerantString():
 	m_is_valid(true),
 	m_len(0),
-	m_data(0),
-	m_standby("")
+	m_data(0)
 {
+	*m_standby = '\0';
 }
 
 TolerantString::TolerantString(char const* p_string):
 	m_is_valid(true),
 	m_len(0),
-	m_data(0),
-	m_standby("")
+	m_data(0)
 {
+	*m_standby = '\0';
 	initialize_from_c_string(p_string);
 }
 
 TolerantString::TolerantString(TolerantString const& rhs):
 	m_is_valid(true),
 	m_len(0),
-	m_data(0),
-	m_standby("")
+	m_data(0)
 {
+	*m_standby = '\0';
 	initialize_from_c_string(rhs.c_str());
 }
 
@@ -53,6 +53,7 @@ TolerantString::operator=(TolerantString const& rhs)
 	{
 		initialize_from_c_string(rhs.c_str());
 	}
+	JEWEL_ASSERT(m_standby[0] == '\0');
 	return *this;
 }
 
@@ -69,7 +70,7 @@ TolerantString::operator==(TolerantString const& rhs) const
 char const*
 TolerantString::c_str() const
 {
-	return m_data? m_data: m_standby.c_str();
+	return m_data? m_data: m_standby;
 }
 
 TolerantString::size_type
@@ -97,7 +98,7 @@ TolerantString::clear()
 	m_data = 0;
 	m_is_valid = true;
 	m_len = 0;
-	JEWEL_ASSERT(m_standby == CappedString<1>());
+	JEWEL_ASSERT(m_standby[0] == '\0');
 	return;
 }
 
@@ -108,7 +109,8 @@ TolerantString::swap(TolerantString& rhs)
 	swap(m_is_valid, rhs.m_is_valid);
 	swap(m_len, rhs.m_len);
 	swap(m_data, rhs.m_data);
-	JEWEL_ASSERT(m_standby == rhs.m_standby);
+	JEWEL_ASSERT(m_standby[0] == '\0');
+	JEWEL_ASSERT(rhs.m_standby[0] == '\0');
 	return;
 }
 
@@ -119,7 +121,7 @@ TolerantString::initialize_from_c_string(char const* p_string)
 	m_data = static_cast<char*>(malloc(sizeof(char) * (m_len + 1)));
 	m_is_valid = (m_data != 0);
 	strcpy(m_data, p_string);
-	JEWEL_ASSERT(m_standby == CappedString<1>());
+	JEWEL_ASSERT(m_standby[0] == '\0');
 	return;
 }
 
