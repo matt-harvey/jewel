@@ -6,10 +6,13 @@ project (jewel)
 if (WIN32)
 	include_directories(C:/Dev-Cpp
 	                    C:/Dev-Cpp/include/common
-						C:/include)
+						C:/include
+						.)
 	link_directories(C:/Dev-Cpp/lib
 	                 C:/Dev-Cpp/MinGW/lib
 					 C:/lib)
+else ()
+	include_directories(.)
 endif ()
 
 set (library_sources
@@ -21,19 +24,19 @@ set (library_sources
 	 tolerant_string.cpp)
 
 set (test_sources
-		test.cpp
-		capped_string_tests.cpp
-		checked_arithmetic_tests.cpp
-		decimal_special_tests.cpp
-		decimal_tests.cpp
-		exception_special_tests.cpp
-		exception_tests.cpp
-		num_digits_tests.cpp
-		on_windows_tests.cpp
-		optional_tests.cpp
-		power_vector_tests.cpp
-		stopwatch_tests.cpp
-		tolerant_string_tests.cpp)
+		tests/test.cpp
+		tests/capped_string_tests.cpp
+		tests/checked_arithmetic_tests.cpp
+		tests/decimal_special_tests.cpp
+		tests/decimal_tests.cpp
+		tests/exception_special_tests.cpp
+		tests/exception_tests.cpp
+		tests/num_digits_tests.cpp
+		tests/on_windows_tests.cpp
+		tests/optional_tests.cpp
+		tests/power_vector_tests.cpp
+		tests/stopwatch_tests.cpp
+		tests/tolerant_string_tests.cpp)
 
 add_executable (jewel_test ${library_sources} ${test_sources})
 
