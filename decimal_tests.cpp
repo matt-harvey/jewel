@@ -49,8 +49,6 @@ using std::wostringstream;
 using std::wstring;
 using weird_punct::WeirdPunct;
 
-typedef Decimal::int_type int_type;
-typedef Decimal::places_type places_type;
 
 
 #ifndef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
@@ -139,10 +137,10 @@ void insert_from_end(char c, string& s, string::size_type n)
 
 DigitStringFixture::DigitStringFixture()
 {
-	int_type const maxi = numeric_limits<int_type>::max();
-	int_type const mini = numeric_limits<int_type>::min();
-	places_type const max_digits = NumDigits::num_digits(mini);
-	for (places_type i = 0; i != max_digits - 1; ++i)
+	Decimal::int_type const maxi = numeric_limits<Decimal::int_type>::max();
+	Decimal::int_type const mini = numeric_limits<Decimal::int_type>::min();
+	Decimal::places_type const max_digits = NumDigits::num_digits(mini);
+	for (Decimal::places_type i = 0; i != max_digits - 1; ++i)
 	{
 		add_digit(s_max_digits_less_one);
 	}
@@ -152,7 +150,7 @@ DigitStringFixture::DigitStringFixture()
 	JEWEL_ASSERT (s_neg_max_digits_less_one.size() == max_digits);
 	JEWEL_ASSERT (s_neg_max_digits_less_one[0] == '-');
 	s_max_digits_one_and_zeroes = "1";
-	for (places_type i = 1; i != max_digits; ++i)
+	for (Decimal::places_type i = 1; i != max_digits; ++i)
 	{
 		s_max_digits_one_and_zeroes += '0';
 	}
@@ -635,7 +633,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_plus_equals)
 	}
 	CHECK_EQUAL(d15, d15_orig);
 	ostringstream oss;
-	oss << numeric_limits<int_type>::max() / 11;
+	oss << numeric_limits<Decimal::int_type>::max() / 11;
 	Decimal large_num(oss.str());
 	Decimal large_neg_num = -large_num;
 	Decimal large_num_b = large_num;
@@ -722,7 +720,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_addition)
 	
 	// With straightforward overflow
 	ostringstream oss;
-	oss << numeric_limits<int_type>::max() / 11;
+	oss << numeric_limits<Decimal::int_type>::max() / 11;
 	Decimal large_num(oss.str());
 	Decimal large_neg_num = -large_num;
 	Decimal large_num_b = large_num;
@@ -815,7 +813,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_minus_equals)
 	CHECK_THROW(d13 -= s13b, DecimalRangeException);
 	// With straightforward overflow
 	ostringstream oss;
-	oss << numeric_limits<int_type>::max() / 11;
+	oss << numeric_limits<Decimal::int_type>::max() / 11;
 	Decimal large_num(oss.str());
 	Decimal large_neg_num = -large_num;
 	Decimal large_num_b = large_num;
@@ -923,7 +921,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_subtraction)
 
 	// With straightforward overflow
 	ostringstream oss;
-	oss << numeric_limits<int_type>::max() / 11;
+	oss << numeric_limits<Decimal::int_type>::max() / 11;
 	Decimal large_num(oss.str());
 	Decimal large_neg_num = -large_num;
 	Decimal large_num_b = large_num;
@@ -989,7 +987,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiply_equals)
 	
 	// With straightforward overflow
 	ostringstream oss;
-	oss << numeric_limits<int_type>::max() / 11;
+	oss << numeric_limits<Decimal::int_type>::max() / 11;
 	Decimal large_num(oss.str());
 	Decimal large_neg_num = -large_num;
 	CHECK_THROW(large_num *= large_num, DecimalMultiplicationException);
@@ -1104,7 +1102,7 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiplication)
 	
 	// With straightforward overflow
 	ostringstream oss;
-	oss << numeric_limits<int_type>::max() / 11;
+	oss << numeric_limits<Decimal::int_type>::max() / 11;
 	Decimal large_num(oss.str());
 	Decimal large_neg_num = -large_num;
 	Decimal large_num_b;
@@ -2106,7 +2104,7 @@ TEST(decimal_maximum)
 	++m;
 	CHECK_THROW(++m, DecimalIncrementationException);
 	ostringstream oss;
-	oss << numeric_limits<int_type>::max();
+	oss << numeric_limits<Decimal::int_type>::max();
 	CHECK_EQUAL(Decimal(oss.str()), Decimal::maximum());
 }
 
@@ -2117,7 +2115,7 @@ TEST(decimal_minimum)
 	--m;
 	CHECK_THROW(--m, DecimalDecrementationException);
 	ostringstream oss;
-	oss << numeric_limits<int_type>::min();
+	oss << numeric_limits<Decimal::int_type>::min();
 	CHECK_EQUAL(Decimal(oss.str()), Decimal::minimum());
 }
 
