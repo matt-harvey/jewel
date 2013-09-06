@@ -55,8 +55,6 @@ public:
 	 */
 	char const* c_str() const;
 
-	// TODO HIGH PRIORITY Write unit tests for functions below here.
-
 	size_type size() const;
 
 	bool empty() const;

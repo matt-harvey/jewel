@@ -248,3 +248,188 @@ TEST(tolerant_string_c_str)
 	}
 }
 
+TEST(tolerant_string_size)
+{
+	TolerantString const ts0;
+	TolerantString const ts1("Hello");
+	TolerantString ts2(std::string(9768, 'b').c_str());
+	TolerantString const ts3("I dunno what to write here.");
+	TolerantString ts4 = ts1;
+	TolerantString ts5 = TolerantString("apkh");
+	TolerantString ts6("AAAAAccc");
+	ts5 = ts6;
+	if
+	(	ts0.is_valid() &&
+		ts1.is_valid() &&
+		ts2.is_valid() &&
+		ts3.is_valid() &&
+		ts4.is_valid() &&
+		ts5.is_valid() &&
+		ts6.is_valid()
+	)
+	{
+		CHECK_EQUAL(ts0.size(), 0);
+		CHECK_EQUAL(ts1.size(), 5);
+		CHECK_EQUAL(ts2.size(), 9768);
+		CHECK_EQUAL(ts3.size(), strlen("I dunno what to write here."));
+		CHECK_EQUAL(ts4.size(), ts1.size());
+		CHECK_EQUAL(ts5.size(), 8);
+		CHECK_EQUAL(ts6.size(), ts5.size());
+	}
+	else
+	{
+		handle_invalidity();
+	}
+}
+
+TEST(tolerant_string_empty)
+{
+	TolerantString const ts0;
+	TolerantString const ts1("Hello");
+	TolerantString ts2(std::string(9768, 'b').c_str());
+	TolerantString const ts3("I dunno what to write here.");
+	TolerantString ts4(std::string(7889, '#').c_str());
+	ts4 = "";
+	if
+	(	ts0.is_valid() &&
+		ts1.is_valid() &&
+		ts2.is_valid() &&
+		ts3.is_valid() &&
+		ts4.is_valid()
+	)
+	{
+		CHECK(ts0.empty());
+		CHECK(!ts1.empty());
+		CHECK(!ts2.empty());
+		CHECK(!ts3.empty());
+		CHECK(ts4.empty());
+	}
+	else
+	{
+		handle_invalidity();
+	}
+}
+
+TEST(tolerant_string_clear)
+{
+	TolerantString ts0;
+	TolerantString ts1("Hello");
+	TolerantString ts2(std::string(9768, 'b').c_str());
+	TolerantString ts3("I dunno what to write here.");
+	TolerantString ts4(std::string(7889, '#').c_str());
+	if
+	(	ts0.is_valid() &&
+		ts1.is_valid() &&
+		ts2.is_valid() &&
+		ts3.is_valid() &&
+		ts4.is_valid()
+	)
+	{
+		CHECK(ts0.empty());
+		CHECK(!ts1.empty());
+		CHECK(!ts2.empty());
+		CHECK(!ts3.empty());
+		CHECK(!ts4.empty());
+		ts0.clear();
+		ts1.clear();
+		ts2.clear();
+		ts3.clear();
+		ts4.clear();
+		CHECK(ts0.is_valid());
+		CHECK(ts0.empty());
+		CHECK(ts1.empty());
+		CHECK(ts1.is_valid());
+		CHECK(ts1.size() == 0);
+		CHECK(ts2.empty());
+		CHECK(ts2.is_valid());
+		CHECK_EQUAL(ts2, TolerantString());
+		CHECK(ts3.empty());
+		CHECK(ts3.is_valid());
+		CHECK(ts4.empty());
+		CHECK(ts4.is_valid());
+		CHECK_EQUAL(ts4.c_str(), "");
+	}
+	else
+	{
+		handle_invalidity();
+	}
+}
+
+TEST(tolerant_string_swap)
+{
+	TolerantString ts0;
+	TolerantString ts1("Hello");
+	TolerantString ts2(std::string(9768, 'b').c_str());
+	TolerantString ts3("I dunno what to write here.");
+	TolerantString ts4(std::string(7889, '#').c_str());
+	if
+	(	ts0.is_valid() &&
+		ts1.is_valid() &&
+		ts2.is_valid() &&
+		ts3.is_valid() &&
+		ts4.is_valid()
+	)
+	{
+		ts0.swap(ts1);
+		ts2.swap(ts3);
+		CHECK_EQUAL(ts0, "Hello");
+		CHECK_EQUAL(ts1, TolerantString());
+		CHECK_EQUAL(ts2, TolerantString("I dunno what to write here."));
+		CHECK_EQUAL(ts3.size(), 9768);
+		CHECK_EQUAL(ts3, TolerantString(std::string(9768, 'b').c_str()));
+		ts3.swap(ts4);
+		CHECK_EQUAL(ts3, TolerantString(std::string(7889, '#').c_str()));
+		CHECK_EQUAL(ts4.size(), 9768);
+		CHECK(ts0.is_valid());
+		CHECK(ts1.is_valid());
+		CHECK(ts2.is_valid());
+		CHECK(ts3.is_valid());
+		CHECK(ts4.is_valid());
+	}
+	else
+	{
+		handle_invalidity();
+	}
+
+}
+
+TEST(tolerant_string_output_operator)
+{
+	TolerantString ts0;
+	TolerantString ts1("Hello");
+	TolerantString ts2(std::string(9768, 'b').c_str());
+	TolerantString ts3("I dunno what to write here.");
+	TolerantString ts4(std::string(7889, '#').c_str());
+	if
+	(	ts0.is_valid() &&
+		ts1.is_valid() &&
+		ts2.is_valid() &&
+		ts3.is_valid() &&
+		ts4.is_valid()
+	)
+	{
+		ostringstream oss0;
+		oss0 << ts0;
+		CHECK_EQUAL(oss0.str(), std::string());
+		oss0 << ts1;
+		CHECK_EQUAL(oss0.str(), "Hello");
+		oss0 << ts2;
+		CHECK_EQUAL
+		(	oss0.str(),
+			std::string("Hello") + std::string(9768, 'b')
+		);
+		
+		ostringstream oss1;
+		oss1 << ts3 << ts3 << "\n" << ts1 << ts0 << endl;
+		CHECK_EQUAL
+		(	oss1.str(),
+			std::string("I dunno what to write here.") +
+				"I dunno what to write here.\n" +
+				"Hello\n"
+		);
+	}
+	else
+	{
+		handle_invalidity();
+	}
+}
