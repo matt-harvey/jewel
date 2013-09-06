@@ -34,7 +34,6 @@ public:
 	TolerantString();
 	TolerantString(char const* p_string);
 
-	// TODO HIGH PRIORITY Write unit tests for functions below here.
 	TolerantString(TolerantString const& rhs);
 	~TolerantString();
 	TolerantString& operator=(TolerantString const& rhs);
@@ -55,6 +54,8 @@ public:
 	 * returns an empty string if the TolerantString is invalid.
 	 */
 	char const* c_str() const;
+
+	// TODO HIGH PRIORITY Write unit tests for functions below here.
 
 	size_type size() const;
 

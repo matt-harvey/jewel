@@ -67,6 +67,12 @@ TolerantString::operator==(TolerantString const& rhs) const
 	);
 }
 
+bool
+TolerantString::operator!=(TolerantString const& rhs) const
+{
+	return !(*this == rhs);
+}
+
 char const*
 TolerantString::c_str() const
 {
