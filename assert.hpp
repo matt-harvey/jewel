@@ -23,20 +23,13 @@
  */
 
 
-namespace jewel
-{
-
-JEWEL_DERIVED_EXCEPTION(AssertionFailure, Exception);
-
-}  // namespace jewel
-
 #define JEWEL_HARD_ASSERT(p) \
 	if (!(p)) \
 	{ \
 		std::cerr << \
 			"Failed assertion (" #p ") " \
 			"in file \"" __FILE__ "\" at line " \
-			JEWEL_MAKE_STRING_B(__LINE__) "."; \
+			JEWEL_MAKE_STRING_B(__LINE__) ".\n"; \
 		std::terminate(); \
 	}
 

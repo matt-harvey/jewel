@@ -126,6 +126,7 @@ public:
 private:
 
 	void initialize_from_c_string(char const* p_string);
+	void truncate();
 	void unchecked_assign(CappedString const& rhs);
 	bool m_is_truncated;
 	size_type m_len;
@@ -273,16 +274,23 @@ CappedString<N>::initialize_from_c_string(char const* p_string)
 {
 	m_is_truncated = false;
 	m_len = 0;
-	while ((m_data[m_len] = p_string[m_len]) != '\0')
+	for ( ; (m_data[m_len] = p_string[m_len]) != '\0'; ++m_len)
 	{
 		if (m_len == capacity())
 		{
-			m_data[m_len] = '\0';
-			m_is_truncated = true;
-			return;
+			truncate();
+			break;
 		}
-		++m_len;
 	}
+	return;
+}
+
+template <std::size_t N>
+void
+CappedString<N>::truncate()
+{
+	m_data[N] = '\0';
+	m_is_truncated = true;
 	return;
 }
 

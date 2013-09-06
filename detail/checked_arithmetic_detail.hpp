@@ -18,7 +18,7 @@
  * Copyright (c) 2012, Matthew Harvey. All rights reserved.
  */
 
-#include "assert.hpp"
+#include "../assert.hpp"
 #include <climits>
 #include <cstdlib>
 #include <cmath>

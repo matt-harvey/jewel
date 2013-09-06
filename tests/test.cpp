@@ -36,6 +36,9 @@ using std::locale;
 
 int main()
 {
+	Log::set_filepath("test.log");
+	Log::set_threshold(Log::trace);
+
 	#ifndef NDEBUG
 		cout << "Compiled in debugging mode (NDEBUG not defined)."
 		     << endl;

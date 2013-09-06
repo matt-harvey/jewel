@@ -1,12 +1,14 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "exception.hpp"
-#include "assert.hpp"
+#include "../exception.hpp"
+#include "../assert.hpp"
+#include "../log.hpp"
 #include <cstring>
 #include <string>
 #include <UnitTest++/UnitTest++.h>
 
 using jewel::Exception;
+using jewel::Log;
 using std::string;
 using std::strlen;
 
@@ -29,6 +31,11 @@ TEST(error_message_truncation_point)
 				for (size_t m = 0; m != len; ++m)
 				{
 					CHECK_EQUAL( (e.what())[m], 'x');
+					if (e.what()[m] != 'x')
+					{
+						// JEWEL_LOG_VALUE(Log::info, e.what());
+						JEWEL_LOG_VALUE(Log::info, len);
+					}
 				}
 			}
 			else
@@ -40,8 +47,8 @@ TEST(error_message_truncation_point)
 					CHECK_EQUAL(*it, 'x');
 					++it;
 				}
-				string const last_bit(it, msg_str.end());
-				CHECK_EQUAL(last_bit, trunc_msg);
+				string const last_part(it, msg_str.end());
+				CHECK_EQUAL(last_part, trunc_msg);
 			}
 		}
 	}

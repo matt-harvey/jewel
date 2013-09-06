@@ -3,6 +3,7 @@
 #ifndef GUARD_exception_hpp
 #define GUARD_exception_hpp
 
+#include "capped_string.hpp"
 #include <stdexcept>
 
 /** @file exception.hpp
@@ -37,17 +38,23 @@ namespace jewel
  */
 class Exception: public virtual std::exception
 {
+	enum
+	{
+		truncation_flag_capacity = 11,
+		message_capacity = 50
+	};
+
 	Exception const operator=(Exception const&);  // unimplemented
-	static size_t const s_message_buffer_size = 200;
-	static char const* s_truncation_flag;
-	char m_message[s_message_buffer_size];
+	static CappedString<truncation_flag_capacity> truncation_flag();
+	CappedString<message_capacity> m_message;
 public:
 	Exception() throw();
 	explicit Exception(char const* p_message) throw();
+	Exception(Exception const& rhs) throw();
 	virtual ~Exception() throw();
 	virtual char const* what() const throw();
+	void truncate_message();
 	static size_t max_message_size() throw();
-	Exception(Exception const& rhs) throw();
 };
 
 
