@@ -16,12 +16,12 @@ else ()
 endif ()
 
 set (library_sources
-     checked_arithmetic_detail.cpp
 	 decimal.cpp
 	 exception.cpp
 	 log.cpp
 	 num_digits.cpp
-	 tolerant_string.cpp)
+	 tolerant_string.cpp
+	 detail/checked_arithmetic_detail.cpp)
 
 set (test_sources
 		tests/test.cpp
@@ -62,19 +62,20 @@ install(TARGETS jewel
 	ARCHIVE DESTINATION ${lib_installation_dir})
 
 if (WIN32)
-	set (header_installation_dir C:/include)
+	set (outer_header_installation_dir C:/include)
 else ()
-	set (header_installation_dir /usr/local/include)
+	set (outer_header_installation_dir /usr/local/include)
 endif ()
 
-install(DIRECTORY jewel DESTINATION ${header_installation_dir})
+set (inner_header_installation_dir "${outer_header_installation_dir}/jewel")
+
+install(DIRECTORY jewel DESTINATION ${outer_header_installation_dir})
 
 install(FILES
 		array_utilities.hpp
 		assert.hpp
 		capped_string.hpp
 		checked_arithmetic.hpp
-		checked_arithmetic_detail.hpp
 		log.hpp
 		decimal.hpp
         decimal_exceptions.hpp
@@ -89,10 +90,14 @@ install(FILES
 		overview.dox
 		power_vector.hpp
 		signature.hpp
-		smallest_sufficient_unsigned_type.hpp
 		stopwatch.hpp
 		tolerant_string.hpp
 		DESTINATION
-		"${header_installation_dir}/jewel")
+		${inner_header_installation_dir})
 
+install(FILES
+		detail/checked_arithmetic_detail.hpp
+		detail/smallest_sufficient_unsigned_type.hpp
+		DESTINATION
+		"${inner_header_installation_dir}/detail")
 

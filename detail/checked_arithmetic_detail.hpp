@@ -27,7 +27,6 @@
 namespace jewel
 {
 
-
 namespace detail
 {
 

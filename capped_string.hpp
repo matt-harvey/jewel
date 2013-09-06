@@ -3,7 +3,7 @@
 #ifndef GUARD_capped_string_hpp
 #define GUARD_capped_string_hpp
 
-#include "smallest_sufficient_unsigned_type.hpp"
+#include "detail/smallest_sufficient_unsigned_type.hpp"
 #include <jewel/log.hpp>
 #include <algorithm>
 #include <cstddef>

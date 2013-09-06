@@ -42,7 +42,7 @@
  */
 
 #include <boost/cstdint.hpp>
-#include "checked_arithmetic_detail.hpp"
+#include "detail/checked_arithmetic_detail.hpp"
 
 
 namespace jewel
