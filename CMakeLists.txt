@@ -37,8 +37,8 @@ set (test_sources
 
 add_executable (jewel_test ${library_sources} ${test_sources})
 
-#add_library(jewel ${library_sources})
-add_library(jewel SHARED ${library_sources})
+add_library(jewel ${library_sources})
+#add_library(jewel SHARED ${library_sources})
 
 if (WIN32)
 	set (boost_locale_lib boost_locale-mgw46-mt-1_53)
@@ -56,7 +56,7 @@ else ()
 endif ()
 
 install(TARGETS jewel
-	LIBRARY DESTINATION ${lib_installation_dir})
+	ARCHIVE DESTINATION ${lib_installation_dir})
 
 if (WIN32)
 	set (header_installation_dir C:/include)
