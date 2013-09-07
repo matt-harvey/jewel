@@ -57,9 +57,8 @@ namespace jewel
  * a CappedString<M> where M != N. We might also allow two such strings
  * to be compared.
  *
- * TODO Implement indexing operator functions. (Should also implement
- * at(); but note this will mean we would have to qualify blanket
- * guarantee that no member functions throw.)
+ * TODO implement at(); but note this will mean we would have to qualify
+ * blanket guarantee that no member functions throw.
  *
  * THOUGHTS... A major motivation for using CappedString instead of
  * std::string is
@@ -93,11 +92,13 @@ class CappedString
 {
 public:
 
-	typedef char const* const_iterator;
-	typedef char* iterator;
+	typedef char value_type;
+	typedef value_type const* const_iterator;
+	typedef value_type* iterator;
 	typedef typename SmallestSufficientUnsignedType<N + 1>::Result size_type;
 	typedef std::ptrdiff_t difference_type;
-	typedef char value_type;
+	typedef value_type& reference;
+	typedef value_type const& const_reference;
 	// typedef ??? const_reverse_iterator;  // TODO <---
 	// typedef ??? reverse_iterator;  // TODO <---
 
@@ -112,6 +113,13 @@ public:
 	CappedString& operator=(CappedString const& rhs);
 	bool operator==(CappedString const& rhs) const;
 	bool operator!=(CappedString const& rhs) const;
+	const_reference operator[](size_type p_index) const;
+	reference operator[](size_type p_index);
+
+	const_iterator begin() const;
+	iterator begin();
+	const_iterator end() const;
+	iterator end();
 
 	char const* c_str() const;
 
@@ -216,6 +224,54 @@ bool
 CappedString<N>::operator!=(CappedString const& rhs) const
 {
 	return !(*this == rhs);
+}
+
+template <std::size_t N>
+inline
+typename CappedString<N>::const_reference
+CappedString<N>::operator[](size_type p_index) const
+{
+	return m_data[p_index];
+}
+
+template <std::size_t N>
+inline
+typename CappedString<N>::reference
+CappedString<N>::operator[](size_type p_index)
+{
+	return m_data[p_index];
+}
+
+template <std::size_t N>
+inline
+typename CappedString<N>::const_iterator
+CappedString<N>::begin() const
+{
+	return m_data;
+}
+
+template <std::size_t N>
+inline
+typename CappedString<N>::iterator
+CappedString<N>::begin()
+{
+	return m_data;
+}
+
+template <std::size_t N>
+inline
+typename CappedString<N>::const_iterator
+CappedString<N>::end() const
+{
+	return m_data + m_len;
+}
+
+template <std::size_t N>
+inline
+typename CappedString<N>::iterator
+CappedString<N>::end()
+{
+	return m_data + m_len;
 }
 
 template <std::size_t N>

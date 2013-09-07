@@ -366,6 +366,109 @@ TEST(capped_string_equality_and_inequality)
 	CHECK(c4a == c4b);
 }
 
+TEST(capped_string_indexing_operators)
+{
+	char const* s0("heoa");
+	char const* s1("890jk'l2j\n\n\n\"");
+	std::string s2("yes");
+	std::string s3(688, ' ');
+ 	char const* s4("lkuioasdfhjkasdf'asdfasdfhjk'asdasdfhasdf'");
+
+	CappedString<9> c0(s0);
+	CappedString<9> c1(s1);
+	CappedString<9> c2(s2);
+	CappedString<7000> c3(s3);
+	CappedString<12> c4(s4);
+	CappedString<12> c5;
+
+	CHECK_EQUAL(c0[0], 'h');
+	CHECK_EQUAL(c0[2], 'o');
+	CHECK_EQUAL(&(c0[4]), c0.end());
+	CHECK_EQUAL(c1[5], '\'');
+	CHECK_EQUAL(c1[2], '0');
+	CHECK_EQUAL(c2[1], 'e');
+	CHECK_EQUAL(c3[687], ' ');
+	CHECK_EQUAL(c3[0], ' ');
+	CHECK_EQUAL(c4[3], 'i');
+
+	c0[1] = 'i';
+	CHECK_EQUAL(c0, "hioa");
+	c2[c2.size() - 1] = 'p';
+	CHECK_EQUAL(strcmp(c2.c_str(), "yep"), 0);
+	for (CappedString<12>::size_type i = 0; i != c4.size(); ++i)
+	{
+		c4[i] = 'k';
+	}
+	for (CappedString<12>::size_type i = 0; i != c4.size(); ++i)
+	{
+		CHECK_EQUAL(c4[i], 'k');
+	}
+}
+
+TEST(capped_string_iterators)
+{
+	char const* s0("heoa");
+	char const* s1("890jk'l2j\n\n\n\"");
+	std::string s2("yes");
+	std::string s3(688, ' ');
+ 	char const* s4("lkuioasdfhjkasdf'asdfasdfhjk'asdasdfhasdf'");
+
+	CappedString<9> c0(s0);
+	CappedString<9> c1(s1);
+	CappedString<9> c2(s2);
+	CappedString<7000> c3(s3);
+	CappedString<12> c4(s4);
+	CappedString<12> c5;
+
+	CHECK_EQUAL(*(c0.begin()), 'h');
+	CappedString<9>::const_iterator itb1 = c1.begin();
+	++itb1;
+	++itb1;
+	CHECK_EQUAL(*itb1, '0');
+	CHECK_EQUAL(*++itb1, 'j');
+	CHECK_EQUAL(*itb1--, 'j');
+	CHECK_EQUAL(*itb1, '0');
+	--itb1;
+	--itb1;
+	CHECK_EQUAL(itb1, c1.begin());
+	++itb1;
+	CHECK(itb1 != c1.begin());
+
+	CappedString<9>::iterator itb2 = c2.begin();
+	for ( ; itb2 != c2.end(); ++itb2)
+	{
+		*itb2 = 'y';
+	}
+	CHECK_EQUAL(c2, "yyy");
+
+	CappedString<12>::const_iterator ite4 = c4.end();
+	--ite4;
+	CHECK_EQUAL(*ite4, 'k');
+	--ite4;
+	CHECK_EQUAL(*ite4, 'j');
+	++ite4;
+	++ite4;
+	CHECK_EQUAL(ite4, c4.end());
+	CHECK_EQUAL(ite4 - c4.begin(), c4.size());
+
+	CappedString<12>::iterator ite4b = c4.end();
+	--ite4b;
+	CHECK_EQUAL(*ite4b, 'k');
+	*ite4b = 'W';
+	--ite4b;
+	CHECK_EQUAL(*++ite4b, 'W');
+	ite4b++;
+	CHECK(ite4b != c4.begin());
+	for (CappedString<12>::size_type i = c4.size(); i != 0; --i)
+	{
+		ite4b--;
+	}
+	CHECK_EQUAL(ite4b, c4.begin());
+	*++ite4b = 'Y';
+	CHECK_EQUAL(c4[1], 'Y');
+	CHECK_EQUAL(c4[0], 'l');
+}
+
 TEST(capped_string_c_str)
 {
 	char const* const s0("heoa");
@@ -556,5 +659,4 @@ TEST(capped_string_output)
 	ostringstream oss3;
 	oss3 << cs;
 	CHECK_EQUAL(oss3.str(), std::string(1000, 'b'));
-
 }

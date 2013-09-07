@@ -41,7 +41,7 @@ class Exception: public virtual std::exception
 	enum
 	{
 		truncation_flag_capacity = 11,
-		message_capacity = 50
+		message_capacity = 200
 	};
 
 	Exception const operator=(Exception const&);  // unimplemented
