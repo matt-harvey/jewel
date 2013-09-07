@@ -5,16 +5,14 @@
 #include "assert.hpp"
 #include "log.hpp"
 #include <boost/static_assert.hpp>
+#include <algorithm>
 #include <cstring>
 #include <iostream>
 #include <string>
 
 using jewel::num_elements;
+using std::copy;
 using std::endl;
-using std::strlen;
-using std::strncat;
-using std::strncpy;
-using std::string;
 
 namespace jewel
 {
@@ -57,22 +55,14 @@ char const* Exception::what() const throw()
 void
 Exception::truncate_message()
 {
-	// TODO This concatenation would be better handled within
-	// CappedString.
-	char buf[message_capacity + 1];
-	size_t const truncation_flag_size = truncation_flag().size();
-	size_t const truncated_message_size =
-		message_capacity - truncation_flag_size;
-	strncpy(buf, m_message.c_str(), truncated_message_size);
-	buf[truncated_message_size] = '\0';
-	JEWEL_ASSERT
-	(	truncation_flag_size <=
-		(message_capacity - truncated_message_size)
+	CappedString<truncation_flag_capacity> const trunc_flag =
+		truncation_flag();
+	CappedString<message_capacity>::iterator out_it = copy
+	(	trunc_flag.begin(),
+		trunc_flag.end(),
+		m_message.begin() + (message_capacity - trunc_flag.size())
 	);
-	strcat(buf, truncation_flag().c_str());
-	buf[message_capacity] = 1;  // Doesn't matter as long as it's not '\0';
-	// We still want m_message to be marked as truncated!
-	m_message = CappedString<message_capacity>(buf);
+	*out_it = '\0';
 	return;
 }
 
