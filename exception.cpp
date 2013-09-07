@@ -57,14 +57,8 @@ char const* Exception::what() const throw()
 void
 Exception::mark_message_as_truncated()
 {
-	CappedString<truncation_flag_capacity> const trunc_flag =
-		truncation_flag();
-	while (m_message.size() > max_message_size())
-	{
-		JEWEL_ASSERT (!m_message.empty());
-		m_message.pop_back();
-	}
-	copy(trunc_flag.begin(), trunc_flag.end(), back_inserter(m_message));
+	m_message.resize(max_message_size());
+	m_message += truncation_flag().c_str();
 	JEWEL_ASSERT (m_message.size() == extended_message_capacity);
 	return;
 }

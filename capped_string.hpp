@@ -148,6 +148,19 @@ public:
 	 */
 	void pop_back();
 
+	/**
+	 * Like std::string::resize(...) in behaviour. Note that if the
+	 * CappedString is resized to its \e current size, then any truncation
+	 * flag will be cleared, i.e. it will be marked as \e not truncated
+	 * after resizing,
+	 * even if it is at is capacity and was marked as truncated before
+	 * the "resizing" operation.
+	 * If the string is resized to a size greater than its capacity(),
+	 * then it will only grow to its capacity, and will be marked as
+	 * truncated.
+	 */
+	void resize(size_type p_new_size);
+
 private:
 
 	void initialize_from_c_string(char const* p_string);
@@ -402,6 +415,30 @@ CappedString<N>::pop_back()
 	--m_len;
 	m_data[m_len] = '\0';
 	m_is_truncated = false;
+	return;
+}
+
+template <std::size_t N>
+void
+CappedString<N>::resize(size_type p_new_size)
+{
+	size_type const old_size = m_len;
+	if (p_new_size > capacity())
+	{
+		m_is_truncated = true;
+		m_len = capacity();
+	}
+	else
+	{
+		m_is_truncated = false;
+		m_len = p_new_size;
+	}
+	if (m_len > old_size)
+	{
+		std::fill(m_data + old_size, end(), char());
+	}
+	m_data[m_len] = '\0';
+	
 	return;
 }
 

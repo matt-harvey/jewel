@@ -742,3 +742,31 @@ TEST(capped_string_push_back_and_pop_back)
 	CHECK_EQUAL(c0, "Helpaaaaa");
 	CHECK(!c0.is_truncated());
 }
+
+TEST(capped_string_resize)
+{
+	CappedString<5> cs0("Hellop");
+	CHECK(cs0.is_truncated());
+	cs0.resize(5);
+	CHECK(!cs0.is_truncated());
+	cs0.resize(150);
+	CHECK(cs0.is_truncated());
+	CHECK_EQUAL(cs0.size(), 5);
+	cs0.resize(2);
+	CHECK_EQUAL(cs0, "He");
+	CHECK_EQUAL(cs0.capacity(), 5);
+	CHECK_EQUAL(cs0.size(), 2);
+	CHECK(!cs0.is_truncated());
+	cs0.resize(5);
+	CHECK(!cs0.is_truncated());
+	CHECK_EQUAL(cs0.size(), 5);
+	CHECK_EQUAL(strcmp(cs0.c_str(), "He"), 0);
+	CHECK_EQUAL(strlen(cs0.c_str()), 2);
+
+	CappedString<3> cs1;
+	cs1.resize(50);
+	CHECK(cs1.is_truncated());
+	CHECK_EQUAL(cs1.size(), 3);
+	cs1.resize(2);
+	CHECK_EQUAL(cs1.size(), 2);
+}
