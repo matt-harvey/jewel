@@ -1,8 +1,8 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "decimal.hpp"
+#include "../decimal.hpp"
 #include "decimal_special_tests.hpp"
-#include "stopwatch.hpp"
+#include "../stopwatch.hpp"
 #include <boost/algorithm/string.hpp>
 
 

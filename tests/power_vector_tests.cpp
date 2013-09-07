@@ -1,6 +1,6 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "assert.hpp"
+#include "../assert.hpp"
 #include <cmath>
 #include <iostream>
 #include <vector>
@@ -8,7 +8,7 @@
 
 #include <boost/foreach.hpp>
 #include <UnitTest++/UnitTest++.h>
-#include "power_vector.hpp"
+#include "../power_vector.hpp"
 
 using std::cerr;
 using std::endl;

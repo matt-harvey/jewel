@@ -1,8 +1,8 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "decimal.hpp"
-#include "decimal_exceptions.hpp"
-#include "num_digits.hpp"
+#include "../decimal.hpp"
+#include "../decimal_exceptions.hpp"
+#include "../num_digits.hpp"
 #include "decimal_tests_weird_punct.hpp"
 
 #include <limits>

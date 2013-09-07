@@ -3,8 +3,9 @@
 #ifndef GUARD_capped_string_hpp
 #define GUARD_capped_string_hpp
 
+#include "array_utilities.hpp"
 #include "detail/smallest_sufficient_unsigned_type.hpp"
-#include <jewel/log.hpp>
+#include "log.hpp"
 #include <algorithm>
 #include <cstddef>
 #include <istream>
@@ -130,6 +131,20 @@ public:
 	bool is_truncated() const;
 
 	void clear();
+
+	/**
+	 * If the CappedString has reached its capacity, then calling push_back
+	 * will simply mark it as truncated, without otherwise altering its
+	 * contents.
+	 */
+	void push_back(CappedString::value_type p_value);
+
+	/**
+	 * If CappedString is empty, behaviour is undefined. If the string is
+	 * marked as truncated, then calling pop_back will cause it to /e cease
+	 * being marked as truncated.
+	 */
+	void pop_back();
 
 private:
 
@@ -321,6 +336,36 @@ CappedString<N>::clear()
 {
 	m_data[0] = '\0';
 	m_len = 0;
+	return;
+}
+
+template <std::size_t N>
+inline
+void
+CappedString<N>::push_back(value_type p_value)
+{
+	if (size() == capacity())
+	{
+		m_is_truncated = true;
+	}
+	else
+	{
+		m_data[m_len] = p_value;
+		++m_len;
+		JEWEL_ASSERT(m_len < jewel::num_elements(m_data));
+		m_data[m_len] = '\0';
+	}
+	JEWEL_ASSERT(size() <= capacity());
+	return;
+}
+
+template <std::size_t N>
+void
+CappedString<N>::pop_back()
+{
+	--m_len;
+	m_data[m_len] = '\0';
+	m_is_truncated = false;
 	return;
 }
 

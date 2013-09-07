@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "assert.hpp"
-#include "tolerant_string.hpp"
+#include "../assert.hpp"
+#include "../tolerant_string.hpp"
 #include <UnitTest++/UnitTest++.h>
 #include <cstring>
 #include <exception>

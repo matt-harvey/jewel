@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "assert.hpp"
-#include "capped_string.hpp"
+#include "../assert.hpp"
+#include "../capped_string.hpp"
 #include <UnitTest++/UnitTest++.h>
 #include <cstring>
 #include <iostream>
@@ -659,4 +659,29 @@ TEST(capped_string_output)
 	ostringstream oss3;
 	oss3 << cs;
 	CHECK_EQUAL(oss3.str(), std::string(1000, 'b'));
+}
+
+TEST(capped_string_push_back_and_pop_back)
+{
+	CappedString<10> c0 = "Hello!";
+	CHECK(!c0.is_truncated());
+	CHECK_EQUAL(c0.size(), 6);
+	c0.pop_back();
+	CHECK(!c0.is_truncated());
+	c0.pop_back();
+	CHECK_EQUAL(c0, "Hell");
+	c0.pop_back();
+	c0.push_back('p');
+	CHECK_EQUAL(c0, "Help");
+	CHECK_EQUAL(c0.size(), 4);
+	for (size_t i = 0; i != 500; ++i)
+	{
+		c0.push_back('a');
+	}
+	CHECK_EQUAL(c0, "Helpaaaaaa");
+	CHECK(c0.is_truncated());
+	CHECK_EQUAL(c0.size(), 10);
+	c0.pop_back();
+	CHECK_EQUAL(c0, "Helpaaaaa");
+	CHECK(!c0.is_truncated());
 }

@@ -1,6 +1,6 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "optional.hpp"
+#include "../optional.hpp"
 #include <UnitTest++/UnitTest++.h>
 #include <string>
 #include <vector>

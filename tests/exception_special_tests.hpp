@@ -4,7 +4,7 @@
 #define GUARD_exception_special_tests_hpp
 
 
-#include "exception.hpp"
+#include "../exception.hpp"
 
 /**
  * This file declares special testing functions (not managed by UnitTest++),

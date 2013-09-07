@@ -2,12 +2,12 @@
 
 #include <UnitTest++/UnitTest++.h>
 #include <boost/numeric/conversion/cast.hpp>
-#include "decimal_exceptions.hpp"
-#include "checked_arithmetic.hpp"
-#include "decimal.hpp"
+#include "../decimal_exceptions.hpp"
+#include "../checked_arithmetic.hpp"
+#include "../decimal.hpp"
 #include "decimal_special_tests.hpp"
 #include "exception_special_tests.hpp"
-#include "num_digits.hpp"
+#include "../num_digits.hpp"
 #include <iomanip>
 #include <iostream>
 #include <limits>
