@@ -233,7 +233,7 @@ TEST(capped_string_constructor_from_std_string)
 	CHECK(f5.is_truncated());
 	CHECK_EQUAL(std::string(f5.c_str()), std::string(5, 'y'));
 	CappedString50 const f50(str2);
-	CHECK_EQUAL(f50.size(), 50);
+	CHECK_EQUAL((size_t)f50.size(), 50);
 	CHECK(f50.is_truncated());
 	CappedString303 const f303(str2);
 	CHECK_EQUAL(f303.size(), 303);
@@ -597,7 +597,11 @@ TEST(capped_string_size)
 	c5 = CappedString<12>(c0.c_str());
 	CHECK_EQUAL(c5.size(), 4);
 	c3 = CappedString<7000>(std::string(7001, '\0'));
-	CHECK_EQUAL(c3.size(), 0);
+	CHECK_EQUAL(c3.size(), 7000);
+	CappedString<7000> const c3b(c3);
+	CHECK_EQUAL(c3b.size(), 7000);
+	CHECK_EQUAL(strlen(c3b.c_str()), 0);
+	CHECK_EQUAL(c3b, c3);
 	c3 = CappedString<7000>(std::string(7001, '9'));
 	CHECK_EQUAL(c3.size(), 7000);
 	c3 = CappedString<7000>("Lkjlg\n");

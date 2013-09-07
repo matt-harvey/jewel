@@ -104,7 +104,18 @@ public:
 	// typedef ??? reverse_iterator;  // TODO <---
 
 	CappedString();
+
+	/**
+	 * Initializes CappedString with characters up to the first null
+	 * character in the array pointed to by p_string.
+	 */
 	CappedString(char const* p_string);
+
+	/**
+	 * If p_string is contains a null character, then even if there
+	 * characters \e after that null character, these will
+	 * still be copied over into the CappedString.
+	 */
 	explicit CappedString(std::string const& p_string);
 
 	CappedString(CappedString const& rhs);
@@ -163,7 +174,6 @@ public:
 
 private:
 
-	void initialize_from_c_string(char const* p_string);
 	void truncate();
 	void unchecked_assign(CappedString const& rhs);
 	bool m_is_truncated;
@@ -208,17 +218,37 @@ CappedString<N>::CappedString(): m_is_truncated(false), m_len(0)
 }
 
 template <std::size_t N>
-inline
 CappedString<N>::CappedString(char const* p_string)
 {
-	initialize_from_c_string(p_string);
+	m_is_truncated = false;
+	m_len = 0;
+	for ( ; (m_data[m_len] = p_string[m_len]) != '\0'; ++m_len)
+	{
+		if (m_len == capacity())
+		{
+			truncate();
+			break;
+		}
+	}
+	return;
 }
 
 template <std::size_t N>
-inline
-CappedString<N>::CappedString(std::string const& p_string)
+CappedString<N>::CappedString(std::string const& p_string):
+	m_is_truncated(false)
 {
-	initialize_from_c_string(p_string.c_str());
+	if (p_string.size() > capacity())
+	{
+		m_len = capacity();
+		m_is_truncated = true;
+	}
+	else
+	{
+		m_len = p_string.size();
+		m_is_truncated = false;
+	}
+	*std::copy(p_string.begin(), p_string.begin() + m_len, m_data) = '\0';
+	return;
 }
 
 template <std::size_t N>
@@ -238,7 +268,6 @@ CappedString<N>::operator=(CappedString const& rhs)
 }
 
 template <std::size_t N>
-inline
 bool
 CappedString<N>::operator==(CappedString const& rhs) const
 {
@@ -438,24 +467,6 @@ CappedString<N>::resize(size_type p_new_size)
 		std::fill(m_data + old_size, end(), char());
 	}
 	m_data[m_len] = '\0';
-	
-	return;
-}
-
-template <std::size_t N>
-void
-CappedString<N>::initialize_from_c_string(char const* p_string)
-{
-	m_is_truncated = false;
-	m_len = 0;
-	for ( ; (m_data[m_len] = p_string[m_len]) != '\0'; ++m_len)
-	{
-		if (m_len == capacity())
-		{
-			truncate();
-			break;
-		}
-	}
 	return;
 }
 
