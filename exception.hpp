@@ -4,6 +4,7 @@
 #define GUARD_exception_hpp
 
 #include "capped_string.hpp"
+#include <cstddef>
 #include <stdexcept>
 
 /** @file exception.hpp
@@ -39,21 +40,41 @@ namespace jewel
 class Exception: public virtual std::exception
 {
 public:
+
 	Exception() throw();
-	explicit Exception(char const* p_message) throw();
+	explicit Exception
+	(	char const* p_message,
+		char const* p_type = 0,
+		char const* p_throwing_function = 0,
+		char const* p_throwing_filepath = 0,
+		long p_throwing_line_number = -1  // -1 means not provided
+	) throw();
+
 	Exception(Exception const& rhs) throw();
 	virtual ~Exception() throw();
 	virtual char const* what() const throw();
 	static size_t max_message_size() throw();
 
+	char const* message() const;
+	char const* type() const;
+	char const* throwing_function() const;
+	char const* throwing_filepath() const;
+	std::size_t throwing_line_number() const;
+
 private:
 	enum
 	{
-		extended_message_capacity = 211
+		string_capacity = 211
 	};
 
 	Exception const operator=(Exception const&);  // unimplemented
-	CappedString<extended_message_capacity> m_message;
+
+	typedef CappedString<string_capacity> String;
+	String m_message;
+	String m_type_name;
+	String m_function_name;
+	String m_filepath;
+	long m_throwing_line_number;	
 };
 
 

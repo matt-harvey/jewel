@@ -43,6 +43,15 @@ namespace
 		return p_string;
 	}
 
+	template <size_t N>
+	CappedString<N> truncate_c_str(char const* p_string)
+	{
+		return
+			p_string?
+			truncate(CappedString<N>(p_string)):
+			CappedString<N>();
+	}
+
 }  // end anonymous namespace
 
 
@@ -50,8 +59,18 @@ Exception::Exception() throw()
 {
 }
 
-Exception::Exception(char const* p_message) throw():
-	m_message(truncate(CappedString<extended_message_capacity>(p_message)))
+Exception::Exception
+(	char const* p_message,
+	char const* p_type,
+	char const* p_throwing_function,
+	char const* p_throwing_filepath,
+	long p_throwing_line_number
+) throw():
+	m_message(truncate_c_str<string_capacity>(p_message)),
+	m_type_name(truncate_c_str<string_capacity>(p_type)),
+	m_function_name(truncate_c_str<string_capacity>(p_throwing_function)),
+	m_filepath(truncate_c_str<string_capacity>(p_throwing_filepath)),
+	m_throwing_line_number(p_throwing_line_number)
 {
 }
 
@@ -70,7 +89,7 @@ char const* Exception::what() const throw()
 
 size_t Exception::max_message_size() throw()
 {
-	return extended_message_capacity - truncation_stamp_capacity;
+	return string_capacity - truncation_stamp_capacity;
 }
 
 
