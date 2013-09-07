@@ -57,12 +57,19 @@ Exception::truncate_message()
 {
 	CappedString<truncation_flag_capacity> const trunc_flag =
 		truncation_flag();
-	CappedString<message_capacity>::iterator out_it = copy
+	char truncated_message[message_capacity + 1];
+	char* out_it = copy
+	(	m_message.begin(),
+		m_message.begin() + (message_capacity - trunc_flag.size()),
+		truncated_message
+	);
+	out_it = copy
 	(	trunc_flag.begin(),
 		trunc_flag.end(),
-		m_message.begin() + (message_capacity - trunc_flag.size())
+		out_it
 	);
 	*out_it = '\0';
+	m_message = truncated_message;
 	return;
 }
 
