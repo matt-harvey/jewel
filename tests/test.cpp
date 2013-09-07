@@ -2,6 +2,7 @@
 
 #include <UnitTest++/UnitTest++.h>
 #include "../assert.hpp"
+#include "capped_string.hpp"
 #include "../checked_arithmetic.hpp"
 #include "../decimal_exceptions.hpp"
 #include "decimal_special_tests.hpp"

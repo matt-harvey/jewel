@@ -51,6 +51,8 @@ TolerantString::operator=(TolerantString const& rhs)
 {
 	if (this != &rhs)
 	{
+		free(m_data);
+		m_data = 0;
 		initialize_from_c_string(rhs.c_str());
 	}
 	JEWEL_ASSERT(m_standby[0] == '\0');

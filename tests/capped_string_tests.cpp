@@ -331,7 +331,6 @@ TEST(capped_string_assignment)
 	c5 = CappedString<1000000>(nc1);
 	CHECK(!c5.is_truncated());
 	CHECK_EQUAL(CappedString<1000000>(nc1), c5);
-
 }
 
 TEST(capped_string_equality_and_inequality)
