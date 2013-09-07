@@ -96,7 +96,7 @@ public:
 	typedef char value_type;
 	typedef value_type const* const_iterator;
 	typedef value_type* iterator;
-	typedef typename SmallestSufficientUnsignedType<N + 1>::Result size_type;
+	typedef typename detail::SmallestSufficientUnsignedType<N + 1>::Result size_type;
 	typedef std::ptrdiff_t difference_type;
 	typedef value_type& reference;
 	typedef value_type const& const_reference;

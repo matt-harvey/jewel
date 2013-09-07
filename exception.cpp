@@ -8,9 +8,11 @@
 #include <algorithm>
 #include <cstring>
 #include <iostream>
+#include <iterator>
 #include <string>
 
 using jewel::num_elements;
+using std::back_inserter;
 using std::copy;
 using std::endl;
 
@@ -25,13 +27,13 @@ Exception::Exception() throw()
 Exception::Exception(char const* p_message) throw():
 	m_message(p_message)
 {
-	if (m_message.size() > max_message_size()) truncate_message();
+	if (m_message.size() > max_message_size()) mark_message_as_truncated();
 }
 
 Exception::Exception(Exception const& rhs) throw():
 	m_message(rhs.m_message)
 {
-	if (m_message.size() > max_message_size()) truncate_message();
+	if (m_message.size() > max_message_size()) mark_message_as_truncated();
 }
 
 Exception::~Exception() throw()
@@ -53,29 +55,23 @@ char const* Exception::what() const throw()
 }
 
 void
-Exception::truncate_message()
+Exception::mark_message_as_truncated()
 {
 	CappedString<truncation_flag_capacity> const trunc_flag =
 		truncation_flag();
-	char truncated_message[message_capacity + 1];
-	char* out_it = copy
-	(	m_message.begin(),
-		m_message.begin() + (message_capacity - trunc_flag.size()),
-		truncated_message
-	);
-	out_it = copy
-	(	trunc_flag.begin(),
-		trunc_flag.end(),
-		out_it
-	);
-	*out_it = '\0';
-	m_message = truncated_message;
+	while (m_message.size() > max_message_size())
+	{
+		JEWEL_ASSERT (!m_message.empty());
+		m_message.pop_back();
+	}
+	copy(trunc_flag.begin(), trunc_flag.end(), back_inserter(m_message));
+	JEWEL_ASSERT (m_message.size() == extended_message_capacity);
 	return;
 }
 
 size_t Exception::max_message_size() throw()
 {
-	return message_capacity - truncation_flag_capacity;
+	return extended_message_capacity - truncation_flag_capacity;
 }
 
 

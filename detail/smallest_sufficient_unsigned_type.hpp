@@ -11,6 +11,8 @@
 
 namespace jewel
 {
+namespace detail
+{
 
 // Client code can ignore what's in detail namespace.
 // See below for API viz. SmallestSufficientUnsignedType template.
@@ -140,6 +142,7 @@ BOOST_STATIC_ASSERT
 ));
 
 
+}  // namespace detail
 }  // namespace jewel
 
 #endif  // GUARD_smallest_sufficient_unsigned_type_hpp

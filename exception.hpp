@@ -41,19 +41,19 @@ class Exception: public virtual std::exception
 	enum
 	{
 		truncation_flag_capacity = 11,
-		message_capacity = 200
+		extended_message_capacity = 200
 	};
 
 	Exception const operator=(Exception const&);  // unimplemented
 	static CappedString<truncation_flag_capacity> truncation_flag();
-	CappedString<message_capacity> m_message;
+	CappedString<extended_message_capacity> m_message;
 public:
 	Exception() throw();
 	explicit Exception(char const* p_message) throw();
 	Exception(Exception const& rhs) throw();
 	virtual ~Exception() throw();
 	virtual char const* what() const throw();
-	void truncate_message();
+	void mark_message_as_truncated();
 	static size_t max_message_size() throw();
 };
 
