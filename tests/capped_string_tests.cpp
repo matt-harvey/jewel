@@ -366,6 +366,55 @@ TEST(capped_string_equality_and_inequality)
 	CHECK(c4a == c4b);
 }
 
+TEST(capped_string_concatenation)
+{
+	CappedString<100> c0("hello");
+	CappedString<100> c1("there");
+	CHECK_EQUAL(strcmp(c0.c_str(), "hello"), 0);
+	c0 += c1;
+	CHECK_EQUAL(c0, "hellothere");
+	CHECK_EQUAL(c0.size(), 10);
+	CHECK(!c0.is_truncated());
+
+	CappedString<5> c2;
+	c2 = "yep";
+	c2 += "hello";
+	CHECK_EQUAL(c2, "yephe");
+	CHECK(c2.is_truncated());
+	c2 += "asdlasdfkljasdfasdfsdfasdfasdf";
+	CHECK_EQUAL(c2, "yephe");
+	CHECK(c2.is_truncated());
+
+	CappedString<0> c3;
+	CHECK(!c3.is_truncated());
+	c3 += "";
+	CHECK(!c3.is_truncated());
+	CHECK(c3.empty());
+	CHECK(c3.size() == 0);
+	c3 += "asdjkldfasdf";
+	CHECK(c3.is_truncated());
+	CHECK(c3.empty());
+	CHECK(c3.size() == 0);
+	c3.clear();
+	CHECK(!c3.is_truncated());
+
+	CappedString<20> c4;
+	CHECK_EQUAL(c4 + "hello", "hello");
+	CHECK_EQUAL(c4, "");
+	c4 += "hello";
+	CHECK_EQUAL(c4, "hello");
+	CHECK_EQUAL(c4 + "goodbye", "hellogoodbye");
+	
+	CHECK_EQUAL
+	(	CappedString<20>("Hey ") + "there " + "ho " + "hum",
+		CappedString<20>("Hey there ho hum")
+	);
+
+	CHECK(!(CappedString<5>("he") + "llo").is_truncated());
+	CHECK((CappedString<5>("h") + "Hellosldfjk").is_truncated());
+	CHECK_EQUAL((CappedString<5>("he") + "llo").size(), 5);
+}
+
 TEST(capped_string_indexing_operators)
 {
 	char const* s0("heoa");
@@ -633,6 +682,14 @@ TEST(capped_string_clear)
 	CappedString<0> b;
 	b.clear();
 	CHECK(b.empty());
+	CHECK(!b.is_truncated());
+
+	CappedString<5> c("laskdjasdfasdfasd");
+	CHECK(c.is_truncated());
+	CHECK(c.size() == 5);
+	c.clear();
+	CHECK(c.size() == 0);
+	CHECK(!c.is_truncated());
 }
 
 TEST(capped_string_output)

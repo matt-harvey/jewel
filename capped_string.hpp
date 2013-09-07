@@ -114,6 +114,8 @@ public:
 	CappedString& operator=(CappedString const& rhs);
 	bool operator==(CappedString const& rhs) const;
 	bool operator!=(CappedString const& rhs) const;
+	CappedString& operator+=(CappedString const& rhs);
+	CappedString const operator+(CappedString const& rhs) const;
 	const_reference operator[](size_type p_index) const;
 	reference operator[](size_type p_index);
 
@@ -242,6 +244,39 @@ CappedString<N>::operator!=(CappedString const& rhs) const
 }
 
 template <std::size_t N>
+CappedString<N>&
+CappedString<N>::operator+=(CappedString const& rhs)
+{
+	size_type new_length = size() + rhs.size();
+	if (new_length > capacity())
+	{
+		new_length = capacity();
+		m_is_truncated = true;
+	}
+	if (rhs.is_truncated())
+	{
+		// Take care of the case where we are concatenating via an implicit
+		// conversion from char const* on the rhs - client would expect this
+		// to be marked as truncated if the char const* is longer than
+		// capacity.
+		JEWEL_ASSERT (rhs.capacity() == capacity());
+		m_is_truncated = true;
+	}
+	size_type const num_extra_elements = new_length - size();
+	std::copy(rhs.begin(), rhs.begin() + num_extra_elements, m_data + size());
+	m_len = new_length;
+	m_data[m_len] = '\0';
+	return *this;
+}
+
+template <std::size_t N>
+CappedString<N> const
+CappedString<N>::operator+(CappedString const& rhs) const
+{
+	return CappedString<N>(*this) += rhs;
+}
+
+template <std::size_t N>
 inline
 typename CappedString<N>::const_reference
 CappedString<N>::operator[](size_type p_index) const
@@ -336,6 +371,7 @@ CappedString<N>::clear()
 {
 	m_data[0] = '\0';
 	m_len = 0;
+	m_is_truncated = false;
 	return;
 }
 
