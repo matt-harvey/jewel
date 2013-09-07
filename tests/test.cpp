@@ -1,13 +1,15 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include <UnitTest++/UnitTest++.h>
-#include <boost/numeric/conversion/cast.hpp>
-#include "../decimal_exceptions.hpp"
+#include "../assert.hpp"
 #include "../checked_arithmetic.hpp"
-#include "../decimal.hpp"
+#include "../decimal_exceptions.hpp"
 #include "decimal_special_tests.hpp"
 #include "exception_special_tests.hpp"
+#include "../decimal.hpp"
+#include "../log.hpp"
 #include "../num_digits.hpp"
+#include <boost/numeric/conversion/cast.hpp>
 #include <iomanip>
 #include <iostream>
 #include <limits>
@@ -27,9 +29,6 @@ using std::ostringstream;
 using std::setprecision;
 using std::string;
 
-// TEMP
-#include "assert.hpp"
-#include "log.hpp"
 #include <locale>
 using jewel::Log;
 using std::locale;

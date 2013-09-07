@@ -1,6 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include "../assert.hpp"
+#include "../log.hpp"
 #include "exception_special_tests.hpp"
 #include <iostream>
 #include <string>

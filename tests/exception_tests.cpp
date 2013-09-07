@@ -14,7 +14,7 @@ using std::strlen;
 
 TEST(error_message_truncation_point)
 {
-	string const trunc_msg("[TRUNCATED]");
+	string const trunc_msg("(TRUNCATED)");
 	size_t const max_msg_size = Exception::max_message_size();
 	for (string::size_type i = 0; i != max_msg_size * 2; ++i)
 	{
@@ -33,7 +33,6 @@ TEST(error_message_truncation_point)
 					CHECK_EQUAL( (e.what())[m], 'x');
 					if (e.what()[m] != 'x')
 					{
-						// JEWEL_LOG_VALUE(Log::info, e.what());
 						JEWEL_LOG_VALUE(Log::info, len);
 					}
 				}

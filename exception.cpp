@@ -6,6 +6,7 @@
 #include "log.hpp"
 #include <boost/static_assert.hpp>
 #include <algorithm>
+#include <cstddef>
 #include <cstring>
 #include <iostream>
 #include <iterator>
@@ -15,9 +16,34 @@ using jewel::num_elements;
 using std::back_inserter;
 using std::copy;
 using std::endl;
+using std::size_t;
+using std::strlen;
 
 namespace jewel
 {
+
+namespace
+{
+	enum
+	{
+		truncation_stamp_capacity = 11
+	};
+
+	template <size_t N>
+	CappedString<N> truncate(CappedString<N> p_string)
+	{
+		static CappedString<truncation_stamp_capacity> const stamp =
+			"(TRUNCATED)";
+		JEWEL_ASSERT (!stamp.is_truncated());
+		BOOST_STATIC_ASSERT((N > truncation_stamp_capacity));	
+		p_string.resize(N - truncation_stamp_capacity);
+		p_string += stamp.c_str();
+		JEWEL_ASSERT (!p_string.is_truncated());
+		JEWEL_ASSERT (p_string.size() == p_string.capacity());
+		return p_string;
+	}
+
+}  // end anonymous namespace
 
 
 Exception::Exception() throw()
@@ -25,28 +51,16 @@ Exception::Exception() throw()
 }
 
 Exception::Exception(char const* p_message) throw():
-	m_message(p_message)
+	m_message(truncate(CappedString<extended_message_capacity>(p_message)))
 {
-	if (m_message.size() > max_message_size()) mark_message_as_truncated();
 }
 
-Exception::Exception(Exception const& rhs) throw():
-	m_message(rhs.m_message)
+Exception::Exception(Exception const& rhs) throw(): m_message(rhs.m_message)
 {
-	if (m_message.size() > max_message_size()) mark_message_as_truncated();
 }
 
 Exception::~Exception() throw()
 {
-}
-
-CappedString<Exception::truncation_flag_capacity>
-Exception::truncation_flag()
-{
-	CappedString<truncation_flag_capacity> const ret("[TRUNCATED]");
-	JEWEL_ASSERT (!ret.is_truncated());
-	JEWEL_ASSERT (ret.size() == truncation_flag_capacity);
-	return ret;
 }
 
 char const* Exception::what() const throw()
@@ -54,18 +68,9 @@ char const* Exception::what() const throw()
 	return m_message.c_str();
 }
 
-void
-Exception::mark_message_as_truncated()
-{
-	m_message.resize(max_message_size());
-	m_message += truncation_flag().c_str();
-	JEWEL_ASSERT (m_message.size() == extended_message_capacity);
-	return;
-}
-
 size_t Exception::max_message_size() throw()
 {
-	return extended_message_capacity - truncation_flag_capacity;
+	return extended_message_capacity - truncation_stamp_capacity;
 }
 
 

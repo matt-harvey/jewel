@@ -38,23 +38,22 @@ namespace jewel
  */
 class Exception: public virtual std::exception
 {
-	enum
-	{
-		truncation_flag_capacity = 11,
-		extended_message_capacity = 200
-	};
-
-	Exception const operator=(Exception const&);  // unimplemented
-	static CappedString<truncation_flag_capacity> truncation_flag();
-	CappedString<extended_message_capacity> m_message;
 public:
 	Exception() throw();
 	explicit Exception(char const* p_message) throw();
 	Exception(Exception const& rhs) throw();
 	virtual ~Exception() throw();
 	virtual char const* what() const throw();
-	void mark_message_as_truncated();
 	static size_t max_message_size() throw();
+
+private:
+	enum
+	{
+		extended_message_capacity = 211
+	};
+
+	Exception const operator=(Exception const&);  // unimplemented
+	CappedString<extended_message_capacity> m_message;
 };
 
 
