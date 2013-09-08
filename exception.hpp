@@ -3,8 +3,11 @@
 #ifndef GUARD_exception_hpp
 #define GUARD_exception_hpp
 
+#ifdef JEWEL_ENABLE_EXCEPTION_LOGGING
+#	include "log.hpp"
+#endif
+
 #include "capped_string.hpp"
-#include "log.hpp"
 #include <cstddef>
 #include <stdexcept>
 

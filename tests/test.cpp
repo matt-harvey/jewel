@@ -40,8 +40,6 @@ int main()
 	Log::set_filepath("test.log");
 	Log::set_threshold(Log::trace);
 
-	JEWEL_LOG_TRACE();
-
 	#ifndef NDEBUG
 		cout << "Compiled in debugging mode (NDEBUG not defined)."
 		     << endl;
