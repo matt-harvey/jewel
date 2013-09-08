@@ -55,7 +55,7 @@ namespace
 }  // end anonymous namespace
 
 
-Exception::Exception() throw()
+Exception::Exception() throw(): m_throwing_line_number(-1)
 {
 }
 
@@ -67,14 +67,19 @@ Exception::Exception
 	long p_throwing_line_number
 ) throw():
 	m_message(truncate_c_str<string_capacity>(p_message)),
-	m_type_name(truncate_c_str<string_capacity>(p_type)),
-	m_function_name(truncate_c_str<string_capacity>(p_throwing_function)),
-	m_filepath(truncate_c_str<string_capacity>(p_throwing_filepath)),
+	m_type(truncate_c_str<string_capacity>(p_type)),
+	m_throwing_function(truncate_c_str<string_capacity>(p_throwing_function)),
+	m_throwing_filepath(truncate_c_str<string_capacity>(p_throwing_filepath)),
 	m_throwing_line_number(p_throwing_line_number)
 {
 }
 
-Exception::Exception(Exception const& rhs) throw(): m_message(rhs.m_message)
+Exception::Exception(Exception const& rhs) throw():
+	m_message(rhs.m_message),
+	m_type(rhs.m_type),
+	m_throwing_function(rhs.m_throwing_function),
+	m_throwing_filepath(rhs.m_throwing_filepath),
+	m_throwing_line_number(rhs.m_throwing_line_number)
 {
 }
 

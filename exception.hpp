@@ -36,6 +36,10 @@ namespace jewel
  *
  * Exception safety: all of the functions in this class offer
  * the <em>nothrow guarantee</em>.
+ * 
+ * @todo HIGH PRIORITY Document member functions.
+ *
+ * @todo HIGH PRIORITY Further testing.
  */
 class Exception: public virtual std::exception
 {
@@ -71,9 +75,9 @@ private:
 
 	typedef CappedString<string_capacity> String;
 	String m_message;
-	String m_type_name;
-	String m_function_name;
-	String m_filepath;
+	String m_type;
+	String m_throwing_function;
+	String m_throwing_filepath;
 	long m_throwing_line_number;	
 };
 
@@ -85,10 +89,9 @@ private:
 /**
  * Macro to declare and define an exception class called \c DERIVED_CLASS,
  * inheriting from \c BASE_CLASS. The \c BASE_CLASS must have a constructor
- * that takes a \c char \c const*, representing an error message.
- * 
- * \c DERIVED_CLASS will have both a default constructor, and a constructor
- * that takes a \c char \c const*, representing an error message.
+ * that takes the same parameters as jewel::Exception. This is most easily
+ * achieved by actually deriving from jewel::Exception, either directly
+ * or via another parent class or classes.
  *
  * Note the macro definition omits a trailing semi-colon. A semi-colon should
  * always be appended when the macro is invoked.
@@ -100,8 +103,20 @@ private:
 		DERIVED_CLASS() throw()\
 		{\
 		}\
-		explicit DERIVED_CLASS(char const* p_message) throw():\
-			BASE_CLASS(p_message)\
+		explicit DERIVED_CLASS \
+		(	char const* p_message, \
+			char const* p_type = 0, \
+			char const* p_throwing_function = 0, \
+			char const* p_throwing_filepath = 0, \
+			long p_throwing_line_number = -1 \
+		) throw(): \
+			BASE_CLASS \
+			(	p_message, \
+				p_type, \
+				p_throwing_function, \
+				p_throwing_filepath, \
+				p_throwing_line_number \
+			) \
 		{\
 		}\
 		virtual ~DERIVED_CLASS() throw()\
@@ -109,6 +124,28 @@ private:
 		}\
 	}\
 
+
+
+/**
+ * Macro to throw an exception of type \e TYPE, where \e TYPE inherits from
+ * (or is) \e jewel::Exception. Pass a const char* to
+ * \e MESSAGE, which will
+ * determine the string returned by \e what() (and
+ * thus displayed at the terminal). The macro also automatically populates
+ * other fields in the exception, which can later be retrieved by calling
+ * \e type(), \e throwing_function(), \e throwing_filepath() and
+ * \e throwing_line_number() methods of the exception object.
+ */
+#define JEWEL_THROW(TYPE, MESSAGE) \
+	throw TYPE \
+	(	MESSAGE, \
+		#TYPE, \
+		__func__, \
+		__FILE__, \
+		__LINE__ \
+	);
+
+		
 
 
 #endif  // GUARD_exception_hpp
