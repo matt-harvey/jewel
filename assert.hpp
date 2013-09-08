@@ -43,7 +43,7 @@
 			__DATE__, \
 			__TIME__, \
 			0, \
-			#p, \
+			"static_cast<bool>(" #p ")", \
 			"false" \
 		);
 #else

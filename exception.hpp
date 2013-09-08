@@ -197,13 +197,13 @@ private:
  *
  * If JEWEL_ENABLE_EXCEPTION_LOGGING is defined, then this macro will
  * also invoke jewel::Log::log to write to the log with severity level
- * jewel::Log::error, with details of the exception. Note this will have
+ * jewel::Log::warning, with details of the exception. Note this will have
  * effect even if JEWEL_ENABLE_LOGGING is not defined.
  */
 #ifdef JEWEL_ENABLE_EXCEPTION_LOGGING
 #	define JEWEL_THROW(TYPE, MESSAGE) \
 		jewel::Log::log \
-		(	jewel::Log::error, \
+		(	jewel::Log::warning, \
 			MESSAGE, \
 			__func__, \
 			__FILE__, \
