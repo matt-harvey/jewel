@@ -3,11 +3,13 @@
 #include "../assert.hpp"
 #include "../log.hpp"
 #include "exception_special_tests.hpp"
+#include <cstring>
 #include <iostream>
 #include <string>
 
 using std::cout;
 using std::endl;
+using std::strcmp;
 using std::string;
 
 
@@ -21,7 +23,7 @@ void test_exception_macros()
 {
 	try
 	{
-		throw TrialException0("Here's a TrialException0.");
+		JEWEL_THROW(TrialException0, "Here's a TrialException0.");
 	}
 	catch (std::exception&)
 	{
@@ -38,7 +40,7 @@ void test_exception_macros()
 
 	try
 	{
-		throw TrialException0_0("Here's TrialException0_0.");
+		JEWEL_THROW(TrialException0_0, "Here's TrialException0_0.");
 	}
 	catch (std::exception&)
 	{
@@ -46,10 +48,20 @@ void test_exception_macros()
 
 	try
 	{
-		throw TrialException0_0("Here a TrialException0_0.");
+		JEWEL_THROW(TrialException0_0, "Here a TrialException0_0.");
 	}
-	catch (TrialException0&)
+	catch (TrialException0& e)
 	{
+		JEWEL_HARD_ASSERT
+		(	strcmp(e.message(), "Here a TrialException0_0.") == 0
+		);
+		JEWEL_HARD_ASSERT(strcmp(e.type(), "TrialException0_0") == 0);
+		string const filepath(e.filepath());
+		string const expected_filename = "exception_special_tests.cpp";
+		JEWEL_HARD_ASSERT(expected_filename.size() - filepath.size());
+		string::const_iterator const it =
+			filepath.begin() + filepath.size() - expected_filename.size();
+		JEWEL_HARD_ASSERT(string(it, filepath.end()) == expected_filename);
 	}
 
 	try
@@ -70,7 +82,7 @@ void test_exception_macros()
 
 	try
 	{
-		throw TrialException1_0("Here's a TrialException1_0.");
+		JEWEL_THROW(TrialException1_0, "Here's a TrialException1_0.");
 	}
 	catch (TrialException0&)
 	{
@@ -109,7 +121,7 @@ void test_exception_macros()
 
 	try
 	{
-		throw TrialException1_0_1("Here's a TrialException1_0_1.");
+		JEWEL_THROW(TrialException1_0_1, "Here's a TrialException1_0_1.");
 	}
 	catch (TrialException1_0_1& e)
 	{

@@ -120,7 +120,7 @@ namespace jewel
  * I should probably define this in a separate file. Note this is different
  * from the internationalization task which is a separate todo.
  *
- * @todo HIGH PRIORITY
+ * @todo MEDIUM PRIORITY
  * Internationalized output is working using the std::numpunct facilities.
  * But it doesn't support Boost.Locale. If the client uses Boost.Locale
  * instead of the standard library facilities, Decimal will
@@ -129,7 +129,7 @@ namespace jewel
  * properly, do I want to provide support for Boost.Locale in
  * jewel::Decimal?
  *
- * @todo HIGH PRIORITY
+ * @todo MEDIUM PRIORITY
  * Support internationalization of input.
  *
  * @todo LOW PRIORITY
@@ -149,9 +149,6 @@ namespace jewel
  * and (b) it contains a "hard-wired" behaviour of rounding up at 5, while not
  * actually referring to the Decimal::s_rounding_threshold constant to achieve
  * this. This is a kind of code repetition and so is bad.
- *
- * @todo HIGH PRIORITY
- * Fix compiler warnings.
  */
 
 class Decimal:

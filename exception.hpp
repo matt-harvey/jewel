@@ -40,8 +40,6 @@ namespace jewel
  *
  * Exception safety: all of the functions in this class offer
  * the <em>nothrow guarantee</em>.
- * 
- * @todo HIGH PRIORITY Further testing.
  */
 class Exception: public virtual std::exception
 {
