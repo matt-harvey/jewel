@@ -2,10 +2,11 @@
 
 #include <UnitTest++/UnitTest++.h>
 #include "../assert.hpp"
-#include "capped_string.hpp"
+#include "../capped_string.hpp"
 #include "../checked_arithmetic.hpp"
 #include "../decimal_exceptions.hpp"
 #include "decimal_special_tests.hpp"
+#include "../exception.hpp"
 #include "exception_special_tests.hpp"
 #include "../decimal.hpp"
 #include "../log.hpp"
@@ -38,6 +39,8 @@ int main()
 {
 	Log::set_filepath("test.log");
 	Log::set_threshold(Log::trace);
+
+	JEWEL_LOG_TRACE();
 
 	#ifndef NDEBUG
 		cout << "Compiled in debugging mode (NDEBUG not defined)."

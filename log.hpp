@@ -25,14 +25,17 @@ namespace jewel
 /**
  * Class to facilitate logging.
  *
- * To fire logging events using the \e Log class, client code should call the
+ * To fire logging events using the \e Log class, client code should use the
  * following macros.
+ *
+ * <b>JEWEL_ENABLE_LOGGING must be defined, otherwise the logging macros
+ * will have no effect at all and will compile away to nothing.</b>
  *
  * JEWEL_LOG_TRACE() will fire a logging event that simply displays the name
  * of the function, file and line number where it appeared, with a severity
  * level of \e trace.
  *
- * JEWEL_LOG_MESSAGE(severity, message) will fire a logging event will
+ * JEWEL_LOG_MESSAGE(severity, message) will fire a logging event with
  * severity of \e severity and with a message \e message, which should be
  * a string (either C-style, or std::string will do). The log will also show
  * the function, file and line number in the source code where it appears.
@@ -43,10 +46,6 @@ namespace jewel
  * is defined). Do not include quotes around the expression when passing
  * it to the macro. The log will also show the function, file and line number
  * in the source code where is appears.
- *
- * JEWEL_DISABLE_LOGGING if defined will disable logging entirely. All logging
- * statements <em>which use these macros</em> will then be compiled away
- * to nothing.
  *
  * JEWEL_HARD_LOGGING_THRESHOLD is by default defined as 0, which means that
  * there is no
@@ -120,7 +119,8 @@ public:
 		std::string const& p_file,
 		int p_line,
 		std::string const& p_compilation_date,
-		std::string const& p_compilation_time
+		std::string const& p_compilation_time,
+		std::string const& p_exception_type
 	);
 
 	/**
@@ -134,8 +134,9 @@ public:
 		char const* p_function,
 		char const* p_file,
 		int p_line,
-		char const* p_compilation_date,
-		char const* p_compilation_time,
+		char const* p_compilation_date = 0,
+		char const* p_compilation_time = 0,
+		char const* p_exception_type = 0,
 		char const* p_expression = 0,
 		char const* p_value = 0
 	);
@@ -158,7 +159,7 @@ private:
 // MACROS
 
 
-#ifndef JEWEL_DISABLE_LOGGING
+#ifdef JEWEL_ENABLE_LOGGING
 
 #	ifndef JEWEL_HARD_LOGGING_THRESHOLD
 #		define JEWEL_HARD_LOGGING_THRESHOLD 0
@@ -229,7 +230,7 @@ private:
 #	define JEWEL_LOG_VALUE(severity, expression) \
 		if (false) { (void)(severity); (void)(expression); } // Silence compiler warnings re. unused variables, and prevent them from being evaluated.
 		
-#endif  // JEWEL_DISABLE_LOGGING
+#endif  // JEWEL_ENABLE_LOGGING
 
 
 // INLINE FUNCTION DEFINITIONS

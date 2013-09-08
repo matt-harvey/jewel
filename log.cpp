@@ -108,7 +108,8 @@ Log::log
 	string const& p_file,
 	int p_line,
 	string const& p_compilation_date,
-	string const& p_compilation_time
+	string const& p_compilation_time,
+	string const& p_exception_type
 )
 {
 	log
@@ -118,7 +119,8 @@ Log::log
 		p_file.c_str(),
 		p_line,
 		p_compilation_date.c_str(),
-		p_compilation_time.c_str()
+		p_compilation_time.c_str(),
+		p_exception_type.c_str()
 	);
 	return;
 }
@@ -132,6 +134,7 @@ Log::log
 	int p_line,
 	char const* p_compilation_date,
 	char const* p_compilation_time,
+	char const* p_exception_type,
 	char const* p_expression,
 	char const* p_value
 )
@@ -146,24 +149,34 @@ Log::log
 		assert (!osp->bad());  // guaranteed by stream_aux().
 		assert (!osp->exceptions());  // guaranteed by stream_aux().
 		*osp << "{RECORD}\n"
-			<< "{FIELD}[id]" << next_id() << "\n"
-			<< "{FIELD}[severity]" << severity_string(p_severity) << "\n";
+			<< "{FIELD}[id]" << next_id() << '\n'
+			<< "{FIELD}[severity]" << severity_string(p_severity) << '\n';
 		if (p_message)
 		{
-			*osp << "{FIELD}[message]" << p_message << "\n";
+			*osp << "{FIELD}[message]" << p_message << '\n';
 		}
-		*osp << "{FIELD}[function]" << p_function << "\n"
-			<< "{FIELD}[file]" << p_file << "\n"
-			<< "{FIELD}[line]" << p_line << "\n"
-			<< "{FIELD}[compilation_date]" << p_compilation_date << "\n"
-			<< "{FIELD}[compilation_time]" << p_compilation_time << "\n";
+		*osp << "{FIELD}[function]" << p_function << '\n'
+			 << "{FIELD}[file]" << p_file << '\n'
+			 << "{FIELD}[line]" << p_line << '\n';
+		if (p_compilation_date)
+		{
+			*osp << "{FIELD}[compilation_date]" << p_compilation_date << '\n';
+		}
+		if (p_compilation_time)
+		{
+			*osp << "{FIELD}[compilation_time]" << p_compilation_time << '\n';
+		}
+		if (p_exception_type)
+		{
+			*osp << "{FIELD}[exception_type]" << p_exception_type << '\n';
+		}
 		if (p_expression)
 		{
-			*osp << "{FIELD}[expression]" << p_expression << "\n";
+			*osp << "{FIELD}[expression]" << p_expression << '\n';
 		}
 		if (p_value)
 		{
-			*osp << "{FIELD}[value]" << p_value << "\n";
+			*osp << "{FIELD}[value]" << p_value << '\n';
 		}
 		*osp << endl;
 	}

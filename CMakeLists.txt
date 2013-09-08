@@ -38,6 +38,9 @@ set (test_sources
 		tests/stopwatch_tests.cpp
 		tests/tolerant_string_tests.cpp)
 
+add_definitions(-DJEWEL_ENABLE_LOGGING
+                -DJEWEL_ENABLE_EXCEPTION_LOGGING)
+
 add_executable (jewel_test ${library_sources} ${test_sources})
 
 add_library(jewel ${library_sources})

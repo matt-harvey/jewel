@@ -55,31 +55,28 @@ namespace
 }  // end anonymous namespace
 
 
-Exception::Exception() throw(): m_throwing_line_number(-1)
-{
-}
 
 Exception::Exception
 (	char const* p_message,
 	char const* p_type,
-	char const* p_throwing_function,
-	char const* p_throwing_filepath,
-	long p_throwing_line_number
+	char const* p_function,
+	char const* p_filepath,
+	long p_line
 ) throw():
 	m_message(truncate_c_str<string_capacity>(p_message)),
 	m_type(truncate_c_str<string_capacity>(p_type)),
-	m_throwing_function(truncate_c_str<string_capacity>(p_throwing_function)),
-	m_throwing_filepath(truncate_c_str<string_capacity>(p_throwing_filepath)),
-	m_throwing_line_number(p_throwing_line_number)
+	m_function(truncate_c_str<string_capacity>(p_function)),
+	m_filepath(truncate_c_str<string_capacity>(p_filepath)),
+	m_line(p_line)
 {
 }
 
 Exception::Exception(Exception const& rhs) throw():
 	m_message(rhs.m_message),
 	m_type(rhs.m_type),
-	m_throwing_function(rhs.m_throwing_function),
-	m_throwing_filepath(rhs.m_throwing_filepath),
-	m_throwing_line_number(rhs.m_throwing_line_number)
+	m_function(rhs.m_function),
+	m_filepath(rhs.m_filepath),
+	m_line(rhs.m_line)
 {
 }
 
@@ -87,9 +84,40 @@ Exception::~Exception() throw()
 {
 }
 
-char const* Exception::what() const throw()
+char const*
+Exception::what() const throw()
+{
+	return message();
+}
+
+char const*
+Exception::message() const throw()
 {
 	return m_message.c_str();
+}
+
+char const*
+Exception::type() const throw()
+{
+	return m_type.c_str();
+}
+
+char const*
+Exception::function() const throw()
+{
+	return m_function.c_str();
+}
+
+char const*
+Exception::filepath() const throw()
+{
+	return m_filepath.c_str();
+}
+
+long
+Exception::line() const throw()
+{
+	return m_line;
 }
 
 size_t Exception::max_message_size() throw()
