@@ -201,6 +201,7 @@ private:
 					__LINE__, \
 					__DATE__, \
 					__TIME__, \
+					0, \
 					#expression, \
 					boost::lexical_cast<std::string>(expression).c_str() \
 				); \
