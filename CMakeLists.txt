@@ -31,6 +31,7 @@ set (test_sources
 		tests/decimal_tests.cpp
 		tests/exception_special_tests.cpp
 		tests/exception_tests.cpp
+		tests/flag_set_tests.cpp
 		tests/num_digits_tests.cpp
 		tests/on_windows_tests.cpp
 		tests/optional_tests.cpp

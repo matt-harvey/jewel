@@ -87,9 +87,10 @@ struct EnumTraits
  * that a default-constructed instance will have no flags set.
  *
  * By default, the underlying integer value holding the flags is stored in
- * an <em>unsigned int</em>. If this is not big enough to encompass \e EnumT,
- * compilation will fail. An alternative underlying integral type can
- * be supplied be specializing \e EnumTraits for \e EnumT.
+ * an <em>unsigned int</em>. An alternative underlying integral type can
+ * be supplied be specializing \e EnumTraits for \e EnumT. It is the
+ * client's responsibility to ensure that this type will be sufficiently
+ * large.
  *
  * @todo HIGH PRIORITY testing
  */
@@ -173,13 +174,6 @@ private:
 // compile-time assertions
 private:
 
-	/**
-	 * Ensure \e IntT is big enough to hold the enumeration.
-	 */
-	BOOST_STATIC_ASSERT
-	(	(sizeof(IntT) >= sizeof(EnumT))
-	);
-	
 	/**
 	 * Ensure \e default_value is consistent with \e mask.
 	 */
