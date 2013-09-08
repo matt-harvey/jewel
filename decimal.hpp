@@ -13,8 +13,9 @@
 
 
 
-#include "decimal_exceptions.hpp"
 #include "assert.hpp"
+#include "decimal_exceptions.hpp"
+#include "exception.hpp"
 #include <boost/lexical_cast.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/operators.hpp>
@@ -852,8 +853,9 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	
 	if (str.empty())
 	{
-		throw DecimalFromStringException
-		(	"Cannot construct Decimal from an empty string"
+		JEWEL_THROW
+		(	DecimalFromStringException,
+			"Cannot construct Decimal from an empty string"
 		);
 	}
 	sz_t const str_size = str.size();
@@ -877,9 +879,9 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 		JEWEL_ASSERT (si < str_end);
 		if (!CharacterProvider<charT>::is_digit(*si))
 		{
-			throw DecimalFromStringException
-			(	"Invalid string passed "
-				"to Decimal constructor."
+			JEWEL_THROW
+			(	DecimalFromStringException,
+				"Invalid string passed to Decimal constructor."
 			);
 		}
 		JEWEL_ASSERT (ri < str_rep.end());
@@ -909,9 +911,9 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 			{
 				JEWEL_ASSERT (m_places == 0);
 				JEWEL_ASSERT (m_intval == 0);
-				throw DecimalFromStringException
-				(	"Invalid string passed to"
-					" Decimal constructor."
+				JEWEL_THROW
+				(	DecimalFromStringException,
+					"Invalid string passed to Decimal constructor."
 				);
 			}
 			JEWEL_ASSERT (reduced_size == str_rep.size());
@@ -921,9 +923,9 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	}
 	if (spot_position > s_max_places)
 	{
-		throw DecimalRangeException
-		(	"Attempt to set m_places "
-			"to a value exceeding that returned by "
+		JEWEL_THROW
+		(	DecimalRangeException,
+			"Attempt to set m_places to a value exceeding that returned by "
 			"Decimal::maximum_precision()."
 		);
 	}
@@ -935,8 +937,9 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 			str_rep == stringT(1, plus_char)
 		)
 		{
-			throw DecimalFromStringException
-			(	"Attempt to create a Decimal without any digits."
+			JEWEL_THROW
+			(	DecimalFromStringException,
+				"Attempt to create a Decimal without any digits."
 			);
 		}
 	}
@@ -948,8 +951,9 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	}
 	catch (boost::bad_lexical_cast&)
 	{
-		throw DecimalRangeException
-		(	"Attempt to create Decimal that is either too large, too small "
+		JEWEL_THROW
+		(	DecimalRangeException,
+			"Attempt to create Decimal that is either too large, too small "
 			"or too precise than is supported by the Decimal implementation."
 		);
 	}

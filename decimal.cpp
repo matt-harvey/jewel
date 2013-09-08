@@ -2,8 +2,9 @@
 
 #include "decimal.hpp"
 #include "assert.hpp"
-#include "decimal_exceptions.hpp"
 #include "checked_arithmetic.hpp"
+#include "decimal_exceptions.hpp"
+#include "exception.hpp"
 #include "num_digits.hpp"  // for num_digits
 
 #include <algorithm>
@@ -100,8 +101,9 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 	{
 		if (x.rescale(y.m_places) != 0)
 		{
-			throw DecimalRangeException
-			(	"Unsafe attempt to set fractional precision in course "
+			JEWEL_THROW
+			(	DecimalRangeException,
+				"Unsafe attempt to set fractional precision in course "
 				"of co-normalization attempt."
 			);
 		}
@@ -111,8 +113,9 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 		JEWEL_ASSERT (y.m_places < x.m_places);
 		if (y.rescale(x.m_places) != 0)
 		{
-			throw DecimalRangeException
-			(	"Unsafe attempt to set fractional precision in course "
+			JEWEL_THROW
+			(	DecimalRangeException,
+				"Unsafe attempt to set fractional precision in course "
 				"of co-normalization attempt."
 			);
 		}
@@ -148,8 +151,9 @@ Decimal::Decimal(int_type p_intval, places_type p_places):
 		// other valid value) here, since the Decimal instance is not going
 		// to be created anyway - nothing will be able to refer to it after this
 		// exception is thrown.
-		throw DecimalRangeException
-		(	"Attempt to construct Decimal with precision greater"
+		JEWEL_THROW
+		(	DecimalRangeException,
+			"Attempt to construct Decimal with precision greater"
 			" than maximum precision."
 		);
 	}
@@ -274,8 +278,9 @@ Decimal const& Decimal::operator++()
 	if (addition_is_unsafe(m_intval, implicit_divisor()))
 	{
 		JEWEL_ASSERT (*this == orig);
-		throw DecimalIncrementationException
-		(	"Incrementation may cause overflow."
+		JEWEL_THROW
+		(	DecimalIncrementationException,
+			"Incrementation may cause overflow."
 		);
 	}
 	m_intval += implicit_divisor();
@@ -295,8 +300,9 @@ Decimal const& Decimal::operator--()
 	if (subtraction_is_unsafe(m_intval, implicit_divisor()))
 	{
 		JEWEL_ASSERT (*this == orig);
-		throw DecimalDecrementationException
-		(	"Decrementation may cause "
+		JEWEL_THROW
+		(	DecimalDecrementationException,
+			"Decrementation may cause "
 			"overflow."
 		);
 	}
@@ -318,7 +324,7 @@ Decimal& Decimal::operator+=(Decimal rhs)
 	if (addition_is_unsafe(m_intval, rhs.m_intval))
 	{
 		*this = orig;
-		throw DecimalAdditionException("Addition may cause overflow.");
+		JEWEL_THROW(DecimalAdditionException, "Addition may cause overflow.");
 	}
 	m_intval += rhs.m_intval;
 	JEWEL_ASSERT (m_places >= benchmark_places);
@@ -337,7 +343,10 @@ Decimal& Decimal::operator-=(Decimal rhs)
 	if (subtraction_is_unsafe(m_intval, rhs.m_intval))
 	{
 		*this = orig;
-		throw DecimalSubtractionException("Subtraction may cause overflow.");
+		JEWEL_THROW
+		(	DecimalSubtractionException,
+			"Subtraction may cause overflow."
+		);
 	}
 	m_intval -= rhs.m_intval;
 	JEWEL_ASSERT (m_places >= benchmark_places);
@@ -355,8 +364,9 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	if (*this == minimum() || rhs == minimum())
 	{
 		JEWEL_ASSERT (*this == orig);
-		throw DecimalMultiplicationException
-		(	"Cannot multiply smallest possible "
+		JEWEL_THROW
+		(	DecimalMultiplicationException,
+			"Cannot multiply smallest possible "
 			"Decimal safely."
 		);
 	}
@@ -392,7 +402,7 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	}
 
 	*this = orig;
-	throw DecimalMultiplicationException("Unsafe multiplication.");
+	JEWEL_THROW(DecimalMultiplicationException, "Unsafe multiplication.");
 	JEWEL_ASSERT (false);  // Execution should never reach here.
 	return *this;    // Silence compiler re. return from non-void function.
 
@@ -410,7 +420,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	if (rhs.m_intval == 0)
 	{
 		JEWEL_ASSERT (*this == orig);
-		throw (DecimalDivisionByZeroException("Division by zero."));
+		JEWEL_THROW(DecimalDivisionByZeroException, "Division by zero.");
 	}
 	
 	// To prevent complications
@@ -418,8 +428,9 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	  rhs.m_intval == numeric_limits<int_type>::min() )
 	{
 		JEWEL_ASSERT (*this == orig);
-		throw DecimalDivisionException
-		(	"Smallest possible Decimal cannot "
+		JEWEL_THROW
+		(	DecimalDivisionException,
+			"Smallest possible Decimal cannot "
 			"feature in division operation."
 		);
 	}
@@ -427,8 +438,9 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	if (NumDigits::num_digits(rhs.m_intval) == maximum_precision())
 	{
 		JEWEL_ASSERT (*this == orig);
-		throw DecimalDivisionException
-		(	"Dividend has a number of significant"
+		JEWEL_THROW
+		(	DecimalDivisionException,
+			"Dividend has a number of significant"
 		 	"digits that is greater than or equal to the return value of "
 			"Decimal::maximum_precision(); as a result, division cannot be "
 			"performed safely."
@@ -453,7 +465,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	{
 		// We can't rescale high enough to proceed, so reset and throw
 		*this = orig;
-		throw (DecimalDivisionException("Unsafe division."));
+		JEWEL_THROW(DecimalDivisionException, "Unsafe division.");
 	}
 	JEWEL_ASSERT (m_places >= rhs.m_places);
 
@@ -536,7 +548,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		if (addition_is_unsafe(m_intval, NUM_CAST<int_type>(1)))
 		{
 			*this = orig;
-			throw DecimalDivisionException("Unsafe division.");
+			JEWEL_THROW(DecimalDivisionException, "Unsafe division.");
 		}
 		// Do the rounding, it's safe
 		++m_intval;
@@ -600,9 +612,10 @@ Decimal round(Decimal const& x, Decimal::places_type decimal_places)
 	Decimal ret = x;
 	if (ret.rescale(decimal_places) != 0)
 	{	
-		throw DecimalRangeException
-		(	"Decimal number cannot "
-			"safely be rounded to this number of places."
+		JEWEL_THROW
+		(	DecimalRangeException,
+			"Decimal number cannot safely be rounded to "
+			"this number of places."
 		);
 	}
 	return ret;
@@ -613,8 +626,9 @@ Decimal operator-(Decimal const& d)
 {
 	if (d.m_intval == numeric_limits<Decimal::int_type>::min())
 	{
-		throw DecimalUnaryMinusException
-		(	"Unsafe arithmetic operation (unary minus)."
+		JEWEL_THROW
+		(	DecimalUnaryMinusException,
+			"Unsafe arithmetic operation (unary minus)."
 		);
 	}
 	JEWEL_ASSERT (d.m_intval != numeric_limits<Decimal::int_type>::min());

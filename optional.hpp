@@ -67,7 +67,10 @@ value(boost::optional<T> const& x)
 	{
 		return *x;
 	}
-	throw UninitializedOptionalException();
+	JEWEL_THROW
+	(	UninitializedOptionalException,
+		"Attempted to access unitialized boost::optional."
+	);
 }
 
 template <typename T>

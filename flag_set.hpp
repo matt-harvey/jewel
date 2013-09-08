@@ -12,6 +12,7 @@
  */
 
 #include "assert.hpp"
+#include "exception.hpp"
 #include <boost/static_assert.hpp>
 #include <jewel/exception.hpp>
 
@@ -256,8 +257,9 @@ FlagSet<EnumT, mask, default_value>::check_flag_acceptance(EnumT p_flag) const
 {
 	if ((p_flag | mask) != mask)
 	{
-		throw InvalidFlagException
-		(	"Flag not recognized by this instantiation of FlagSet."
+		JEWEL_THROW
+		(	InvalidFlagException,
+			"Flag not recognized by this instantiation of FlagSet."
 		);
 	}
 	return;
