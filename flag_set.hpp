@@ -91,8 +91,6 @@ struct EnumTraits
  * be supplied be specializing \e EnumTraits for \e EnumT. It is the
  * client's responsibility to ensure that this type will be sufficiently
  * large.
- *
- * @todo HIGH PRIORITY testing
  */
 template
 <	typename EnumT,
