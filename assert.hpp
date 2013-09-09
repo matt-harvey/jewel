@@ -47,7 +47,7 @@
 			"false" \
 		);
 #else
-#	define JEWEL_LOG_ASSERTION_AUX(p) if (false) (void)(p)
+#	define JEWEL_LOG_ASSERTION_AUX(p) if (false) { }
 #endif  // JEWEL_ENABLE_ASSERTION_LOGGING
 
 
@@ -65,7 +65,7 @@
 #ifndef NDEBUG
 #	define JEWEL_ASSERT(p) JEWEL_HARD_ASSERT(p)
 #else
-#	define JEWEL_ASSERT(p) if (false) (void)(p)
+#	define JEWEL_ASSERT(p) if (false) { }
 #endif  // NDEBUG
 	
 
