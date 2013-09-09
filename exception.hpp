@@ -15,6 +15,7 @@
 #include <iostream>
 #include <ostream>
 #include <stdexcept>
+#include <utility>
 
 /** @file exception.hpp
  *
@@ -271,40 +272,33 @@ operator<<(std::basic_ostream<charT, traits>& os, Exception const& e)
 {
 	using jewel::num_elements;
 	using std::endl;
+	using std::make_pair;
+	using std::pair;
 	using std::strlen;
 	if (!os)
 	{
 		return os;
 	}
-	char const* const string_data[] =
-	{	e.message(),
-		e.type(),
-		e.function(),
-		e.filepath(),
-	};
-	char const* const string_data_labels[] =
-	{	"Message: ",
-		"Exception type: ",
-		"Function in which exception was thrown: ",
-		"Filepath: "
+	pair<char const* const, char const* const> const data[] =
+	{	make_pair("Message", e.message()),
+		make_pair("Exception type", e.type()),
+		make_pair("Function in which exception was thrown", e.function()),
+		make_pair("Filepath", e.filepath())
 	};
 	os << "BEGIN EXCEPTION DESCRIPTION" << '\n';
-	JEWEL_HARD_ASSERT
-	(	num_elements(string_data) ==
-		num_elements(string_data_labels)
-	);
-	for (size_t i = 0; i != num_elements(string_data); ++i)
+	char const* const sep = ": ";
+	for (size_t i = 0; i != num_elements(data); ++i)
 	{
-		char const* const datum = string_data[i];
+		char const* const datum = data[i].second;
 		if (strlen(datum) != 0)
 		{
 			JEWEL_ASSERT (strlen(datum) > 0);
-			os << string_data_labels[i] << datum << '\n';
+			os << data[i].first << sep << datum << '\n';
 		}
 	}
 	if (e.line() >= 0)
 	{
-		os << "Line: " << e.line() << '\n';
+		os << "Line" << sep << e.line() << '\n';
 	}
 	os << "END EXCEPTION DESCRIPTION" << '\n';
 	return os;
