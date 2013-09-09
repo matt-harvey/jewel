@@ -14,6 +14,7 @@
 
 using jewel::num_elements;
 using std::back_inserter;
+using std::cerr;
 using std::copy;
 using std::endl;
 using std::size_t;
@@ -120,16 +121,11 @@ Exception::line() const throw()
 	return m_line;
 }
 
-size_t Exception::max_message_size() throw()
+size_t
+Exception::max_message_size() throw()
 {
 	return string_capacity - truncation_stamp_capacity;
 }
-
-
-
-
-
-
 
 
 }  // namespace jewel

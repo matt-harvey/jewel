@@ -7,8 +7,13 @@
 #	include "log.hpp"
 #endif
 
+#include "array_utilities.hpp"
+#include "assert.hpp"
 #include "capped_string.hpp"
 #include <cstddef>
+#include <cstring>
+#include <iostream>
+#include <ostream>
 #include <stdexcept>
 
 /** @file exception.hpp
@@ -38,8 +43,10 @@ namespace jewel
  * Note that instances of this class will store a copy of the
  * entire error message passed to the constructor, not just a pointer thereto.
  *
- * Exception safety: all of the functions in this class offer
- * the <em>nothrow guarantee</em>.
+ * Exception safety: all of the \e member functions in this class offer
+ * the <em>nothrow guarantee</em>. But see the documentation in the
+ * (non-member) stream output operator, which theoretically can throw if exceptions
+ * are enabled on the stream.
  */
 class Exception: public virtual std::exception
 {
@@ -144,6 +151,27 @@ private:
 };
 
 
+// NON-MEMBER FUNCTIONS
+
+/**
+ * Output a description of a jewel::Exception to \e os.
+ *
+ * It is theoretically possible for this function to throw an exception, but
+ * only if exceptions are enabled on \e os, and there is an error when
+ * outputting to the stream (unlikely).
+ *
+ * Note outputting the exception will \e not necessarily cause \e os to be
+ * flushed. The user of this function should flush the stream manually after
+ * calling this function if they want to make sure it is flushed.
+ *
+ * @todo Write a test for this.
+ */
+template <typename charT, typename traits>
+std::basic_ostream<charT, traits>&
+operator<<(std::basic_ostream<charT, traits>& os, Exception const& e);
+
+
+
 }  // namespace jewel
 
 
@@ -229,6 +257,60 @@ private:
 			__LINE__ \
 		);
 #endif  // JEWEL_ENABLE_EXCEPTION_LOGGING
+
+
+
+namespace jewel
+{
+
+// IMPLEMENT NON-MEMBER FUNCTIONS
+
+template <typename charT, typename traits>
+std::basic_ostream<charT, traits>&
+operator<<(std::basic_ostream<charT, traits>& os, Exception const& e)
+{
+	using jewel::num_elements;
+	using std::endl;
+	using std::strlen;
+	if (!os)
+	{
+		return os;
+	}
+	char const* const string_data[] =
+	{	e.message(),
+		e.type(),
+		e.function(),
+		e.filepath(),
+	};
+	char const* const string_data_labels[] =
+	{	"Message: ",
+		"Exception type: ",
+		"Function in which exception was thrown: ",
+		"Filepath: "
+	};
+	os << "BEGIN EXCEPTION DESCRIPTION" << '\n';
+	JEWEL_HARD_ASSERT
+	(	num_elements(string_data) ==
+		num_elements(string_data_labels)
+	);
+	for (size_t i = 0; i != num_elements(string_data); ++i)
+	{
+		char const* const datum = string_data[i];
+		if (strlen(datum) != 0)
+		{
+			JEWEL_ASSERT (strlen(datum) > 0);
+			os << string_data_labels[i] << datum << '\n';
+		}
+	}
+	if (e.line() >= 0)
+	{
+		os << "Line: " << e.line() << '\n';
+	}
+	os << "END EXCEPTION DESCRIPTION" << '\n';
+	return os;
+}
+
+}  // namespace jewel
 
 
 #endif  // GUARD_exception_hpp
