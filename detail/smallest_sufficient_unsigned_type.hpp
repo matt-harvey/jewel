@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#ifndef GUARD_smallest_sufficient_unsigned_type_hpp
-#define GUARD_smallest_sufficient_unsigned_type_hpp
+#ifndef GUARD_smallest_sufficient_unsigned_type_hpp_07093942774037804
+#define GUARD_smallest_sufficient_unsigned_type_hpp_07093942774037804
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -145,4 +145,4 @@ BOOST_STATIC_ASSERT
 }  // namespace detail
 }  // namespace jewel
 
-#endif  // GUARD_smallest_sufficient_unsigned_type_hpp
+#endif  // GUARD_smallest_sufficient_unsigned_type_hpp_07093942774037804

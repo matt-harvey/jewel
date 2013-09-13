@@ -1,5 +1,5 @@
-#ifndef GUARD_power_vector_hpp
-#define GUARD_power_vector_hpp
+#ifndef GUARD_power_vector_hpp_057917258729188355
+#define GUARD_power_vector_hpp_057917258729188355
 
 
 /** @file power_vector.hpp

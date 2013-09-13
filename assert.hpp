@@ -1,12 +1,11 @@
-#ifndef GUARD_assert_hpp
-#define GUARD_assert_hpp
+#ifndef GUARD_assert_hpp_3948190120956018
+#define GUARD_assert_hpp_3948190120956018
 
 #ifdef JEWEL_ENABLE_ASSERTION_LOGGING
 #	include "log.hpp"
 #endif
 
 #include "helper_macros.hpp"
-#include "exception"
 #include <exception>
 #include <iostream>
 
@@ -71,4 +70,4 @@
 #endif  // NDEBUG
 	
 
-#endif  // GUARD_assert_hpp
+#endif  // GUARD_assert_hpp_3948190120956018

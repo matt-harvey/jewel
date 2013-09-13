@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#ifndef GUARD_exception_special_tests_hpp
-#define GUARD_exception_special_tests_hpp
+#ifndef GUARD_exception_special_tests_hpp_5527552434023262
+#define GUARD_exception_special_tests_hpp_5527552434023262
 
 
 #include "../exception.hpp"
@@ -42,4 +42,4 @@ void test_exception_macros();
 }  // namespace jewel
 
 
-#endif  // GUARD_exception_special_tests_hpp
+#endif  // GUARD_exception_special_tests_hpp_5527552434023262

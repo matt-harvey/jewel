@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#ifndef GUARD_decimal_tests_weird_punct_hpp
-#define GUARD_decimal_tests_weird_punct_hpp
+#ifndef GUARD_decimal_tests_weird_punct_hpp_7668562358090916
+#define GUARD_decimal_tests_weird_punct_hpp_7668562358090916
 
 #include <locale>
 #include <string>
@@ -41,4 +41,4 @@ protected:
 }  // namespace weird_punct
 
 
-#endif  // GUARD_decimal_tests_weird_punct_hpp
+#endif  // GUARD_decimal_tests_weird_punct_hpp_7668562358090916

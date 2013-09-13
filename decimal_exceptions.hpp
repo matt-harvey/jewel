@@ -1,5 +1,5 @@
-#ifndef GUARD_decimal_exceptions_hpp
-#define GUARD_decimal_exceptions_hpp
+#ifndef GUARD_decimal_exceptions_hpp_7516391215620745
+#define GUARD_decimal_exceptions_hpp_7516391215620745
 
 /** \file decimal_exceptions.hpp
  *
@@ -34,10 +34,8 @@ JEWEL_DERIVED_EXCEPTION(DecimalException, Exception);
 	JEWEL_DERIVED_EXCEPTION(DecimalFromStringException, DecimalException);
 	JEWEL_DERIVED_EXCEPTION(DecimalStreamReadException, DecimalException);
 
-
-
 }  // namespace jewel
 
-#endif  // GUARD_decimal_exceptions_hpp
+#endif  // GUARD_decimal_exceptions_hpp_7516391215620745
 
 

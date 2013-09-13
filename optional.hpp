@@ -1,5 +1,5 @@
-#ifndef GUARD_optional_hpp
-#define GUARD_optional_hpp
+#ifndef GUARD_optional_hpp_9131848518332396
+#define GUARD_optional_hpp_9131848518332396
 
 /** \file optional.hpp
  *
@@ -86,4 +86,4 @@ clear(boost::optional<T>& x)
 
 
 
-#endif  // GUARD_optional_hpp
+#endif  // GUARD_optional_hpp_9131848518332396

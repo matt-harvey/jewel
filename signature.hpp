@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#ifndef GUARD_signature_hpp
-#define GUARD_signature_hpp
+#ifndef GUARD_signature_hpp_897804761257863
+#define GUARD_signature_hpp_897804761257863
 
 #include <boost/noncopyable.hpp>
 
@@ -45,4 +45,4 @@ Signature<T>::Signature()
 
 }  // namespace jewel
 
-#endif  // GUARD_signature_hpp
+#endif  // GUARD_signature_hpp_897804761257863

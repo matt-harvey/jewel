@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#ifndef GUARD_on_windows_hpp
-#define GUARD_on_windows_hpp
+#ifndef GUARD_on_windows_hpp_15737586289522046
+#define GUARD_on_windows_hpp_15737586289522046
 
 
 #	if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
@@ -19,4 +19,4 @@
 
 
 
-#endif  // GUARD_on_windows_hpp
+#endif  // GUARD_on_windows_hpp_15737586289522046

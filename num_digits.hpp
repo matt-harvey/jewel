@@ -1,5 +1,5 @@
-#ifndef GUARD_num_digits_hpp
-#define GUARD_num_digits_hpp
+#ifndef GUARD_num_digits_hpp_48970041167442707
+#define GUARD_num_digits_hpp_48970041167442707
 
 /** \file num_digits.hpp
  *
@@ -89,4 +89,4 @@ std::size_t NumDigits::num_digits_aux(T x, T base)
 
 
 
-#endif  // GUARD_utilities_hpp
+#endif  // GUARD_utilities_hpp_48970041167442707

@@ -1,5 +1,5 @@
-#ifndef GUARD_array_utilities_hpp
-#define GUARD_array_utilities_hpp
+#ifndef GUARD_array_utilities_hpp_01612767997017488
+#define GUARD_array_utilities_hpp_01612767997017488
 
 #include <cstddef>
 
@@ -96,4 +96,4 @@ end(Elem const (&p_array)[sz])
 
 }  // namespace jewel
 
-#endif  // GUARD_array_utilities_hpp
+#endif  // GUARD_array_utilities_hpp_01612767997017488

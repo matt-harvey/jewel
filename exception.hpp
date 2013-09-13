@@ -1,14 +1,8 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#ifndef GUARD_exception_hpp
-#define GUARD_exception_hpp
+#ifndef GUARD_exception_hpp_6015026497661614
+#define GUARD_exception_hpp_6015026497661614
 
-#ifdef JEWEL_ENABLE_EXCEPTION_LOGGING
-#	include "log.hpp"
-#endif
-
-#include "array_utilities.hpp"
-#include "assert.hpp"
 #include "capped_string.hpp"
 #include <cstddef>
 #include <cstring>
@@ -171,10 +165,15 @@ template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
 operator<<(std::basic_ostream<charT, traits>& os, Exception const& e);
 
-
-
 }  // namespace jewel
 
+
+#include "array_utilities.hpp"
+#include "assert.hpp"
+
+#ifdef JEWEL_ENABLE_EXCEPTION_LOGGING
+#	include "log.hpp"
+#endif
 
 
 /**
@@ -307,4 +306,4 @@ operator<<(std::basic_ostream<charT, traits>& os, Exception const& e)
 }  // namespace jewel
 
 
-#endif  // GUARD_exception_hpp
+#endif  // GUARD_exception_hpp_6015026497661614

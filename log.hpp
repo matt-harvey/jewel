@@ -11,8 +11,6 @@
  * Copyright (c) 2013, Matthew Harvey. All rights reserved.
  */
 
-#include "helper_macros.hpp"
-#include "assert.hpp"
 #include <boost/lexical_cast.hpp>
 #include <exception>
 #include <new>

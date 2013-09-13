@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#ifndef GUARD_decimal_special_tests_hpp
-#define GUARD_decimal_special_tests_hpp
+#ifndef GUARD_decimal_special_tests_hpp_4550346198748027
+#define GUARD_decimal_special_tests_hpp_4550346198748027
 
 
 /**
@@ -38,4 +38,4 @@ void decimal_csv_test();
 
 
 
-#endif  // GUARD_decimal_special_tests_hpp
+#endif  // GUARD_decimal_special_tests_hpp_4550346198748027

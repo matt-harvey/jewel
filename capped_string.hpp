@@ -1,11 +1,10 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#ifndef GUARD_capped_string_hpp
-#define GUARD_capped_string_hpp
+#ifndef GUARD_capped_string_hpp_6740592125216774
+#define GUARD_capped_string_hpp_6740592125216774
 
 #include "array_utilities.hpp"
 #include "detail/smallest_sufficient_unsigned_type.hpp"
-#include "log.hpp"
 #include <algorithm>
 #include <cstddef>
 #include <istream>
@@ -181,6 +180,13 @@ private:
 	char m_data[N + 1];
 };
 
+
+}  // namespace jewel
+
+#include "assert.hpp"
+
+namespace jewel
+{
 
 // NON-MEMBER FUNCTIONS
 
@@ -505,7 +511,6 @@ operator<<
 }
 
 
-
 }  // namespace jewel
 
-#endif   // GUARD_capped_string_hpp
+#endif   // GUARD_capped_string_hpp_6740592125216774

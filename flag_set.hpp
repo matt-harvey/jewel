@@ -1,5 +1,5 @@
-#ifndef GUARD_flag_set_hpp
-#define GUARD_flag_set_hpp
+#ifndef GUARD_flag_set_hpp_4153674614687299
+#define GUARD_flag_set_hpp_4153674614687299
 
 /** @file flag_set.hpp
  *
@@ -14,7 +14,6 @@
 #include "assert.hpp"
 #include "exception.hpp"
 #include <boost/static_assert.hpp>
-#include <jewel/exception.hpp>
 
 
 namespace jewel
@@ -275,4 +274,4 @@ FlagSet<EnumT, mask, default_value>::underlying() const
 }  // namespace jewel
 
 
-#endif  // GUARD_flag_set_hpp
+#endif  // GUARD_flag_set_hpp_4153674614687299

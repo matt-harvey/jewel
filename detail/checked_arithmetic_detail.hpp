@@ -1,5 +1,5 @@
-#ifndef GUARD_checked_arithmetic_detail_hpp
-#define GUARD_checked_arithmetic_detail_hpp
+#ifndef GUARD_checked_arithmetic_detail_hpp_8232921365756971
+#define GUARD_checked_arithmetic_detail_hpp_8232921365756971
 
 /** \file checked_arithmetic_detail.hpp
  *
@@ -279,5 +279,5 @@ CheckedArithmetic::multiplication_is_unsafe_unsigned_integral_types(T x, T y)
 
 }  // namespace jewel
 
-#endif  // GUARD_checked_arithmetic_detail_hpp
+#endif  // GUARD_checked_arithmetic_detail_hpp_8232921365756971
 

@@ -1,5 +1,5 @@
-#ifndef GUARD_checked_arithmetic_hpp
-#define GUARD_checked_arithmetic_hpp
+#ifndef GUARD_checked_arithmetic_hpp_7987160937854629
+#define GUARD_checked_arithmetic_hpp_7987160937854629
 
 /** \file checked_arithmetic.hpp
  * 
@@ -100,4 +100,4 @@ bool multiplication_is_unsafe(T x, T y)
 
 }  // namespace jewel
 
-#endif  // GUARD_checked_arithmetic_hpp
+#endif  // GUARD_checked_arithmetic_hpp_7987160937854629

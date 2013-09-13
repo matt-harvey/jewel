@@ -1,5 +1,5 @@
-#ifndef GUARD_decimal_hpp
-#define GUARD_decimal_hpp
+#ifndef GUARD_decimal_hpp_0809249049429432
+#define GUARD_decimal_hpp_0809249049429432
 
 /** @file decimal.hpp
  *
@@ -13,9 +13,6 @@
 
 
 
-#include "assert.hpp"
-#include "decimal_exceptions.hpp"
-#include "exception.hpp"
 #include <boost/lexical_cast.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/operators.hpp>
@@ -700,9 +697,6 @@ private:
 
 
 
-
-
-
 // non-member functions - declarations
 
 /** Write to an output stream.
@@ -803,8 +797,21 @@ Decimal operator+(Decimal const& d);
 Decimal round(Decimal const& x, Decimal::places_type decimal_places);
 
 
+}  // namespace jewel
+
 
 // ****************//
+
+#include "assert.hpp"
+#include "decimal_exceptions.hpp"
+#include "exception.hpp"
+
+
+
+
+namespace jewel
+{
+
 
 // IMPLEMENTATIONS
 
@@ -1265,4 +1272,4 @@ operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 
 } // namespace jewel
 
-#endif  // GUARD_decimal_hpp
+#endif  // GUARD_decimal_hpp_0809249049429432

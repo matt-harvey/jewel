@@ -1,9 +1,10 @@
-#ifndef GUARD_tolerant_string_hpp
-#define GUARD_tolerant_string_hpp
+#ifndef GUARD_tolerant_string_hpp_4046224609038897
+#define GUARD_tolerant_string_hpp_4046224609038897
 
 #include <cstddef>
 #include <cstdlib>
 #include <ios>
+#include <ostream>
 
 namespace jewel
 {
@@ -119,4 +120,4 @@ operator<<
 
 }  // namespace jewel
 
-#endif  // GUARD_tolerant_string_hpp
+#endif  // GUARD_tolerant_string_hpp_4046224609038897

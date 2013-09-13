@@ -1,5 +1,5 @@
-#ifndef GUARD_helper_macros_hpp
-#define GUARD_helper_macros_hpp
+#ifndef GUARD_helper_macros_hpp_723136290778935
+#define GUARD_helper_macros_hpp_723136290778935
 
 /** @file helper_macros.hpp
  *
@@ -18,4 +18,4 @@
 #define JEWEL_MAKE_STRING_B(x) JEWEL_MAKE_STRING_A(x)
 
 
-#endif   // GUARD_helper_macros_hpp
+#endif   // GUARD_helper_macros_hpp_723136290778935

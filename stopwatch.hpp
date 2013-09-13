@@ -1,5 +1,5 @@
-#ifndef GUARD_stopwatch_hpp
-#define GUARD_stopwatch_hpp
+#ifndef GUARD_stopwatch_hpp_021388252275711044
+#define GUARD_stopwatch_hpp_021388252275711044
 
 /** \file stopwatch.hpp
  *
@@ -89,4 +89,4 @@ std::ostream& Stopwatch::log(std::ostream& os) const
 
 }  // namespace jewel
 
-#endif
+#endif  // GUARD_stopwatch_hpp_021388252275711044
