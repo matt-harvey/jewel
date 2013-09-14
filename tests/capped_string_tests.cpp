@@ -2,6 +2,7 @@
 
 #include "../assert.hpp"
 #include "../capped_string.hpp"
+#include "../log.hpp"
 #include <UnitTest++/UnitTest++.h>
 #include <cstring>
 #include <iostream>
@@ -26,6 +27,7 @@ typedef CappedString<UINT_MAX> CappedStringUIMax;
 
 TEST(capped_string_default_constructor)
 {
+	JEWEL_LOG_TRACE();
 	CappedString0 const c0;
 	CappedString1 const c1;
 	CappedString5 const c5;
@@ -81,6 +83,7 @@ TEST(capped_string_default_constructor)
 
 TEST(capped_string_constructor_from_char_const_ptr)
 {
+	JEWEL_LOG_TRACE();
 	CappedString0 const c0("");
 	CappedString1 const c1("");
 	CappedString5 const c5("");
@@ -163,6 +166,7 @@ TEST(capped_string_constructor_from_char_const_ptr)
 
 TEST(capped_string_constructor_from_std_string)
 {
+	JEWEL_LOG_TRACE();
 	std::string const s;
 	CappedString0 const c0(s);
 	CappedString1 const c1(s);
@@ -250,12 +254,14 @@ TEST(capped_string_constructor_from_std_string)
 
 TEST(capped_string_copy_constructor)
 {
+	JEWEL_LOG_TRACE();
 	std::string const s0("heoa");
 	std::string const s1("890jk'l2j\n\n\n\"");
 	std::string const s2("yes");
 	std::string const s3(688, ' ');
 	std::string const s4("lkuioasdfhjkasdf'asdfasdfhjk'asdasdfhasdf'");
 
+	JEWEL_LOG_TRACE();
 	CappedString0 const c0(s0);
 	CappedString1 const c1(s1.c_str());
 	CappedString5 const c5(s2);
@@ -263,6 +269,7 @@ TEST(capped_string_copy_constructor)
 	CappedString303 const c303(s4);
 	CappedString40938 const c40938(s4.c_str());
 
+	JEWEL_LOG_TRACE();
 	CappedString0 d0 = c0;
 	CappedString0 e0(c0);
 	CappedString1 d1 = c1;
@@ -274,6 +281,7 @@ TEST(capped_string_copy_constructor)
 	CappedString40938 d40938(c40938);
 	CappedString40938 const e40938 = c40938;
 
+	JEWEL_LOG_TRACE();
 	CHECK_EQUAL(d0, c0);
 	CHECK_EQUAL(e0, c0);
 	CHECK_EQUAL(d1, c1);
@@ -284,22 +292,25 @@ TEST(capped_string_copy_constructor)
 	CHECK_EQUAL(d40938, c40938);
 	CHECK_EQUAL(e40938, c40938);
 
+	JEWEL_LOG_TRACE();
 	CHECK_EQUAL(d0.size(), c0.size());
 	CHECK_EQUAL(std::string(e0.c_str()), std::string(c0.c_str()));
 	CHECK_EQUAL(d1.size(), c1.size());
 	CHECK_EQUAL(e303.size(), c303.size());
 
+	JEWEL_LOG_TRACE();
 }
 
 TEST(capped_string_assignment)
 {
+	JEWEL_LOG_TRACE();
 	char const* const nc1("890jk'12j\n\n\n\"");
 	CappedString0 const c0("heoa");
 	CappedString1 c1(nc1);
 	CappedString50 const c2("yes");
 	CappedString303 c3(std::string(688, ' '));
 	CappedString40938 const c4("lkuioasdfhjkasdf'asdfasdfhjk'asdasdfhasdf'");
-	CappedString<1000000> c5(std::string(2000000, 'x'));
+	CappedString<250000> c5(std::string(2000000, 'x'));
 	CappedString40938 c6;
 	CappedString303 c7;
 	CappedString0 c8;
@@ -328,13 +339,14 @@ TEST(capped_string_assignment)
 	c7 = CappedString303(cc9);
 	CHECK_EQUAL(c7, CappedString303("8"));
 	CHECK(!c7.is_truncated());
-	c5 = CappedString<1000000>(nc1);
+	c5 = CappedString<250000>(nc1);
 	CHECK(!c5.is_truncated());
-	CHECK_EQUAL(CappedString<1000000>(nc1), c5);
+	CHECK_EQUAL(CappedString<250000>(nc1), c5);
 }
 
 TEST(capped_string_equality_and_inequality)
 {
+	JEWEL_LOG_TRACE();
 	std::string const s0("heoa");
 	std::string const s1("890jk'l2j\n\n\n\"");
 	std::string const s2("yes");
@@ -367,6 +379,7 @@ TEST(capped_string_equality_and_inequality)
 
 TEST(capped_string_concatenation)
 {
+	JEWEL_LOG_TRACE();
 	CappedString<100> c0("hello");
 	CappedString<100> c1("there");
 	CHECK_EQUAL(strcmp(c0.c_str(), "hello"), 0);
@@ -416,6 +429,7 @@ TEST(capped_string_concatenation)
 
 TEST(capped_string_indexing_operators)
 {
+	JEWEL_LOG_TRACE();
 	char const* s0("heoa");
 	char const* s1("890jk'l2j\n\n\n\"");
 	std::string s2("yes");
@@ -455,6 +469,7 @@ TEST(capped_string_indexing_operators)
 
 TEST(capped_string_iterators)
 {
+	JEWEL_LOG_TRACE();
 	char const* s0("heoa");
 	char const* s1("890jk'l2j\n\n\n\"");
 	std::string s2("yes");
@@ -519,6 +534,7 @@ TEST(capped_string_iterators)
 
 TEST(capped_string_c_str)
 {
+	JEWEL_LOG_TRACE();
 	char const* const s0("heoa");
 	char const* const s1("890jk'l2j\n\n\n\"");
 	std::string const s2("yes");
@@ -543,6 +559,7 @@ TEST(capped_string_c_str)
 
 TEST(capped_string_capacity)
 {
+	JEWEL_LOG_TRACE();
 	char const* const s0("heoa");
 	char const* const s1("890jk'l2j\n\n\n\"");
 	std::string const s2("yes");
@@ -574,6 +591,7 @@ TEST(capped_string_capacity)
 
 TEST(capped_string_size)
 {
+	JEWEL_LOG_TRACE();
 	char const* const s0("heoa");
 	char const* const s1("890jk'l2j\n\n\n\"");
 	std::string const s2("yes");
@@ -609,6 +627,7 @@ TEST(capped_string_size)
 
 TEST(capped_string_empty)
 {
+	JEWEL_LOG_TRACE();
 	char const* const s0("heoa");
 	char const* const s1("890jk'l2j\n\n\n\"");
 	std::string const s2("yes");
@@ -638,6 +657,7 @@ TEST(capped_string_empty)
 
 TEST(capped_string_truncated)
 {
+	JEWEL_LOG_TRACE();
 	// Log::set_filepath("~/Workbench/versioned/jewel/scratch.log");
 	// Log::set_threshold(Log::trace);
 
@@ -669,6 +689,7 @@ TEST(capped_string_truncated)
 
 TEST(capped_string_clear)
 {
+	JEWEL_LOG_TRACE();
 	typedef CappedString<101115> CS;
 	CS a("asdfy");
 	CHECK(!a.empty());
@@ -697,6 +718,7 @@ TEST(capped_string_clear)
 
 TEST(capped_string_output)
 {
+	JEWEL_LOG_TRACE();
 	typedef CappedString<1000> CS;
 	std::string const s0(1000, 'a');
 	CS cs0(s0);
@@ -723,6 +745,7 @@ TEST(capped_string_output)
 
 TEST(capped_string_push_back_and_pop_back)
 {
+	JEWEL_LOG_TRACE();
 	CappedString<10> c0 = "Hello!";
 	CHECK(!c0.is_truncated());
 	CHECK_EQUAL(c0.size(), 6);
@@ -748,6 +771,7 @@ TEST(capped_string_push_back_and_pop_back)
 
 TEST(capped_string_resize)
 {
+	JEWEL_LOG_TRACE();
 	CappedString<5> cs0("Hellop");
 	CHECK(cs0.is_truncated());
 	cs0.resize(5);

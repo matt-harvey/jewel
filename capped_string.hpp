@@ -5,6 +5,7 @@
 
 #include "array_utilities.hpp"
 #include "detail/smallest_sufficient_unsigned_type.hpp"
+#include "log.hpp"
 #include <algorithm>
 #include <cstddef>
 #include <istream>
