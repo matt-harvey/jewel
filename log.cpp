@@ -8,6 +8,7 @@
 // circularity here.
 #include <cassert>
 
+#include <ctime>
 #include <fstream>
 #include <ios>
 #include <iostream>
@@ -20,10 +21,14 @@ using std::clog;
 using std::cout;
 using std::endl;
 using std::ios;
+using std::localtime;
 using std::ofstream;
 using std::ostream;
+using std::strftime;
 using std::string;
-
+using std::time;
+using std::time_t;
+using std::tm;
 
 namespace jewel
 {
@@ -41,6 +46,13 @@ namespace
 		explicit StreamHolder(ostream* p_os);
 		~StreamHolder();
 		void kill();
+
+		// If current date and time can be obtained and formatted
+		// successfully, writes a single field to the logging stream (a record
+		// should already have been commenced) with this date and time.
+		// Otherwise, does nothing. Does not write a newline at the end.
+		void log_date_time_now() const;
+
 		ostream* os;
 	};
 
@@ -54,14 +66,14 @@ namespace
 		kill();
 	}
 
-	void
-	StreamHolder::kill()
+	void StreamHolder::kill()
 	{
 		if (os)
 		{
 			*os << "{RECORD}\n{FIELD}[id]" << next_id()
-			    << "\n{FIELD}[message]End log\n"
-				<< endl;
+			    << "\n{FIELD}[message]End log";
+			log_date_time_now();
+			*os << endl;
 			if ((os != &cerr) && (os != &clog) && (os != &cout))
 			{
 				delete os;
@@ -71,8 +83,42 @@ namespace
 		assert (0 == os);
 		return;
 	}
-	
 
+	void StreamHolder::log_date_time_now() const
+	{
+		if (os)
+		{
+			time_t const now = time(0);
+			if (now != static_cast<time_t>(-1))
+			{
+				// WARNING std::localtime may not be thread-safe.
+				tm const* const now_local = localtime(&now);
+				if (!now_local)
+				{
+					return;
+				}
+				assert (now_local != 0);
+				size_t const date_time_str_len =
+					10 +     // for ISO date format
+					1 +      // for ISO 'T' character separating date & time
+					8;       // for ISO local time format
+				char date_time_arr[date_time_str_len + 1];
+				char const* format_str = "%Y-%m-%dT%H:%M:%S";
+				size_t const check = strftime
+				(	date_time_arr,
+					date_time_str_len + 1,
+					format_str,
+					now_local
+				);
+				if (check == date_time_str_len)
+				{
+					*os << "\n{FIELD}[date_time_written]"
+					    << date_time_arr;
+				}
+			}
+		}
+		return;
+	}
 
 }  // end anonymous namespace
 
