@@ -16,7 +16,7 @@ TEST(on_windows_test)
 		CHECK(on_windows);
 #	endif
 
-#	if _WIN32
+#	ifdef _WIN32
 		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
@@ -26,7 +26,7 @@ TEST(on_windows_test)
 		CHECK(on_windows);
 #	endif
 
-#	if __WIN32__
+#	ifdef __WIN32__
 		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
@@ -36,7 +36,7 @@ TEST(on_windows_test)
 		CHECK(on_windows);
 #	endif
 
-#	if WIN32
+#	ifdef WIN32
 		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
