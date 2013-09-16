@@ -253,7 +253,7 @@ public:
 	 *
 	 * Exception safety: <em>strong guarantee</em>.
 	 *
-	 * @todo High priority. Test with types other than std::string.
+	 * @todo HIGH PRIORITY. Test with types other than std::string.
 	 */
 	template <typename charT, typename traits, typename Alloc>
 	explicit Decimal(std::basic_string<charT, traits, Alloc> const& str);
@@ -679,7 +679,7 @@ private:
 	void output_aux(std::basic_ostream<charT, traits>& oss) const;
 
 	// Auxiliary class to help with char and wchar_t literals
-	// TODO Low priority. Provide specializations for character
+	// TODO HIGH PRIORITY. Provide specializations for character
 	// types other than char and wchar_t.
 	template <typename charT>
 	struct CharacterProvider
@@ -833,7 +833,7 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	typedef typename std::basic_string<charT> stringT;
 	typedef typename stringT::size_type sz_t;
 	
-	// TODO High priority. Localize these properly
+	// TODO HIGH PRIORITY. Localize these properly
 	charT const null_char = CharacterProvider<charT>::null;
 	charT const spot_char = CharacterProvider<charT>::full_stop;
 	charT const plus_char = CharacterProvider<charT>::plus;
