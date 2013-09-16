@@ -63,7 +63,11 @@ namespace jewel
  * @todo Testing.
  *
  * These logging facilities are guaranteed never to throw an exception, with
- * the following proviso. The JEWEL_LOG_VALUE macro makes use of
+ * the following provisos...
+ *
+ * (a) set_filepath may throw std::bad_alloc.
+ *
+ * (b) The JEWEL_LOG_VALUE macro makes use of
  * boost::lexical_cast, the implementation of which inserts the passed
  * expression onto a std::ostream during the casting process. If this process
  * of calling boost::lexical_cast results in either boost::bad_lexical_cast or
@@ -95,6 +99,9 @@ public:
 	/**
 	 * Tell the logging engine the file you want log messages written to.
 	 * This must be called or logging will not occur at all.
+	 *
+	 * @throws std::bad_alloc in the unlikely event of memory allocation
+	 * failure while creating the underlying logging stream.
 	 */
 	static void set_filepath(std::string const& p_filepath);
 

@@ -35,6 +35,44 @@ namespace jewel
 
 namespace
 {
+	// If current date and time can be obtained and formatted
+	// successfully, writes a single field to p_os (a record
+	// should already have been commenced) with this date and time.
+	// Otherwise, does nothing. Does not write a newline at the end.
+	// But does commence with a newline.
+	void write_date_time_now(ostream& p_os)
+	{
+		time_t const now = time(0);
+		if (now != static_cast<time_t>(-1))
+		{
+			// WARNING std::localtime may not be thread-safe.
+			tm const* const now_local = localtime(&now);
+			if (!now_local)
+			{
+				return;
+			}
+			assert (now_local != 0);
+			size_t const date_time_str_len =
+				10 +     // for ISO date format
+				1 +      // for ISO 'T' character separating date & time
+				8;       // for ISO local time format
+			char date_time_arr[date_time_str_len + 1];
+			char const* format_str = "%Y-%m-%dT%H:%M:%S";
+			size_t const check = strftime
+			(	date_time_arr,
+				date_time_str_len + 1,
+				format_str,
+				now_local
+			);
+			if (check == date_time_str_len)
+			{
+				p_os << "\n{FIELD}[date_time_written]"
+				     << date_time_arr;
+			}
+		}
+		return;	
+	}
+	
 	long long next_id()
 	{
 		static long long ret = -1;
@@ -46,13 +84,6 @@ namespace
 		explicit StreamHolder(ostream* p_os);
 		~StreamHolder();
 		void kill();
-
-		// If current date and time can be obtained and formatted
-		// successfully, writes a single field to the logging stream (a record
-		// should already have been commenced) with this date and time.
-		// Otherwise, does nothing. Does not write a newline at the end.
-		void log_date_time_now() const;
-
 		ostream* os;
 	};
 
@@ -72,7 +103,7 @@ namespace
 		{
 			*os << "{RECORD}\n{FIELD}[id]" << next_id()
 			    << "\n{FIELD}[message]End log";
-			log_date_time_now();
+			write_date_time_now(*os);
 			*os << endl;
 			if ((os != &cerr) && (os != &clog) && (os != &cout))
 			{
@@ -81,42 +112,6 @@ namespace
 			os = 0;
 		}
 		assert (0 == os);
-		return;
-	}
-
-	void StreamHolder::log_date_time_now() const
-	{
-		if (os)
-		{
-			time_t const now = time(0);
-			if (now != static_cast<time_t>(-1))
-			{
-				// WARNING std::localtime may not be thread-safe.
-				tm const* const now_local = localtime(&now);
-				if (!now_local)
-				{
-					return;
-				}
-				assert (now_local != 0);
-				size_t const date_time_str_len =
-					10 +     // for ISO date format
-					1 +      // for ISO 'T' character separating date & time
-					8;       // for ISO local time format
-				char date_time_arr[date_time_str_len + 1];
-				char const* format_str = "%Y-%m-%dT%H:%M:%S";
-				size_t const check = strftime
-				(	date_time_arr,
-					date_time_str_len + 1,
-					format_str,
-					now_local
-				);
-				if (check == date_time_str_len)
-				{
-					*os << "\n{FIELD}[date_time_written]"
-					    << date_time_arr;
-				}
-			}
-		}
 		return;
 	}
 
@@ -131,9 +126,20 @@ Log::set_filepath(string const& p_filepath)
 		filepath = p_filepath;
 		if (!filepath.empty())
 		{
-			ofstream* f = new ofstream(p_filepath.c_str());
+			ofstream* f = new ofstream(filepath.c_str());
 			f->exceptions(ios::iostate(0));
 			stream_aux(f);
+			ostream* const osp = stream_aux();
+			if (osp)
+			{
+				*osp << "{RECORD}\n{FIELD}[id]" << next_id()
+		   			 << "\n{FIELD}[message]"
+					 << "Commenced logging to "
+					 << filepath
+					 << ".";
+				write_date_time_now(*osp);
+				*osp << '\n' << endl;
+			}
 		}
 	}
 	return;
