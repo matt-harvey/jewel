@@ -2,6 +2,7 @@
 
 #include "../num_digits.hpp"
 #include <UnitTest++/UnitTest++.h>
+#include <climits>
 
 using jewel::NumDigits;
 
@@ -32,6 +33,10 @@ TEST(num_digits_with_default_base_int)
 	CHECK_EQUAL(NumDigits::num_digits(-10798778), 8);
 	CHECK_EQUAL(NumDigits::num_digits(999999999), 9);
 	CHECK_EQUAL(NumDigits::num_digits(-999999999), 9);
+	CHECK_EQUAL
+	(	NumDigits::num_digits(INT_MAX),
+		NumDigits::num_digits(INT_MIN)
+	);
 }
 
 TEST(num_digits_with_base_of_2_int)

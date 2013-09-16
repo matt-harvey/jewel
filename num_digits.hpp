@@ -34,6 +34,8 @@ public:
 	 *@param x the number whose digits we want to count
 	 *@param base the numerical base of representation of x (defaults to 10)
 	 *
+	 * Precondition: Base must be greater than 1.
+	 *
 	 * Exception safety: the <em>nothrow guarantee</em> is offered by
 	 * all the public functions in NumDigits.
 	 */
@@ -59,7 +61,8 @@ private:
 	// Capture parameters of disallowed type in this unimplemented function
 	// template, to cause compile-time failure. Only the types explicitly
 	// allowed for in the public overloaded functions will work; and moreover,
-	// disallowed types will _not_ be automatically converted to allowed types.
+	// disallowed types will _not_ be automatically converted to allowed
+	// types.
 	template <typename T>
 	static std::size_t num_digits(T x, T base = 10);
 
