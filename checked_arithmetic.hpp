@@ -9,7 +9,10 @@
  * Copyright (c) 2012, Matthew Harvey. All rights reserved.
  *
  * \brief Provides functions that check the safety of arithmetic
- * operations.
+ * operations. In the case of signed arithmetic, we are checking
+ * for overflow; in the case of unsigned arithmetic, we are
+ * checking for wrap-around. In the case of division and remainder
+ * operations, we are also checking for divide-by-zero.
  *
  * The parameters to these functions must be of one of the supported types,
  * and must be of the same type.
@@ -30,11 +33,11 @@
  * unsigned short\n
  * unsigned char\n
  * </tt>
- * @param x first number that would be added (or subtracted, or multiplied).
- * @param y second number that would be added (or subtracted, or multiplied).
+ * @param x first number that would be added (or subtracted, or etc.).
+ * @param y second number that would be added (or subtracted, or etc.).
  * @returns \c true if and only if it \e would be
  * unsafe to add \c x and \c y (or subtract \c y from \c x, or multiply \c x
- * by \c y) (i.e. would give rise to overflow), otherwise returns false.
+ * by \c y, or divide \c x by \c y) otherwise returns false.
  * The operation being tested is not actually performed.
  *
  * Exception safety: <em>nothrow guarantee</em> is offered by all compilable
@@ -51,8 +54,8 @@ namespace jewel
 
 // INTERFACE
 
-/// \name Check addition, subtraction and multiplication 
-/// operations for overflow.
+/// \name Check addition, subtraction, multiplication and division
+/// operations for or overflow other unsafe conditions.
  //@{
 /** See documentation for file checked_arithmetic.hpp.
  */
@@ -68,6 +71,11 @@ bool subtraction_is_unsafe(T x, T y);
  */
 template <typename T>
 bool multiplication_is_unsafe(T x, T y);
+
+/** See documentation for file checked_arithmetic.hpp.
+ */
+template <typename T>
+bool division_is_unsafe(T x, T y);
 //@}
 
 
@@ -94,6 +102,13 @@ inline
 bool multiplication_is_unsafe(T x, T y)
 {
 	return detail::CheckedArithmetic::multiplication_is_unsafe(x, y);
+}
+
+template <typename T>
+inline
+bool division_is_unsafe(T x, T y)
+{
+	return detail::CheckedArithmetic::division_is_unsafe(x, y);
 }
 
 //@endcond

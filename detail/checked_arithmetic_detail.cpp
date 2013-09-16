@@ -182,6 +182,68 @@ CheckedArithmetic::
 	return multiplication_is_unsafe_unsigned_integral_types(x, y);
 }
 
+bool
+CheckedArithmetic::division_is_unsafe(int x, int y)
+{
+	return division_is_unsafe_signed_integral_types(x, y);
+}
+
+bool
+CheckedArithmetic::division_is_unsafe(long x, long y)
+{
+	return division_is_unsafe_signed_integral_types(x, y);
+}
+
+bool
+CheckedArithmetic::division_is_unsafe(long long x, long long y)
+{
+	return division_is_unsafe_signed_integral_types(x, y);
+}
+
+bool
+CheckedArithmetic::division_is_unsafe(short x, short y)
+{
+	return division_is_unsafe_signed_integral_types(x, y);
+}
+
+bool
+CheckedArithmetic::division_is_unsafe(signed char x, signed char y)
+{
+	return division_is_unsafe_signed_integral_types(x, y);
+}
+	
+bool
+CheckedArithmetic::division_is_unsafe(unsigned int x, unsigned int y)
+{
+	return division_is_unsafe_unsigned_integral_types(x, y);
+}
+
+bool
+CheckedArithmetic::division_is_unsafe(unsigned long x, unsigned long y)
+{
+	return division_is_unsafe_unsigned_integral_types(x, y);
+}
+
+bool
+CheckedArithmetic::division_is_unsafe
+(	unsigned long long x,
+	unsigned long long y
+)
+{
+	return division_is_unsafe_unsigned_integral_types(x, y);
+}
+
+bool
+CheckedArithmetic::division_is_unsafe(unsigned short x, unsigned short y)
+{
+	return division_is_unsafe_unsigned_integral_types(x, y);
+}
+
+bool
+CheckedArithmetic::division_is_unsafe(unsigned char x, unsigned char y)
+{
+	return division_is_unsafe_unsigned_integral_types(x, y);
+}
 
 }  // namespace detail
 

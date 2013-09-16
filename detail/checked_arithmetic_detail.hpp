@@ -47,7 +47,7 @@ class CheckedArithmetic
 //@cond
 public:
 	
-	/// \name Check addition for overflow
+	/// \name Check addition
 	//@{	
 	// If other types are added, the documentation for the wrapper
 	// functions in checked_arithmetic.hpp needs to be updated
@@ -64,7 +64,7 @@ public:
 	static bool addition_is_unsafe(unsigned char, unsigned char);
 	//@}
 
-	///\name Check subtraction for overflow
+	///\name Check subtraction
 	//@{
 	// If other types are added, the documentation for the wrapper
 	// functions in checked_arithmetic.hpp needs to be updated
@@ -81,7 +81,7 @@ public:
 	static bool subtraction_is_unsafe(unsigned char, unsigned char);
 	//@}
 
-	///\name Check multiplication for overflow
+	///\name Check multiplication
 	//@{
 	// If other types are added, the documentation for the wrapper
 	// functions in checked_arithmetic.hpp needs to be updated
@@ -99,6 +99,26 @@ public:
 	);
 	static bool multiplication_is_unsafe(unsigned short, unsigned short);
 	static bool multiplication_is_unsafe(unsigned char, unsigned char);
+	//@}
+
+	///\name Check division
+	//@{
+	// If other types are added, the documentation for the wrapper
+	// functions in checked_arithmetic.hpp needs to be updated
+	// accordingly.
+	static bool division_is_unsafe(int, int);
+	static bool division_is_unsafe(long, long);
+	static bool division_is_unsafe(long long, long long);
+	static bool division_is_unsafe(short, short);
+	static bool division_is_unsafe(signed char, signed char);
+	static bool division_is_unsafe(unsigned int, unsigned int);
+	static bool division_is_unsafe(unsigned long, unsigned long);
+	static bool division_is_unsafe
+	(	unsigned long long,
+		unsigned long long
+	);
+	static bool division_is_unsafe(unsigned short, unsigned short);
+	static bool division_is_unsafe(unsigned char, unsigned char);
 	//@}
 
 //@endcond
@@ -144,16 +164,10 @@ private:
 	addition_is_unsafe_unsigned_integral_types(T, T);
 
 	template <typename T> static bool
-	addition_is_unsafe_floating_point_types(T, T);
-
-	template <typename T> static bool
 	subtraction_is_unsafe_signed_integral_types(T, T);
 
 	template <typename T> static bool
 	subtraction_is_unsafe_unsigned_integral_types(T, T);
-
-	template <typename T> static bool
-	subtraction_is_unsafe_floating_point_types(T, T);
 
 	template <typename T> static bool
 	multiplication_is_unsafe_signed_integral_types(T, T);
@@ -162,16 +176,10 @@ private:
 	multiplication_is_unsafe_unsigned_integral_types(T, T);
 
 	template <typename T> static bool
-	multiplication_is_unsafe_floating_point_types(T, T);
-
-	template <typename T> static bool
 	division_is_unsafe_signed_integral_types(T, T);
 
 	template <typename T> static bool
 	division_is_unsafe_unsigned_integral_types(T, T);
-
-	template <typename T> static bool
-	division_is_unsafe_floating_point_types(T, T);
 
 };  // class CheckedArithmetic
 
@@ -255,9 +263,27 @@ CheckedArithmetic::multiplication_is_unsafe_unsigned_integral_types(T x, T y)
 	return x > (std::numeric_limits<T>::max() / y);
 }
 
+template <typename T>
+inline
+bool
+CheckedArithmetic::division_is_unsafe_signed_integral_types(T x, T y)
+{
+	return
+		(y == 0) ||
+		((y == -1) && (x == std::numeric_limits<T>::min()));
+}
+
+template <typename T>
+inline
+bool
+CheckedArithmetic::division_is_unsafe_unsigned_integral_types(T x, T y)
+{
+	(void)x;  // Silence compiler warning re. unused variable.
+	return y == 0;
+}
+
 
 }  // namespace detail
-
 }  // namespace jewel
 
 #endif  // GUARD_checked_arithmetic_detail_hpp_8232921365756971
