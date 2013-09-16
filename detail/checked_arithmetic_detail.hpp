@@ -216,46 +216,29 @@ template <typename T>
 bool
 CheckedArithmetic::multiplication_is_unsafe_signed_integral_types(T x, T y)
 {
-	// Deal with easy, common cases
-	if ((x == 0) || (y == 0) || (x == 1) || (y == 1))
-	{
-		return false;
-	}
-	T const tmin = std::numeric_limits<T>::min();
-	JEWEL_ASSERT ((x != 0) && (y != 0) && (x != 1) && (y != 1));
-	// Deal with case of smallest possible number
-	// It's dangerous to multiply this by anything except 1 or 0!
-	if ((x == tmin) || (y == tmin))
-	{
-		return true;
-	}
-	if ((x == -1) || (y == -1))
-	{
-		// Then multiplication is safe given tmin is not involved
-		return false;
-	}
-	JEWEL_ASSERT ((x != tmin) && (y != tmin));
-	// Deal with ordinary cases
-	T const tmax = std::numeric_limits<T>::max();
-	JEWEL_ASSERT ((x != -1) && (y != -1));  // Avoids errors with tmin below
 	if (x > 0)
 	{
 		if (y > 0)
 		{
-			return y > tmax / x;
+			return x > (std::numeric_limits<T>::max() / y);
 		}
-		JEWEL_ASSERT (y < 0);
-		return y < tmin / x;
-	}
-	if (x < 0)
-	{
-		if (y < 0)
+		else
 		{
-			return y < tmax / x;
+			return y < (std::numeric_limits<T>::min() / x);
 		}
 	}
-	JEWEL_ASSERT ((x < 0) && (y > 0));
-	return y > tmin / x;
+	else
+	{
+		if (y > 0)
+		{
+			return x < (std::numeric_limits<T>::min() / y);
+		}
+		else
+		{
+			return (x != 0) && (y < (std::numeric_limits<T>::max() / x));
+		}
+	}
+	JEWEL_HARD_ASSERT (false);
 }
 
 template <typename T>
@@ -263,15 +246,13 @@ inline
 bool
 CheckedArithmetic::multiplication_is_unsafe_unsigned_integral_types(T x, T y)
 {
-	// Deal with easy, common cases 
-	if ((x == 0) || (y == 0) || (x == 1) || (y == 1))
+	if ((x == 0) || (y == 0))
 	{
 		return false;
 	}
-	// Deal with general cases
-	JEWEL_ASSERT (x != 0);
-	JEWEL_ASSERT (y != 0);
-	return std::numeric_limits<T>::max() / x < y;
+	JEWEL_ASSERT (x > 0);
+	JEWEL_ASSERT (y > 0);
+	return x > (std::numeric_limits<T>::max() / y);
 }
 
 
