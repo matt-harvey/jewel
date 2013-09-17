@@ -1009,6 +1009,12 @@ TEST_FIXTURE(DigitStringFixture, decimal_multiply_equals)
 		DecimalMultiplicationException
 	);
 
+	CHECK_THROW
+	(	Decimal(numeric_limits<Decimal::int_type>::min(), 0) *=
+			Decimal(-1, 0),
+		DecimalMultiplicationException
+	);
+
 	// With overflow in execution
 	Decimal d50("1.1111111");
 	string s51 = s_max_digits_one_and_zeroes;

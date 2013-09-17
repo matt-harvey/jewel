@@ -890,6 +890,7 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 		// We have a spot.
 		// We have a str_rep that's one too big
 		sz_t reduced_size = str_size;
+		JEWEL_ASSERT (reduced_size > 0);
 		str_rep.resize(--reduced_size);
 		JEWEL_ASSERT (reduced_size == str_rep.size());	
 		JEWEL_ASSERT (reduced_size < str_size);
@@ -1177,6 +1178,7 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 			charT const separator =
 				use_facet<numpunct<charT> >(loc).thousands_sep();
 			std::string::const_iterator grouping_it = grouping.begin();
+			JEWEL_ASSERT (!grouping.empty());
 			std::string::const_iterator const last_group_datum
 				= grouping.end() - 1;
 			str_sz digits_written_this_group = 0;

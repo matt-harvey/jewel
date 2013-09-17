@@ -195,6 +195,7 @@ int Decimal::rescale(places_type p_places)
 		// greater than p_places will always be less than
 		// numeric_limits<int_type>::max(), given that s_max_places is
 		// equal to the number of digits in numeric_limits<int_type>::min().
+		JEWEL_ASSERT (!subtraction_is_unsafe(p_places, m_places));
 		int_type multiplier = NUM_CAST<int_type>
 		(	pow(s_base, p_places - m_places)
 		);
@@ -212,6 +213,7 @@ int Decimal::rescale(places_type p_places)
 		JEWEL_ASSERT (p_places < m_places);
 
 		// truncate all but one of the required places
+		JEWEL_ASSERT (m_places > 0);
 		for (unsigned int j = m_places - 1; j != p_places; --j)
 		{
 			JEWEL_ASSERT (!division_is_unsafe(m_intval, s_base));
@@ -376,6 +378,8 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	rhs.rationalize();
 
 	// Rule out problematic smallest Decimal
+	JEWEL_ASSERT (minimum() == Decimal(numeric_limits<int_type>::min(), 0));
+	JEWEL_ASSERT (maximum() == Decimal(numeric_limits<int_type>::max(), 0));
 	if (*this == minimum() || rhs == minimum())
 	{
 		JEWEL_ASSERT (*this == orig);
@@ -391,8 +395,20 @@ Decimal& Decimal::operator*=(Decimal rhs)
 	(	(m_intval < 0 && rhs.m_intval > 0) ||
 	    (m_intval > 0 && rhs.m_intval < 0)
 	);
-	if (m_intval < 0) m_intval *= -1;
-	if (rhs.m_intval < 0) rhs.m_intval *= -1;
+	if (m_intval < 0)
+	{
+		JEWEL_ASSERT
+		(	!multiplication_is_unsafe(m_intval, static_cast<int_type>(-1))
+		);
+		m_intval *= -1;
+	}
+	if (rhs.m_intval < 0)
+	{
+		JEWEL_ASSERT
+		(	!multiplication_is_unsafe(rhs.m_intval, static_cast<int_type>(-1))
+		);
+		rhs.m_intval *= -1;
+	}
 
 	// Do "unchecked multiply" if we can
 	JEWEL_ASSERT (m_intval >= 0 && rhs.m_intval >= 0);	
@@ -411,14 +427,24 @@ Decimal& Decimal::operator*=(Decimal rhs)
 				rescale(m_places - 1);
 			#endif
 		}
-		if (signs_differ) m_intval *= -1;
+		if (signs_differ)
+		{
+			JEWEL_ASSERT (m_intval != numeric_limits<int_type>::min());
+			JEWEL_ASSERT
+			(	!multiplication_is_unsafe
+				(	m_intval,
+					static_cast<int_type>(-1)
+				)
+			);
+			m_intval *= -1;
+		}
 		rationalize();
 		return *this;
 	}
 
 	*this = orig;
 	JEWEL_THROW(DecimalMultiplicationException, "Unsafe multiplication.");
-	JEWEL_ASSERT (false);  // Execution should never reach here.
+	JEWEL_HARD_ASSERT (false);  // Execution should never reach here.
 	return *this;    // Silence compiler re. return from non-void function.
 
 }
@@ -431,10 +457,8 @@ Decimal& Decimal::operator/=(Decimal rhs)
 
 	rhs.rationalize();
 
-	int_type rhs_intval = rhs.m_intval;
-
 	// Capture division by zero
-	if (rhs_intval == 0)
+	if (rhs.m_intval == 0)
 	{
 		JEWEL_ASSERT (*this == orig);
 		JEWEL_THROW(DecimalDivisionByZeroException, "Division by zero.");
@@ -442,7 +466,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	
 	// To prevent complications
 	if ( m_intval == numeric_limits<int_type>::min() ||
-	  rhs_intval == numeric_limits<int_type>::min() )
+	  rhs.m_intval == numeric_limits<int_type>::min() )
 	{
 		JEWEL_ASSERT (*this == orig);
 		JEWEL_THROW
@@ -451,8 +475,8 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			"feature in division operation."
 		);
 	}
-	JEWEL_ASSERT (NumDigits::num_digits(rhs_intval) <= maximum_precision());
-	if (NumDigits::num_digits(rhs_intval) == maximum_precision())
+	JEWEL_ASSERT (NumDigits::num_digits(rhs.m_intval) <= maximum_precision());
+	if (NumDigits::num_digits(rhs.m_intval) == maximum_precision())
 	{
 		JEWEL_ASSERT (*this == orig);
 		JEWEL_THROW
@@ -466,8 +490,8 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	
 	// Remember required sign of product
 	bool const diff_signs =
-	(	( m_intval > 0 && rhs_intval < 0) ||
-		( m_intval < 0 && rhs_intval > 0)
+	(	( m_intval > 0 && rhs.m_intval < 0) ||
+		( m_intval < 0 && rhs.m_intval > 0)
 	);
 
 	// Make absolute
@@ -475,10 +499,10 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	(	!multiplication_is_unsafe(m_intval, static_cast<int_type>(-1))
 	);
 	JEWEL_ASSERT
-	(	!multiplication_is_unsafe(rhs_intval, static_cast<int_type>(-1))
+	(	!multiplication_is_unsafe(rhs.m_intval, static_cast<int_type>(-1))
 	);
 	if (m_intval < 0) m_intval *= -1;
-	if (rhs_intval < 0) rhs_intval *= -1;
+	if (rhs.m_intval < 0) rhs.m_intval *= -1;
 
 	// Rescale the dividend as high as we can
 	while (m_places < rhs.m_places && rescale(m_places + 1) == 0)
@@ -490,16 +514,17 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		*this = orig;
 		JEWEL_THROW(DecimalDivisionException, "Unsafe division.");
 	}
-	JEWEL_ASSERT (m_places >= rhs.m_places);
 
 	// Proceed with basic division algorithm
+	JEWEL_ASSERT (m_places >= rhs.m_places);
+	JEWEL_ASSERT (!subtraction_is_unsafe(m_places, rhs.m_places));
 	m_places -= rhs.m_places;
-	JEWEL_ASSERT (rhs_intval != 0);
+	JEWEL_ASSERT (rhs.m_intval != 0);
 	JEWEL_ASSERT (m_intval != numeric_limits<int_type>::min());
-	JEWEL_ASSERT (!remainder_is_unsafe(m_intval, rhs_intval));
-	int_type remainder = m_intval % rhs_intval;
-	JEWEL_ASSERT (!division_is_unsafe(m_intval, rhs_intval));
-	m_intval /= rhs_intval;
+	JEWEL_ASSERT (!remainder_is_unsafe(m_intval, rhs.m_intval));
+	int_type remainder = m_intval % rhs.m_intval;
+	JEWEL_ASSERT (!division_is_unsafe(m_intval, rhs.m_intval));
+	m_intval /= rhs.m_intval;
 
 	// Deal with any remainder using "long division"
 	while (remainder != 0 && rescale(m_places + 1) == 0)
@@ -521,22 +546,22 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			// and need to "scale down" first
 
 			bool add_rounding_right = false;
-			if (rhs_intval % s_base >= s_rounding_threshold)
+			if (rhs.m_intval % s_base >= s_rounding_threshold)
 			{
 				add_rounding_right = true;
 			}
-			rhs_intval /= s_base;
+			rhs.m_intval /= s_base;
 			if (add_rounding_right)
 			{
-				JEWEL_ASSERT (!addition_is_unsafe(rhs_intval,
+				JEWEL_ASSERT (!addition_is_unsafe(rhs.m_intval,
 				  NUM_CAST<int_type>(1)));
-				++(rhs_intval);
+				++(rhs.m_intval);
 			}
 
 			// Redo the Decimal division on a "safe scale"
 			Decimal lhs = orig;
 			if (lhs.m_intval < 0) lhs.m_intval *= -1;
-			JEWEL_ASSERT (rhs_intval >= 0);
+			JEWEL_ASSERT (rhs.m_intval >= 0);
 			lhs /= rhs;
 			bool add_rounding_left = false;
 			if (lhs.m_intval % s_base >= s_rounding_threshold)
@@ -561,19 +586,18 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		JEWEL_ASSERT (!multiplication_is_unsafe(remainder, s_base));
 		remainder *= s_base;
 
-		JEWEL_ASSERT (rhs_intval > 0);
-		JEWEL_ASSERT (!remainder_is_unsafe(remainder, rhs_intval));
-		int_type const temp_remainder = remainder % rhs_intval;
-		JEWEL_ASSERT (!division_is_unsafe(remainder, rhs_intval));
-		m_intval += remainder / rhs_intval;
+		JEWEL_ASSERT (rhs.m_intval > 0);
+		JEWEL_ASSERT (!remainder_is_unsafe(remainder, rhs.m_intval));
+		int_type const temp_remainder = remainder % rhs.m_intval;
+		JEWEL_ASSERT (!division_is_unsafe(remainder, rhs.m_intval));
+		m_intval += remainder / rhs.m_intval;
 		remainder = temp_remainder;
 	}
 
-	JEWEL_ASSERT (rhs_intval >= remainder);
-	JEWEL_ASSERT (!subtraction_is_unsafe(rhs_intval, remainder));
-	
 	// Do rounding if required
-	if (rhs_intval - remainder <= remainder)
+	JEWEL_ASSERT (rhs.m_intval >= remainder);
+	JEWEL_ASSERT (!subtraction_is_unsafe(rhs.m_intval, remainder));
+	if (rhs.m_intval - remainder <= remainder)
 	{
 		// If the required rounding would be unsafe, we throw
 		if (addition_is_unsafe(m_intval, NUM_CAST<int_type>(1)))
@@ -586,8 +610,10 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	}
 
 	// Put the correct sign
-	// TODO HIGH PRIORITY Is this multiplication operation guaranteed
-	// to be safe?
+	JEWEL_ASSERT (m_intval >= 0);
+	JEWEL_ASSERT
+	(	!multiplication_is_unsafe(m_intval, static_cast<int_type>(-1))
+	);
 	if (diff_signs) m_intval *= -1;
 	rationalize();
 	return *this;
@@ -659,15 +685,19 @@ Decimal round(Decimal const& x, Decimal::places_type decimal_places)
 
 Decimal operator-(Decimal const& d)
 {
-	if (d.m_intval == numeric_limits<Decimal::int_type>::min())
+	typedef Decimal::int_type int_type;
+	if (d.m_intval == numeric_limits<int_type>::min())
 	{
 		JEWEL_THROW
 		(	DecimalUnaryMinusException,
 			"Unsafe arithmetic operation (unary minus)."
 		);
 	}
-	JEWEL_ASSERT (d.m_intval != numeric_limits<Decimal::int_type>::min());
+	JEWEL_ASSERT (d.m_intval != numeric_limits<int_type>::min());
 	Decimal ret = d;
+	JEWEL_ASSERT
+	(	!multiplication_is_unsafe(ret.m_intval, static_cast<int_type>(-1))
+	);
 	ret.m_intval *= -1;
 	return ret;
 }
