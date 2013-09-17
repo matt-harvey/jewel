@@ -57,25 +57,42 @@ namespace jewel
 /// \name Check addition, subtraction, multiplication and division
 /// operations for or overflow other unsafe conditions.
  //@{
-/** See documentation for file checked_arithmetic.hpp.
+/** 
+ * @returns true if and only if it is unsafe to perform the
+ * operation <tt>x + y</tt>.
  */
 template <typename T>
 bool addition_is_unsafe(T x, T y);
 
-/** See documentation for file checked_arithmetic.hpp.
+/**
+ * @returns true if and only if it is unsafe to perform the operation
+ * <tt>x - y</tt>.
  */
 template <typename T>
 bool subtraction_is_unsafe(T x, T y);
 
-/** See documentation for file checked_arithmetic.hpp.
+/**
+ * @returns true if and only if it is unsafe to perform the operation
+ * <tt>x * y</tt>.
  */
 template <typename T>
 bool multiplication_is_unsafe(T x, T y);
 
-/** See documentation for file checked_arithmetic.hpp.
+/**
+ * @returns true if and only if is unsafe to perform the operation
+ * <tt>x / y</tt>.
  */
 template <typename T>
 bool division_is_unsafe(T x, T y);
+
+/** See documentation for file checked_arithmetic.hpp.
+ * 
+ * @returns \e true if and only if it is unsafe to perform
+ * the operation <tt>x % y</tt>.
+ */
+template <typename T>
+bool remainder_is_unsafe(T x, T y);
+
 //@}
 
 
@@ -109,6 +126,13 @@ inline
 bool division_is_unsafe(T x, T y)
 {
 	return detail::CheckedArithmetic::division_is_unsafe(x, y);
+}
+
+template <typename T>
+inline
+bool remainder_is_unsafe(T x, T y)
+{
+	return detail::CheckedArithmetic::remainder_is_unsafe(x, y);
 }
 
 //@endcond

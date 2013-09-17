@@ -121,6 +121,26 @@ public:
 	static bool division_is_unsafe(unsigned char, unsigned char);
 	//@}
 
+	///\name Check remainder
+	//@{
+	// If other types are added, the documentation for the wrapper
+	// functions in checked_arithmetic.hpp needs to be updated
+	// accordingly.
+	static bool remainder_is_unsafe(int, int);
+	static bool remainder_is_unsafe(long, long);
+	static bool remainder_is_unsafe(long long, long long);
+	static bool remainder_is_unsafe(short, short);
+	static bool remainder_is_unsafe(signed char, signed char);
+	static bool remainder_is_unsafe(unsigned int, unsigned int);
+	static bool remainder_is_unsafe(unsigned long, unsigned long);
+	static bool remainder_is_unsafe
+	(	unsigned long long,
+		unsigned long long
+	);
+	static bool remainder_is_unsafe(unsigned short, unsigned short);
+	static bool remainder_is_unsafe(unsigned char, unsigned char);
+	//@}
+
 //@endcond
 private:
 
@@ -148,6 +168,9 @@ private:
 
 	template <typename T>
 	static bool division_is_unsafe(T, T);
+
+	template <typename T>
+	static bool remainder_is_unsafe(T, T);
 
 
 	// The following function templates are called by the public

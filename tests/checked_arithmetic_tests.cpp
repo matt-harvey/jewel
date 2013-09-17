@@ -13,6 +13,7 @@ using std::endl;
 using std::numeric_limits;
 using jewel::addition_is_unsafe;
 using jewel::division_is_unsafe;
+using jewel::remainder_is_unsafe;
 using jewel::subtraction_is_unsafe;
 using jewel::multiplication_is_unsafe;
 
@@ -1935,6 +1936,415 @@ TEST(checked_arithmetic_division_is_unsafe_unsigned_unsigned_char)
 	unsigned char i19 = UCHAR_MAX;
 	unsigned char i20 = 1;
 	CHECK(!division_is_unsafe(i19, i20));
+}
+
+
+
+// TEST REMAINDER SAFETY CHECKERS
+
+TEST(checked_arithmetic_remainder_is_unsafe_int)
+{
+	// Test reaction to unsafe operations
+	int i0 = 23;
+	int i1 = 0;
+	CHECK(remainder_is_unsafe(i0, i1));
+	int i2 = INT_MIN;
+	int i3 = -1;
+	CHECK(remainder_is_unsafe(i2, i3));
+	int i4 = 0;
+	int i5 = 0;
+	CHECK(remainder_is_unsafe(i4, i5));
+	int i6 = INT_MIN;
+	int i7 = 0;
+	CHECK(remainder_is_unsafe(i6, i7));
+	int i8 = -238947;
+	int i9 = 0;
+	CHECK(remainder_is_unsafe(i8, i9));
+
+	// Test reaction to safe operations
+	int i10 = 0;
+	int i11 = 23;
+	CHECK(!remainder_is_unsafe(i10, i11));
+	int i12 = -1;
+	int i13 = INT_MIN;
+	CHECK(!remainder_is_unsafe(i12, i13));
+	int i14 = INT_MAX;
+	int i15 = -1;
+	CHECK(!remainder_is_unsafe(i14, i15));
+	int i16 = 0;
+	int i17 = 1;
+	CHECK(!remainder_is_unsafe(i16, i17));
+	int i18 = 0;
+	int i19 = INT_MIN;
+	CHECK(!remainder_is_unsafe(i18, i19));
+	int i20 = 1298;
+	int i21 = -3098;
+	CHECK(!remainder_is_unsafe(i20, i21));
+	int i22 = INT_MAX;
+	int i23 = 1;
+	CHECK(!remainder_is_unsafe(i22, i23));
+}
+
+TEST(checked_arithmetic_remainder_is_unsafe_long)
+{
+	// Test reaction to unsafe operations
+	long i0 = 23;
+	long i1 = 0;
+	CHECK(remainder_is_unsafe(i0, i1));
+	long i2 = LONG_MIN;
+	long i3 = -1;
+	CHECK(remainder_is_unsafe(i2, i3));
+	long i4 = 0;
+	long i5 = 0;
+	CHECK(remainder_is_unsafe(i4, i5));
+	long i6 = LONG_MIN;
+	long i7 = 0;
+	CHECK(remainder_is_unsafe(i6, i7));
+	long i8 = -238947;
+	long i9 = 0;
+	CHECK(remainder_is_unsafe(i8, i9));
+
+	// Test reaction to safe operations
+	long i10 = 0;
+	long i11 = 23;
+	CHECK(!remainder_is_unsafe(i10, i11));
+	long i12 = -1;
+	long i13 = LONG_MIN;
+	CHECK(!remainder_is_unsafe(i12, i13));
+	long i14 = LONG_MAX;
+	long i15 = -1;
+	CHECK(!remainder_is_unsafe(i14, i15));
+	long i16 = 0;
+	long i17 = 1;
+	CHECK(!remainder_is_unsafe(i16, i17));
+	long i18 = 0;
+	long i19 = LONG_MIN;
+	CHECK(!remainder_is_unsafe(i18, i19));
+	long i20 = 12985;
+	long i21 = -30908;
+	CHECK(!remainder_is_unsafe(i20, i21));
+	long i22 = LONG_MAX;
+	long i23 = 1;
+	CHECK(!remainder_is_unsafe(i22, i23));
+}
+
+TEST(checked_arithmetic_remainder_is_unsafe_long_long)
+{
+	long long llmax = numeric_limits<long long>::max();
+	long long llmin = numeric_limits<long long>::min();
+
+	// Test reaction to unsafe operations
+	long long i0 = 23;
+	long long i1 = 0;
+	CHECK(remainder_is_unsafe(i0, i1));
+	long long i2 = llmin;
+	long long i3 = -1;
+	CHECK(remainder_is_unsafe(i2, i3));
+	long long i4 = 0;
+	long long i5 = 0;
+	CHECK(remainder_is_unsafe(i4, i5));
+	long long i6 = llmin;
+	long long i7 = 0;
+	CHECK(remainder_is_unsafe(i6, i7));
+	long long i8 = -238947;
+	long long i9 = 0;
+	CHECK(remainder_is_unsafe(i8, i9));
+
+	// Test reaction to safe operations
+	long long i10 = 0;
+	long long i11 = 23;
+	CHECK(!remainder_is_unsafe(i10, i11));
+	long long i12 = -1;
+	long long i13 = llmin;
+	CHECK(!remainder_is_unsafe(i12, i13));
+	long long i14 = llmax;
+	long long i15 = -1;
+	CHECK(!remainder_is_unsafe(i14, i15));
+	long long i16 = 0;
+	long long i17 = 1;
+	CHECK(!remainder_is_unsafe(i16, i17));
+	long long i18 = 0;
+	long long i19 = llmin;
+	CHECK(!remainder_is_unsafe(i18, i19));
+	long long i20 = 129858;
+	long long i21 = -3090889;
+	CHECK(!remainder_is_unsafe(i20, i21));
+	long long i22 = llmax;
+	long long i23 = 1;
+	CHECK(!remainder_is_unsafe(i22, i23));
+}
+
+TEST(checked_arithmetic_remainder_is_unsafe_short)
+{
+	// Test reaction to unsafe operations
+	short i0 = 23;
+	short i1 = 0;
+	CHECK(remainder_is_unsafe(i0, i1));
+	short i2 = SHRT_MIN;
+	short i3 = -1;
+	CHECK(remainder_is_unsafe(i2, i3));
+	short i4 = 0;
+	short i5 = 0;
+	CHECK(remainder_is_unsafe(i4, i5));
+	short i6 = SHRT_MIN;
+	short i7 = 0;
+	CHECK(remainder_is_unsafe(i6, i7));
+	short i8 = -78;
+	short i9 = 0;
+	CHECK(remainder_is_unsafe(i8, i9));
+
+	// Test reaction to safe operations
+	short i10 = 0;
+	short i11 = 23;
+	CHECK(!remainder_is_unsafe(i10, i11));
+	short i12 = -1;
+	short i13 = SHRT_MIN;
+	CHECK(!remainder_is_unsafe(i12, i13));
+	short i14 = SHRT_MAX;
+	short i15 = -1;
+	CHECK(!remainder_is_unsafe(i14, i15));
+	short i16 = 0;
+	short i17 = 1;
+	CHECK(!remainder_is_unsafe(i16, i17));
+	short i18 = 0;
+	short i19 = SHRT_MIN;
+	CHECK(!remainder_is_unsafe(i18, i19));
+	short i20 = 111;
+	short i21 = -30;
+	CHECK(!remainder_is_unsafe(i20, i21));
+	short i22 = SHRT_MAX;
+	short i23 = 1;
+	CHECK(!remainder_is_unsafe(i22, i23));
+}
+
+TEST(checked_arithmetic_remainder_is_unsafe_signed_char)
+{
+	// Test reaction to unsafe operations
+	signed char i0 = 23;
+	signed char i1 = 0;
+	CHECK(remainder_is_unsafe(i0, i1));
+	signed char i2 = SCHAR_MIN;
+	signed char i3 = -1;
+	CHECK(remainder_is_unsafe(i2, i3));
+	signed char i4 = 0;
+	signed char i5 = 0;
+	CHECK(remainder_is_unsafe(i4, i5));
+	signed char i6 = SCHAR_MIN;
+	signed char i7 = 0;
+	CHECK(remainder_is_unsafe(i6, i7));
+	signed char i8 = -28;
+	signed char i9 = 0;
+	CHECK(remainder_is_unsafe(i8, i9));
+
+	// Test reaction to safe operations
+	signed char i10 = 0;
+	signed char i11 = 23;
+	CHECK(!remainder_is_unsafe(i10, i11));
+	signed char i12 = -1;
+	signed char i13 = SCHAR_MIN;
+	CHECK(!remainder_is_unsafe(i12, i13));
+	signed char i14 = SCHAR_MAX;
+	signed char i15 = -1;
+	CHECK(!remainder_is_unsafe(i14, i15));
+	signed char i16 = 0;
+	signed char i17 = 1;
+	CHECK(!remainder_is_unsafe(i16, i17));
+	signed char i18 = 0;
+	signed char i19 = SCHAR_MIN;
+	CHECK(!remainder_is_unsafe(i18, i19));
+	signed char i20 = 109;
+	signed char i21 = -30;
+	CHECK(!remainder_is_unsafe(i20, i21));
+	signed char i22 = SCHAR_MAX;
+	signed char i23 = 1;
+	CHECK(!remainder_is_unsafe(i22, i23));
+}
+
+TEST(checked_arithmetic_remainder_is_unsafe_unsigned_int)
+{
+	// Test reaction to unsafe operations
+	unsigned int i0 = 23;
+	unsigned int i1 = 0;
+	CHECK(remainder_is_unsafe(i0, i1));
+	unsigned int i2 = -1;
+	unsigned int i3 = 0;
+	CHECK(remainder_is_unsafe(i2, i3));
+	unsigned int i4 = 0;
+	unsigned int i5 = 0;
+	CHECK(remainder_is_unsafe(i4, i5));
+	unsigned int i6 = UINT_MAX;
+	unsigned int i7 = 0;
+	CHECK(remainder_is_unsafe(i6, i7));
+	unsigned int i8 = -28;
+	unsigned int i9 = 0;
+	CHECK(remainder_is_unsafe(i8, i9));
+
+	// Test reaction to safe operations
+	unsigned int i10 = 0;
+	unsigned int i11 = -1;
+	CHECK(!remainder_is_unsafe(i10, i11));
+	unsigned int i12 = UINT_MAX;
+	unsigned int i13 = -1;
+	CHECK(!remainder_is_unsafe(i12, i13));
+	unsigned int i15 = 0;
+	unsigned int i16 = 1;
+	CHECK(!remainder_is_unsafe(i15, i16));
+	unsigned int i17 = 109;
+	unsigned int i18 = -30;
+	CHECK(!remainder_is_unsafe(i17, i18));
+	unsigned int i19 = UINT_MAX;
+	unsigned int i20 = 1;
+	CHECK(!remainder_is_unsafe(i19, i20));
+}
+
+TEST(checked_arithmetic_remainder_is_unsafe_unsigned_unsigned_long)
+{
+	// Test reaction to unsafe operations
+	unsigned long i0 = 23;
+	unsigned long i1 = 0;
+	CHECK(remainder_is_unsafe(i0, i1));
+	unsigned long i2 = -1;
+	unsigned long i3 = 0;
+	CHECK(remainder_is_unsafe(i2, i3));
+	unsigned long i4 = 0;
+	unsigned long i5 = 0;
+	CHECK(remainder_is_unsafe(i4, i5));
+	unsigned long i6 = ULONG_MAX;
+	unsigned long i7 = 0;
+	CHECK(remainder_is_unsafe(i6, i7));
+	unsigned long i8 = -2800;
+	unsigned long i9 = 0;
+	CHECK(remainder_is_unsafe(i8, i9));
+
+	// Test reaction to safe operations
+	unsigned long i10 = 0;
+	unsigned long i11 = -1;
+	CHECK(!remainder_is_unsafe(i10, i11));
+	unsigned long i12 = ULONG_MAX;
+	unsigned long i13 = -1;
+	CHECK(!remainder_is_unsafe(i12, i13));
+	unsigned long i15 = 0;
+	unsigned long i16 = 1;
+	CHECK(!remainder_is_unsafe(i15, i16));
+	unsigned long i17 = 109;
+	unsigned long i18 = -30896;
+	CHECK(!remainder_is_unsafe(i17, i18));
+	unsigned long i19 = ULONG_MAX;
+	unsigned long i20 = 1;
+	CHECK(!remainder_is_unsafe(i19, i20));
+}
+
+TEST(checked_arithmetic_remainder_is_unsafe_unsigned_unsigned_long_long)
+{
+	unsigned long long ullmax = numeric_limits<long long>::max();
+	
+	// Test reaction to unsafe operations
+	unsigned long long i0 = 23;
+	unsigned long long i1 = 0;
+	CHECK(remainder_is_unsafe(i0, i1));
+	unsigned long long i2 = -1;
+	unsigned long long i3 = 0;
+	CHECK(remainder_is_unsafe(i2, i3));
+	unsigned long long i4 = 0;
+	unsigned long long i5 = 0;
+	CHECK(remainder_is_unsafe(i4, i5));
+	unsigned long long i6 = ullmax;
+	unsigned long long i7 = 0;
+	CHECK(remainder_is_unsafe(i6, i7));
+	unsigned long long i8 = -28;
+	unsigned long long i9 = 0;
+	CHECK(remainder_is_unsafe(i8, i9));
+
+	// Test reaction to safe operations
+	unsigned long long i10 = 0;
+	unsigned long long i11 = -1;
+	CHECK(!remainder_is_unsafe(i10, i11));
+	unsigned long long i12 = ullmax;
+	unsigned long long i13 = -1;
+	CHECK(!remainder_is_unsafe(i12, i13));
+	unsigned long long i15 = 0;
+	unsigned long long i16 = 1;
+	CHECK(!remainder_is_unsafe(i15, i16));
+	unsigned long long i17 = 109;
+	unsigned long long i18 = -30;
+	CHECK(!remainder_is_unsafe(i17, i18));
+	unsigned long long i19 = ullmax;
+	unsigned long long i20 = 1;
+	CHECK(!remainder_is_unsafe(i19, i20));
+}
+
+TEST(checked_arithmetic_remainder_is_unsafe_unsigned_unsigned_short)
+{
+	// Test reaction to unsafe operations
+	unsigned short i0 = 23;
+	unsigned short i1 = 0;
+	CHECK(remainder_is_unsafe(i0, i1));
+	unsigned short i2 = -1;
+	unsigned short i3 = 0;
+	CHECK(remainder_is_unsafe(i2, i3));
+	unsigned short i4 = 0;
+	unsigned short i5 = 0;
+	CHECK(remainder_is_unsafe(i4, i5));
+	unsigned short i6 = USHRT_MAX;
+	unsigned short i7 = 0;
+	CHECK(remainder_is_unsafe(i6, i7));
+	unsigned short i8 = -28;
+	unsigned short i9 = 0;
+	CHECK(remainder_is_unsafe(i8, i9));
+
+	// Test reaction to safe operations
+	unsigned short i10 = 0;
+	unsigned short i11 = -1;
+	CHECK(!remainder_is_unsafe(i10, i11));
+	unsigned short i12 = USHRT_MAX;
+	unsigned short i13 = -1;
+	CHECK(!remainder_is_unsafe(i12, i13));
+	unsigned short i15 = 0;
+	unsigned short i16 = 1;
+	CHECK(!remainder_is_unsafe(i15, i16));
+	unsigned short i17 = 109;
+	unsigned short i18 = -30;
+	CHECK(!remainder_is_unsafe(i17, i18));
+	unsigned short i19 = USHRT_MAX;
+	unsigned short i20 = 1;
+	CHECK(!remainder_is_unsafe(i19, i20));
+}
+
+TEST(checked_arithmetic_remainder_is_unsafe_unsigned_unsigned_char)
+{
+	// Test reaction to unsafe operations
+	unsigned char i0 = 23;
+	unsigned char i1 = 0;
+	CHECK(remainder_is_unsafe(i0, i1));
+	unsigned char i2 = -1;
+	unsigned char i3 = 0;
+	CHECK(remainder_is_unsafe(i2, i3));
+	unsigned char i4 = 0;
+	unsigned char i5 = 0;
+	CHECK(remainder_is_unsafe(i4, i5));
+	unsigned char i6 = UCHAR_MAX;
+	unsigned char i7 = 0;
+	CHECK(remainder_is_unsafe(i6, i7));
+	unsigned char i8 = -28;
+	unsigned char i9 = 0;
+	CHECK(remainder_is_unsafe(i8, i9));
+
+	// Test reaction to safe operations
+	unsigned char i10 = 0;
+	unsigned char i11 = -1;
+	CHECK(!remainder_is_unsafe(i10, i11));
+	unsigned char i12 = UCHAR_MAX;
+	unsigned char i13 = -1;
+	CHECK(!remainder_is_unsafe(i12, i13));
+	unsigned char i15 = 0;
+	unsigned char i16 = 1;
+	CHECK(!remainder_is_unsafe(i15, i16));
+	unsigned char i17 = 109;
+	unsigned char i18 = -30;
+	CHECK(!remainder_is_unsafe(i17, i18));
+	unsigned char i19 = UCHAR_MAX;
+	unsigned char i20 = 1;
+	CHECK(!remainder_is_unsafe(i19, i20));
 }
 
 
