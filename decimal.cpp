@@ -84,9 +84,6 @@ Decimal::s_maximum = Decimal(numeric_limits<int_type>::max(), 0);
 Decimal const
 Decimal::s_minimum = Decimal(numeric_limits<int_type>::min(), 0);
 
-std::vector<Decimal::int_type>
-Decimal::s_divisor_lookup(Decimal::s_max_places, 0);
-
 
 // static member functions
 
@@ -130,10 +127,13 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 void
 Decimal::rationalize(places_type min_places)
 {
+	JEWEL_ASSERT (s_base > 0);
+	JEWEL_ASSERT (!remainder_is_unsafe(m_intval, s_base));
 	while ((m_places > min_places) && (m_intval % s_base == 0))
 	{
-		JEWEL_ASSERT (m_places > 0);
+		JEWEL_ASSERT (!division_is_unsafe(m_intval, s_base));
 		m_intval /= s_base;
+		JEWEL_ASSERT (m_places > 0);
 		--m_places;
 	}
 	return;
@@ -209,32 +209,47 @@ int Decimal::rescale(places_type p_places)
 	}
 	else
 	{
-		JEWEL_ASSERT(p_places < m_places);
+		JEWEL_ASSERT (p_places < m_places);
 
 		// truncate all but one of the required places
 		for (unsigned int j = m_places - 1; j != p_places; --j)
 		{
+			JEWEL_ASSERT (!division_is_unsafe(m_intval, s_base));
 			m_intval /= s_base;
 		}
 
 		// with one more place still to eliminate, we calculate
 		// whether rounding is required
+		JEWEL_ASSERT (!remainder_is_unsafe(m_intval, s_base));
 		bool remainder =
 		(	std::abs(m_intval % s_base) >=
 			s_rounding_threshold
 		);
 
 		// now remove the remaining place
+		JEWEL_ASSERT (!division_is_unsafe(m_intval, s_base));
+		JEWEL_ASSERT (s_base > 1);
 		m_intval /= s_base;
+		JEWEL_ASSERT (m_intval < numeric_limits<int_type>::max());
+		JEWEL_ASSERT (m_intval > numeric_limits<int_type>::min());
 
 		// and add rounding if required
 		if (remainder)
 		{
-			if (is_positive) ++m_intval;
+			if (is_positive)
+			{
+				JEWEL_ASSERT
+				(	!addition_is_unsafe(m_intval, static_cast<int_type>(1))
+				);
+				++m_intval;
+			}
 			else
 			{
 				JEWEL_ASSERT (is_negative);
 				JEWEL_ASSERT (!is_zero);
+				JEWEL_ASSERT
+				(	!subtraction_is_unsafe(m_intval, static_cast<int_type>(1))
+				);
 				--m_intval;
 			}
 		}
@@ -248,21 +263,21 @@ Decimal::int_type
 Decimal::implicit_divisor() const
 {	
 	static bool calculated_already = false;
-	if (calculated_already)
+	static vector<int_type> divisor_lookup(1, 1);
+	while (!calculated_already)
 	{
-		return s_divisor_lookup[m_places];
+		while (divisor_lookup.size() != s_max_places)
+		{
+			JEWEL_ASSERT (!divisor_lookup.empty());
+			JEWEL_ASSERT
+			(	!multiplication_is_unsafe(divisor_lookup.back(), s_base)
+			);
+			divisor_lookup.push_back(divisor_lookup.back() * s_base);
+		}
+		calculated_already = true;
 	}
-	JEWEL_ASSERT (!calculated_already);
-	int_type next_power = 1;
-	for (size_t j = 0; j != s_max_places; ++j)
-	{
-		JEWEL_ASSERT (j < s_divisor_lookup.size());
-		s_divisor_lookup[j] = next_power;
-		next_power *= s_base;
-	}
-	JEWEL_ASSERT (s_divisor_lookup.size() == s_max_places);
-	calculated_already = true;
-	return s_divisor_lookup[m_places];
+	JEWEL_ASSERT (m_places < divisor_lookup.size());
+	return divisor_lookup[m_places];
 }
 
 
@@ -416,8 +431,10 @@ Decimal& Decimal::operator/=(Decimal rhs)
 
 	rhs.rationalize();
 
+	int_type rhs_intval = rhs.m_intval;
+
 	// Capture division by zero
-	if (rhs.m_intval == 0)
+	if (rhs_intval == 0)
 	{
 		JEWEL_ASSERT (*this == orig);
 		JEWEL_THROW(DecimalDivisionByZeroException, "Division by zero.");
@@ -425,7 +442,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	
 	// To prevent complications
 	if ( m_intval == numeric_limits<int_type>::min() ||
-	  rhs.m_intval == numeric_limits<int_type>::min() )
+	  rhs_intval == numeric_limits<int_type>::min() )
 	{
 		JEWEL_ASSERT (*this == orig);
 		JEWEL_THROW
@@ -434,8 +451,8 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			"feature in division operation."
 		);
 	}
-	JEWEL_ASSERT (NumDigits::num_digits(rhs.m_intval) <= maximum_precision());
-	if (NumDigits::num_digits(rhs.m_intval) == maximum_precision())
+	JEWEL_ASSERT (NumDigits::num_digits(rhs_intval) <= maximum_precision());
+	if (NumDigits::num_digits(rhs_intval) == maximum_precision())
 	{
 		JEWEL_ASSERT (*this == orig);
 		JEWEL_THROW
@@ -449,13 +466,19 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	
 	// Remember required sign of product
 	bool const diff_signs =
-	(	( m_intval > 0 && rhs.m_intval < 0) ||
-		( m_intval < 0 && rhs.m_intval > 0)
+	(	( m_intval > 0 && rhs_intval < 0) ||
+		( m_intval < 0 && rhs_intval > 0)
 	);
 
 	// Make absolute
+	JEWEL_ASSERT
+	(	!multiplication_is_unsafe(m_intval, static_cast<int_type>(-1))
+	);
+	JEWEL_ASSERT
+	(	!multiplication_is_unsafe(rhs_intval, static_cast<int_type>(-1))
+	);
 	if (m_intval < 0) m_intval *= -1;
-	if (rhs.m_intval < 0) rhs.m_intval *= -1;
+	if (rhs_intval < 0) rhs_intval *= -1;
 
 	// Rescale the dividend as high as we can
 	while (m_places < rhs.m_places && rescale(m_places + 1) == 0)
@@ -471,8 +494,12 @@ Decimal& Decimal::operator/=(Decimal rhs)
 
 	// Proceed with basic division algorithm
 	m_places -= rhs.m_places;
-	int_type remainder = m_intval % rhs.m_intval;
-	m_intval /= rhs.m_intval;
+	JEWEL_ASSERT (rhs_intval != 0);
+	JEWEL_ASSERT (m_intval != numeric_limits<int_type>::min());
+	JEWEL_ASSERT (!remainder_is_unsafe(m_intval, rhs_intval));
+	int_type remainder = m_intval % rhs_intval;
+	JEWEL_ASSERT (!division_is_unsafe(m_intval, rhs_intval));
+	m_intval /= rhs_intval;
 
 	// Deal with any remainder using "long division"
 	while (remainder != 0 && rescale(m_places + 1) == 0)
@@ -494,22 +521,22 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			// and need to "scale down" first
 
 			bool add_rounding_right = false;
-			if (rhs.m_intval % s_base >= s_rounding_threshold)
+			if (rhs_intval % s_base >= s_rounding_threshold)
 			{
 				add_rounding_right = true;
 			}
-			rhs.m_intval /= s_base;
+			rhs_intval /= s_base;
 			if (add_rounding_right)
 			{
-				JEWEL_ASSERT (!addition_is_unsafe(rhs.m_intval,
+				JEWEL_ASSERT (!addition_is_unsafe(rhs_intval,
 				  NUM_CAST<int_type>(1)));
-				++(rhs.m_intval);
+				++(rhs_intval);
 			}
 
 			// Redo the Decimal division on a "safe scale"
 			Decimal lhs = orig;
 			if (lhs.m_intval < 0) lhs.m_intval *= -1;
-			JEWEL_ASSERT (rhs.m_intval >= 0);
+			JEWEL_ASSERT (rhs_intval >= 0);
 			lhs /= rhs;
 			bool add_rounding_left = false;
 			if (lhs.m_intval % s_base >= s_rounding_threshold)
@@ -531,18 +558,22 @@ Decimal& Decimal::operator/=(Decimal rhs)
 		*/
 
 		// It's safe to proceed with ordinary "long division"
-		JEWEL_ASSERT(!multiplication_is_unsafe(remainder, s_base));
+		JEWEL_ASSERT (!multiplication_is_unsafe(remainder, s_base));
 		remainder *= s_base;
-		int_type temp_remainder = remainder % rhs.m_intval;
-		m_intval += remainder / rhs.m_intval;
+
+		JEWEL_ASSERT (rhs_intval > 0);
+		JEWEL_ASSERT (!remainder_is_unsafe(remainder, rhs_intval));
+		int_type const temp_remainder = remainder % rhs_intval;
+		JEWEL_ASSERT (!division_is_unsafe(remainder, rhs_intval));
+		m_intval += remainder / rhs_intval;
 		remainder = temp_remainder;
 	}
 
-	JEWEL_ASSERT (rhs.m_intval >= remainder);
-	JEWEL_ASSERT (!subtraction_is_unsafe(rhs.m_intval, remainder));
+	JEWEL_ASSERT (rhs_intval >= remainder);
+	JEWEL_ASSERT (!subtraction_is_unsafe(rhs_intval, remainder));
 	
 	// Do rounding if required
-	if (rhs.m_intval - remainder <= remainder)
+	if (rhs_intval - remainder <= remainder)
 	{
 		// If the required rounding would be unsafe, we throw
 		if (addition_is_unsafe(m_intval, NUM_CAST<int_type>(1)))
@@ -555,6 +586,8 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	}
 
 	// Put the correct sign
+	// TODO HIGH PRIORITY Is this multiplication operation guaranteed
+	// to be safe?
 	if (diff_signs) m_intval *= -1;
 	rationalize();
 	return *this;
@@ -583,6 +616,8 @@ bool Decimal::operator<(Decimal rhs) const
 		--longers_places
 	)
 	{
+		JEWEL_ASSERT (s_base > 0);
+		JEWEL_ASSERT (!division_is_unsafe(longers_revised_intval, s_base));
 		longers_revised_intval /= s_base;
 		JEWEL_ASSERT (longers_places > 0);
 	}

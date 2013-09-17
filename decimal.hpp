@@ -263,8 +263,8 @@ public:
 	 *
 	 * @todo Documentation esp. re. exception-safety.
 	 *
-	 * @todo Implement this more efficiently, and move implementation out of class
-	 * body.
+	 * @todo Implement this more efficiently, and move implementation out of
+	 * class body.
 	 */
 	explicit Decimal(char const* str)
 	{
@@ -631,12 +631,6 @@ private:
 	static Decimal const s_minimum;
 
 	/**
-	 * Vector for looking up the implicit divisor of a Decimal instance
-	 * based on the value of m_places.
-	 */
-	static std::vector<int_type> s_divisor_lookup;
-
-	/**
 	 * Number of digits of precision to the right of the decimal point.
 	 */
 	places_type m_places;
@@ -664,9 +658,8 @@ private:
 
 	/** This constructor is deliberately unimplemented. Ensures if an int or
 	 * a convertible-to-int is passed to constructor, compilation will fail.
-	 * TODO uncomment
+	 */
 	explicit Decimal(int);
-	*/
 
 	/**
 	 * Called by output operator. This is not designed to be called by
