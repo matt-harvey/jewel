@@ -48,14 +48,7 @@ add_executable (jewel_test ${library_sources} ${test_sources})
 add_library(jewel ${library_sources})
 #add_library(jewel SHARED ${library_sources})
 
-if (WIN32)
-	set (boost_locale_lib boost_locale-mgw46-mt-1_53)
-else ()
-	set (boost_locale_lib boost_locale-mt)
-endif ()
-
 target_link_libraries (jewel_test
-		       ${boost_locale_lib}
                        UnitTest++)
 if (WIN32)
 	set (lib_installation_dir C:/lib)

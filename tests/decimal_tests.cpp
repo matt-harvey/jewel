@@ -1823,7 +1823,7 @@ TEST(decimal_operator_output)
 		ostringstream os20b;
 		os20b << Decimal("1000000000000");
 		ostringstream os20c;
-		os20c << 1000000000000;
+		os20c << 1000000000000LL;
 		CHECK_EQUAL(os20b.str(), os20c.str());
 		locale::global(locale::classic());
 		
