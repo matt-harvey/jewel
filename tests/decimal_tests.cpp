@@ -1,5 +1,8 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
+// TODO HIGH PRIORITY The locale-specific tests in here are
+// not portable.
+
 #include "../decimal.hpp"
 #include "../decimal_exceptions.hpp"
 #include "../num_digits.hpp"
