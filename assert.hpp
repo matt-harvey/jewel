@@ -5,7 +5,7 @@
 #	include "log.hpp"
 #endif
 
-#include "helper_macros.hpp"
+#include "detail/helper_macros.hpp"
 #include <exception>
 #include <iostream>
 
@@ -59,7 +59,7 @@
 		std::cerr << \
 			"Failed assertion (" #p ") " \
 			"in file \"" __FILE__ "\" at line " \
-			JEWEL_MAKE_STRING_B(__LINE__) ".\n"; \
+			JEWEL_DETAIL_MAKE_STRING_B(__LINE__) ".\n"; \
 		std::terminate(); \
 	}
 

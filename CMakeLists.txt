@@ -79,7 +79,6 @@ install(FILES
 		decimal_fwd.hpp
 		exception.hpp
 		flag_set.hpp
-		helper_macros.hpp
 		num_digits.hpp
 		on_windows.hpp
 		optional.hpp
@@ -93,6 +92,7 @@ install(FILES
 
 install(FILES
 		detail/checked_arithmetic_detail.hpp
+		detail/helper_macros.hpp
 		detail/smallest_sufficient_unsigned_type.hpp
 		DESTINATION
 		"${inner_header_installation_dir}/detail")

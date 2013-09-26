@@ -13,9 +13,9 @@
  */
 
 
-#define JEWEL_MAKE_STRING_A(x) #x
+#define JEWEL_DETAIL_MAKE_STRING_A(x) #x
 
-#define JEWEL_MAKE_STRING_B(x) JEWEL_MAKE_STRING_A(x)
+#define JEWEL_DETAIL_MAKE_STRING_B(x) JEWEL_DETAIL_MAKE_STRING_A(x)
 
 
 #endif   // GUARD_helper_macros_hpp_723136290778935
