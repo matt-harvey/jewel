@@ -10,34 +10,31 @@
 TEST(on_windows_test)
 {
 	bool on_windows = false;
-	(void)on_windows;  // silence compiler warning re. unused variable
+#	ifdef JEWEL_ON_WINDOWS
+		on_windows = true;
+#	endif
+
 #	if defined(_WIN32)
-		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
 
 #	ifdef _WIN32
-		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
 
 #	if defined(__WIN32__)
-		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
 
 #	ifdef __WIN32__
-		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
 
 #	if defined(WIN32)
-		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
 
 #	ifdef WIN32
-		on_windows = JEWEL_ON_WINDOWS;
 		CHECK(on_windows);
 #	endif
 
