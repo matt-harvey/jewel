@@ -15,12 +15,8 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <boost/lexical_cast.hpp>
-#include <boost/shared_ptr.hpp>
 #include <UnitTest++/UnitTest++.h>
 
-using boost::lexical_cast;
-using boost::shared_ptr;
 using jewel::Decimal;
 using jewel::NumDigits;
 using jewel::DecimalException;
@@ -1631,7 +1627,7 @@ TEST(decimal_operator_less_than)
 	CHECK(d0 < d1);
 	Decimal d2("-1");
 	Decimal d3("1.0000");
-	CHECK(d2 < d3);
+	CHECK(d2 <= d3);
 	// Check operands unchanged
 	CHECK_EQUAL(d2, Decimal("-1"));
 	CHECK_EQUAL(d3, Decimal("1.0000"));
@@ -1643,13 +1639,15 @@ TEST(decimal_operator_less_than)
 	CHECK(Decimal("-.34") < Decimal("-0.000"));
 	CHECK(!(Decimal(".34") < Decimal("0.000")));
 	CHECK(!(Decimal("-0.000") < Decimal("0")));
+	CHECK(Decimal("-0.000") <= Decimal("0"));
 	CHECK(!(Decimal("0") < Decimal("-0.000")));
 	CHECK(Decimal(".18791274") < Decimal("123412134"));
 	CHECK(Decimal("-0.000000001") < Decimal("91341971"));
-	CHECK(Decimal("-0.9000098") < Decimal("-0.9"));
+	CHECK(Decimal("-0.9000098") <= Decimal("-0.9"));
 	CHECK(Decimal("1.22390423") < Decimal("1.223904231"));
-	CHECK(Decimal("201060.2234") < Decimal("201060.3"));
+	CHECK(Decimal("201060.2234") <= Decimal("201060.3"));
 	CHECK(Decimal("201060.2") < Decimal("201060.2234"));
+	CHECK(Decimal("2069") <= Decimal("2069"));
 	CHECK(Decimal("-102349187") < Decimal("-0.000012"));
 }
 
@@ -1657,11 +1655,12 @@ TEST(decimal_operator_greater_than)
 {
 	CHECK(Decimal("2.342809") > Decimal("2.34"));
 	CHECK(Decimal("-1") > Decimal("-1.0099"));
-	CHECK(Decimal("2.093") > Decimal("-0.12"));
+	CHECK(Decimal("2.093") >= Decimal("-0.12"));
 	CHECK(Decimal("789") > Decimal("788.089234"));
 	CHECK(Decimal("0") > Decimal("-0.3"));
 	Decimal d0("100000000");
 	Decimal d1(".00000001");
+	CHECK(Decimal(".098") >= Decimal("0.098000"));
 	CHECK(d0 > d1);
 	// Check operands unchanged after comparison
 	Decimal d2("19237.02");
@@ -1670,11 +1669,11 @@ TEST(decimal_operator_greater_than)
 	CHECK_EQUAL(b, true);
 	CHECK_EQUAL(d2, Decimal("19237.02"));
 	CHECK_EQUAL(Decimal("1234.2"), d3);
-	CHECK(!(Decimal("0.000001") > Decimal("9000000")));
+	CHECK(!(Decimal("0.000001") >= Decimal("9000000")));
 	CHECK(Decimal("-.000003") > Decimal("-112341878"));
-	CHECK(Decimal("201060.2234") > Decimal("201060.2"));
+	CHECK(Decimal("201060.2234") >= Decimal("201060.2"));
 	CHECK(Decimal("201060.3") > Decimal("201060.2234"));
-	CHECK(Decimal("1") < Decimal("1.00000001"));
+	CHECK(Decimal("1.000001") > Decimal("1.0000000"));
 }
 
 TEST(decimal_operator_equality)

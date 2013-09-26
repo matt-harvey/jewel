@@ -1,6 +1,5 @@
 #include "log.hpp"
 #include "array_utilities.hpp"
-#include <boost/noncopyable.hpp>
 
 // We deliberately do NOT use "jewel/assert.hpp" here,
 // as we might one day want a call the assert to invoke
@@ -14,7 +13,6 @@
 #include <iostream>
 #include <string>
 
-using boost::noncopyable;
 using jewel::num_elements;
 using std::cerr;
 using std::clog;
@@ -79,10 +77,15 @@ namespace
 		return ++ret;
 	}
 
-	struct StreamHolder: noncopyable
+	struct StreamHolder
 	{
 		explicit StreamHolder(ostream* p_os);
+		StreamHolder(StreamHolder const&) = delete;
+		StreamHolder(StreamHolder&&) = delete;
+		StreamHolder& operator=(StreamHolder const&) = delete;
+		StreamHolder& operator=(StreamHolder&&) = delete;
 		~StreamHolder();
+		
 		void kill();
 		ostream* os;
 	};

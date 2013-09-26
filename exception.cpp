@@ -4,7 +4,6 @@
 #include "array_utilities.hpp"
 #include "assert.hpp"
 #include "log.hpp"
-#include <boost/static_assert.hpp>
 #include <algorithm>
 #include <cstddef>
 #include <cstring>
@@ -36,7 +35,11 @@ namespace
 		static CappedString<truncation_stamp_capacity> const stamp =
 			"(TRUNCATED)";
 		JEWEL_ASSERT (!stamp.is_truncated());
-		BOOST_STATIC_ASSERT((N > truncation_stamp_capacity));	
+		static_assert
+		(	N > truncation_stamp_capacity,
+			"In instantiation of CappedString<N>, N is too small to "
+			"hold truncation stamp for jewel::Exception."
+		);
 		p_string.resize(N - truncation_stamp_capacity);
 		p_string += stamp.c_str();
 		JEWEL_ASSERT (!p_string.is_truncated());

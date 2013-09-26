@@ -3,10 +3,9 @@
 #ifndef GUARD_smallest_sufficient_unsigned_type_hpp_07093942774037804
 #define GUARD_smallest_sufficient_unsigned_type_hpp_07093942774037804
 
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
 #include <cstddef>
 #include <climits>
+#include <type_traits>
 
 
 namespace jewel
@@ -82,7 +81,7 @@ struct Ternary<false, ResultIfTrue, ResultIfFalse>
  * For example, SmallestSufficientUnsignedType<300>::Result will
  * be a typedef for <em>unsigned short</em>
  *
- * @todo Move the BOOST_STATIC_ASSERTS into a separate test file,
+ * @todo Move the static_asserts into a separate test file,
  * and expand them to be more comprehensive.
  */
 template <size_t N, typename Begin = unsigned char>
@@ -106,40 +105,45 @@ struct SmallestSufficientUnsignedType<N, size_t>
 };
 
 
-BOOST_STATIC_ASSERT
-((	boost::is_same
-	<	SmallestSufficientUnsignedType<5>::Result,
-		unsigned char
-	>::value
-));
+static_assert
+(	std::is_same
+		<	SmallestSufficientUnsignedType<5>::Result,
+			unsigned char
+		>::value,
+	"Unexpected result when instantiation SmallestSufficientUnsignedType."
+);
 
-BOOST_STATIC_ASSERT
-((	boost::is_same
-	<	SmallestSufficientUnsignedType<UINT_MAX>::Result,
-		unsigned int
-	>::value
-));
+static_assert
+(	std::is_same
+		<	SmallestSufficientUnsignedType<UINT_MAX>::Result,
+			unsigned int
+		>::value,
+	"Unexpected result when instantiation SmallestSufficientUnsignedType."
+);
 
-BOOST_STATIC_ASSERT
-((	boost::is_same
-	<	SmallestSufficientUnsignedType<USHRT_MAX>::Result,
-		unsigned short
-	>::value
-));
+static_assert
+(	std::is_same
+		<	SmallestSufficientUnsignedType<USHRT_MAX>::Result,
+			unsigned short
+		>::value,
+	"Unexpected result when instantiation SmallestSufficientUnsignedType."
+);
 
-BOOST_STATIC_ASSERT
-((	boost::is_same
-	<	SmallestSufficientUnsignedType<500>::Result,
-		unsigned short
-	>::value
-));
+static_assert
+(	std::is_same
+		<	SmallestSufficientUnsignedType<500>::Result,
+			unsigned short
+		>::value,
+	"Unexpected result when instantiation SmallestSufficientUnsignedType."
+);
 
-BOOST_STATIC_ASSERT
-((	boost::is_same
-	<	SmallestSufficientUnsignedType<0>::Result,
-		unsigned char
-	>::value
-));
+static_assert
+(	std::is_same
+		<	SmallestSufficientUnsignedType<0>::Result,
+			unsigned char
+		>::value,
+	"Unexpected result when instantiation SmallestSufficientUnsignedType."
+);
 
 
 }  // namespace detail

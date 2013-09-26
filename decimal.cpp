@@ -303,8 +303,12 @@ Decimal const& Decimal::operator++()
 	return *this;
 }
 
-
-
+Decimal Decimal::operator++(int)
+{
+	Decimal const ret(*this);
+	++*this;
+	return ret;
+}
 
 Decimal const& Decimal::operator--()
 {
@@ -326,8 +330,12 @@ Decimal const& Decimal::operator--()
 	return *this;
 }
 
-
-
+Decimal Decimal::operator--(int)
+{
+	Decimal const ret(*this);
+	--*this;
+	return ret;
+}
 
 Decimal& Decimal::operator+=(Decimal rhs)
 {

@@ -15,7 +15,6 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/numeric/conversion/cast.hpp>
-#include <boost/operators.hpp>
 #include <algorithm>
 #include <cstdlib>  // for abs
 #include <cmath>
@@ -148,18 +147,7 @@ namespace jewel
  * this. This is a kind of code repetition and so is bad.
  */
 
-class Decimal:
-	// use boost.operators to automatically define certain operators
-	// on the basis of others
-	boost::less_than_comparable < Decimal, 
-	boost::equality_comparable < Decimal,
-	boost::addable < Decimal,
-	boost::subtractable < Decimal,
-	boost::multipliable < Decimal,
-	boost::dividable < Decimal, 
-	boost::incrementable < Decimal,
-	boost::decrementable < Decimal
-	> > > > > > > >		
+class Decimal
 {
 public:
 
@@ -284,10 +272,11 @@ public:
 		*this = Decimal(std::wstring(str));
 	}
 
-
-	// Use compiler-generated copy constructor, copy assignment and
-	// destructor. These are all non-throwing. In C++11, compiler will
-	// also generator move constructor and move assignment.
+	Decimal(Decimal const&) = default;
+	Decimal(Decimal&&) = default;
+	Decimal& operator=(Decimal const&) = default;
+	Decimal& operator=(Decimal&&) = default;
+	~Decimal() = default;
 
 	/**
 	 * @exception DecimalAdditionException thrown if addition
@@ -311,11 +300,6 @@ public:
 	 * of the more precise of the operands, and if it cannot be, an exception
 	 * is thrown.
 	 *
-	 * In virtue of operator+=(Decimal) being defined,
-	 * \b operator+(Decimal, Decimal) is also defined (through the magic of
-	 * Boost). It behaves as expected, and will throw exceptions under
-	 * the same circumstances.
-	 *
 	 * Exception safety: <em>strong guarantee</em>.
 	 */	
 	Decimal& operator+=(Decimal);
@@ -337,11 +321,6 @@ public:
 	 * result. Stored fractional precision is always maintained at the level
 	 * of the more precise of the operands, and if it cannot be, an exception
 	 * is thrown.
-
-	 * In virtue of operator-=(Decimal) being defined,
-	 * \b operator-(Decimal, Decimal) is also defined (through the magic
-	 * of Boost). It behaves as expected, and will throw the same exceptions
-	 * under the same circumstances.
 	 *
 	 * Exception safety: <em>strong guarantee</em>.
 	 */
@@ -385,11 +364,6 @@ public:
 	 * possible within this constraint; however, trailing fractional zeroes
 	 * are always eliminated rather than being stored within the returned
 	 * product.
-	 *
-	 * In virtue of operator*=(Decimal) being defined,
-	 * \b operator*(Decimal, Decimal) is also defined (through the magic of
-	 * Boost). It behaves as expected, and will throw the same exceptions
-	 * under the same circumstances.
 	 *
 	 * Exception safety: <em>strong guarantee</em>.
 	 */
@@ -449,11 +423,6 @@ public:
 	 * digits). The negative sign and the decimal point
 	 * do not count as digits.
 	 *
-	 * In virtue of operator/=(Decimal) being defined,
-	 * \b operator/(Decimal, Decimal) is also defined (through the magic
-	 * of Boost). It behaves as expected, and will through the same exceptions
-	 * under the same circumstances.
-	 *
 	 * Exception safety: <em>strong guarantee</em>.
 	 */
 	Decimal& operator/=(Decimal);
@@ -464,19 +433,27 @@ public:
 	 * from its original value.
 	 *
 	 * Incrementing a Decimal never changes its fractional precision.
+	 * 
+	 * Postfix and prefix version are both provided, with conventional
+	 * semantics.
 	 *
 	 * Exception safety: <em>strong guarantee</em>.
 	 */
-	Decimal const& operator++();  // prefix version
+	Decimal const& operator++();
+	Decimal operator++(int);
 
 	/** @exception DecimalDecrementationException is throw if decrementing
 	 * would cause overflow.
 	 *
 	 * Decrementing a Decimal never changes its fractional precision.
 	 *
+	 * Postfix and prefix version are both provided, with conventional
+	 * semantics.
+	 *
 	 * Exception safety: <em>strong guarantee</em>.
 	 */
-	Decimal const& operator--();  // prefix version
+	Decimal const& operator--();
+	Decimal operator--(int);
 
 	/**
 	 * Less-than operator. Compares Decimals by value.
@@ -739,6 +716,47 @@ template <typename charT, typename traits>
 std::basic_istream<charT, traits>&
 operator>>(std::basic_istream<charT, traits>&, Decimal&);
 
+/**
+ * Behaves as would be expected given the behaviour of operator+=, and
+ * throws under the same circumstances.
+ */
+Decimal const operator+(Decimal lhs, Decimal const& rhs);
+
+/**
+ * Behaves as would be expected given the behaviour of operator-=, and
+ * throws under the same circumstances.
+ */
+Decimal const operator-(Decimal lhs, Decimal const& rhs);
+
+/**
+ * Behaves as would be expected given the behaviour of operator*=, and
+ * throws under the same circumstances.
+ */
+Decimal const operator*(Decimal lhs, Decimal const& rhs);
+
+/**
+ * Behaves as would be expected given the behaviour of operator/=, and
+ * throws under the same circumstances.
+ */
+Decimal const operator/(Decimal lhs, Decimal const& rhs);
+
+/**
+ * Behaves as would be expected given the behaviour of operator==.
+ */
+bool operator!=(Decimal const& lhs, Decimal const& rhs);
+
+/**
+ * Behaves as would be expected given the behaviour of operator< and
+ * of operator==.
+ */
+bool operator<=(Decimal const& lhs, Decimal const& rhs);
+
+/**
+ * Behaves as would be expected given the behaviour of operator> and
+ * of operator==.
+ */
+bool operator>=(Decimal const& lhs, Decimal const& rhs);
+
 /** Unary minus
  *
  * @relates Decimal
@@ -953,10 +971,6 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	m_places = boost::numeric_cast<places_type>(spot_position);
 }
 
-
-
-// Inline member functions
-
 inline
 Decimal::int_type
 Decimal::intval() const
@@ -994,12 +1008,73 @@ Decimal::maximum()
 }
 
 
-// inline non-member functions
+// Inline non-member functions
 
 inline
-Decimal operator+(Decimal const& d)
+Decimal const
+operator+(Decimal lhs, Decimal const& rhs)
+{
+	lhs += rhs;
+	return lhs;
+}
+
+inline
+Decimal const
+operator-(Decimal lhs, Decimal const& rhs)
+{
+	lhs -= rhs;
+	return lhs;
+}
+
+inline
+Decimal const
+operator*(Decimal lhs, Decimal const& rhs)
+{
+	lhs *= rhs;
+	return lhs;
+}
+
+inline
+Decimal const
+operator/(Decimal lhs, Decimal const& rhs)
+{
+	lhs /= rhs;
+	return lhs;
+}
+
+inline
+Decimal
+operator+(Decimal const& d)
 {
 	return d;
+}
+
+inline
+bool
+operator!=(Decimal const& lhs, Decimal const& rhs)
+{
+	return !(lhs == rhs);
+}
+
+inline
+bool
+operator>(Decimal const& lhs, Decimal const& rhs)
+{
+	return rhs < lhs;
+}
+
+inline
+bool
+operator<=(Decimal const& lhs, Decimal const& rhs)
+{
+	return (lhs == rhs) || (lhs < rhs);
+}
+
+inline
+bool
+operator>=(Decimal const& lhs, Decimal const& rhs)
+{
+	return (lhs == rhs) || (rhs < lhs);
 }
 
 

@@ -13,7 +13,6 @@
 
 #include "assert.hpp"
 #include "exception.hpp"
-#include <boost/static_assert.hpp>
 
 
 namespace jewel
@@ -174,8 +173,9 @@ private:
 	/**
 	 * Ensure \e default_value is consistent with \e mask.
 	 */
-	BOOST_STATIC_ASSERT
-	(	(default_value & mask) || !default_value
+	static_assert
+	(	(default_value & mask) || !default_value,
+		"default_value for FlagSet is inconconsistent with mask."
 	);
 
 };

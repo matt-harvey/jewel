@@ -3,8 +3,6 @@
 #ifndef GUARD_signature_hpp_897804761257863
 #define GUARD_signature_hpp_897804761257863
 
-#include <boost/noncopyable.hpp>
-
 
 namespace jewel
 {
@@ -24,23 +22,19 @@ namespace jewel
  * the \e friend mechanism.
  */
 template <class T>
-class Signature:
-	private boost::noncopyable
+class Signature
 {
 public:
-	// WARNING this is non-conformant prior to C++11; although
-	// some C++98 compilers neverthless allow it.
 	friend T;
+	Signature(Signature const&) = delete;
+	Signature(Signature&&) = delete;
+	Signature& operator=(Signature const&) = delete;
+	Signature& operator=(Signature&&) = delete;
+	~Signature() = default;
 private:
-	Signature();
+	Signature() = default;
 };
 
-
-template <class T>
-inline
-Signature<T>::Signature()
-{
-}
 
 
 }  // namespace jewel
