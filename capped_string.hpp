@@ -16,7 +16,8 @@ namespace jewel
 {
 
 
-/**
+/** Provides for limited length string of char that avoids heap allocation.
+ *
  * A template for string classes encapsulating a limited length string of
  * \e char, which is safer than a C-style string, more convenient than a
  * boost::array<char, N> or a std::array<char, N>, and can be copied
@@ -40,11 +41,6 @@ namespace jewel
  * null-terminate its internal char array, even if it is truncated
  * relative to the original string.
  *
- * When comparing strings using \e operator==, truncation is ignored.
- * I.e., two CappedString<N> are considered equal if they have the
- * same char contents (in the same order), even if one is truncated and
- * the other is not.
- *
  * You can obtain a pointer to the internal null-terminated char array
  * by calling \e c_str() - with caveats as per the member function in
  * std::string of the same name.
@@ -60,33 +56,6 @@ namespace jewel
  *
  * TODO implement at(); but note this will mean we would have to qualify
  * blanket guarantee that no member functions throw.
- *
- * THOUGHTS... A major motivation for using CappedString instead of
- * std::string is
- * that std::string can throw an exception, viz. std::bad_alloc, in case of
- * memory allocation failure e.g. while being copied, whereas CappedString
- * cannot throw an exception.
- * There are contexts in which an exception being thrown would result in
- * undefined behaviour (e.g. after another exception has already been thrown),
- * and in these cases it is good to rule out even the slightest possibility
- * of an exception being thrown. Hence a non-throwing string class,
- * CappedString. However, a CappedString<N> cannot have a very large N without
- * blowing the stack and crashing the program. Crashing is better than
- * undefined behaviour but - could we have the best of both worlds by using
- * new(std::nothrow), or std::malloc, to attempt whatever dynamic allocation
- * we need without danger of an exception being thrown? If the returned
- * pointer is null, then
- * we can set the truncation flag, and try again with a lower size, etc..
- * until we allocate the largest reasonably possible amount of memory.. etc..
- * So we could achieve the non-throwing-ness of CappedString, while allowing
- * for much larger possible strings (as the upper limit on the size of
- * heap-allocable objects appears to be much larger than the upper limit on
- * the size of stack-allocable objects). BUT: CappedString is a pretty
- * simple solution, and for the use case I have in mind (error messages
- * for placement inside exception objects) we're not going to need more
- * than about a CappedString<1000> tops, so it should be fine. The
- * non-throwing heap-based solution would be more complex to implement -
- * it's not worth it.
  */
 template <std::size_t N>
 class CappedString
@@ -103,6 +72,9 @@ public:
 	// typedef ??? const_reverse_iterator;  // TODO <---
 	// typedef ??? reverse_iterator;  // TODO <---
 
+	/**
+	 * Initialized an empty CappedString.
+	 */
 	CappedString();
 
 	/**
@@ -118,50 +90,137 @@ public:
 	 */
 	explicit CappedString(std::string const& p_string);
 
+	/**
+	 * Copy constructor.
+	 */
 	CappedString(CappedString const& rhs);
 
 	// Use compiler-generated destructor.
+	// Under C++11, move-constructor and move-assignment are
+	// not provided.
 
+	/** Assignment.
+	 */
 	CappedString& operator=(CappedString const& rhs);
+
+	/** Equality.
+	 *
+	 * CappedStrings compare equal if their contents are the
+	 * same, even if one is truncated and the other isn't.
+	 */
 	bool operator==(CappedString const& rhs) const;
+
+	/** Inequality.
+	 */
 	bool operator!=(CappedString const& rhs) const;
+
+	/**
+	 * Concetenate \e rhs to an existing CappedString.
+	 */
 	CappedString& operator+=(CappedString const& rhs);
+
+	/**
+	 * @returns the concatenation of two CappedStrings.
+	 */
 	CappedString const operator+(CappedString const& rhs) const;
+
+	/**
+	 * Read a char by indexing. Behaviour is undefined if out
+	 * of range.
+	 */
 	const_reference operator[](size_type p_index) const;
+
+	/**
+	 * Write a char to position p_index. Behaviour is undefined if
+	 * out of range.
+	 */
 	reference operator[](size_type p_index);
 
+	/**
+	 * @return a const_iterator pointing to the first character
+	 * of the CappedString.
+	 */
 	const_iterator begin() const;
+
+	/**
+	 * @return an iterator pointing to the first character of the
+	 * CappedString.
+	 */
 	iterator begin();
+
+	/**
+	 * @return a const_iterator pointing to "one past the end" of the
+	 * CappedString.
+	 */
 	const_iterator end() const;
+
+	/**
+	 * @return an iterator pointing to "one past the end" of the
+	 * CappedString.
+	 */
 	iterator end();
 
+	/**
+	 * @return a pointer to the internal char array - with caveats as
+	 * per std::string.
+	 */
 	char const* c_str() const;
 
+	/**
+	 * @returns the maximum number of characters that may be stored in
+	 * CappedString without truncation. The function is provided for
+	 * consistency with the standard library container interface.
+	 */
 	size_type capacity() const;
+
+	/**
+	 * @returns the length of the string currently stored in CappedString.
+	 * This might be anything between 0 and capacity().
+	 */
 	size_type size() const;
+
+	/**
+	 * @returns \e true if and only if \e size() is 0.
+	 */
 	bool empty() const;
 
+	/**
+	 * @returns \e true if and only if the string used to initialize the
+	 * CappedString could not fit inside the CappedString given its capacity,
+	 * and was therefore truncated.
+	 */
 	bool is_truncated() const;
 
+	/**
+	 * Caused the CappedString to become empty.
+	 */
 	void clear();
 
 	/**
-	 * If the CappedString has reached its capacity, then calling push_back
-	 * will simply mark it as truncated, without otherwise altering its
-	 * contents.
+	 * Push a character onto the end of the CappedString. Normally this will
+	 * increase its size by 1; but if the CappedString has already
+	 * reached its capacity, then calling push_back will simply mark it as
+	 * truncated, without otherwise altering its contents. If the CappedString
+	 * is already marked as truncated, then calling this function will have
+	 * no effect whatsoever (it will simply continue to be marked as
+	 * truncated).
 	 */
 	void push_back(CappedString::value_type p_value);
 
 	/**
-	 * If CappedString is empty, behaviour is undefined. If the string is
+	 * Remove the last character from the CappedString. This will normally
+	 * decrease its size by 1; however if the CappedString is empty,
+	 * then behaviour is undefined. If the CappedString is
 	 * marked as truncated, then calling pop_back will cause it to /e cease
-	 * being marked as truncated.
+	 * being marked as truncated. The last character will always be removed,
+	 * whether truncated or not (provided size() if non-zero).
 	 */
 	void pop_back();
 
 	/**
 	 * Like std::string::resize(...) in behaviour. Note that if the
-	 * CappedString is resized to its \e current size, then any truncation
+	 * CappedString is resized to its \e current size, then this will
+	 * simply have the effect that any truncation
 	 * flag will be cleared, i.e. it will be marked as \e not truncated
 	 * after resizing,
 	 * even if it is at is capacity and was marked as truncated before
