@@ -1,7 +1,5 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-// TODO HIGH PRIORITY The locale-specific tests in here are
-// not portable.
 
 #include "../decimal.hpp"
 #include "../decimal_exceptions.hpp"
@@ -1779,21 +1777,19 @@ TEST(decimal_operator_output)
 		os16 << Decimal::minimum();
 		CHECK_EQUAL(os15.str(), os16.str());
 
+		// TODO The locale-related tests in here were not portable so were
+		// commented out. Reinstate them, in some portable way. (Note it
+		// is only the tests that are non-portable. The code being
+		// tested is itself portable.)
+
 		// Test internationalization support
+
+		/*
 
 		// C locale
 		ostringstream os16b;
 		os16b << Decimal("9300700.95838");
 		CHECK_EQUAL(os16b.str(), "9300700.95838");
-
-	      #ifndef __WIN32__ 
-
-		// WARNING This test is implementation-dependant, because
-		// locale names are implementation-dependant.
-		// We don't compile here if on WIN32
-		// WARNNG This sucks.
-		// (However
-		// the code these tests are testing is NOT implementation-dependant.)
 
 		locale const german = locale("german");
 		locale const french = locale("fr_FR");
@@ -1904,9 +1900,9 @@ TEST(decimal_operator_output)
 		bool const ok34 = (ws34 == ws34b);
 		CHECK(ok34);
 
-	    #endif /* __WIN32__ */
+		*/
+	#else
 
-	#else	
 		// JEWEL_DECIMAL_OUTPUT_FAILURE_TEST is defined.
 		// Decimal output should fail. Here we test how the
 		// failure is handled.
