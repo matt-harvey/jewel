@@ -1,5 +1,4 @@
-Coding style conventions to be adopted in Phatbooks
-
+Coding style to be adopted in Jewel library.
 
 // Conditional statements
 
@@ -46,7 +45,8 @@ function_name
 local_variable_name
 local_constant_name
 file_name
-GUARD_header_guard_hpp
+namespace
+GUARD_header_guard_hpp_198237498712349
 m_member_variable
 s_static_class_variable
 p_parameter_if_required_to_distinguish_from_member_variable
