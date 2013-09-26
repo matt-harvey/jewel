@@ -35,7 +35,6 @@ set (test_sources
 		tests/num_digits_tests.cpp
 		tests/on_windows_tests.cpp
 		tests/optional_tests.cpp
-		tests/power_vector_tests.cpp
 		tests/stopwatch_tests.cpp
 		tests/tolerant_string_tests.cpp)
 
@@ -86,7 +85,6 @@ install(FILES
 		optional.hpp
 		output_aux.hpp
 		overview.dox
-		power_vector.hpp
 		signature.hpp
 		stopwatch.hpp
 		tolerant_string.hpp
