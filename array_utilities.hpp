@@ -6,6 +6,9 @@
 /** @file array_utilities.hpp
  *
  * @brief Utility functions for working with built-in arrays.
+ * 
+ * Note some or all of these functions may be rendered redundant
+ * by standard library functions available in C++11.
  *
  * @author Matthew Harvey
  * @date 01 August 2013

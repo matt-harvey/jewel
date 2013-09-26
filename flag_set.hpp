@@ -102,13 +102,18 @@ public:
 
 	typedef typename EnumTraits<EnumT>::IntT IntT;
 
-// constructors
+// constructors, assignment and destructor
 public:
 
 	/**
 	 * By default the flags are initialized with \e default_value.
 	 */
 	FlagSet();
+
+	FlagSet(FlagSet const&) = default;
+	FlagSet(FlagSet&&) = default;
+	FlagSet& operator=(FlagSet const&) = default;
+	FlagSet& operator=(FlagSet&&) = default;
 
 // setters
 public:

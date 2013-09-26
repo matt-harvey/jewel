@@ -10,12 +10,14 @@
 #include <iostream>
 #include <iterator>
 #include <string>
+#include <utility>
 
 using jewel::num_elements;
 using std::back_inserter;
 using std::cerr;
 using std::copy;
 using std::endl;
+using std::move;
 using std::size_t;
 using std::strlen;
 
@@ -66,7 +68,7 @@ Exception::Exception
 	char const* p_function,
 	char const* p_filepath,
 	long p_line
-) throw():
+) noexcept:
 	m_message(truncate_c_str<string_capacity>(p_message)),
 	m_type(truncate_c_str<string_capacity>(p_type)),
 	m_function(truncate_c_str<string_capacity>(p_function)),
@@ -75,7 +77,7 @@ Exception::Exception
 {
 }
 
-Exception::Exception(Exception const& rhs) throw():
+Exception::Exception(Exception const& rhs) noexcept:
 	m_message(rhs.m_message),
 	m_type(rhs.m_type),
 	m_function(rhs.m_function),
@@ -84,48 +86,57 @@ Exception::Exception(Exception const& rhs) throw():
 {
 }
 
-Exception::~Exception() throw()
+Exception::Exception(Exception&& rhs) noexcept:
+	m_message(move(rhs.m_message)),
+	m_type(move(rhs.m_type)),
+	m_function(move(rhs.m_function)),
+	m_filepath(move(rhs.m_filepath)),
+	m_line(move(rhs.m_line))
+{
+}
+
+Exception::~Exception() noexcept
 {
 }
 
 char const*
-Exception::what() const throw()
+Exception::what() const noexcept
 {
 	return message();
 }
 
 char const*
-Exception::message() const throw()
+Exception::message() const noexcept
 {
 	return m_message.c_str();
 }
 
 char const*
-Exception::type() const throw()
+Exception::type() const noexcept
 {
 	return m_type.c_str();
 }
 
 char const*
-Exception::function() const throw()
+Exception::function() const noexcept
 {
 	return m_function.c_str();
 }
 
 char const*
-Exception::filepath() const throw()
+Exception::filepath() const noexcept
 {
 	return m_filepath.c_str();
 }
 
 long
-Exception::line() const throw()
+Exception::line() const noexcept
 {
 	return m_line;
 }
 
 size_t
-Exception::max_message_size() throw()
+Exception::max_message_size() noexcept
 {
 	return string_capacity - truncation_stamp_capacity;
 }

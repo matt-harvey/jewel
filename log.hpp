@@ -148,6 +148,8 @@ public:
 
 private:
 
+	Log();  // private and unimplemented - we don't want instances.
+
 	static char const* severity_string(Level p_level);
 
 	// Pass a stream pointer to set the static stream pointer that lives

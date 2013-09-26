@@ -67,7 +67,7 @@ public:
 	// typedef ??? reverse_iterator;  // TODO <---
 
 	/**
-	 * Initialized an empty CappedString.
+	 * Constructs an empty CappedString.
 	 */
 	CappedString();
 
@@ -89,13 +89,14 @@ public:
 	 */
 	CappedString(CappedString const& rhs);
 
-	// Use compiler-generated destructor.
-	// Under C++11, move-constructor and move-assignment are
-	// not provided.
-
 	/** Assignment.
 	 */
 	CappedString& operator=(CappedString const& rhs);
+
+	// Move constructor and move assignment are deliberately
+	// undeclared.
+
+	~CappedString() = default;
 
 	/** Equality.
 	 *

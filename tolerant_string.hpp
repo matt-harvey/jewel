@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <cstdlib>
 #include <ios>
+#include <memory>
 #include <ostream>
 
 namespace jewel
@@ -34,10 +35,11 @@ public:
 
 	TolerantString();
 	TolerantString(char const* p_string);
-
 	TolerantString(TolerantString const& rhs);
-	~TolerantString();
+	TolerantString(TolerantString&& rhs);
 	TolerantString& operator=(TolerantString const& rhs);
+	TolerantString& operator=(TolerantString&& rhs);
+	~TolerantString();
 
 	/**
 	 * Two TolerantString compare as equal if and only if they have the
@@ -77,7 +79,7 @@ private:
 
 	bool m_is_valid;
 	size_type m_len;
-	char* m_data;
+	std::unique_ptr<char[]> m_data;
 	char m_standby[1];
 
 };  // class TolerantString

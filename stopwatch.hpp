@@ -42,6 +42,12 @@ public:
 	 */
 	Stopwatch();
 
+	Stopwatch(Stopwatch const&) = delete;
+	Stopwatch(Stopwatch&&) = delete;
+	Stopwatch& operator=(Stopwatch const&) = delete;
+	Stopwatch& operator=(Stopwatch&&) = delete;
+	~Stopwatch() = default;
+
 	/** Write a message to an output stream re. the number of seconds elapsed.
 	 *
 	 * The message is in the form: \n <tt> n seconds elapsed. </tt>
@@ -57,6 +63,7 @@ public:
 	 */
 	double seconds_elapsed() const;
 private:
+
 	std::clock_t m_start_time;
 };
 

@@ -81,12 +81,21 @@ public:
 		char const* p_function = 0,
 		char const* p_filepath = 0,
 		long p_line = -1  // -1 means not provided
-	) throw();
+	) noexcept;
 
-	Exception(Exception const& rhs) throw();
-	virtual ~Exception() throw();
-	virtual char const* what() const throw();
-	static size_t max_message_size() throw();
+	Exception(Exception const&) noexcept;
+
+	Exception(Exception&& rhs) noexcept;
+
+	Exception& operator=(Exception const&) = delete;
+
+	Exception& operator=(Exception&&) = delete;
+
+	virtual ~Exception() noexcept;
+
+	virtual char const* what() const noexcept;
+
+	static size_t max_message_size() noexcept;
 
 	/**
 	 * Retrieve the diagnostic message associated with the exception.
@@ -97,7 +106,7 @@ public:
 	 *
 	 * See class documetation re. possibility of truncation.
 	 */
-	char const* message() const throw();
+	char const* message() const noexcept;
 
 	/**
 	 * Retrieve the name of the string passed to \e p_type in the constructor.
@@ -105,7 +114,7 @@ public:
 	 *
 	 * See class documentation re. possibility of truncation.
 	 */
-	char const* type() const throw();
+	char const* type() const noexcept;
 
 	/**
 	 * Retrieve the function name passed to \e p_function in the constructor.
@@ -113,13 +122,13 @@ public:
 	 *
 	 * See class documentation re. possibility of truncation.
 	 */
-	char const* function() const throw();
+	char const* function() const noexcept;
 
 	/**
 	 * Retrieve the string passed to \e p_filepath in the constructor.
 	 * Returns the empty string if this was passed 0.
 	 */
-	char const* filepath() const throw();
+	char const* filepath() const noexcept;
 
 	/**
 	 * Return the line number in the source file from which the exception
@@ -127,15 +136,13 @@ public:
 	 * A return value of -1 indicates that this information was not supplied
 	 * to the constructor.
 	 */
-	long line() const throw();
+	long line() const noexcept;
 
 private:
 	enum
 	{
 		string_capacity = 211
 	};
-
-	Exception const operator=(Exception const&);  // unimplemented
 
 	typedef CappedString<string_capacity> String;
 	String m_message;
@@ -196,7 +203,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Exception const& e);
 			char const* p_function = 0, \
 			char const* p_filepath = 0, \
 			long p_line = -1 \
-		) throw(): \
+		) noexcept: \
 			BASE_CLASS \
 			(	p_message, \
 				p_type, \
@@ -206,7 +213,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Exception const& e);
 			) \
 		{\
 		}\
-		virtual ~DERIVED_CLASS() throw()\
+		virtual ~DERIVED_CLASS() noexcept \
 		{\
 		}\
 	}\
