@@ -2,7 +2,6 @@
 #define GUARD_tolerant_string_hpp_4046224609038897
 
 #include <cstddef>
-#include <cstdlib>
 #include <ios>
 #include <memory>
 #include <ostream>

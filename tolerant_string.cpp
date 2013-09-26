@@ -1,7 +1,6 @@
 #include "tolerant_string.hpp"
 #include "assert.hpp"
 #include <algorithm>
-#include <cstdlib>
 #include <cstring>
 #include <exception>
 #include <memory>
