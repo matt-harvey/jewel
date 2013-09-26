@@ -285,14 +285,9 @@ public:
 	}
 
 
-	// use compiler-generated copy constructor and destructor
-
-	/**
-	 * Assigns by value.
-	 *
-	 * Exception safety: <em>nothrow guarantee</em>.
-	 */
-	Decimal& operator=(Decimal const&);
+	// Use compiler-generated copy constructor, copy assignment and
+	// destructor. These are all non-throwing. In C++11, compiler will
+	// also generator move constructor and move assignment.
 
 	/**
 	 * @exception DecimalAdditionException thrown if addition
@@ -959,14 +954,6 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 }
 
 
-
-inline
-Decimal& Decimal::operator=(Decimal const& rhs)
-{
-	m_places = rhs.m_places;
-	m_intval = rhs.m_intval;
-	return *this;
-}
 
 // Inline member functions
 

@@ -160,8 +160,6 @@ Decimal::Decimal(int_type p_intval, places_type p_places):
 }
 
 
-
-
 int Decimal::rescale(places_type p_places)
 {
 	#ifndef NDEBUG
