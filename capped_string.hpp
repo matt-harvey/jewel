@@ -16,16 +16,19 @@ namespace jewel
 {
 
 
-/** Provides for limited length string of char that avoids heap allocation.
+/**
+ * @class CappedString.
+ *
+ * @brief Provides for a limited length string of char that avoids heap
+ * allocation.
  *
  * A template for string classes encapsulating a limited length string of
  * \e char, which is safer than a C-style string, more convenient than a
  * boost::array<char, N> or a std::array<char, N>, and can be copied
  * safely.
  *
- * The string is limited to a certain length; but for purposes of
- * assessing the length of the string, and comparing strings with each
- * other, etc., only the characters up to null are considered relevant.
+ * The string is limited to a certain length, which is provided to the
+ * template parameter N.
  *
  * No heap allocation is performed by CappedString.
  *
@@ -40,15 +43,6 @@ namespace jewel
  * \e is_truncated() member. Internally, CappedString will always
  * null-terminate its internal char array, even if it is truncated
  * relative to the original string.
- *
- * You can obtain a pointer to the internal null-terminated char array
- * by calling \e c_str() - with caveats as per the member function in
- * std::string of the same name.
- *
- * Note the template parameter N represents the maximum number of characters
- * in the CappedString NOT including the null-terminator (which is considered
- * an implementation detail). This is the same number that is returned by
- * the member function \e capacity().
  *
  * TODO Allow a CappedString<N> to be initialized and/or copied from
  * a CappedString<M> where M != N. We might also allow two such strings
@@ -168,8 +162,10 @@ public:
 
 	/**
 	 * @returns the maximum number of characters that may be stored in
-	 * CappedString without truncation. The function is provided for
-	 * consistency with the standard library container interface.
+	 * CappedString without truncation. This is the same as the value N
+	 * passed to the CappedString class template.
+	 * The function is provided mainly for consistency with the standard
+	 * library container interface.
 	 */
 	size_type capacity() const;
 
