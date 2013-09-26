@@ -47,7 +47,6 @@
  * increment and decrement.
  */
 
-#include <boost/cstdint.hpp>
 #include "detail/checked_arithmetic_detail.hpp"
 
 
