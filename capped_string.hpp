@@ -3,7 +3,6 @@
 #ifndef GUARD_capped_string_hpp_6740592125216774
 #define GUARD_capped_string_hpp_6740592125216774
 
-#include "array_utilities.hpp"
 #include "detail/smallest_sufficient_unsigned_type.hpp"
 #include "log.hpp"
 #include <algorithm>
@@ -493,7 +492,7 @@ CappedString<N>::push_back(value_type p_value)
 	{
 		m_data[m_len] = p_value;
 		++m_len;
-		JEWEL_ASSERT(m_len < jewel::num_elements(m_data));
+		JEWEL_ASSERT(m_len < (std::end(m_data) - std::begin(m_data)));
 		m_data[m_len] = '\0';
 	}
 	JEWEL_ASSERT(size() <= capacity());

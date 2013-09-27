@@ -69,7 +69,6 @@ set (inner_header_installation_dir "${outer_header_installation_dir}/jewel")
 install(DIRECTORY jewel DESTINATION ${outer_header_installation_dir})
 
 install(FILES
-		array_utilities.hpp
 		assert.hpp
 		capped_string.hpp
 		checked_arithmetic.hpp

@@ -10,6 +10,9 @@
 TEST(on_windows_test)
 {
 	bool on_windows = false;
+
+	(void)on_windows;   // prevent warning re. unused variable
+
 #	ifdef JEWEL_ON_WINDOWS
 		on_windows = true;
 #	endif

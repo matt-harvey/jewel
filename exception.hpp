@@ -175,7 +175,6 @@ operator<<(std::basic_ostream<charT, traits>& os, Exception const& e);
 }  // namespace jewel
 
 
-#include "array_utilities.hpp"
 #include "assert.hpp"
 
 #ifdef JEWEL_ENABLE_EXCEPTION_LOGGING
@@ -276,7 +275,6 @@ template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
 operator<<(std::basic_ostream<charT, traits>& os, Exception const& e)
 {
-	using jewel::num_elements;
 	using std::endl;
 	using std::make_pair;
 	using std::pair;
@@ -293,13 +291,12 @@ operator<<(std::basic_ostream<charT, traits>& os, Exception const& e)
 	};
 	os << "BEGIN EXCEPTION DESCRIPTION" << '\n';
 	char const* const sep = ": ";
-	for (size_t i = 0; i != num_elements(data); ++i)
+	for (auto const& datum: data)
 	{
-		char const* const datum = data[i].second;
-		if (strlen(datum) != 0)
+		if (strlen(datum.second) != 0)
 		{
-			JEWEL_ASSERT (strlen(datum) > 0);
-			os << data[i].first << sep << datum << '\n';
+			JEWEL_ASSERT (strlen(datum.second) > 0);
+			os << datum.first << sep << datum.second << '\n';
 		}
 	}
 	if (e.line() >= 0)

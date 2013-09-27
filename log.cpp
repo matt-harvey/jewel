@@ -1,5 +1,4 @@
 #include "log.hpp"
-#include "array_utilities.hpp"
 
 // We deliberately do NOT use "jewel/assert.hpp" here,
 // as we might one day want a call the assert to invoke
@@ -12,11 +11,13 @@
 #include <ios>
 #include <iostream>
 #include <string>
+#include <utility>
 
-using jewel::num_elements;
+using std::begin;
 using std::cerr;
 using std::clog;
 using std::cout;
+using std::end;
 using std::endl;
 using std::ios;
 using std::localtime;
@@ -248,7 +249,7 @@ Log::severity_string(Level p_level)
 		"warning",
 		"error"
 	};
-	if (p_level >= num_elements(strings))
+	if (p_level >= (end(strings) - begin(strings)))
 	{
 		return "unrecognized";
 	}

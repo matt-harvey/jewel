@@ -1,7 +1,6 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include "exception.hpp"
-#include "array_utilities.hpp"
 #include "assert.hpp"
 #include "log.hpp"
 #include <algorithm>
@@ -12,7 +11,6 @@
 #include <string>
 #include <utility>
 
-using jewel::num_elements;
 using std::back_inserter;
 using std::cerr;
 using std::copy;
