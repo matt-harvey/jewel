@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <istream>
+#include <iterator>
 #include <ostream>
 #include <string>
 
