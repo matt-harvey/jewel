@@ -71,6 +71,7 @@ install(DIRECTORY jewel DESTINATION ${outer_header_installation_dir})
 install(FILES
 		assert.hpp
 		capped_string.hpp
+		capped_string_fwd.hpp
 		checked_arithmetic.hpp
 		log.hpp
 		decimal.hpp
@@ -86,6 +87,7 @@ install(FILES
 		signature.hpp
 		stopwatch.hpp
 		tolerant_string.hpp
+		tolerant_string_fwd.hpp
 		DESTINATION
 		${inner_header_installation_dir})
 
