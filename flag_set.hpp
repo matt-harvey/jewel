@@ -55,7 +55,8 @@ struct EnumTraits
  *
  * \e EnumT is an enum defined in client code, in which the enumerators are
  * initialized with progressive powers of 2, i.e.: 1, 2, 4 etc.. Each
- * enumerator represents a boolean flag.
+ * enumerator represents a boolean flag. EnumT should be a plain enum,
+ * not an enum class.
  *
  * \e mask is an integer mask of those enumerators in EnumT that are
  * considered relevant for this
