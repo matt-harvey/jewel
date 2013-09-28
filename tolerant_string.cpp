@@ -47,7 +47,6 @@ TolerantString::TolerantString(TolerantString&& rhs):
 	m_len(move(rhs.m_len)),
 	m_data(move(rhs.m_data))
 {
-	rhs.m_data = nullptr;
 	*m_standby = '\0';
 }
 
@@ -65,10 +64,12 @@ TolerantString::operator=(TolerantString const& rhs)
 TolerantString&
 TolerantString::operator=(TolerantString&& rhs)
 {
-	m_data = move(rhs.m_data);
-	rhs.m_data = nullptr;	
-	m_is_valid = move(rhs.m_is_valid);
-	m_len = move(rhs.m_len);
+	if (this != &rhs)
+	{
+		m_data = move(rhs.m_data);
+		m_is_valid = move(rhs.m_is_valid);
+		m_len = move(rhs.m_len);
+	}
 	JEWEL_ASSERT (*m_standby == '\0');
 	return *this;
 }
