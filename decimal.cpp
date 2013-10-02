@@ -67,12 +67,6 @@ namespace jewel
 
 // initialize static data members
 
-Decimal::int_type const
-Decimal::s_base = 10;
-
-Decimal::int_type const
-Decimal::s_rounding_threshold = 5;
-
 size_t const
 Decimal::s_max_places = NumDigits::num_digits
 (	numeric_limits<int_type>::min()

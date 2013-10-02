@@ -184,7 +184,7 @@ public:
 	 *
 	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
-	Decimal();
+	Decimal() = default;
 
 	/**
 	 * Constructs a Decimal with an underlying integer of
@@ -551,8 +551,7 @@ private:
 	 * @returns an integer indicating whether the operation was successful,
 	 * viz. 0 if successful, otherwise a non-zero value. 
 	 */
-	int
-	rescale(places_type p_places);
+	int rescale(places_type p_places);
 
 	/**
 	 * Where the final digit(s) of the Decimal number are '0', this
@@ -579,12 +578,12 @@ private:
 	 * Base of arithmetic. I can't imagine this ever being equal to anything
 	 * other than 10.
 	 */
-	static int_type const s_base;
+	static int_type constexpr s_base = 10;
 
 	/**
 	 * Threshold at which rounding goes up rather than down.
 	 */
-	static int_type const s_rounding_threshold;
+	static int_type constexpr s_rounding_threshold = 5;
 
 	/**
 	 * Maximum number of decimal places of precision to the right of
@@ -605,12 +604,12 @@ private:
 	/**
 	 * Number of digits of precision to the right of the decimal point.
 	 */
-	places_type m_places;
+	places_type m_places = 0;
 
 	/**
 	 * Underlying integer representation of Decimal number.
 	 */
-	int_type m_intval;
+	int_type m_intval = 0;
 
 	/** 
 	 * Convert two Decimal objects to the same number of places by converting
@@ -820,13 +819,6 @@ namespace jewel
 
 
 // IMPLEMENTATIONS
-
-
-inline
-Decimal::Decimal(): m_places(0), m_intval(0)
-{
-}
-
 
 
 // TODO High priority. Ensure this works with wchar_t.
