@@ -118,21 +118,9 @@ void Decimal::co_normalize(Decimal& x, Decimal& y)
 // some member functions
 
 
-void
-Decimal::rationalize(places_type min_places)
+Decimal::Decimal(): m_places(0), m_intval(0)
 {
-	JEWEL_ASSERT (s_base > 0);
-	JEWEL_ASSERT (!remainder_is_unsafe(m_intval, s_base));
-	while ((m_places > min_places) && (m_intval % s_base == 0))
-	{
-		JEWEL_ASSERT (!division_is_unsafe(m_intval, s_base));
-		m_intval /= s_base;
-		JEWEL_ASSERT (m_places > 0);
-		--m_places;
-	}
-	return;
 }
-
 
 Decimal::Decimal(int_type p_intval, places_type p_places):
 	m_places(p_places),
@@ -153,6 +141,20 @@ Decimal::Decimal(int_type p_intval, places_type p_places):
 	}
 }
 
+void
+Decimal::rationalize(places_type min_places)
+{
+	JEWEL_ASSERT (s_base > 0);
+	JEWEL_ASSERT (!remainder_is_unsafe(m_intval, s_base));
+	while ((m_places > min_places) && (m_intval % s_base == 0))
+	{
+		JEWEL_ASSERT (!division_is_unsafe(m_intval, s_base));
+		m_intval /= s_base;
+		JEWEL_ASSERT (m_places > 0);
+		--m_places;
+	}
+	return;
+}
 
 int Decimal::rescale(places_type p_places)
 {

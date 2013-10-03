@@ -184,7 +184,7 @@ public:
 	 *
 	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
-	Decimal() = default;
+	Decimal();
 
 	/**
 	 * Constructs a Decimal with an underlying integer of
@@ -604,12 +604,12 @@ private:
 	/**
 	 * Number of digits of precision to the right of the decimal point.
 	 */
-	places_type m_places = 0;
+	places_type m_places;
 
 	/**
 	 * Underlying integer representation of Decimal number.
 	 */
-	int_type m_intval = 0;
+	int_type m_intval;
 
 	/** 
 	 * Convert two Decimal objects to the same number of places by converting
