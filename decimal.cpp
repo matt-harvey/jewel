@@ -6,6 +6,7 @@
 #include "decimal_exceptions.hpp"
 #include "exception.hpp"
 #include "num_digits.hpp"
+#include <boost/numeric/conversion/cast.hpp>
 #include <algorithm>
 #include <cmath>
 #include <cstdlib>
@@ -16,32 +17,52 @@
 
 #include <iostream>   // For logging only
 
+using boost::numeric_cast;
+
 /*
+ * Hack: using this instead of static_cast because there appears to be a bug
+ * in GCC 4.6.1 (at least on MinGW on Windows) when casting to long long using
+ * static_cast or implicit cast.
+ */
+template <typename Target>
+struct Converter
+{
+	template <typename Source>
+	static Target convert(Source p_source)
+	{
+		return p_source;
+	}
+};
+
+/*
+ * Specialize for conversions to long long to use boost::numeric cast to
+ * avoid the bug.
+ */
+template <>
+struct Converter<long long>
+{
+	template <typename Source>
+	static long long convert(Source p_source)
+	{
+		return numeric_cast<long long>(p_source);
+	}
+};
+
+template <typename Target, typename Source>
+Target num_cast(Source p_source);
+
+template <typename Target, typename Source>
+inline
+Target num_cast(Source p_source)
+{
+	return Converter<Target>::template convert(p_source);
+}
+
 #ifndef NDEBUG
-*/
-	// TODO HIGH PRIORITY. I have made NUM_CAST ALWAYS
-	// be boost::numeric_cast even on Release builds. This
-	// is inefficient. However, if I used static_cast with
-	// TDM-GCC 4.6.1 on Windows 7, there is a mysterious error
-	// when casting from unsigned short to long long (even with
-	// -std=c++0x flag). This error goes away if I use
-	// numeric_cast. The task is to figure out what the
-	// heck is going on there - it appears to be a compiler bug -
-	// and fix it preferably by recompiling everything on my
-	// Windows installation with a more recent version of GCC -
-	// rather than by having to live with numeric_cast on release
-	// builds (especially since I don't understand why it works
-	// with numeric_cast and not static_cast). Note that, the error
-	// ALSO goes away on Windows if I do cout << "Any string" << endl
-	// just after the offending cast. It is utterly bizarre.
-	#include <boost/numeric/conversion/cast.hpp>
-	using boost::numeric_cast;
 	#define NUM_CAST numeric_cast          // Safer
-/*
 #else
-	#define NUM_CAST static_cast           // Faster
+	#define NUM_CAST num_cast           // Faster
 #endif
-*/
 
 /*
  * Don't rely on the exceptions thrown by boost::numeric_cast.
