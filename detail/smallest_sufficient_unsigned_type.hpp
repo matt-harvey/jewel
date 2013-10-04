@@ -16,9 +16,6 @@ namespace detail
 // Client code can ignore what's in detail namespace.
 // See below for API viz. SmallestSufficientUnsignedType template.
 
-namespace detail
-{
-
 template <typename T>
 struct UnsignedTypeTraits
 {
@@ -70,9 +67,6 @@ struct Ternary<false, ResultIfTrue, ResultIfFalse>
 	typedef ResultIfFalse Result;
 };
 
-}  // namespace detail
-
-
 /**
  * If you instantiate this with a \e size_t N, then
  * <em>SmallestSufficientUnsignedType<N>::Result</em> will be a typedef
@@ -110,7 +104,7 @@ static_assert
 		<	SmallestSufficientUnsignedType<5>::Result,
 			unsigned char
 		>::value,
-	"Unexpected result when instantiation SmallestSufficientUnsignedType."
+	"Unexpected result when instantiating SmallestSufficientUnsignedType."
 );
 
 static_assert
@@ -118,7 +112,7 @@ static_assert
 		<	SmallestSufficientUnsignedType<UINT_MAX>::Result,
 			unsigned int
 		>::value,
-	"Unexpected result when instantiation SmallestSufficientUnsignedType."
+	"Unexpected result when instantiating SmallestSufficientUnsignedType."
 );
 
 static_assert
@@ -126,7 +120,7 @@ static_assert
 		<	SmallestSufficientUnsignedType<USHRT_MAX>::Result,
 			unsigned short
 		>::value,
-	"Unexpected result when instantiation SmallestSufficientUnsignedType."
+	"Unexpected result when instantiating SmallestSufficientUnsignedType."
 );
 
 static_assert
@@ -134,7 +128,7 @@ static_assert
 		<	SmallestSufficientUnsignedType<500>::Result,
 			unsigned short
 		>::value,
-	"Unexpected result when instantiation SmallestSufficientUnsignedType."
+	"Unexpected result when instantiating SmallestSufficientUnsignedType."
 );
 
 static_assert
@@ -142,7 +136,7 @@ static_assert
 		<	SmallestSufficientUnsignedType<0>::Result,
 			unsigned char
 		>::value,
-	"Unexpected result when instantiation SmallestSufficientUnsignedType."
+	"Unexpected result when instantiating SmallestSufficientUnsignedType."
 );
 
 

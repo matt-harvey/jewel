@@ -134,13 +134,6 @@ namespace jewel
  * Doxyfile.
  *
  * @todo LOW PRIORITY
- * Stop Doxygen from spewing all those warnings. They relate only to Doxygen
- * markup.
- *
- * @todo LOW PRIORITY
- * Deal with compiler warnings about unused variables in tests.
- *
-  @todo LOW PRIORITY
  * Division now incorporates rounding but: (a) it is a bit inefficient;
  * and (b) it contains a "hard-wired" behaviour of rounding up at 5, while not
  * actually referring to the Decimal::s_rounding_threshold constant to achieve
