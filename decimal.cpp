@@ -5,14 +5,13 @@
 #include "checked_arithmetic.hpp"
 #include "decimal_exceptions.hpp"
 #include "exception.hpp"
-#include "num_digits.hpp"  // for num_digits
-
+#include "num_digits.hpp"
 #include <algorithm>
-#include <cmath>    // for pow
-#include <cstdlib>  // for abs
-#include <cctype>  // for isdigit(char) and iswdigit(wchar_t)
+#include <cmath>
+#include <cstdlib>
+#include <cctype>
 #include <limits>
-#include <numeric>  // for accumulate
+#include <numeric>
 #include <vector>
 
 #include <iostream>   // For logging only
