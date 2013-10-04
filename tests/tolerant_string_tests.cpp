@@ -37,11 +37,11 @@ TEST(tolerant_string_default_constructor)
 	CHECK_EQUAL(ts0.c_str(), std::string().c_str());
 	CHECK(ts0.empty());
 	CHECK(ts0.is_valid());
-	CHECK_EQUAL(ts0.size(), 0);
-	CHECK_EQUAL(strlen(ts0.c_str()), 0);
+	CHECK_EQUAL(ts0.size(), static_cast<size_t>(0));
+	CHECK_EQUAL(strlen(ts0.c_str()), static_cast<size_t>(0));
 	CHECK_EQUAL(strcmp(ts0.c_str(), ""), 0);
 	ts0.clear();
-	CHECK_EQUAL(ts0.size(), 0);
+	CHECK_EQUAL(ts0.size(), static_cast<size_t>(0));
 	CHECK(ts0.empty());
 	CHECK(ts0.is_valid());
 }
@@ -54,7 +54,7 @@ TEST(tolerant_string_constructor_from_char_const_ptr)
 		CHECK_EQUAL(std::string(ts0.c_str()), std::string("Hello there!"));
 		CHECK_EQUAL(ts0, TolerantString("Hello there!"));
 		CHECK_EQUAL(strcmp(ts0.c_str(), "Hello there!"), 0);
-		CHECK_EQUAL(ts0.size(), 12);
+		CHECK_EQUAL(ts0.size(), static_cast<size_t>(12));
 		CHECK(!ts0.empty());
 		ts0.clear();
 		CHECK(ts0.empty());
@@ -69,8 +69,8 @@ TEST(tolerant_string_constructor_from_char_const_ptr)
 	{
 		TolerantString ts1b;
 		CHECK_EQUAL(ts1, ts1b);
-		CHECK_EQUAL(ts1.size(), 0);
-		CHECK_EQUAL(strlen(ts1.c_str()), 0);
+		CHECK_EQUAL(ts1.size(), static_cast<size_t>(0));
+		CHECK_EQUAL(strlen(ts1.c_str()), static_cast<size_t>(0));
 		CHECK_EQUAL(strcmp(ts1.c_str(), ""), 0);
 	}
 	else
@@ -83,7 +83,7 @@ TEST(tolerant_string_constructor_from_char_const_ptr)
 		CHECK_EQUAL(std::string(ts2.c_str()), std::string("Hello there!"));
 		CHECK_EQUAL(ts2, TolerantString("Hello there!"));
 		CHECK_EQUAL(strcmp(ts2.c_str(), "Hello there!"), 0);
-		CHECK_EQUAL(ts2.size(), 12);
+		CHECK_EQUAL(ts2.size(), static_cast<size_t>(12));
 		CHECK(!ts2.empty());
 	}
 	else
@@ -123,7 +123,7 @@ TEST(tolerant_string_copy_constructor)
 		CHECK_EQUAL(ts3b, ts3);
 		CHECK_EQUAL(ts4b, ts4);
 		CHECK(ts0b.empty());
-		CHECK_EQUAL(ts1b.size(), 589760);
+		CHECK_EQUAL(ts1b.size(), static_cast<size_t>(589760));
 		CHECK_EQUAL(std::string(ts4b.c_str()), "100293k");
 	}
 	else
@@ -167,7 +167,7 @@ TEST(tolerant_string_copy_assignment)
 	if (ts4.is_valid())
 	{
 		CHECK_EQUAL(ts4, TolerantString());
-		CHECK_EQUAL(ts4.size(), 0);
+		CHECK_EQUAL(ts4.size(), static_cast<size_t>(0));
 	}
 	else
 	{
@@ -268,12 +268,12 @@ TEST(tolerant_string_size)
 		ts6.is_valid()
 	)
 	{
-		CHECK_EQUAL(ts0.size(), 0);
-		CHECK_EQUAL(ts1.size(), 5);
-		CHECK_EQUAL(ts2.size(), 9768);
+		CHECK_EQUAL(ts0.size(), static_cast<size_t>(0));
+		CHECK_EQUAL(ts1.size(), static_cast<size_t>(5));
+		CHECK_EQUAL(ts2.size(), static_cast<size_t>(9768));
 		CHECK_EQUAL(ts3.size(), strlen("I dunno what to write here."));
 		CHECK_EQUAL(ts4.size(), ts1.size());
-		CHECK_EQUAL(ts5.size(), 8);
+		CHECK_EQUAL(ts5.size(), static_cast<size_t>(8));
 		CHECK_EQUAL(ts6.size(), ts5.size());
 	}
 	else
@@ -339,7 +339,7 @@ TEST(tolerant_string_clear)
 		CHECK(ts0.empty());
 		CHECK(ts1.empty());
 		CHECK(ts1.is_valid());
-		CHECK(ts1.size() == 0);
+		CHECK(ts1.size() == static_cast<size_t>(0));
 		CHECK(ts2.empty());
 		CHECK(ts2.is_valid());
 		CHECK_EQUAL(ts2, TolerantString());
@@ -375,11 +375,11 @@ TEST(tolerant_string_swap)
 		CHECK_EQUAL(ts0, "Hello");
 		CHECK_EQUAL(ts1, TolerantString());
 		CHECK_EQUAL(ts2, TolerantString("I dunno what to write here."));
-		CHECK_EQUAL(ts3.size(), 9768);
+		CHECK_EQUAL(ts3.size(), static_cast<size_t>(9768));
 		CHECK_EQUAL(ts3, TolerantString(std::string(9768, 'b').c_str()));
 		ts3.swap(ts4);
 		CHECK_EQUAL(ts3, TolerantString(std::string(7889, '#').c_str()));
-		CHECK_EQUAL(ts4.size(), 9768);
+		CHECK_EQUAL(ts4.size(), static_cast<size_t>(9768));
 		CHECK(ts0.is_valid());
 		CHECK(ts1.is_valid());
 		CHECK(ts2.is_valid());

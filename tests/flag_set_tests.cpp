@@ -23,7 +23,7 @@ enum Talent
 TEST(flag_set_default_constructor)
 {
 	FlagSet<Talent, public_speaking | walking> fs0;
-	CHECK_EQUAL(fs0.underlying(), 0);
+	CHECK_EQUAL(fs0.underlying(), static_cast<size_t>(0));
 	CHECK(!fs0.test(public_speaking));
 	CHECK(!fs0.test(walking));
 
@@ -35,7 +35,7 @@ TEST(flag_set_default_constructor)
 	CHECK(!fs1.test(music));
 	CHECK(fs1.test(eating));
 	CHECK(fs1.test(public_speaking));
-	CHECK_EQUAL(fs1.underlying(), eating | public_speaking);
+	CHECK_EQUAL((int)fs1.underlying(), eating | public_speaking);
 }
 
 TEST(flag_set_set_test_clear_and_underlying)
@@ -45,13 +45,13 @@ TEST(flag_set_set_test_clear_and_underlying)
 	CHECK(!fs0.test(eating));
 	CHECK(!fs0.test(running));
 	CHECK(!fs0.test(music));
-	CHECK_EQUAL(fs0.underlying(), !eating | !running | !music);
+	CHECK_EQUAL((int)fs0.underlying(), !eating | !running | !music);
 
 	fs0.set(running);
 	CHECK(!fs0.test(eating));
 	CHECK(fs0.test(running));
 	CHECK(!fs0.test(music));
-	CHECK_EQUAL(fs0.underlying(), !eating | running | !music);
+	CHECK_EQUAL((int)fs0.underlying(), !eating | running | !music);
 
 	fs0.set(music);
 	CHECK(!fs0.test(eating));

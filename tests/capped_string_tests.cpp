@@ -61,18 +61,18 @@ TEST(capped_string_default_constructor)
 	CHECK_EQUAL(c40938, CappedString40938(d));
 	CHECK_EQUAL(c40938, CappedString40938(e));
 
-	CHECK_EQUAL(c0.size(), 0);
-	CHECK_EQUAL(c1.size(), 0);
-	CHECK_EQUAL(c5.size(), 0);
-	CHECK_EQUAL(c50.size(), 0);
-	CHECK_EQUAL(c303.size(), 0);
-	CHECK_EQUAL(c40938.size(), 0);
+	CHECK_EQUAL(c0.size(), static_cast<size_t>(0));
+	CHECK_EQUAL(c1.size(), static_cast<size_t>(0));
+	CHECK_EQUAL(c5.size(), static_cast<size_t>(0));
+	CHECK_EQUAL(c50.size(), static_cast<size_t>(0));
+	CHECK_EQUAL(c303.size(), static_cast<size_t>(0));
+	CHECK_EQUAL(c40938.size(), static_cast<size_t>(0));
 	
-	CHECK_EQUAL(c0.capacity(), 0);
-	CHECK_EQUAL(c1.capacity(), 1);
-	CHECK_EQUAL(c5.capacity(), 5);
-	CHECK_EQUAL(c50.capacity(), 50);
-	CHECK_EQUAL(c40938.capacity(), 40938);
+	CHECK_EQUAL(c0.capacity(), static_cast<size_t>(0));
+	CHECK_EQUAL(c1.capacity(), static_cast<size_t>(1));
+	CHECK_EQUAL(c5.capacity(), static_cast<size_t>(5));
+	CHECK_EQUAL(c50.capacity(), static_cast<size_t>(50));
+	CHECK_EQUAL(c40938.capacity(), static_cast<size_t>(40938));
 
 	CHECK(!c0.is_truncated());
 	CHECK(!c1.is_truncated());
@@ -91,10 +91,10 @@ TEST(capped_string_constructor_from_char_const_ptr)
 	CappedString303 const c303("");
 	CappedString40938 const c40938("");
 	CHECK(!c0.is_truncated());
-	CHECK_EQUAL(c0.size(), 0);
+	CHECK_EQUAL(c0.size(), static_cast<size_t>(0));
 	CHECK(!c1.is_truncated());
-	CHECK_EQUAL(c1.size(), 0);
-	CHECK_EQUAL(c303.size(), 0);
+	CHECK_EQUAL(c1.size(), static_cast<size_t>(0));
+	CHECK_EQUAL(c303.size(), static_cast<size_t>(0));
 	CHECK(c303.empty());
 	CHECK(!c303.is_truncated());
 	CHECK_EQUAL(std::string(c40938.c_str()), std::string(c0.c_str()));
@@ -107,15 +107,15 @@ TEST(capped_string_constructor_from_char_const_ptr)
 	CappedString50 const d50(cstr0);
 	CappedString303 const d303(cstr0);
 	CappedString40938 const d40938(cstr0);
-	CHECK_EQUAL(d0.size(), 0);
+	CHECK_EQUAL(d0.size(), static_cast<size_t>(0));
 	CHECK(d0.is_truncated());
-	CHECK_EQUAL(d1.size(), 1);
+	CHECK_EQUAL(d1.size(), static_cast<size_t>(1));
 	CHECK(d1.is_truncated());
-	CHECK_EQUAL(d5.size(), 3);
+	CHECK_EQUAL(d5.size(), static_cast<size_t>(3));
 	CHECK(!d5.is_truncated());
-	CHECK_EQUAL(d50.size(), 3);
-	CHECK_EQUAL(d303.size(), 3);
-	CHECK_EQUAL(d40938.size(), 3);
+	CHECK_EQUAL(d50.size(), static_cast<size_t>(3));
+	CHECK_EQUAL(d303.size(), static_cast<size_t>(3));
+	CHECK_EQUAL(d40938.size(), static_cast<size_t>(3));
 	CHECK(!d40938.is_truncated());
 	CHECK_EQUAL(d0, CappedString0(""));
 	CHECK_EQUAL(d1, CappedString1("H"));
@@ -129,16 +129,16 @@ TEST(capped_string_constructor_from_char_const_ptr)
 	CappedString50 const e50(cstr1);
 	CappedString303 const e303(cstr1);
 	CappedString40938 const e40938(cstr1);
-	CHECK_EQUAL(strlen(e0.c_str()), 0);
+	CHECK_EQUAL(strlen(e0.c_str()), static_cast<size_t>(0));
 	CHECK(e0.empty());
 	CHECK(e0.is_truncated());
-	CHECK_EQUAL(e1.size(), 1);
+	CHECK_EQUAL(e1.size(), static_cast<size_t>(1));
 	CHECK_EQUAL(e1.c_str()[0], 'x');
 	CHECK_EQUAL(e1, CappedString1("x"));
 	CHECK_EQUAL(e5, CappedString5(std::string(5, 'x')));
 	CHECK(e5.is_truncated());
-	CHECK_EQUAL(e50.size(), 50);
-	CHECK_EQUAL(e303.size(), 303);
+	CHECK_EQUAL(e50.size(), static_cast<size_t>(50));
+	CHECK_EQUAL(e303.size(), static_cast<size_t>(303));
 	CHECK(e303.is_truncated());
 	CHECK(!e303.empty());
 	CHECK(!e40938.is_truncated());
@@ -149,19 +149,19 @@ TEST(capped_string_constructor_from_char_const_ptr)
 	CappedString0 const f0(cstr2);
 	CHECK(f0.is_truncated());
 	CappedString1 const f1(cstr2);
-	CHECK_EQUAL(f1.size(), 1);
+	CHECK_EQUAL(f1.size(), static_cast<size_t>(1));
 	CappedString5 const f5(cstr2);
-	CHECK_EQUAL(f5.size(), 5);
+	CHECK_EQUAL(f5.size(), static_cast<size_t>(5));
 	CHECK(f5.is_truncated());
 	CHECK_EQUAL(std::string(f5.c_str()), std::string(5, 'y'));
 	CappedString50 const f50(cstr2);
-	CHECK_EQUAL(f50.size(), 50);
+	CHECK_EQUAL(f50.size(), static_cast<size_t>(50));
 	CHECK(f50.is_truncated());
 	CappedString303 const f303(cstr2);
-	CHECK_EQUAL(f303.size(), 303);
+	CHECK_EQUAL(f303.size(), static_cast<size_t>(303));
 	CHECK_EQUAL(f303.capacity(), f303.size());
 	CappedString40938 const f40938(cstr2);
-	CHECK_EQUAL(f40938.size(), 303);
+	CHECK_EQUAL(f40938.size(), static_cast<size_t>(303));
 }
 
 TEST(capped_string_constructor_from_std_string)
@@ -175,10 +175,10 @@ TEST(capped_string_constructor_from_std_string)
 	CappedString303 const c303(s);
 	CappedString40938 const c40938(s);
 	CHECK(!c0.is_truncated());
-	CHECK_EQUAL(c0.size(), 0);
+	CHECK_EQUAL(c0.size(), static_cast<size_t>(0));
 	CHECK(!c1.is_truncated());
-	CHECK_EQUAL(c1.size(), 0);
-	CHECK_EQUAL(c303.size(), 0);
+	CHECK_EQUAL(c1.size(), static_cast<size_t>(0));
+	CHECK_EQUAL(c303.size(), static_cast<size_t>(0));
 	CHECK(c303.empty());
 	CHECK(!c303.is_truncated());
 	CHECK_EQUAL(std::string(c40938.c_str()), std::string(c0.c_str()));
@@ -191,15 +191,15 @@ TEST(capped_string_constructor_from_std_string)
 	CappedString50 const d50(str0);
 	CappedString303 const d303(str0);
 	CappedString40938 const d40938(str0);
-	CHECK_EQUAL(d0.size(), 0);
+	CHECK_EQUAL(d0.size(), static_cast<size_t>(0));
 	CHECK(d0.is_truncated());
-	CHECK_EQUAL(d1.size(), 1);
+	CHECK_EQUAL(d1.size(), static_cast<size_t>(1));
 	CHECK(d1.is_truncated());
-	CHECK_EQUAL(d5.size(), 3);
+	CHECK_EQUAL(d5.size(), static_cast<size_t>(3));
 	CHECK(!d5.is_truncated());
-	CHECK_EQUAL(d50.size(), 3);
-	CHECK_EQUAL(d303.size(), 3);
-	CHECK_EQUAL(d40938.size(), 3);
+	CHECK_EQUAL(d50.size(), static_cast<size_t>(3));
+	CHECK_EQUAL(d303.size(), static_cast<size_t>(3));
+	CHECK_EQUAL(d40938.size(), static_cast<size_t>(3));
 	CHECK(!d40938.is_truncated());
 	CHECK_EQUAL(d0, CappedString0());
 	CHECK_EQUAL(d1, CappedString1(std::string("H")));
@@ -212,16 +212,16 @@ TEST(capped_string_constructor_from_std_string)
 	CappedString50 const e50(str1);
 	CappedString303 const e303(str1);
 	CappedString40938 const e40938(str1);
-	CHECK_EQUAL(strlen(e0.c_str()), 0);
+	CHECK_EQUAL(strlen(e0.c_str()), static_cast<size_t>(0));
 	CHECK(e0.empty());
 	CHECK(e0.is_truncated());
-	CHECK_EQUAL(e1.size(), 1);
+	CHECK_EQUAL(e1.size(), static_cast<size_t>(1));
 	CHECK_EQUAL(e1.c_str()[0], 'x');
 	CHECK_EQUAL(e1, CappedString1("x"));
 	CHECK_EQUAL(e5, CappedString5(std::string(5, 'x')));
 	CHECK(e5.is_truncated());
-	CHECK_EQUAL(e50.size(), 50);
-	CHECK_EQUAL(e303.size(), 303);
+	CHECK_EQUAL(e50.size(), static_cast<size_t>(50));
+	CHECK_EQUAL(e303.size(), static_cast<size_t>(303));
 	CHECK(e303.is_truncated());
 	CHECK(!e303.empty());
 	CHECK(!e40938.is_truncated());
@@ -231,19 +231,19 @@ TEST(capped_string_constructor_from_std_string)
 	CappedString0 const f0(str2);
 	CHECK(f0.is_truncated());
 	CappedString1 const f1(str2);
-	CHECK_EQUAL(f1.size(), 1);
+	CHECK_EQUAL(f1.size(), static_cast<size_t>(1));
 	CappedString5 const f5(str2);
-	CHECK_EQUAL(f5.size(), 5);
+	CHECK_EQUAL(f5.size(), static_cast<size_t>(5));
 	CHECK(f5.is_truncated());
 	CHECK_EQUAL(std::string(f5.c_str()), std::string(5, 'y'));
 	CappedString50 const f50(str2);
-	CHECK_EQUAL((size_t)f50.size(), 50);
+	CHECK_EQUAL(f50.size(), static_cast<size_t>(50));
 	CHECK(f50.is_truncated());
 	CappedString303 const f303(str2);
-	CHECK_EQUAL(f303.size(), 303);
+	CHECK_EQUAL(f303.size(), static_cast<size_t>(303));
 	CHECK_EQUAL(f303.capacity(), f303.size());
 	CappedString40938 const f40938(str2);
-	CHECK_EQUAL(f40938.size(), 303);
+	CHECK_EQUAL(f40938.size(), static_cast<size_t>(303));
 
 	std::string const str3("lailasdf8907\n\t\a --    '");
 	CHECK_EQUAL(CappedString50(str3), CappedString50(str3.c_str()));
@@ -321,7 +321,7 @@ TEST(capped_string_assignment)
 	c3 = c7;
 	CHECK_EQUAL(c3 = c3, c3);
 	CHECK_EQUAL(c0, CappedString0());
-	CHECK_EQUAL(c3.size(), 0);
+	CHECK_EQUAL(c3.size(), static_cast<size_t>(0));
 	CHECK_EQUAL(c3.capacity(), 303);
 	c6 = CappedString40938(c3.c_str());
 	CHECK_EQUAL(c6, CappedString40938());
@@ -385,7 +385,7 @@ TEST(capped_string_concatenation)
 	CHECK_EQUAL(strcmp(c0.c_str(), "hello"), 0);
 	c0 += c1;
 	CHECK_EQUAL(c0, "hellothere");
-	CHECK_EQUAL(c0.size(), 10);
+	CHECK_EQUAL(c0.size(), static_cast<size_t>(10));
 	CHECK(!c0.is_truncated());
 
 	CappedString<5> c2;
@@ -402,11 +402,11 @@ TEST(capped_string_concatenation)
 	c3 += "";
 	CHECK(!c3.is_truncated());
 	CHECK(c3.empty());
-	CHECK(c3.size() == 0);
+	CHECK(c3.size() == static_cast<size_t>(0));
 	c3 += "asdjkldfasdf";
 	CHECK(c3.is_truncated());
 	CHECK(c3.empty());
-	CHECK(c3.size() == 0);
+	CHECK(c3.size() == static_cast<size_t>(0));
 	c3.clear();
 	CHECK(!c3.is_truncated());
 
@@ -424,7 +424,7 @@ TEST(capped_string_concatenation)
 
 	CHECK(!(CappedString<5>("he") + "llo").is_truncated());
 	CHECK((CappedString<5>("h") + "Hellosldfjk").is_truncated());
-	CHECK_EQUAL((CappedString<5>("he") + "llo").size(), 5);
+	CHECK_EQUAL((CappedString<5>("he") + "llo").size(), static_cast<size_t>(5));
 }
 
 TEST(capped_string_indexing_operators)
@@ -573,12 +573,12 @@ TEST(capped_string_capacity)
 	CappedString<12> const c4(s4);
 	CappedString<12> c5;
 
-	CHECK_EQUAL(c0.capacity(), 9);
-	CHECK_EQUAL(c1.capacity(), 9);
-	CHECK_EQUAL(c2.capacity(), 9);
-	CHECK_EQUAL(c3.capacity(), 7000);
-	CHECK_EQUAL(c4.capacity(), 12);
-	CHECK_EQUAL(c5.capacity(), 12);
+	CHECK_EQUAL(c0.capacity(), static_cast<size_t>(9));
+	CHECK_EQUAL(c1.capacity(), static_cast<size_t>(9));
+	CHECK_EQUAL(c2.capacity(), static_cast<size_t>(9));
+	CHECK_EQUAL(c3.capacity(), static_cast<size_t>(7000));
+	CHECK_EQUAL(c4.capacity(), static_cast<size_t>(12));
+	CHECK_EQUAL(c5.capacity(), static_cast<size_t>(12));
 
 	c5 = CappedString<12>
 	(	std::string("lasdfjkflkajsl;dfkjasl;dfjas") +
@@ -605,24 +605,24 @@ TEST(capped_string_size)
 	CappedString<12> const c4(s4);
 	CappedString<12> c5;
 
-	CHECK_EQUAL(c0.size(), 4);
-	CHECK_EQUAL(c1.size(), 9);
-	CHECK_EQUAL(c2.size(), 3);
-	CHECK_EQUAL(c3.size(), 688);
-	CHECK_EQUAL(c4.size(), 12);
-	CHECK_EQUAL(c5.size(), 0);
+	CHECK_EQUAL(c0.size(), static_cast<size_t>(4));
+	CHECK_EQUAL(c1.size(), static_cast<size_t>(9));
+	CHECK_EQUAL(c2.size(), static_cast<size_t>(3));
+	CHECK_EQUAL(c3.size(), static_cast<size_t>(688));
+	CHECK_EQUAL(c4.size(), static_cast<size_t>(12));
+	CHECK_EQUAL(c5.size(), static_cast<size_t>(0));
 	c5 = CappedString<12>(c0.c_str());
-	CHECK_EQUAL(c5.size(), 4);
+	CHECK_EQUAL(c5.size(), static_cast<size_t>(4));
 	c3 = CappedString<7000>(std::string(7001, '\0'));
-	CHECK_EQUAL(c3.size(), 7000);
+	CHECK_EQUAL(c3.size(), static_cast<size_t>(7000));
 	CappedString<7000> const c3b(c3);
-	CHECK_EQUAL(c3b.size(), 7000);
-	CHECK_EQUAL(strlen(c3b.c_str()), 0);
+	CHECK_EQUAL(c3b.size(), static_cast<size_t>(7000));
+	CHECK_EQUAL(strlen(c3b.c_str()), static_cast<size_t>(0));
 	CHECK_EQUAL(c3b, c3);
 	c3 = CappedString<7000>(std::string(7001, '9'));
-	CHECK_EQUAL(c3.size(), 7000);
+	CHECK_EQUAL(c3.size(), static_cast<size_t>(7000));
 	c3 = CappedString<7000>("Lkjlg\n");
-	CHECK_EQUAL(c3.size(), 6);
+	CHECK_EQUAL(c3.size(), static_cast<size_t>(6));
 }
 
 TEST(capped_string_empty)
@@ -693,15 +693,15 @@ TEST(capped_string_clear)
 	typedef CappedString<101115> CS;
 	CS a("asdfy");
 	CHECK(!a.empty());
-	CHECK_EQUAL(a.size(), 5);
+	CHECK_EQUAL(a.size(), static_cast<size_t>(5));
 	a.clear();
-	CHECK_EQUAL(a.size(), 0);
+	CHECK_EQUAL(a.size(), static_cast<size_t>(0));
 	CHECK_EQUAL(a, CS());
 	CHECK(a.empty());
 	a = CS(std::string(8907777, 'h'));
-	CHECK(a.size() > 0);
+	CHECK(a.size() > static_cast<size_t>(0));
 	a.clear();
-	CHECK(a.size() == 0);
+	CHECK(a.size() == static_cast<size_t>(0));
 
 	CappedString<0> b;
 	b.clear();
@@ -710,9 +710,9 @@ TEST(capped_string_clear)
 
 	CappedString<5> c("laskdjasdfasdfasd");
 	CHECK(c.is_truncated());
-	CHECK(c.size() == 5);
+	CHECK(c.size() == static_cast<size_t>(5));
 	c.clear();
-	CHECK(c.size() == 0);
+	CHECK(c.size() == static_cast<size_t>(0));
 	CHECK(!c.is_truncated());
 }
 
@@ -748,7 +748,7 @@ TEST(capped_string_push_back_and_pop_back)
 	JEWEL_LOG_TRACE();
 	CappedString<10> c0 = "Hello!";
 	CHECK(!c0.is_truncated());
-	CHECK_EQUAL(c0.size(), 6);
+	CHECK_EQUAL(c0.size(), static_cast<size_t>(6));
 	c0.pop_back();
 	CHECK(!c0.is_truncated());
 	c0.pop_back();
@@ -756,14 +756,14 @@ TEST(capped_string_push_back_and_pop_back)
 	c0.pop_back();
 	c0.push_back('p');
 	CHECK_EQUAL(c0, "Help");
-	CHECK_EQUAL(c0.size(), 4);
+	CHECK_EQUAL(c0.size(), static_cast<size_t>(4));
 	for (size_t i = 0; i != 500; ++i)
 	{
 		c0.push_back('a');
 	}
 	CHECK_EQUAL(c0, "Helpaaaaaa");
 	CHECK(c0.is_truncated());
-	CHECK_EQUAL(c0.size(), 10);
+	CHECK_EQUAL(c0.size(), static_cast<size_t>(10));
 	c0.pop_back();
 	CHECK_EQUAL(c0, "Helpaaaaa");
 	CHECK(!c0.is_truncated());
@@ -778,22 +778,22 @@ TEST(capped_string_resize)
 	CHECK(!cs0.is_truncated());
 	cs0.resize(150);
 	CHECK(cs0.is_truncated());
-	CHECK_EQUAL(cs0.size(), 5);
+	CHECK_EQUAL(cs0.size(), static_cast<size_t>(5));
 	cs0.resize(2);
 	CHECK_EQUAL(cs0, "He");
 	CHECK_EQUAL(cs0.capacity(), 5);
-	CHECK_EQUAL(cs0.size(), 2);
+	CHECK_EQUAL(cs0.size(), static_cast<size_t>(2));
 	CHECK(!cs0.is_truncated());
 	cs0.resize(5);
 	CHECK(!cs0.is_truncated());
-	CHECK_EQUAL(cs0.size(), 5);
+	CHECK_EQUAL(cs0.size(), static_cast<size_t>(5));
 	CHECK_EQUAL(strcmp(cs0.c_str(), "He"), 0);
-	CHECK_EQUAL(strlen(cs0.c_str()), 2);
+	CHECK_EQUAL(strlen(cs0.c_str()), static_cast<size_t>(2));
 
 	CappedString<3> cs1;
 	cs1.resize(50);
 	CHECK(cs1.is_truncated());
-	CHECK_EQUAL(cs1.size(), 3);
+	CHECK_EQUAL(cs1.size(), static_cast<size_t>(3));
 	cs1.resize(2);
-	CHECK_EQUAL(cs1.size(), 2);
+	CHECK_EQUAL(cs1.size(), static_cast<size_t>(2));
 }
