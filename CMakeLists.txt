@@ -20,7 +20,6 @@ set (library_sources
 	 exception.cpp
 	 log.cpp
 	 num_digits.cpp
-	 tolerant_string.cpp
 	 detail/checked_arithmetic_detail.cpp)
 
 set (test_sources
@@ -35,8 +34,7 @@ set (test_sources
 		tests/num_digits_tests.cpp
 		tests/on_windows_tests.cpp
 		tests/optional_tests.cpp
-		tests/stopwatch_tests.cpp
-		tests/tolerant_string_tests.cpp)
+		tests/stopwatch_tests.cpp)
 
 add_definitions(-DJEWEL_ENABLE_LOGGING
 				-DJEWEL_ENABLE_ASSERTION_LOGGING
@@ -86,8 +84,6 @@ install(FILES
 		overview.dox
 		signature.hpp
 		stopwatch.hpp
-		tolerant_string.hpp
-		tolerant_string_fwd.hpp
 		DESTINATION
 		${inner_header_installation_dir})
 
