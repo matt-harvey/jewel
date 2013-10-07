@@ -2,7 +2,6 @@ cmake_minimum_required (VERSION 2.6)
 
 project (jewel)
 
-
 if (WIN32)
 	include_directories(C:/Dev-Cpp
 	                    C:/Dev-Cpp/include/common
@@ -61,9 +60,7 @@ else ()
 	set (outer_header_installation_dir /usr/local/include)
 endif ()
 
-# install(DIRECTORY jewel DESTINATION ${outer_header_installation_dir})
 set (inner_header_installation_dir "${outer_header_installation_dir}/jewel")
-# install(DIRECTORY detail DESTINATION ${inner_header_installation_dir})
 
 install(FILES
 		include/assert.hpp
