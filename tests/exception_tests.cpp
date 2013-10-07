@@ -1,8 +1,8 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "../exception.hpp"
-#include "../assert.hpp"
-#include "../log.hpp"
+#include "assert.hpp"
+#include "exception.hpp"
+#include "log.hpp"
 #include <cstring>
 #include <string>
 #include <UnitTest++/UnitTest++.h>

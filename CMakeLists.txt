@@ -12,15 +12,15 @@ if (WIN32)
 	                 C:/Dev-Cpp/MinGW/lib
 					 C:/lib)
 else ()
-	include_directories(.)
+	include_directories(. include)
 endif ()
 
 set (library_sources
-	 decimal.cpp
-	 exception.cpp
-	 log.cpp
-	 num_digits.cpp
-	 detail/checked_arithmetic_detail.cpp)
+	 src/decimal.cpp
+	 src/exception.cpp
+	 src/log.cpp
+	 src/num_digits.cpp
+	 src/checked_arithmetic_detail.cpp)
 
 set (test_sources
 		tests/test.cpp
@@ -43,7 +43,6 @@ add_definitions(-DJEWEL_ENABLE_LOGGING
 add_executable (jewel_test ${library_sources} ${test_sources})
 
 add_library(jewel ${library_sources})
-#add_library(jewel SHARED ${library_sources})
 
 target_link_libraries (jewel_test
                        UnitTest++)
@@ -62,35 +61,34 @@ else ()
 	set (outer_header_installation_dir /usr/local/include)
 endif ()
 
+# install(DIRECTORY jewel DESTINATION ${outer_header_installation_dir})
 set (inner_header_installation_dir "${outer_header_installation_dir}/jewel")
-
-install(DIRECTORY jewel DESTINATION ${outer_header_installation_dir})
+# install(DIRECTORY detail DESTINATION ${inner_header_installation_dir})
 
 install(FILES
-		assert.hpp
-		capped_string.hpp
-		capped_string_fwd.hpp
-		checked_arithmetic.hpp
-		log.hpp
-		decimal.hpp
-        decimal_exceptions.hpp
-		decimal_fwd.hpp
-		exception.hpp
-		flag_set.hpp
-		num_digits.hpp
-		on_windows.hpp
-		optional.hpp
-		output_aux.hpp
-		overview.dox
-		signature.hpp
-		stopwatch.hpp
+		include/assert.hpp
+		include/capped_string.hpp
+		include/capped_string_fwd.hpp
+		include/checked_arithmetic.hpp
+		include/log.hpp
+		include/decimal.hpp
+        include/decimal_exceptions.hpp
+		include/decimal_fwd.hpp
+		include/exception.hpp
+		include/flag_set.hpp
+		include/num_digits.hpp
+		include/on_windows.hpp
+		include/optional.hpp
+		include/output_aux.hpp
+		include/signature.hpp
+		include/stopwatch.hpp
 		DESTINATION
 		${inner_header_installation_dir})
 
 install(FILES
-		detail/checked_arithmetic_detail.hpp
-		detail/helper_macros.hpp
-		detail/smallest_sufficient_unsigned_type.hpp
+		include/detail/checked_arithmetic_detail.hpp
+		include/detail/helper_macros.hpp
+		include/detail/smallest_sufficient_unsigned_type.hpp
 		DESTINATION
 		"${inner_header_installation_dir}/detail")
 

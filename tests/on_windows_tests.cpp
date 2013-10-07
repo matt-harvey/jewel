@@ -1,6 +1,6 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "../on_windows.hpp"
+#include "on_windows.hpp"
 
 #include <UnitTest++/UnitTest++.h>
 

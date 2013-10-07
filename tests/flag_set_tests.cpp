@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "../assert.hpp"
-#include "../flag_set.hpp"
+#include "assert.hpp"
+#include "flag_set.hpp"
 #include <UnitTest++/UnitTest++.h>
 #include <iostream>
 

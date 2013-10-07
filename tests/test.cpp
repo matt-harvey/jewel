@@ -1,16 +1,16 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include <UnitTest++/UnitTest++.h>
-#include "../assert.hpp"
-#include "../capped_string.hpp"
-#include "../checked_arithmetic.hpp"
-#include "../decimal_exceptions.hpp"
+#include "assert.hpp"
+#include "capped_string.hpp"
+#include "checked_arithmetic.hpp"
+#include "decimal.hpp"
+#include "decimal_exceptions.hpp"
 #include "decimal_special_tests.hpp"
-#include "../exception.hpp"
+#include "exception.hpp"
 #include "exception_special_tests.hpp"
-#include "../decimal.hpp"
-#include "../log.hpp"
-#include "../num_digits.hpp"
+#include "log.hpp"
+#include "num_digits.hpp"
 #include <boost/numeric/conversion/cast.hpp>
 #include <iomanip>
 #include <iostream>

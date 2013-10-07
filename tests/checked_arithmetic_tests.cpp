@@ -1,7 +1,7 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "../assert.hpp"
-#include "../checked_arithmetic.hpp"
+#include "assert.hpp"
+#include "checked_arithmetic.hpp"
 #include <iostream>
 #include <limits>
 #include <UnitTest++/UnitTest++.h>

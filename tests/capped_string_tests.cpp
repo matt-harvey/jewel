@@ -1,8 +1,8 @@
 // Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
-#include "../assert.hpp"
-#include "../capped_string.hpp"
-#include "../log.hpp"
+#include "assert.hpp"
+#include "capped_string.hpp"
+#include "log.hpp"
 #include <UnitTest++/UnitTest++.h>
 #include <cstring>
 #include <iostream>
