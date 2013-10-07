@@ -26,8 +26,10 @@ namespace jewel
  * \c std::exception. It is intended in turn to be the base class
  * for further custom exception classes.
  * Instances of \c jewel::Exception
- * can be initialized with either a \c char \c const* \c (representing
- * an error message), or with no parameters. The char const*, if lengthier
+ * can be initialized with no parameters, with a \c char \c const* \c,
+ * representing
+ * an error message, or with a range of other parameters.
+ * The char const*, if lengthier
  * than the length returned by the static member function
  * \c max_message_size(), will be truncated to that maximum length, with
  * the text "[TRUNCATED]" appended to indicate truncation has occurred.
@@ -40,8 +42,8 @@ namespace jewel
  *
  * Exception safety: all of the \e member functions in this class offer
  * the <em>nothrow guarantee</em>. But see the documentation in the
- * (non-member) stream output operator, which theoretically can throw if exceptions
- * are enabled on the stream.
+ * (non-member) stream output operator, which theoretically can throw if
+ * exceptions are enabled on the stream.
  */
 class Exception: public virtual std::exception
 {
