@@ -3,7 +3,8 @@ cmake_minimum_required (VERSION 2.6)
 project (jewel)
 
 if (WIN32)
-	include_directories(C:/Dev-Cpp
+	include_directories(include
+	                    C:/Dev-Cpp
 	                    C:/Dev-Cpp/include/common
 						C:/include)
 	link_directories(C:/Dev-Cpp/lib
