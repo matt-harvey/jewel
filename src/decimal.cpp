@@ -15,61 +15,7 @@
 #include <numeric>
 #include <vector>
 
-#include <iostream>   // For logging only
-
 using boost::numeric_cast;
-
-/*
- * Hack: using this instead of static_cast because there appears to be a bug
- * in GCC 4.6.1 (at least on MinGW on Windows) when casting to long long using
- * static_cast or implicit cast.
- */
-template <typename Target>
-struct Converter
-{
-	template <typename Source>
-	static Target convert(Source p_source)
-	{
-		return p_source;
-	}
-};
-
-/*
- * Specialize for conversions to long long to use boost::numeric cast to
- * avoid the bug.
- */
-template <>
-struct Converter<long long>
-{
-	template <typename Source>
-	static long long convert(Source p_source)
-	{
-		return numeric_cast<long long>(p_source);
-	}
-};
-
-template <typename Target, typename Source>
-Target num_cast(Source p_source);
-
-template <typename Target, typename Source>
-inline
-Target num_cast(Source p_source)
-{
-	return Converter<Target>::template convert(p_source);
-}
-
-#ifndef NDEBUG
-	#define NUM_CAST numeric_cast          // Safer
-#else
-	#define NUM_CAST num_cast           // Faster
-#endif
-
-/*
- * Don't rely on the exceptions thrown by boost::numeric_cast.
- * If boost::numeric_cast is throws here, there's something wrong
- * with the program!
- */
-
 using std::accumulate;
 using std::find;
 using std::isdigit;
@@ -79,11 +25,69 @@ using std::max;
 using std::pow;
 using std::vector;
 
-using std::cerr;  // for logging only
-using std::endl;  // for logging only
-
 namespace jewel
 {
+
+namespace
+{
+
+	/*
+	 * Hack: using this instead of static_cast because there appears to be a
+	 * bug in GCC 4.6.1 (at least on MinGW on Windows) when casting to
+	 * long long using static_cast or implicit cast.
+	 */
+	template <typename Target>
+	struct Converter
+	{
+		template <typename Source>
+		static Target convert(Source p_source)
+		{
+			return p_source;
+		}
+	};
+
+	/*
+	 * Specialize for conversions to long long to use boost::numeric cast to
+	 * avoid the bug.
+	 *
+	 * NOTE: Don't rely on the exceptions thrown by boost::numeric_cast.
+	 * If boost::numeric_cast is throws here, there's something wrong
+	 * with the program!
+	 */
+	template <>
+	struct Converter<long long>
+	{
+		template <typename Source>
+		static long long convert(Source p_source)
+		{
+			return numeric_cast<long long>(p_source);
+		}
+	};
+
+	template <typename Target, typename Source>
+	Target num_cast(Source p_source);
+
+	template <typename Target, typename Source>
+	inline
+	Target num_cast(Source p_source)
+	{
+		return Converter<Target>::template convert(p_source);
+	}
+
+}  // end anonymous namespace
+
+
+/*
+ * NOTE: Don't rely on the exceptions thrown by boost::numeric_cast.
+ * If boost::numeric_cast is throws here, there's something wrong
+ * with the program!
+ */
+#ifndef NDEBUG
+#	define JEWEL_NUMERIC_CAST numeric_cast
+#else
+#	define JEWEL_NUMERIC_CAST num_cast      // faster
+#endif
+
 
 // initialize static data members
 
@@ -151,8 +155,8 @@ Decimal::Decimal(int_type p_intval, places_type p_places):
 	{
 		// There is no point setting m_intval and m_places to 0 (or any other
 		// other valid value) here, since the Decimal instance is not going
-		// to be created anyway - nothing will be able to refer to it after this
-		// exception is thrown.
+		// to be created anyway - nothing will be able to refer to it after
+		// this exception is thrown.
 		JEWEL_THROW
 		(	DecimalRangeException,
 			"Attempt to construct Decimal with precision greater"
@@ -210,7 +214,7 @@ int Decimal::rescale(places_type p_places)
 		// numeric_limits<int_type>::max(), given that s_max_places is
 		// equal to the number of digits in numeric_limits<int_type>::min().
 		JEWEL_ASSERT (!subtraction_is_unsafe(p_places, m_places));
-		int_type multiplier = NUM_CAST<int_type>
+		int_type multiplier = JEWEL_NUMERIC_CAST<int_type>
 		(	pow(s_base, p_places - m_places)
 		);
 
@@ -576,7 +580,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			if (add_rounding_right)
 			{
 				JEWEL_ASSERT (!addition_is_unsafe(rhs.m_intval,
-				  NUM_CAST<int_type>(1)));
+				  JEWEL_NUMERIC_CAST<int_type>(1)));
 				++(rhs.m_intval);
 			}
 
@@ -594,7 +598,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 			if (add_rounding_left)
 			{
 				JEWEL_ASSERT (!addition_is_unsafe(lhs.m_intval,
-				  NUM_CAST<int_type>(1)));
+				  JEWEL_NUMERIC_CAST<int_type>(1)));
 				++(lhs.m_intval);
 			}
 			if (diff_signs) lhs.m_intval *= -1;
@@ -622,7 +626,7 @@ Decimal& Decimal::operator/=(Decimal rhs)
 	if (rhs.m_intval - remainder <= remainder)
 	{
 		// If the required rounding would be unsafe, we throw
-		if (addition_is_unsafe(m_intval, NUM_CAST<int_type>(1)))
+		if (addition_is_unsafe(m_intval, JEWEL_NUMERIC_CAST<int_type>(1)))
 		{
 			*this = orig;
 			JEWEL_THROW(DecimalDivisionException, "Unsafe division.");

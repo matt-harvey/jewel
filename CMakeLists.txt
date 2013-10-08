@@ -10,8 +10,13 @@ if (WIN32)
 	link_directories(C:/Dev-Cpp/lib
 	                 C:/Dev-Cpp/MinGW/lib
 					 C:/lib)
+	set (lib_installation_dir "${cmake_install_prefix}/lib")
+	set (outer_header_installation_dir "${cmake_install_prefix}/include")
 else ()
 	include_directories(include)
+	link_directories(/usr/local/lib)
+	set (lib_installation_dir "${cmake_install_prefix}/lib")
+	set (outer_header_installation_dir "${cmake_install_prefix}/include")
 endif ()
 
 set (library_sources
@@ -45,20 +50,7 @@ add_executable (test ${test_sources})
 
 target_link_libraries (test UnitTest++ jewel)
 
-if (WIN32)
-	set (lib_installation_dir C:/lib)
-else ()
-	set (lib_installation_dir /usr/local/lib)
-endif ()
-
-install(TARGETS jewel
-	ARCHIVE DESTINATION ${lib_installation_dir})
-
-if (WIN32)
-	set (outer_header_installation_dir C:/include)
-else ()
-	set (outer_header_installation_dir /usr/local/include)
-endif ()
+install(TARGETS jewel ARCHIVE DESTINATION ${lib_installation_dir})
 
 set (inner_header_installation_dir "${outer_header_installation_dir}/jewel")
 

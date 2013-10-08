@@ -348,13 +348,16 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructors)
 	Decimal d108(s_min_int_type);
 	// These should throw
 	CHECK_THROW
-	(	Decimal d109(s_max_digits_plus_one_places_2), DecimalRangeException
+	(	Decimal d109(s_max_digits_plus_one_places_2),
+		DecimalRangeException
 	);
 	CHECK_THROW
-	(	Decimal d110(s_neg_max_digits_plus_one_places_2), DecimalException
+	(	Decimal d110(s_neg_max_digits_plus_one_places_2),
+		DecimalException
 	);
 	CHECK_THROW
-	(	Decimal d110(s_neg_max_digits_plus_one_places_2), DecimalRangeException
+	(	Decimal d110(s_neg_max_digits_plus_one_places_2),
+		DecimalRangeException
 	);
 	// These should be OK
 	Decimal d111(s_max_digits_one_and_zeroes_places_2);
