@@ -38,11 +38,11 @@ add_definitions(-DJEWEL_ENABLE_LOGGING
 				-DJEWEL_ENABLE_ASSERTION_LOGGING
                 -DJEWEL_ENABLE_EXCEPTION_LOGGING)
 
-add_executable (test ${library_sources} ${test_sources})
-
 add_library(jewel ${library_sources})
 
-target_link_libraries (test UnitTest++)
+add_executable (test ${test_sources})
+
+target_link_libraries (test UnitTest++ jewel)
 
 if (WIN32)
 	set (lib_installation_dir C:/lib)
