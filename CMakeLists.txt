@@ -5,13 +5,12 @@ project (jewel)
 if (WIN32)
 	include_directories(C:/Dev-Cpp
 	                    C:/Dev-Cpp/include/common
-						C:/include
-						.)
+						C:/include)
 	link_directories(C:/Dev-Cpp/lib
 	                 C:/Dev-Cpp/MinGW/lib
 					 C:/lib)
 else ()
-	include_directories(. include)
+	include_directories(include)
 endif ()
 
 set (library_sources
@@ -43,8 +42,8 @@ add_executable (test ${library_sources} ${test_sources})
 
 add_library(jewel ${library_sources})
 
-target_link_libraries (test
-                       UnitTest++)
+target_link_libraries (test UnitTest++)
+
 if (WIN32)
 	set (lib_installation_dir C:/lib)
 else ()
