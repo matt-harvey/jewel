@@ -1,7 +1,7 @@
-// Copyright (c) 2013, Matthew Harvey. All rights reserved.
-
 #ifndef GUARD_capped_string_hpp_6740592125216774
 #define GUARD_capped_string_hpp_6740592125216774
+
+// Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include "detail/smallest_sufficient_unsigned_type.hpp"
 #include "log.hpp"

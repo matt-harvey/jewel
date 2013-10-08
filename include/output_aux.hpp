@@ -1,7 +1,7 @@
-// Copyright (c) 2013, Matthew Harvey. All rights reserved.
-
 #ifndef GUARD_output_aux_hpp_10487737604644028
 #define GUARD_output_aux_hpp_10487737604644028
+
+// Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include <ostream>
 #include <sstream>

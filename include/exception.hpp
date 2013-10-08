@@ -1,7 +1,7 @@
-// Copyright (c) 2013, Matthew Harvey. All rights reserved.
-
 #ifndef GUARD_exception_hpp_6015026497661614
 #define GUARD_exception_hpp_6015026497661614
+
+// Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include "capped_string.hpp"
 #include <cstddef>

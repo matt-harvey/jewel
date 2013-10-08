@@ -1,7 +1,7 @@
-// Copyright (c) 2013, Matthew Harvey. All rights reserved.
-
 #ifndef GUARD_smallest_sufficient_unsigned_type_hpp_07093942774037804
 #define GUARD_smallest_sufficient_unsigned_type_hpp_07093942774037804
+
+// Copyright (c) 2013, Matthew Harvey. All rights reserved.
 
 #include <cstddef>
 #include <climits>
