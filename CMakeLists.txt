@@ -10,13 +10,9 @@ if (WIN32)
 	link_directories(C:/Dev-Cpp/lib
 	                 C:/Dev-Cpp/MinGW/lib
 					 C:/lib)
-	set (lib_installation_dir "${cmake_install_prefix}/lib")
-	set (outer_header_installation_dir "${cmake_install_prefix}/include")
 else ()
 	include_directories(include)
 	link_directories(/usr/local/lib)
-	set (lib_installation_dir "${cmake_install_prefix}/lib")
-	set (outer_header_installation_dir "${cmake_install_prefix}/include")
 endif ()
 
 set (library_sources
@@ -50,9 +46,10 @@ add_executable (test ${test_sources})
 
 target_link_libraries (test UnitTest++ jewel)
 
-install(TARGETS jewel ARCHIVE DESTINATION ${lib_installation_dir})
+set (lib_installation_dir "${CMAKE_INSTALL_PREFIX}/lib")
+set (inner_header_installation_dir "${CMAKE_INSTALL_PREFIX}/include/jewel")
 
-set (inner_header_installation_dir "${outer_header_installation_dir}/jewel")
+install(TARGETS jewel ARCHIVE DESTINATION ${lib_installation_dir})
 
 install(FILES
 		include/assert.hpp
