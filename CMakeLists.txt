@@ -47,7 +47,7 @@ add_executable (test ${test_sources})
 target_link_libraries (test UnitTest++ jewel)
 
 set (lib_installation_dir "${CMAKE_INSTALL_PREFIX}/lib")
-set (inner_header_installation_dir "${CMAKE_INSTALL_PREFIX}/include/jewel")
+set (header_installation_dir "${CMAKE_INSTALL_PREFIX}/include/jewel")
 
 install(TARGETS jewel ARCHIVE DESTINATION ${lib_installation_dir})
 
@@ -69,12 +69,12 @@ install(FILES
 		include/signature.hpp
 		include/stopwatch.hpp
 		DESTINATION
-		${inner_header_installation_dir})
+		${header_installation_dir})
 
 install(FILES
 		include/detail/checked_arithmetic_detail.hpp
 		include/detail/helper_macros.hpp
 		include/detail/smallest_sufficient_unsigned_type.hpp
 		DESTINATION
-		"${inner_header_installation_dir}/detail")
+		"${header_installation_dir}/detail")
 

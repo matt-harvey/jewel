@@ -25,31 +25,31 @@ namespace jewel
  * A template for string classes encapsulating a limited length string of
  * \e char, which is safer than a C-style string, more convenient than a
  * boost::array<char, N> or a std::array<char, N>, and can be copied
- * safely.
+ * safely. The string is limited to a certain maximum length, which is
+ * provided to the template parameter N.
  *
- * The string is limited to a certain length, which is provided to the
- * template parameter N.
- *
- * No heap allocation is performed by CappedString.
- *
- * None of the member functions of this class will ever throw an exception.
- * (The only possible source of runtime failure is stack overflow or exploding
- * computer.)
+ * No heap allocation is performed by CappedString. This avoids the
+ * possibility of std::bad_alloc being thrown during construction or
+ * copying. This allows most or all member functions to offer the
+ * no-throw guarantee (see documentation of individual functions to confirm
+ * specific exception guarantees). Thus CappedString may be preferred over
+ * std::string in situations where the no-throw guarantee is important, and
+ * where there is reasonable upper limit to the size of the string
+ * (and this limit is not so large as to risk blowing the stack).
  *
  * If an attempt is made to initialize a CappedString<N> from a built-in
  * string or std::string that exceeds N in length, then the resulting
  * CappedString will be truncated relative to that original string.
  * You can tell whether a CappedString is thus truncated by calling its
- * \e is_truncated() member. Internally, CappedString will always
+ * \e is_truncated() member. (Internally, CappedString will always
  * null-terminate its internal char array, even if it is truncated
- * relative to the original string.
+ * relative to the original string.)
  *
- * TODO Allow a CappedString<N> to be initialized and/or copied from
- * a CappedString<M> where M != N. We might also allow two such strings
+ * @todo LOW PRIORITY Allow a CappedString<N> to be initialized and/or copied
+ * from a CappedString<M> where M != N. We might also allow two such strings
  * to be compared.
  *
- * TODO implement at(); but note this will mean we would have to qualify
- * blanket guarantee that no member functions throw.
+ * @todo LOW PRIORITY implement at().
  */
 template <std::size_t N>
 class CappedString
@@ -68,12 +68,16 @@ public:
 
 	/**
 	 * Constructs an empty CappedString.
+	 *
+	 * Never throws.
 	 */
 	CappedString();
 
 	/**
 	 * Initializes CappedString with characters up to the first null
 	 * character in the array pointed to by p_string.
+	 *
+	 * Never throws.
 	 */
 	CappedString(char const* p_string);
 
@@ -81,83 +85,116 @@ public:
 	 * If p_string is contains a null character, then even if there
 	 * characters \e after that null character, these will
 	 * still be copied over into the CappedString.
+	 *
+	 * Never throws.
 	 */
 	explicit CappedString(std::string const& p_string);
 
 	/**
 	 * Copy constructor.
+	 *
+	 * Never throws.
 	 */
 	CappedString(CappedString const& rhs);
 
-	/** Assignment.
+	/**
+	 * Assignment.
+	 *
+	 * Never throws.
 	 */
 	CappedString& operator=(CappedString const& rhs);
 
 	// Move constructor and move assignment are deliberately
 	// undeclared.
 
+	/**
+	 * Never throws.
+	 */
 	~CappedString() = default;
 
 	/** Equality.
 	 *
 	 * CappedStrings compare equal if their contents are the
 	 * same, even if one is truncated and the other isn't.
+	 *
+	 * Never throws.
 	 */
 	bool operator==(CappedString const& rhs) const;
 
-	/** Inequality.
+	/**
+	 * Inequality.
+	 *
+	 * Never throws.
 	 */
 	bool operator!=(CappedString const& rhs) const;
 
 	/**
 	 * Concetenate \e rhs to an existing CappedString.
+	 *
+	 * Never throws.
 	 */
 	CappedString& operator+=(CappedString const& rhs);
 
 	/**
 	 * @returns the concatenation of two CappedStrings.
+	 *
+	 * Never throws.
 	 */
 	CappedString const operator+(CappedString const& rhs) const;
 
 	/**
 	 * Read a char by indexing. Behaviour is undefined if out
 	 * of range.
+	 *
+	 * Never throws.
 	 */
 	const_reference operator[](size_type p_index) const;
 
 	/**
 	 * Write a char to position p_index. Behaviour is undefined if
 	 * out of range.
+	 *
+	 * Never throws.
 	 */
 	reference operator[](size_type p_index);
 
 	/**
 	 * @return a const_iterator pointing to the first character
 	 * of the CappedString.
+	 *
+	 * Never throws.
 	 */
 	const_iterator begin() const;
 
 	/**
 	 * @return an iterator pointing to the first character of the
 	 * CappedString.
+	 *
+	 * Never throws.
 	 */
 	iterator begin();
 
 	/**
 	 * @return a const_iterator pointing to "one past the end" of the
 	 * CappedString.
+	 *
+	 * Never throws.
 	 */
 	const_iterator end() const;
 
 	/**
 	 * @return an iterator pointing to "one past the end" of the
 	 * CappedString.
+	 *
+	 * Never throws.
 	 */
 	iterator end();
 
 	/**
 	 * @return a pointer to the internal char array - with caveats as
 	 * per std::string.
+	 *
+	 * Never throws.
 	 */
 	char const* c_str() const;
 
@@ -167,17 +204,23 @@ public:
 	 * passed to the CappedString class template.
 	 * The function is provided mainly for consistency with the standard
 	 * library container interface.
+	 *
+	 * Never throws.
 	 */
 	size_type capacity() const;
 
 	/**
 	 * @returns the length of the string currently stored in CappedString.
 	 * This might be anything between 0 and capacity().
+	 *
+	 * Never throws.
 	 */
 	size_type size() const;
 
 	/**
 	 * @returns \e true if and only if \e size() is 0.
+	 *
+	 * Never throws.
 	 */
 	bool empty() const;
 
@@ -185,11 +228,15 @@ public:
 	 * @returns \e true if and only if the string used to initialize the
 	 * CappedString could not fit inside the CappedString given its capacity,
 	 * and was therefore truncated.
+	 *
+	 * Never throws.
 	 */
 	bool is_truncated() const;
 
 	/**
 	 * Caused the CappedString to become empty.
+	 *
+	 * Never throws.
 	 */
 	void clear();
 
@@ -201,6 +248,8 @@ public:
 	 * is already marked as truncated, then calling this function will have
 	 * no effect whatsoever (it will simply continue to be marked as
 	 * truncated).
+	 *
+	 * Never throws.
 	 */
 	void push_back(CappedString::value_type p_value);
 
@@ -211,6 +260,8 @@ public:
 	 * marked as truncated, then calling pop_back will cause it to /e cease
 	 * being marked as truncated. The last character will always be removed,
 	 * whether truncated or not (provided size() if non-zero).
+	 *
+	 * Never throws.
 	 */
 	void pop_back();
 
@@ -225,6 +276,8 @@ public:
 	 * If the string is resized to a size greater than its capacity(),
 	 * then it will only grow to its capacity, and will be marked as
 	 * truncated.
+	 *
+	 * Never throws.
 	 */
 	void resize(size_type p_new_size);
 
