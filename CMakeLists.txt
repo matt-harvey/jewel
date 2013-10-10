@@ -34,6 +34,7 @@ set (test_sources
 		tests/num_digits_tests.cpp
 		tests/on_windows_tests.cpp
 		tests/optional_tests.cpp
+		tests/smallest_sufficient_unsigned_type_tests.cpp
 		tests/stopwatch_tests.cpp)
 
 add_definitions(-DJEWEL_ENABLE_LOGGING

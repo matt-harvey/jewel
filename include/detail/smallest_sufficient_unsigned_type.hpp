@@ -98,48 +98,6 @@ struct SmallestSufficientUnsignedType<N, size_t>
 	typedef size_t Result;
 };
 
-
-static_assert
-(	std::is_same
-		<	SmallestSufficientUnsignedType<5>::Result,
-			unsigned char
-		>::value,
-	"Unexpected result when instantiating SmallestSufficientUnsignedType."
-);
-
-static_assert
-(	std::is_same
-		<	SmallestSufficientUnsignedType<UINT_MAX>::Result,
-			unsigned int
-		>::value,
-	"Unexpected result when instantiating SmallestSufficientUnsignedType."
-);
-
-static_assert
-(	std::is_same
-		<	SmallestSufficientUnsignedType<USHRT_MAX>::Result,
-			unsigned short
-		>::value,
-	"Unexpected result when instantiating SmallestSufficientUnsignedType."
-);
-
-static_assert
-(	std::is_same
-		<	SmallestSufficientUnsignedType<500>::Result,
-			unsigned short
-		>::value,
-	"Unexpected result when instantiating SmallestSufficientUnsignedType."
-);
-
-static_assert
-(	std::is_same
-		<	SmallestSufficientUnsignedType<0>::Result,
-			unsigned char
-		>::value,
-	"Unexpected result when instantiating SmallestSufficientUnsignedType."
-);
-
-
 }  // namespace detail
 }  // namespace jewel
 
