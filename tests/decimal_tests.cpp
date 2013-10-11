@@ -289,6 +289,8 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructors)
 	CHECK_THROW(Decimal d10(s10), DecimalException);
 	CHECK_THROW(Decimal d10(s10), DecimalFromStringException);
 	string s10_s(0, 'c');
+	string s10_e;
+	CHECK_THROW(Decimal d10(s10_e), DecimalFromStringException);
 
 	// Test behaviour with very short digitless strings
 	CHECK_THROW(Decimal d10b("."), DecimalFromStringException);
@@ -435,6 +437,10 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructors)
 	CHECK_EQUAL(d29w, d29d);
 	CHECK_EQUAL(d29w.intval(), d29d.intval());
 	CHECK_EQUAL(d29w.places(), d29d.places());
+	CHECK_THROW(Decimal(L"ds"), DecimalFromStringException);
+	wstring const ws;
+	CHECK_THROW(Decimal d29x(ws), DecimalFromStringException);
+	CHECK_THROW(Decimal d29y(L""), DecimalFromStringException);
 }
 
 
