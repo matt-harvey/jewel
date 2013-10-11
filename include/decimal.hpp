@@ -710,12 +710,13 @@ operator<<(std::basic_ostream<charT, traits>&, Decimal const&);
  * std::ios_base::failbit. This is in
  * accordance with standard library convention. There is also an (extremely
  * small) chance of memory allocation failure during the read operation.
- * Again, std::ios::failbit will be set in this case, and
- * an exception, again an instance of std::ios_base::failbit, will be thrown
- * if and only if exceptions have been enabled for failbit for the stream.
+ * In this case, std::ios::badbit, and
+ * an exception, being an instance of std::ios_base::failure, will be thrown
+ * if and only if exceptions have been enabled for badbit for the stream.
  *
  * Exception safety: <em>nothrow guarantee</em>, unless exceptions have
- * been enabled for std::ios_base::failbit for the stream (see above).
+ * been enabled for std::ios_base::failbit or std::ios_base::badbit for the
+ * stream (see above).
  */
 template <typename charT, typename traits>
 std::basic_istream<charT, traits>&
@@ -1346,7 +1347,7 @@ operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 	}
 	catch (std::bad_alloc&)
 	{
-		is.setstate(std::ios_base::failbit);  // TODO HIGH PRIORITY Should this be badbit?
+		is.setstate(std::ios_base::badbit);
 		return is;
 	}
 	return is;

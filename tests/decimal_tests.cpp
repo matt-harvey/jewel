@@ -2000,6 +2000,7 @@ TEST(decimal_operator_input)
 	bis0 >> d100;
 	CHECK(!static_cast<bool>(bis0));
 	CHECK(bis0.rdstate() != std::ios::goodbit);
+	CHECK(bis0.rdstate() == std::ios::failbit);
 	// Check value hasn't changed.
 	CHECK_EQUAL(d100, Decimal("0"));
 	// Now with exceptions enabled on stream for failbit
