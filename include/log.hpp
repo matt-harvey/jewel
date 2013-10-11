@@ -67,7 +67,7 @@ namespace jewel
  * <em>compile-time</em> restriction on what is logged. If you want to
  * restrict which statements are logged at <em>compile-time</em>, so that
  * statements below a certain severity level are not logged regardless of
- * the runtime threshold passed to <em>Log::set_threshold(...), you can
+ * the runtime threshold passed to <em>Log::set_threshold(...)</em>, you can
  * do so by setting <em>JEWEL_HARD_LOGGING_THRESHOLD</em> to a higher
  * severity level, e.g. <em>jewel::Log::warning</em>. On most compilers,
  * with optimization on,
@@ -75,7 +75,7 @@ namespace jewel
  * compiled away to nothing. You should of course make sure that this is
  * defined prior to including <jewel/log.hpp>.
  *
- * NOTE These logging facilities are not thread-safe.
+ * <b>NOTE</b> These logging facilities are not thread-safe!
  *
  * @todo Testing.
  *

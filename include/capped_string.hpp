@@ -80,8 +80,8 @@ public:
 	typedef std::ptrdiff_t difference_type;
 	typedef value_type& reference;
 	typedef value_type const& const_reference;
-	// typedef ??? const_reverse_iterator;  // TODO <---
-	// typedef ??? reverse_iterator;  // TODO <---
+	// typedef ??? const_reverse_iterator;  // TODO LOW PRIORITY
+	// typedef ??? reverse_iterator;  // TODO LOW PRIORITY
 
 	/**
 	 * Constructs an empty CappedString.

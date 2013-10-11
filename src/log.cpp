@@ -63,7 +63,9 @@ namespace
 		time_t const now = time(0);
 		if (now != static_cast<time_t>(-1))
 		{
-			// WARNING std::localtime may not be thread-safe.
+			// NOTE std::localtime may not be thread-safe. This is
+			// only ONE of the reasons why jewel::Log is not
+			// thread-safe.
 			tm const* const now_local = localtime(&now);
 			if (!now_local)
 			{
