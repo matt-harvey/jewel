@@ -1819,10 +1819,10 @@ TEST(decimal_operator_output)
 		os16 << Decimal::minimum();
 		CHECK_EQUAL(os15.str(), os16.str());
 
-		// TODO The locale-related tests in here were not portable so were
-		// commented out. Reinstate them, in some portable way. (Note it
-		// is only the tests that are non-portable. The code being
-		// tested is itself portable.)
+		// TODO MEDIUM PRIORITY The locale-related tests in here were not
+		// portable so were commented out. Reinstate them, in some
+		// portable way. (Note it is only the tests that are non-portable.
+		// The code being tested is itself portable.)
 
 		// Test internationalization support
 

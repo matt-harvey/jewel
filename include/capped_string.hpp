@@ -330,7 +330,7 @@ operator<<
 /**
  * Read from an output stream.
  *
- * TODO Implement this.
+ * TODO LOW PRIORITY Implement this.
 template <typename traits, std::size_t N>
 std::basic_istream<typename CappedString<N>::value_type, traits>&
 operator>>

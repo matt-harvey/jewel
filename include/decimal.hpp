@@ -843,7 +843,7 @@ bool is_digit<wchar_t>(wchar_t c)
 
 // IMPLEMENTATIONS
 
-// TODO High priority make spot work across locales.
+// TODO HIGH PRIORITY make spot work across locales.
 template <typename charT, typename traits, typename Alloc>
 Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	m_places(0),
@@ -1346,7 +1346,7 @@ operator>>(std::basic_istream<charT, traits>& is, Decimal& d)
 	}
 	catch (std::bad_alloc&)
 	{
-		is.setstate(std::ios_base::failbit);  // TODO Should this be badbit?
+		is.setstate(std::ios_base::failbit);  // TODO HIGH PRIORITY Should this be badbit?
 		return is;
 	}
 	return is;

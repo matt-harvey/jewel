@@ -77,7 +77,7 @@ namespace jewel
  *
  * <b>NOTE</b> These logging facilities are not thread-safe!
  *
- * @todo Testing.
+ * @todo MEDIUM PRIORITY Write unit tests for this.
  *
  * These logging facilities are guaranteed never to throw an exception, with
  * the following provisos...
