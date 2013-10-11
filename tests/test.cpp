@@ -17,7 +17,6 @@
  */
 
 
-#include <UnitTest++/UnitTest++.h>
 #include "assert.hpp"
 #include "capped_string.hpp"
 #include "checked_arithmetic.hpp"
@@ -33,12 +32,14 @@
 #include <iostream>
 #include <limits>
 #include <sstream>
+#include <UnitTest++/UnitTest++.h>
 using boost::numeric_cast;
 using jewel::Decimal;
 using jewel::detail::decimal_csv_test;
 using jewel::detail::decimal_speed_test;
 using jewel::detail::test_exception_macros;
 using jewel::multiplication_is_unsafe;
+using jewel::Log;
 using jewel::NumDigits;
 using std::cout;
 using std::endl;
@@ -47,10 +48,6 @@ using std::numeric_limits;
 using std::ostringstream;
 using std::setprecision;
 using std::string;
-
-#include <locale>
-using jewel::Log;
-using std::locale;
 
 int main()
 {
@@ -61,55 +58,46 @@ int main()
 		cout << "Compiled in debugging mode (NDEBUG not defined)."
 		     << endl;
 	#else
-		cout << "Compiled in release mode (NDEBUG is defined)." << endl;
+		cout << "Compiled in release mode (NDEBUG is defined)."
+		     << endl;
 	#endif
 
-	#ifdef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
-		cout << "Compiled with JEWEL_DECIMAL_OUTPUT_FAILURE_TEST defined. "
-		     << "Normal tests for jewel::Decimal will be "
-			 << "eschewed in order to test a sabotaged version of the\n"
-			 << "output function, to ensure it handles errors as expected."
+	#ifdef JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
+		cout << "Compiled with JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST "
+		     << "defined. Normal tests for jewel::Decimal will be "
+			 << "eschewed in order to test a sabotaged version of the "
+			 << "output function, to ensure it handles errors as expected.\n"
 			 << endl;
 	#else
-		cout << "Compiled without JEWEL_DECIMAL_OUTPUT_FAILURE_TEST defined. "
-		     << "Define this to test error handling in stream output operator"
-			 << " for jewel::Decimal." << endl;
+		cout << "Compiled without JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST "
+		     << "defined. Define this to test error handling in stream output"
+			 << " operator for jewel::Decimal."
+			 << endl;
 	#endif
 
-	/*
-	cout << std::setprecision(2) << std::showpoint << std::fixed;
-	cout << std::setw(10) << std::right << double(11) << endl
-	     << std::setw(10) << std::right << double(1) << endl
-		 << std::setw(10) << std::right << 1.1 << endl
-		 << std::setw(10) << std::right << 1.11 << endl
-		 << std::setw(10) << std::right << -1.111 << endl
-		 << std::setw(10) << std::right << 0.000000001 << endl
-		 << std::setw(10) << std::right << double(100000) << endl;
-	 */
+	# ifdef JEWEL_PERFORM_DECIMAL_CSV_TEST
+		decimal_csv_test();
+	# else
+		cout << "Compiled without JEWEL_PERFORM_DECIMAL_CSV_TEST defined. "
+		     << "Define this to perform a test involving reading and summing "
+			 << "large number of jewel::Decimal from a CSV file."
+			 << endl;
+	# endif
 
-
-	/*
-	 * Here's a way of inspecting flags
-	cout << static_cast<bool>(cout.flags() & ios::hex) << endl;
-	cout << static_cast<bool>(cout.flags() & ios::dec) << endl;
-	// and changing a flag...
-	cout << std::hex;
-	// and inspecting them again...
-	cout << static_cast<bool>(cout.flags() & ios::hex) << endl;
-	cout << static_cast<bool>(cout.flags() & ios::dec) << endl;
-	*/
-
-	/*
-	decimal_csv_test();
-	decimal_speed_test();
-	decimal_serialization_test();
-	*/
+	# ifdef JEWEL_PERFORM_DECIMAL_SPEED_TEST
+		decimal_speed_test();
+	# else
+		cout << "Compiled without JEWEL_PERFORM_DECIMAL_SPEED_TEST defined. "
+		     << "Define this to perform tests on the speed of various "
+			 << "operations involving jewel::Decimal."
+			 << endl;
+	# endif
 	
-	cout << "Now running special tests of exception related macros."
+	cout << "\nNow running special tests of exception related macros."
 	     << endl;
 	
 	test_exception_macros();
 
-	cout << "Now running various unit tests..." << endl;
+	cout << "\nNow running various unit tests..." << endl;
 	return UnitTest::RunAllTests();
 }
