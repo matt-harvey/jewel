@@ -419,6 +419,22 @@ TEST_FIXTURE(DigitStringFixture, decimal_string_constructors)
 	oss2 << d26;
 	CHECK_EQUAL(oss2.str(), "10987");
 
+	// Test with wide string
+	Decimal const d27w(L"90.100");
+	Decimal const d27n("90.100");
+	CHECK_EQUAL(d27w, d27n);
+	CHECK_EQUAL(d27w.intval(), d27n.intval());
+	CHECK_EQUAL(d27w.places(), d27n.places());
+	Decimal const d28w(L"-300.010");
+	Decimal const d28n("-300.010");
+	CHECK_EQUAL(d28w, d28n);
+	CHECK_EQUAL(d28w.intval(), d28n.intval());
+	CHECK_EQUAL(d28w.places(), d28n.places());
+	Decimal const d29w(wstring(L"690002223"));
+	Decimal const d29d(690002223, 0);
+	CHECK_EQUAL(d29w, d29d);
+	CHECK_EQUAL(d29w.intval(), d29d.intval());
+	CHECK_EQUAL(d29w.places(), d29d.places());
 }
 
 

@@ -91,9 +91,6 @@ struct Ternary<false, ResultIfTrue, ResultIfFalse>
  *
  * For example, SmallestSufficientUnsignedType<300>::Result will
  * be a typedef for <em>unsigned short</em>
- *
- * @todo Move the static_asserts into a separate test file,
- * and expand them to be more comprehensive.
  */
 template <size_t N, typename Begin = unsigned char>
 struct SmallestSufficientUnsignedType

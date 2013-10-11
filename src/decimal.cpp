@@ -35,7 +35,6 @@
 using boost::numeric_cast;
 using std::accumulate;
 using std::find;
-using std::isdigit;
 using std::numeric_limits;
 using std::max_element;
 using std::max;
@@ -745,45 +744,6 @@ Decimal operator-(Decimal const& d)
 	return ret;
 }
 
-
-
-// Specializations
-
-template <>
-char const Decimal::CharacterProvider<char>::null = '\0';
-
-template <>
-char const Decimal::CharacterProvider<char>::plus = '+';
-
-template <>
-char const Decimal::CharacterProvider<char>::minus = '-';
-
-template <>
-char const Decimal::CharacterProvider<char>::full_stop = '.';
-
-template <>
-bool Decimal::CharacterProvider<char>::is_digit(char c)
-{
-	return isdigit(c);
-}
-
-template <>
-wchar_t const Decimal::CharacterProvider<wchar_t>::null = '\0';
-
-template <>
-wchar_t const Decimal::CharacterProvider<wchar_t>::plus = '+';
-
-template <>
-wchar_t const Decimal::CharacterProvider<wchar_t>::minus = '-';
-
-template <>
-wchar_t const Decimal::CharacterProvider<wchar_t>::full_stop = '.';
-
-template <>
-bool Decimal::CharacterProvider<wchar_t>::is_digit(wchar_t c)
-{
-	return iswdigit(c);
-}
 
 
 }  // namespace jewel

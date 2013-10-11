@@ -33,6 +33,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <algorithm>
+#include <cctype>
 #include <cstdlib>  // for abs
 #include <cmath>
 #include <istream>
@@ -131,7 +132,7 @@ namespace jewel
  * of an ostream (or a basic_ostream<>?), and use
  * those flags to format the string in accordance with those flags.
  * I should probably define this in a separate file. Note this is different
- * from the internationalization task which is a separate todo.
+ * from the internationalization task which is separately noted.
  *
  * @todo MEDIUM PRIORITY
  * Internationalized output is working using the std::numpunct facilities.
@@ -210,6 +211,8 @@ public:
 
 	/** Constructs a Decimal from a string.
 	 *
+	 * <em>This is only known to work with std::string and std::wstring.</em>
+	 *
 	 * @param str is the string representation of a Decimal
 	 * number.
 	 *
@@ -250,8 +253,6 @@ public:
 	 * equivalents are \e not stored.
 	 *
 	 * Exception safety: <em>strong guarantee</em>.
-	 *
-	 * @todo HIGH PRIORITY. Test with types other than std::string.
 	 */
 	template <typename charT, typename traits, typename Alloc>
 	explicit Decimal(std::basic_string<charT, traits, Alloc> const& str);
@@ -652,23 +653,28 @@ private:
 	template <typename charT, typename traits>
 	void output_aux(std::basic_ostream<charT, traits>& oss) const;
 
-	// Auxiliary class to help with char and wchar_t literals
-	// TODO HIGH PRIORITY. Provide specializations for character
-	// types other than char and wchar_t.
+	// Auxiliary class to help with char and wchar_t literals.
 	template <typename charT>
 	struct CharacterProvider
 	{
-		static charT const null;
-		static charT const plus;
-		static charT const minus;
-		static charT const full_stop;
-		static bool is_digit(charT c);
+		static charT constexpr null = '\0';
+		static charT constexpr plus = '+';
+		static charT constexpr minus = '-';
+		static charT constexpr full_stop = '.';
 	};
-
 
 }; // class Decimal
 
 
+// Helper function
+
+namespace detail
+{
+
+template <typename charT>
+static bool is_digit(charT c);
+
+}  // namespace detail
 
 
 // non-member functions - declarations
@@ -821,15 +827,29 @@ Decimal round(Decimal const& x, Decimal::places_type decimal_places);
 #include "decimal_exceptions.hpp"
 #include "exception.hpp"
 
-
-
-
 namespace jewel
 {
 
+// SPECIALIZATIONS
+
+namespace detail
+{
+
+template <>
+bool is_digit<char>(char c)
+{
+	return std::isdigit(c);
+}
+
+template <>
+bool is_digit<wchar_t>(wchar_t c)
+{
+	return std::iswdigit(c);
+}
+
+}  // namespace detail
 
 // IMPLEMENTATIONS
-
 
 // TODO High priority. Ensure this works with wchar_t.
 // TODO High priority make spot work across locales.
@@ -889,8 +909,9 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	for ( ; *si != spot_char && si != str_end; ++si, ++ri)
 	{
 		JEWEL_ASSERT (si < str_end);
-		if (!CharacterProvider<charT>::is_digit(*si))
+		if (!detail::is_digit(*si))
 		{
+			JEWEL_LOG_TRACE();
 			JEWEL_THROW
 			(	DecimalFromStringException,
 				"Invalid string passed to Decimal constructor."
@@ -920,10 +941,11 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 		{
 			++spot_position;        // To count no. of fractional places
 			JEWEL_ASSERT (si < str_end);
-			if (!CharacterProvider<charT>::is_digit(*si))
+			if (!detail::is_digit(*si))
 			{
 				JEWEL_ASSERT (m_places == 0);
 				JEWEL_ASSERT (m_intval == 0);
+				JEWEL_LOG_TRACE();
 				JEWEL_THROW
 				(	DecimalFromStringException,
 					"Invalid string passed to Decimal constructor."
