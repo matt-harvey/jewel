@@ -66,7 +66,6 @@ install(FILES
 		include/num_digits.hpp
 		include/on_windows.hpp
 		include/optional.hpp
-		include/output_aux.hpp
 		include/signature.hpp
 		include/stopwatch.hpp
 		DESTINATION
