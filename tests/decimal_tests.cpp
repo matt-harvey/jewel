@@ -1755,7 +1755,6 @@ TEST(decimal_operator_inequality)
 #endif  // JEWEL DECIMAL_OUTPUT_FAILURE_TEST
 
 
-
 TEST(decimal_operator_output)
 {
 	#ifndef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
@@ -1823,10 +1822,9 @@ TEST(decimal_operator_output)
 		// portable so were commented out. Reinstate them, in some
 		// portable way. (Note it is only the tests that are non-portable.
 		// The code being tested is itself portable.)
+		/*
 
 		// Test internationalization support
-
-		/*
 
 		// C locale
 		ostringstream os16b;
@@ -1839,17 +1837,18 @@ TEST(decimal_operator_output)
 
 		// German locale
 		locale::global(german);
-		JEWEL_ASSERT (use_facet< numpunct<char> >(german).grouping()[0] == 3);
-		JEWEL_ASSERT (use_facet< numpunct<char> >(german).grouping().size() == 2);
-		JEWEL_ASSERT (use_facet< numpunct<char> >(german).grouping()[0] == 3);
-		JEWEL_ASSERT (use_facet< numpunct<char> >(german).grouping()[1] == 3);
-		JEWEL_ASSERT (use_facet< numpunct<char> >(german).thousands_sep() == '.');
-		JEWEL_ASSERT (use_facet< numpunct<char> >(german).decimal_point() == ',');
+		JEWEL_ASSERT (use_facet<numpunct<char> >(german).grouping()[0] == 3);
+		JEWEL_ASSERT (use_facet<numpunct<char> >(german).grouping().size() == 2);
+		JEWEL_ASSERT (use_facet<numpunct<char> >(german).grouping()[0] == 3);
+		JEWEL_ASSERT (use_facet<numpunct<char> >(german).grouping()[1] == 3);
+		JEWEL_ASSERT (use_facet<numpunct<char> >(german).thousands_sep() == '.');
+		JEWEL_ASSERT (use_facet<numpunct<char> >(german).decimal_point() == ',');
 		ostringstream os17;
-		os17 << Decimal("9300700.958");
+		os17 << Decimal("9300700,958");
+
 		CHECK_EQUAL(os17.str(), "9.300.700,958");
 		ostringstream os17b;
-		os17b << Decimal("1000");
+		os17b << Decimal(1000, 0);
 		CHECK_EQUAL(os17b.str(), "1.000");
 		ostringstream os18;
 		os18 << Decimal("900");
@@ -1858,7 +1857,7 @@ TEST(decimal_operator_output)
 		os19 << Decimal("0");
 		CHECK_EQUAL(os19.str(), "0");
 		ostringstream os20;
-		os20 << Decimal("-50800.5");
+		os20 << Decimal("-50800,5");
 		CHECK_EQUAL(os20.str(), "-50.800,5");
 		ostringstream os20b;
 		os20b << Decimal("1000000000000");
@@ -1875,10 +1874,10 @@ TEST(decimal_operator_output)
 		JEWEL_ASSERT (use_facet< numpunct<char> >(french).thousands_sep() == ' ');
 		JEWEL_ASSERT (use_facet< numpunct<char> >(french).decimal_point() == ',');
 		ostringstream os24;
-		os24 << Decimal("898234.2983");
+		os24 << Decimal("898234,2983");
 		CHECK_EQUAL(os24.str(), "898 234,2983");
 		ostringstream os25;
-		os25 << Decimal("-50000000.000");
+		os25 << Decimal("-50000000,000");
 		ostringstream os25b;
 		CHECK_EQUAL(os25.str(), "-50 000 000,000");
 		locale::global(locale::classic());
@@ -1902,11 +1901,11 @@ TEST(decimal_operator_output)
 		ostringstream os28;
 		os28 << 2003678376;
 		ostringstream os29;
-		os29 << Decimal("2003678376");
+		os29 << Decimal(2003678376, 0);
 		cout.imbue(locale::classic());
 		CHECK_EQUAL(os28.str(), os29.str());
 		ostringstream os30;
-		os30 << Decimal("-2000000.5555");
+		os30 << Decimal(-20000005555, 4);
 		CHECK_EQUAL(os30.str(), "-2,000,000.5555");
 		locale::global(locale::classic());
 
@@ -1916,7 +1915,7 @@ TEST(decimal_operator_output)
 		locale const weird_locale(locale(""), new WeirdPunct(""));
 		locale::global(weird_locale);
 		ostringstream os31;
-		os31 << Decimal("-453709876.090");
+		os31 << Decimal("-453709876^090");
 		CHECK_EQUAL(os31.str(), "-453w709w87w6^090");
 		locale::global(locale::classic());
 
@@ -1943,6 +1942,7 @@ TEST(decimal_operator_output)
 		CHECK(ok34);
 
 		*/
+
 	#else
 
 		// JEWEL_DECIMAL_OUTPUT_FAILURE_TEST is defined.
@@ -2000,7 +2000,7 @@ TEST(decimal_operator_input)
 	bis0 >> d100;
 	CHECK(!static_cast<bool>(bis0));
 	CHECK(bis0.rdstate() != std::ios::goodbit);
-	CHECK(bis0.rdstate() == std::ios::failbit);
+	CHECK(bis0.rdstate() & std::ios::failbit);
 	// Check value hasn't changed.
 	CHECK_EQUAL(d100, Decimal("0"));
 	// Now with exceptions enabled on stream for failbit

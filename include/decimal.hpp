@@ -218,17 +218,24 @@ public:
 	 *
 	 * Currently str must be a non-empty series of digits
 	 * between 0 and 9 inclusive, possibly preceded by a minus
-	 * sign, possibly followed by a spot ('.'), possibly followed
-	 * by further digits between 0 and 9 inclusive. There must be
-	 * at least one digit in the string.
-	 * 
-	 * Examples of accepted strings: "10", "0.0012", "-1.3", ".234".
+	 * sign, possibly followed by a decimal point character, possibly
+	 * followed by further digits between 0 and 9 inclusive. There must be
+	 * at least one digit in the string. The spot character is
+	 * determined by the current global std::locale (whatever std::locale
+	 * is created by the default constructor for std::locale). It could be
+	 * be ".", "," or some other character - whatever represents a
+	 * decimal point in that locale.
 	 *
-	 * Examples of non-accepted strings: "10e2", "12312.23413434123424".
+	 * Assuming "." for the global locale's decimal point, the following are
+	 * examples of accepted strings: "10", "0.0012", "-1.3", ".234".
+	 *
+	 * Assuming a "." for the global locale's decimal point,
+	 * the following are examples of non-accepted strings: "10e2",
+	 * "12312.234134341.23424", "1,000".
 	 *
 	 * @exception DecimalFromStringException is thrown if:\n
 	 *   an empty string is passed to \c str; or\n
-	 *   non-digit characters (other than '-' and '.', at the
+	 *   non-digit characters (other than '-' and the decimal point, at the
 	 *   appropriate point) are included in the string.
 	 * 
 	 * @exception DecimalRangeException is thrown if \c str is otherwise
@@ -650,7 +657,6 @@ private:
 		static charT constexpr null = '\0';
 		static charT constexpr plus = '+';
 		static charT constexpr minus = '-';
-		static charT constexpr full_stop = '.';
 	};
 
 }; // class Decimal
@@ -844,7 +850,6 @@ bool is_digit<wchar_t>(wchar_t c)
 
 // IMPLEMENTATIONS
 
-// TODO HIGH PRIORITY make spot work across locales.
 template <typename charT, typename traits, typename Alloc>
 Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	m_places(0),
@@ -852,10 +857,11 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 {
 	typedef typename std::basic_string<charT> stringT;
 	typedef typename stringT::size_type sz_t;
-	
-	// TODO HIGH PRIORITY. Localize these properly
+
+	std::locale const loc;  // global locale
+	charT const spot_char =
+		std::use_facet<std::numpunct<charT> >(loc).decimal_point();
 	charT const null_char = CharacterProvider<charT>::null;
-	charT const spot_char = CharacterProvider<charT>::full_stop;
 	charT const plus_char = CharacterProvider<charT>::plus;
 	charT const minus_char = CharacterProvider<charT>::minus;
 
@@ -1173,7 +1179,7 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 	// Record target locale
 	locale const loc(oss.getloc());
 	charT const decimal_point =
-		use_facet< numpunct<charT> >(loc).decimal_point();
+		use_facet<numpunct<charT> >(loc).decimal_point();
 
 	// We will be "manually" reflecting the locale's numpunct facet
 	// in what we write to oss. If there is already a non-C
