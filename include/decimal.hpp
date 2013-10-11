@@ -260,28 +260,18 @@ public:
 	/**
 	 * Precondition: the string must be null-terminated.
 	 *
-	 * @todo Documentation esp. re. exception-safety.
-	 *
-	 * @todo Implement this more efficiently, and move implementation out of
-	 * class body.
+	 * Behaviour re. exceptions is the same as for the constructor
+	 * which takes a std::string.
 	 */
-	explicit Decimal(char const* str)
-	{
-		*this = Decimal(std::string(str));
-	}
+	explicit Decimal(char const* str);
 
 	/**
 	 * Precondition: the string must be null-terminated.
 	 * 
-	 * @todo Documentation esp. re. exception-safety.
-	 * 
-	 * @todo Implement this more efficiently, and move implementation out of
-	 * class body.
+	 * Behaviour re. exceptions is the same as for the constructor which
+	 * takes a std::wstring.
 	 */
-	explicit Decimal(wchar_t const* str)
-	{
-		*this = Decimal(std::wstring(str));
-	}
+	explicit Decimal(wchar_t const* str);
 
 	Decimal(Decimal const&) = default;
 	Decimal(Decimal&&) = default;
@@ -830,7 +820,8 @@ Decimal round(Decimal const& x, Decimal::places_type decimal_places);
 namespace jewel
 {
 
-// SPECIALIZATIONS
+
+// SPECIALIZATIONS - must come first
 
 namespace detail
 {
@@ -849,9 +840,9 @@ bool is_digit<wchar_t>(wchar_t c)
 
 }  // namespace detail
 
+
 // IMPLEMENTATIONS
 
-// TODO High priority. Ensure this works with wchar_t.
 // TODO High priority make spot work across locales.
 template <typename charT, typename traits, typename Alloc>
 Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
@@ -993,6 +984,18 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 		);
 	}
 	m_places = boost::numeric_cast<places_type>(spot_position);
+}
+
+inline
+Decimal::Decimal(char const* str)
+{
+	*this = Decimal(std::string(str));
+}
+
+inline
+Decimal::Decimal(wchar_t const* str)
+{
+	*this = Decimal(std::wstring(str));
 }
 
 inline
