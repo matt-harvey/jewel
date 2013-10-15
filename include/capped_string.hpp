@@ -76,7 +76,19 @@ public:
 	typedef char value_type;
 	typedef value_type const* const_iterator;
 	typedef value_type* iterator;
-	typedef typename detail::SmallestSufficientUnsignedType<N + 1>::Result size_type;
+
+	/**
+	 * Depending on the value of \e N, it is possible that size_type is
+	 * <em> unsigned char</em>. Thus when an instance of \e size_type is
+	 * output to a stream, it may appear not as a number but rather as
+	 * a character - which will not usually be the desired result.
+	 * Therefore it is recommended to cast \e size_type to an explicitly
+	 * numeric type before printing to a stream.
+	 */
+	typedef
+		typename detail::SmallestSufficientUnsignedType<N + 1>::Result
+		size_type;
+
 	typedef std::ptrdiff_t difference_type;
 	typedef value_type& reference;
 	typedef value_type const& const_reference;
@@ -222,6 +234,8 @@ public:
 	 * The function is provided mainly for consistency with the standard
 	 * library container interface.
 	 *
+	 * @see size_type
+	 *
 	 * Never throws.
 	 */
 	size_type capacity() const;
@@ -229,6 +243,8 @@ public:
 	/**
 	 * @returns the length of the string currently stored in CappedString.
 	 * This might be anything between 0 and capacity().
+	 *
+	 * @see size_type
 	 *
 	 * Never throws.
 	 */
@@ -327,7 +343,7 @@ operator<<
 	CappedString<N> const& p_str
 );
 
-/**
+/*
  * Read from an output stream.
  *
  * TODO LOW PRIORITY Implement this.
