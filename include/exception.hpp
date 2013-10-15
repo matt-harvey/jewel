@@ -79,7 +79,8 @@ public:
 	 *
 	 * @param p_message Message to be stored in Exception object explaining
 	 * the reason for the exception. May be later retrieved via call to
-	 * c_str(). Typically displayed in console if exception not caught.
+	 * \e what() or \e message(). Typically displayed in console if exception
+	 * not caught.
 	 *
 	 * @param p_type The type of the exception, i.e. the name of the class
 	 * of which the exception is an instance.
@@ -175,7 +176,12 @@ private:
 // NON-MEMBER FUNCTIONS
 
 /**
- * Output a description of a jewel::Exception to \e os.
+ * @relates Exception
+ *
+ * Output a description of a jewel::Exception to \e os. This description is
+ * more detailed than that returned by \e what() and \e message(). It
+ * contains information about all the information that was passed to the
+ * Exception constructor.
  *
  * It is theoretically possible for this function to throw an exception, but
  * only if exceptions are enabled on \e os, and there is an error when
