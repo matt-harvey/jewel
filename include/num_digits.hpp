@@ -94,6 +94,7 @@ private:
 
 // FUNCTION TEMPLATE IMPLEMENTATIONS
 
+/// @cond
 template <typename T>
 inline
 std::size_t NumDigits::num_digits_aux(T x, T base)
@@ -103,7 +104,7 @@ std::size_t NumDigits::num_digits_aux(T x, T base)
 	for (T i = x; i != 0; i /= base) ++digits;
 	return digits;
 }
-
+/// @endcond
 
 }  // namespace jewel
 
