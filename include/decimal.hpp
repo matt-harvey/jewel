@@ -402,9 +402,9 @@ public:
 	 * it must be possible for the implementation of the division
 	 * function to increase the
 	 * fractional precision (number of places to the right of the decimal
-	 * point) of the dividend until it equals the fractional precision
-	 * of the divisor. In some cases it is not possible to do this safely,
-	 * in which case an exception
+	 * point) of the dividend until it is greater than or equal to the
+	 * fractional precision of the divisor. In some cases it is not possible to
+	 * do this safely in which case an exception
 	 * is thrown. You can avoid this
 	 * possibility by ensuring that you only divide Decimals where the
 	 * fractional precision of the dividend is at least as great as that
