@@ -344,7 +344,7 @@ operator<<
 );
 
 /*
- * Read from an output stream.
+ * Read from an input stream.
  *
  * TODO LOW PRIORITY Implement this.
 template <typename traits, std::size_t N>

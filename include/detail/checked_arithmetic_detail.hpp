@@ -43,10 +43,8 @@
 
 namespace jewel
 {
-
 namespace detail
 {
-
 
 /**
  * \class CheckedArithmetic
@@ -321,7 +319,6 @@ CheckedArithmetic::division_is_unsafe_unsigned_integral_types(T x, T y)
 	(void)x;  // Silence compiler warning re. unused variable.
 	return y == 0;
 }
-
 
 }  // namespace detail
 }  // namespace jewel

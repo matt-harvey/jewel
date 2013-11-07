@@ -25,12 +25,9 @@
  *
  * \author Matthew Harvey
  * \date 15 May 2012
- *
  */
 
-
 #include "exception.hpp"
-
 
 namespace jewel
 {
