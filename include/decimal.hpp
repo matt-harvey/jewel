@@ -25,10 +25,7 @@
  *
  * @author Matthew Harvey
  * @date 13 May 2012
- *
  */
-
-
 
 #include <boost/lexical_cast.hpp>
 #include <boost/numeric/conversion/cast.hpp>
@@ -156,6 +153,9 @@ namespace jewel
  * and (b) it contains a "hard-wired" behaviour of rounding up at 5, while not
  * actually referring to the Decimal::s_rounding_threshold constant to achieve
  * this. This is a kind of code repetition and so is bad.
+ *
+ * @todo HIGH PRIORITY
+ * Write licence for the entire Jewel library.
  */
 
 class Decimal
