@@ -22,9 +22,6 @@
 /** \file decimal_exceptions.hpp
  *
  * \brief Exceptions to be used with jewel::Decimal class
- *
- * \author Matthew Harvey
- * \date 15 May 2012
  */
 
 #include "exception.hpp"

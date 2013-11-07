@@ -22,10 +22,6 @@
 /** \file num_digits.hpp
  *
  * \brief Facility to count the number of digits in a number of integral type 
- *
- * \author Matthew Harvey
- * \date 2012-05-13
- * 
  */
 
 

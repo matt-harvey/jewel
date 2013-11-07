@@ -22,13 +22,7 @@
 /** \file stopwatch.hpp
  *
  * \brief Stopwatch class for timing intervals
- *
- * \author Matthew Harvey
- * \date 13 May 2012
- *
  */
-
-
 
 #include <ctime>
 #include <iomanip>

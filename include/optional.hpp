@@ -22,10 +22,6 @@
 /** \file optional.hpp
  *
  * \brief Provides functions to be used with boost::optional.
- *
- * \author Matthew Harvey
- * \date 2012-11-06
- * 
  */
 
 #include "exception.hpp"

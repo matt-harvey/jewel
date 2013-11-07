@@ -20,10 +20,6 @@
 #define GUARD_checked_arithmetic_hpp_7987160937854629
 
 /** \file checked_arithmetic.hpp
- * 
- * \author Matthew Harvey
- * \date 2012-06-09
- *
  *
  * \brief Provides functions that check the safety of arithmetic
  * operations. In the case of signed arithmetic, we are checking

@@ -29,10 +29,6 @@
  * CheckedArithmetic. CheckedArithmetic and its static member functions should
  * not be used directly. Client code should call the non-member wrapper
  * functions provided in checked_arithmetic.hpp.
- *
- * \author Matthew Harvey
- * \date 2012-05-13
- * 
  */
 
 #include "../assert.hpp"
