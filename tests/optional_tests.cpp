@@ -16,7 +16,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 #include "optional.hpp"
 #include <UnitTest++/UnitTest++.h>
 #include <string>
