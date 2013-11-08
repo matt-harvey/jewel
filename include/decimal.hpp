@@ -149,6 +149,9 @@ namespace jewel
  * and (b) it contains a "hard-wired" behaviour of rounding up at 5, while not
  * actually referring to the Decimal::s_rounding_threshold constant to achieve
  * this. This is a kind of code repetition and so is bad.
+ *
+ * @todo HIGH PRIORITY
+ * Put installation instructions in the README.
  */
 
 class Decimal

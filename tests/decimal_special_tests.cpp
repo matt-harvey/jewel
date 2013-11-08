@@ -34,11 +34,8 @@ using std::ofstream;
 using std::string;
 using std::vector;
 
-
-
 namespace jewel
 {
-
 namespace detail
 {
 
