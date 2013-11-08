@@ -151,7 +151,8 @@ namespace jewel
  * this. This is a kind of code repetition and so is bad.
  *
  * @todo HIGH PRIORITY
- * Put installation instructions in the README.
+ * Make CMakeLists.txt more reusable and general. Put installation instructions
+ * in the README.
  */
 
 class Decimal
