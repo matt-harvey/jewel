@@ -16,7 +16,7 @@ limitations under the License.
 OVERVIEW
 
 Jewel is software library written in standard C++, using C++11 features,
-containing a classes, functions and macros which may be useful in a variety of
+containing classes, functions and macros which may be useful in a variety of
 C++ programs, but which have no particular common theme. The library was
 developed by Matthew Harvey, originally for use in his own projects, and is
 released in the hope that it will be useful to others.
@@ -44,4 +44,4 @@ simply to examine the headers directly.
 
 CONTACT
 
-matthewharvey@internode.on.net
+matt@matthewharvey.net
