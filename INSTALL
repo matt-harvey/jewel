@@ -1,0 +1,114 @@
+Copyright 2012-2013 Matthew Harvey
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+DEPENDENCIES
+
+To build and install Jewel, you will need CMake.
+
+The Jewel library itself depends on the following headers from the Boost C++
+libraries:
+	
+	<boost/algorithm/string.hpp>
+	<boost/numeric/conversion/cast.hpp>
+	<boost/lexical_cast.hpp>
+	<boost/optional.hpp>
+
+(Compiled Boost libraries are not required.)
+
+To build and run the test suite for Jewel, you will need UnitTest++.
+
+To build the API documentation, you will need Doxygen.
+
+At the time of writing, these dependencies can be obtained from the following
+locations:
+	
+	CMake: 		http://www.cmake.org
+	Boost:		http://www.boost.org
+	UnitTest++:	http://unittest-cpp.sourceforge.net
+	Doxygen:	http://www.stack.nl/~dimitri/doxygen
+
+
+STEP 1. INITIAL BUILD CONFIGURATION
+
+Open a command line and "cd" to the project root.
+
+On Unix-like systems, enter:
+
+	cmake -i
+
+(On Windows, you will need to use the -G option to choose a Makefile generator,
+or else run "cmake-gui.exe .". See CMake documentation for further details.)
+
+You will be prompted with "Would you like to see the advanced options? [No]:".
+Answer "n". Then follow the prompts.
+
+If you run into trouble with the build or have atypical requirements, you can
+return to this step and answer "y" to configure more detailed build options.
+
+
+STEP 2. BUILD THE LIBRARY
+
+At the project root, enter:
+
+	make jewel
+
+
+STEP 3. BUILD AND RUN THE TEST SUITE
+
+This step is optional, but recommended. At the project root, enter:
+
+	make test
+
+To run the tests, on a Unix-like system, enter:
+
+	./test
+
+On Windows, enter:
+
+	.\test.exe
+
+The result of the tests will then be displayed. If any tests fail,
+it would be appreciated if you would send the developer your test output along
+with details of your system and build environment. (See README for contact
+details.) If any tests fails, you should not install or use the library.
+
+
+STEP 4. TO INSTALL THE LIBRARY
+
+At the project root, enter:
+	
+	make install
+
+If on a Unix-like system, you may need to run this as root, i.e.:
+
+	sudo make install
+
+Assuming installation is successful, CMake will output the location of each
+installed file.
+
+
+STEP 5. TO BUILD THE API DOCUMENTATION
+
+If you have Doxygen installed and want to generate API documentation, then
+enter the following at the project root:
+
+	doxygen
+
+HTML documentation will then be generated in the project root directory,
+under "html", and can be browsed by opening the following file in your
+web browser:
+
+	[project root]/html/index.html
+
