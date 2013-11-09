@@ -19,9 +19,9 @@ Jewel is written in standard C++, and utilizes some C++11 features.
 To build and install the library, you will need:
 
 	- A reasonably conformant C++ compiler and standard library implementation
-	  (Jewel has been successfully built with GCC 4.7.2 and with later versions;
-	  it may work with earlier versions and other compilers, but these have not
- 	  been tested)
+	  (Jewel has been successfully built with GCC 4.7.2 and with later
+	  versions; it may work with earlier versions and other compilers, but
+	  these have not been tested)
 
 	- CMake (version 2.6 or later)
 
@@ -92,7 +92,7 @@ On Windows, enter:
 The result of the tests will then be displayed. If any tests fail,
 it would be appreciated if you would send the developer your test output along
 with details of your system and build environment. (See README for contact
-details.) If any tests fails, you should not install or use the library.
+details.) If any tests fail, you should not install or use the library.
 
 
 STEP 4. TO INSTALL THE LIBRARY
