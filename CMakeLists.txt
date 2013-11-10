@@ -18,79 +18,84 @@ cmake_minimum_required (VERSION 2.6)
 
 project (jewel)
 
-include_directories (include)
+find_package (Boost 1.53.0)
 
-set (
-	library_sources
-	src/decimal.cpp
-	src/exception.cpp
-	src/log.cpp
-	src/num_digits.cpp
-	src/checked_arithmetic_detail.cpp
-)
+if (Boost_FOUND)
 
-set (
-	test_sources
-	tests/test.cpp
-	tests/capped_string_tests.cpp
-	tests/checked_arithmetic_tests.cpp
-	tests/decimal_special_tests.cpp
-	tests/decimal_tests.cpp
-	tests/exception_special_tests.cpp
-	tests/exception_tests.cpp
-	tests/flag_set_tests.cpp
-	tests/num_digits_tests.cpp
-	tests/on_windows_tests.cpp
-	tests/optional_tests.cpp
-	tests/smallest_sufficient_unsigned_type_tests.cpp
-	tests/stopwatch_tests.cpp
-)
+	include_directories (include)
 
-add_definitions (
-	-DJEWEL_ENABLE_LOGGING
-	-DJEWEL_ENABLE_ASSERTION_LOGGING
-	-DJEWEL_ENABLE_EXCEPTION_LOGGING
-)
+	set (
+		library_sources
+		src/decimal.cpp
+		src/exception.cpp
+		src/log.cpp
+		src/num_digits.cpp
+		src/checked_arithmetic_detail.cpp
+	)
 
-add_library (jewel ${library_sources})
+	set (
+		test_sources
+		tests/test.cpp
+		tests/capped_string_tests.cpp
+		tests/checked_arithmetic_tests.cpp
+		tests/decimal_special_tests.cpp
+		tests/decimal_tests.cpp
+		tests/exception_special_tests.cpp
+		tests/exception_tests.cpp
+		tests/flag_set_tests.cpp
+		tests/num_digits_tests.cpp
+		tests/on_windows_tests.cpp
+		tests/optional_tests.cpp
+		tests/smallest_sufficient_unsigned_type_tests.cpp
+		tests/stopwatch_tests.cpp
+	)
 
-add_executable (test ${test_sources})
+	add_definitions (
+		-DJEWEL_ENABLE_LOGGING
+		-DJEWEL_ENABLE_ASSERTION_LOGGING
+		-DJEWEL_ENABLE_EXCEPTION_LOGGING
+	)
 
-target_link_libraries (test UnitTest++ jewel)
+	add_library (jewel ${library_sources})
 
-set (lib_installation_dir "${CMAKE_INSTALL_PREFIX}/lib")
+	add_executable (test ${test_sources})
 
-set (header_installation_dir "${CMAKE_INSTALL_PREFIX}/include/jewel")
+	target_link_libraries (test UnitTest++ jewel)
 
-install(TARGETS jewel ARCHIVE DESTINATION ${lib_installation_dir})
+	set (lib_installation_dir "${CMAKE_INSTALL_PREFIX}/lib")
 
-install (
-	FILES
-		include/assert.hpp
-		include/capped_string.hpp
-		include/capped_string_fwd.hpp
-		include/checked_arithmetic.hpp
-		include/log.hpp
-		include/decimal.hpp
-        include/decimal_exceptions.hpp
-		include/decimal_fwd.hpp
-		include/exception.hpp
-		include/flag_set.hpp
-		include/num_digits.hpp
-		include/on_windows.hpp
-		include/optional.hpp
-		include/signature.hpp
-		include/stopwatch.hpp
-	DESTINATION
-		${header_installation_dir}
-)
+	set (header_installation_dir "${CMAKE_INSTALL_PREFIX}/include/jewel")
 
-install (
-	FILES
-		include/detail/checked_arithmetic_detail.hpp
-		include/detail/helper_macros.hpp
-		include/detail/smallest_sufficient_unsigned_type.hpp
-	DESTINATION
-		"${header_installation_dir}/detail"
-)
+	install(TARGETS jewel ARCHIVE DESTINATION ${lib_installation_dir})
 
+	install (
+		FILES
+			include/assert.hpp
+			include/capped_string.hpp
+			include/capped_string_fwd.hpp
+			include/checked_arithmetic.hpp
+			include/log.hpp
+			include/decimal.hpp
+			include/decimal_exceptions.hpp
+			include/decimal_fwd.hpp
+			include/exception.hpp
+			include/flag_set.hpp
+			include/num_digits.hpp
+			include/on_windows.hpp
+			include/optional.hpp
+			include/signature.hpp
+			include/stopwatch.hpp
+		DESTINATION
+			${header_installation_dir}
+	)
+
+	install (
+		FILES
+			include/detail/checked_arithmetic_detail.hpp
+			include/detail/helper_macros.hpp
+			include/detail/smallest_sufficient_unsigned_type.hpp
+		DESTINATION
+			"${header_installation_dir}/detail"
+	)
+
+endif ()

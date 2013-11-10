@@ -25,7 +25,7 @@ To build and install the library, you will need:
 	- CMake (version 2.6 or later)
 
 	- The following headers from the Boost C++ libraries (compiled Boost
-	  binaries are not required):
+	  binaries are not required) (version 1.53.0 or later)
 		
 		- <boost/algorithm/string.hpp>
 		- <boost/numeric/conversion/cast.hpp>
