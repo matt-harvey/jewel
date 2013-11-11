@@ -34,11 +34,11 @@ To build and install the library, you will need:
 
 To build and run the test suite for Jewel, you will need:
 	
-	- UnitTest++
+	- UnitTest++ (known to work with version 1.4)
 
 To build the API documentation, you will need:
 
-	- Doxygen
+	- Doxygen (known to work with version 1.8.3.1)
 
 At the time of writing, these dependencies can be obtained from the following
 locations:

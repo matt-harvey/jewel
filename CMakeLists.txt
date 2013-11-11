@@ -138,13 +138,13 @@ if (Boost_FOUND)
 	add_custom_target (
 		docs
 		ALL
-		COMMAND doxygen
+		COMMAND doxygen Doxyfile
 	)
 
 	set_directory_properties (
 		PROPERTIES
-			ADDITIONAL_MAKE_CLEAN_FILES ${tarball_name}
 			ADDITIONAL_MAKE_CLEAN_FILES "html"
+			ADDITIONAL_MAKE_CLEAN_FILES "${tarball_name}"
 	)
 
 endif ()
