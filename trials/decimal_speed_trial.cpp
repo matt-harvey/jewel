@@ -150,6 +150,5 @@ int decimal_speed_trial()
 
 int main()
 {
-	decimal_speed_trial();
-	return 0;
+	return decimal_speed_trial();
 }
