@@ -1753,8 +1753,6 @@ TEST(decimal_operator_inequality)
 
 TEST(decimal_operator_output)
 {
-	CHECK (false);
-
 	#ifndef JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
 		// Failure test not enabled. Output should work
 		// as normal

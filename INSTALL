@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-DEPENDENCIES
+*** DEPENDENCIES ***
 
 Jewel is written in standard C++, and utilizes some C++11 features.
 To build and install the library, you will need:
@@ -49,6 +49,10 @@ locations:
 	Doxygen:	http://www.stack.nl/~dimitri/doxygen
 
 
+
+*** INSTRUCTIONS TO BUILD, TEST AND INSTALL THE LIBRARY ***
+
+
 STEP 1. INITIAL BUILD CONFIGURATION
 
 Open a command line and "cd" to the project root.
@@ -81,18 +85,20 @@ At the project root, enter:
 
 	make test
 
-The result of the tests will then be displayed. If any tests fail,
-it would be appreciated if you would send the developer your test output, the
-file "test.log" (which should appear in the project root), and the
-details of your system and build environment. (See README for contact
+After the test driver executable is built, the tests will automatically be run
+and the results displayed.
+
+If any tests fail, it would be appreciated if you would send the developer your
+test output, the file "test.log" (which should appear in the project root), and
+the details of your system and build environment. (See README for contact
 details.)
 
 If any tests fail, you should not install or use the library.
 
 
-STEP 4. TO INSTALL THE LIBRARY
+STEP 4. INSTALL THE LIBRARY
 
-At the project root, enter:
+Assuming the tests succeeded, then at the project root, enter:
 	
 	make install
 
@@ -100,13 +106,14 @@ If on a Unix-like system, you may need to run this as root, i.e.:
 
 	sudo make install
 
-Assuming installation is successful, CMake will output the location of each
-installed file.
+
+
+*** MISCELLANEOUS OTHER INSTRUCTIONS ***
 
 
 TO BUILD THE API DOCUMENTATION
 
-If you have Doxygen installed and want to generate API documentation, then
+If you have Doxygen installed and want to generate the API documentation, then
 enter the following at the project root:
 
 	make docs
@@ -118,6 +125,17 @@ web browser:
 	[project root]/html/index.html
 
 
+CLEAN BUILD
+
+Go to the project root and enter:
+	
+	make clean
+
+This will clean all build targets from the project root, including
+HTML documentation and source tarball (see below) if present. This will NOT
+cause the library to be uninstalled from the host system, however,
+
+
 TO BUILD A SOURCE PACKAGE FOR DISTRIBUTION
 
 If you are running a Unix-like system, and have a "tar" program installed,
@@ -126,15 +144,22 @@ at the project root:
 	
 	make package
 
+The tarball will appear in the project root directory, and will overwrite any
+existing tarball with the same name.
 
-TO BUILD EVERYTHING IN ONE GO
+As a safety measure, running "make package" always causes the tests to be built
+and run, prior to the package being built. The package will not be built unless
+all the tests pass.
 
-To build the library, tests, documentation and tarball with one command,
-go to the project root, and enter:
+
+TO BUILD MULTIPLE TARGETS IN ONE GO
+
+To build the library, build the tests, run the tests and generate the
+documentation in one go, go to the project root, and enter:
 
 	make
 
-Note this will NOT actually install the library, however.
+Note this will NOT install the library, and will NOT create a source package.
 
 
 TOOLS

@@ -99,7 +99,7 @@ int main()
 			 << endl;
 	# endif
 	
-	cout << "\nNow running special tests of exception related macros."
+	cout << "Now running special tests of exception related macros."
 	     << endl;
 	
 	num_failures += test_exception_macros();

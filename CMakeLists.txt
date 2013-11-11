@@ -62,22 +62,22 @@ if (Boost_FOUND)
 
 	add_library (${library_name} ${library_sources})
 
-	add_executable (test ${test_sources})
+	add_executable (run_tests ${test_sources})
 
 	if (WIN32)
-		set (test_execution_command ".\\test.exe")
+		set (test_execution_command ".\\run_tests.exe")
 	else ()
-		set (test_execution_command "./test")
+		set (test_execution_command "./run_tests")
 	endif ()
 
-	add_custom_command (
-		TARGET test
-		POST_BUILD
-		COMMAND ${test_execution_command}
-		VERBATIM
-	)
+	target_link_libraries (run_tests UnitTest++ ${library_name})
 
-	target_link_libraries (test UnitTest++ ${library_name})
+	add_custom_target (
+		test
+		ALL
+		COMMAND "${test_execution_command}"
+		DEPENDS ${library_name} run_tests
+	)
 
 	set (lib_installation_dir "${CMAKE_INSTALL_PREFIX}/lib")
 
@@ -140,13 +140,12 @@ if (Boost_FOUND)
 
 	add_custom_target (
 		package
-		ALL
 		COMMAND
 			mkdir ${package_name} &&
 			cp -r ${packaged_items} ${package_name} &&
 			tar -sczf ${tarball_name} ${package_name} &&
 			rm -rf ${package_name}
-		DEPENDS ${library_name} "test"
+		DEPENDS ${library_name} test
 	)
 
 	add_custom_target (
