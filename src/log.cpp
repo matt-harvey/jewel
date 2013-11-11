@@ -84,7 +84,7 @@ namespace
 			);
 			if (check == date_time_str_len)
 			{
-				p_os << "\n{FIELD}[date_time_written]"
+				p_os << "\n{F}[date_time_written]"
 				     << date_time_arr;
 			}
 		}
@@ -124,8 +124,8 @@ namespace
 	{
 		if (os)
 		{
-			*os << "{RECORD}\n{FIELD}[id]" << next_id()
-			    << "\n{FIELD}[message]End log";
+			*os << "{R}\n{F}[id]" << next_id()
+			    << "\n{F}[message]End log";
 			write_date_time_now(*os);
 			*os << endl;
 			if ((os != &cerr) && (os != &clog) && (os != &cout))
@@ -155,8 +155,8 @@ Log::set_filepath(string const& p_filepath)
 			ostream* const osp = stream_aux();
 			if (osp)
 			{
-				*osp << "{RECORD}\n{FIELD}[id]" << next_id()
-		   			 << "\n{FIELD}[message]"
+				*osp << "{R}\n{F}[id]" << next_id()
+		   			 << "\n{F}[message]"
 					 << "Commenced logging to "
 					 << filepath
 					 << ".";
@@ -223,35 +223,35 @@ Log::log
 		}
 		assert (!osp->bad());  // guaranteed by stream_aux().
 		assert (!osp->exceptions());  // guaranteed by stream_aux().
-		*osp << "{RECORD}\n"
-			<< "{FIELD}[id]" << next_id() << '\n'
-			<< "{FIELD}[severity]" << severity_string(p_severity) << '\n';
+		*osp << "{R}\n"
+			<< "{F}[id]" << next_id() << '\n'
+			<< "{F}[severity]" << severity_string(p_severity) << '\n';
 		if (p_message)
 		{
-			*osp << "{FIELD}[message]" << p_message << '\n';
+			*osp << "{F}[message]" << p_message << '\n';
 		}
-		*osp << "{FIELD}[function]" << p_function << '\n'
-			 << "{FIELD}[file]" << p_file << '\n'
-			 << "{FIELD}[line]" << p_line << '\n';
+		*osp << "{F}[function]" << p_function << '\n'
+			 << "{F}[file]" << p_file << '\n'
+			 << "{F}[line]" << p_line << '\n';
 		if (p_compilation_date)
 		{
-			*osp << "{FIELD}[compilation_date]" << p_compilation_date << '\n';
+			*osp << "{F}[compilation_date]" << p_compilation_date << '\n';
 		}
 		if (p_compilation_time)
 		{
-			*osp << "{FIELD}[compilation_time]" << p_compilation_time << '\n';
+			*osp << "{F}[compilation_time]" << p_compilation_time << '\n';
 		}
 		if (p_exception_type)
 		{
-			*osp << "{FIELD}[exception_type]" << p_exception_type << '\n';
+			*osp << "{F}[exception_type]" << p_exception_type << '\n';
 		}
 		if (p_expression)
 		{
-			*osp << "{FIELD}[expression]" << p_expression << '\n';
+			*osp << "{F}[expression]" << p_expression << '\n';
 		}
 		if (p_value)
 		{
-			*osp << "{FIELD}[value]" << p_value << '\n';
+			*osp << "{F}[value]" << p_value << '\n';
 		}
 		*osp << endl;
 	}

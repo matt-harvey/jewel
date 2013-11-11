@@ -140,3 +140,13 @@ go to the project root, and enter:
 	make
 
 Note this will NOT actually install the library, however.
+
+
+TOOLS
+
+The source distribution comes with a "tools" directory, containing one
+or more standalone scripts which may be useful in connection with the library.
+These are not part of the "core library", are not required in order to use the
+library, and will NOT be installed by "make install". (Library users can
+install these if desired simply by copying them to a location in their
+PATH.) The documentation on each script is contained in the script file itself.

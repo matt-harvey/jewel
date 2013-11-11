@@ -22,6 +22,9 @@
 # Takes a logfile produced by jewel::Log as input and
 # prints it in CSV form to stdout.
 
+# Dependencies:
+# a Python 3 interpreter
+
 import csv
 import sys
 import collections
@@ -56,8 +59,8 @@ def log_string_to_dict_list(log_string):
     and return a list of OrderedDicts representing the logging events in the
     log file.
     """
-    record_separator = "{RECORD}"
-    field_separator = "{FIELD}"
+    record_separator = "{R}"
+    field_separator = "{F}"
     raw_records = log_string.split(record_separator)
     ret = []
     for raw_record in raw_records:
