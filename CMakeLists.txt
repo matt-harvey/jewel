@@ -72,10 +72,8 @@ if (Boost_FOUND)
 
 	if (WIN32)
 		set (test_execution_command ".\\test_driver.exe")
-		set (speed_trial_execution_command ".\\decimal_speed_trial.exe")
 	else ()
 		set (test_execution_command "./test_driver")
-		set (speed_trial_execution_command "./decimal_speed_trial")
 	endif ()
 
 	target_link_libraries (test_driver UnitTest++ ${library_name})
