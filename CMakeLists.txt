@@ -31,6 +31,7 @@ if (Boost_FOUND)
 		src/log.cpp
 		src/num_digits.cpp
 		src/checked_arithmetic_detail.cpp
+		src/version.cpp
 	)
 
 	set (
@@ -48,6 +49,7 @@ if (Boost_FOUND)
 		tests/optional_tests.cpp
 		tests/smallest_sufficient_unsigned_type_tests.cpp
 		tests/stopwatch_tests.cpp
+		tests/version_tests.cpp
 	)
 
 	add_definitions (
@@ -85,6 +87,7 @@ if (Boost_FOUND)
 			include/optional.hpp
 			include/signature.hpp
 			include/stopwatch.hpp
+			include/version.hpp
 		DESTINATION
 			${header_installation_dir}
 	)

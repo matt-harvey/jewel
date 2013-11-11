@@ -42,7 +42,7 @@ namespace jewel
 {
 
 /**
-  @class Decimal
+ * @class Decimal
  * @brief A "constrained floating point" decimal number class.
  *
  * Each number is represented as an integer (of int_type), and a number of
