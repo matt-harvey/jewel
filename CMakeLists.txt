@@ -130,7 +130,6 @@ if (Boost_FOUND)
 		tools
 		CMakeLists.txt
 		Doxyfile
-		INSTALL
 		LICENSE
 		NOTICE
 		README
