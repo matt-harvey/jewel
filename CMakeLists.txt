@@ -16,7 +16,7 @@
 
 cmake_minimum_required (VERSION 2.6)
 
-project (jewel)
+project (Jewel)
 
 find_package (Boost 1.53.0)
 
@@ -58,17 +58,19 @@ if (Boost_FOUND)
 		-DJEWEL_ENABLE_EXCEPTION_LOGGING
 	)
 
-	add_library (jewel ${library_sources})
+	set (library_name jewel)
+
+	add_library (${library_name} ${library_sources})
 
 	add_executable (test ${test_sources})
 
-	target_link_libraries (test UnitTest++ jewel)
+	target_link_libraries (test UnitTest++ ${library_name})
 
 	set (lib_installation_dir "${CMAKE_INSTALL_PREFIX}/lib")
 
-	set (header_installation_dir "${CMAKE_INSTALL_PREFIX}/include/jewel")
+	set (header_installation_dir "${CMAKE_INSTALL_PREFIX}/include/${library_name}")
 
-	install(TARGETS jewel ARCHIVE DESTINATION ${lib_installation_dir})
+	install(TARGETS ${library_name} ARCHIVE DESTINATION ${lib_installation_dir})
 
 	install (
 		FILES
@@ -100,5 +102,38 @@ if (Boost_FOUND)
 		DESTINATION
 			"${header_installation_dir}/detail"
 	)
+
+	set (version_major 1)
+	set (version_minor 0)
+	set (version_patch 0)
+	set (package_name "${library_name}-${version_major}.${version_minor}.${version_patch}-working")
+	set (tarball_name "${package_name}.tar.gz")
+
+	set (
+		packaged_items
+		include
+		src
+		tests
+		tools
+		CMakeLists.txt
+		Doxyfile
+		INSTALL
+		LICENSE
+		NOTICE
+		README
+		overview.dox
+	)
+
+	add_custom_target (
+		package
+		COMMAND
+			mkdir ${package_name} &&
+			cp -r ${packaged_items} ${package_name} &&
+			tar -sczf ${tarball_name} ${package_name} &&
+			rm -rf ${package_name}
+		DEPENDS ${library_name}
+	)
+
+	set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${tarball_name})
 
 endif ()

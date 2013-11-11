@@ -109,7 +109,7 @@ Assuming installation is successful, CMake will output the location of each
 installed file.
 
 
-STEP 5. TO BUILD THE API DOCUMENTATION
+TO BUILD THE API DOCUMENTATION
 
 If you have Doxygen installed and want to generate API documentation, then
 enter the following at the project root:
@@ -121,4 +121,13 @@ under "html", and can be browsed by opening the following file in your
 web browser:
 
 	[project root]/html/index.html
+
+
+TO BUILD A SOURCE PACKAGE FOR DISTRIBUTION
+
+If you are running a Unix-like system, and have a "tar" program installed,
+you can build a tarball of the library sources by entering the following
+at the project root:
+	
+	make package
 
