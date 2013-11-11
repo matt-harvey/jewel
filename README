@@ -179,14 +179,29 @@ and run, prior to the package being built. The package will not be built unless
 all the tests pass.
 
 
+TO BUILD THE DECIMAL SPEED TRIAL
+
+A "Decimal speed trial" executable can be built which, when run, will
+execute a large number of arithmethic operations using the Decimal class
+provided by the library. The results of measuring the CPU time taken by these
+operations are then output to the console. To build this executable, run
+
+	make decimal_speed_trial
+
+To run the trial, enter "./decimal_speed_trial" if on a Unix-like systems,
+or ".\decimal_speed_trial.exe" if on Windows.
+
+
 TO BUILD MULTIPLE TARGETS IN ONE GO
 
-To build the library, build the tests, run the tests and generate the
+To build the library, build the tests, run the tests, build the
+Decimal speed trial, and generate the
 documentation in one go, go to the project root, and enter:
 
 	make
 
 Note this will NOT install the library, and will NOT create a source package.
+Also it will NOT run decimal_speed_trial, but will only build the executable.
 
 
 *** TOOLS ***

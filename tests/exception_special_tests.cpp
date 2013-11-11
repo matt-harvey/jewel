@@ -33,6 +33,8 @@ namespace detail
 
 int test_exception_macros()
 {
+	cout << "Now running special tests of exception related macros..." << endl;
+
 	int num_failures = 0;
 
 	try

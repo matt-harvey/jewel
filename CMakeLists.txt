@@ -52,6 +52,11 @@ if (Boost_FOUND)
 		tests/version_tests.cpp
 	)
 
+	set (
+		speed_trial_sources
+		trials/speed_trial.cpp
+	)
+
 	add_definitions (
 		-DJEWEL_ENABLE_LOGGING
 		-DJEWEL_ENABLE_ASSERTION_LOGGING
@@ -63,14 +68,18 @@ if (Boost_FOUND)
 	add_library (${library_name} ${library_sources})
 
 	add_executable (test_driver ${test_sources})
+	add_executable (decimal_speed_trial ${speed_trial_sources})
 
 	if (WIN32)
 		set (test_execution_command ".\\test_driver.exe")
+		set (speed_trial_execution_command ".\\decimal_speed_trial.exe")
 	else ()
 		set (test_execution_command "./test_driver")
+		set (speed_trial_execution_command "./decimal_speed_trial")
 	endif ()
 
 	target_link_libraries (test_driver UnitTest++ ${library_name})
+	target_link_libraries (decimal_speed_trial ${library_name})
 
 	add_custom_target (
 		test
@@ -128,6 +137,7 @@ if (Boost_FOUND)
 		src
 		tests
 		tools
+		trials
 		CMakeLists.txt
 		Doxyfile
 		LICENSE

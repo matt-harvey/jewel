@@ -80,24 +80,10 @@ int main()
 	#endif
 
 	num_failures += decimal_csv_test();
-
-	# ifdef JEWEL_PERFORM_DECIMAL_SPEED_TEST
-		num_failures += decimal_speed_test();
-	# else
-		cout << "Compiled without JEWEL_PERFORM_DECIMAL_SPEED_TEST defined.\n"
-		     << "To perform tests on the speed of various "
-			 << "operations involving jewel::Decimal, rebuild tests with this "
-			 << "defined.\n"
-			 << endl;
-	# endif
-	
-	cout << "Now running special tests of exception related macros."
-	     << endl;
-	
 	num_failures += test_exception_macros();
-
-	cout << "\nNow running various unit tests using UnitTest++." << endl;
+	cout << "\nNow running various unit tests using UnitTest++..." << endl;
 	num_failures += UnitTest::RunAllTests();
+
 	if (num_failures == 0)
 	{
 		cout << "\nSUCCESS. All tests passed." << endl;
