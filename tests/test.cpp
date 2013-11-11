@@ -79,15 +79,7 @@ int main()
 			 << endl;
 	#endif
 
-	# ifdef JEWEL_PERFORM_DECIMAL_CSV_TEST
-		num_failures += decimal_csv_test();
-	# else
-		cout << "Compiled without JEWEL_PERFORM_DECIMAL_CSV_TEST defined.\n"
-		     << "To perform a test involving reading and summing "
-			 << "large number of jewel::Decimal from a CSV file, rebuild tests "
-			 << "with this defined.\n"
-			 << endl;
-	# endif
+	num_failures += decimal_csv_test();
 
 	# ifdef JEWEL_PERFORM_DECIMAL_SPEED_TEST
 		num_failures += decimal_speed_test();

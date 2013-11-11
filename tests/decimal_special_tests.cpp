@@ -161,12 +161,10 @@ int decimal_speed_test()
 	return 0;
 }
 
-
 bool is_dagger(char c)
 {
 	return c == '|';
 }
-
 
 int decimal_csv_test()
 {
@@ -180,8 +178,8 @@ int decimal_csv_test()
 	{
 		vector<string> record_vec;
 		split(record_vec, current_record, is_dagger);
-		Decimal d0(record_vec[0]);
-		Decimal d1(record_vec[1]);
+		Decimal const d0(record_vec[0]);
+		Decimal const d1(record_vec[1]);
 		field_0_total += d0;
 		field_1_total += d1; 
 	}
@@ -207,6 +205,5 @@ int decimal_csv_test()
 }
 
 }  // namespace detail
-
 }  // namespace jewel
 
