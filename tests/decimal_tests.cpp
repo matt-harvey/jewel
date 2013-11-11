@@ -61,7 +61,7 @@ using weird_punct::WeirdPunct;
 
 
 
-#ifndef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+#ifndef JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
 // If the output failure test has been enabled, it is simpler just to
 // exclude all tests for Decimal other than it (see below).
 
@@ -1748,12 +1748,12 @@ TEST(decimal_operator_inequality)
 	CHECK(Decimal("23.342234") != Decimal("23.34223"));
 }
 
-#endif  // JEWEL DECIMAL_OUTPUT_FAILURE_TEST
+#endif  // JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
 
 
 TEST(decimal_operator_output)
 {
-	#ifndef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+	#ifndef JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
 		// Failure test not enabled. Output should work
 		// as normal
 		ostringstream os0;
@@ -1941,7 +1941,7 @@ TEST(decimal_operator_output)
 
 	#else
 
-		// JEWEL_DECIMAL_OUTPUT_FAILURE_TEST is defined.
+		// JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST is defined.
 		// Decimal output should fail. Here we test how the
 		// failure is handled.
 		ostringstream os_e;
@@ -1970,7 +1970,7 @@ TEST(decimal_operator_output)
 
 
 
-#ifndef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+#ifndef JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
 // If the output failure test has been enabled, it is simpler just to
 // exclude all tests for Decimal other than it.
 
@@ -2176,4 +2176,4 @@ TEST(decimal_maximum_precision)
 	CHECK_THROW(Decimal e(s), DecimalRangeException);
 }
 
-#endif  // JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+#endif  // JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST

@@ -1299,7 +1299,7 @@ Decimal::output_aux(std::basic_ostream<charT, traits>& oss) const
 		// Write negative sign if required
 		if (m_intval < 0) oss << '-';
 	}
-	#ifdef JEWEL_DECIMAL_OUTPUT_FAILURE_TEST
+	#ifdef JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
 		// We cause bad memory allocation here to provoke
 		// failure. This is to test how Decimal output
 		// operator<< (which calls this function) handles

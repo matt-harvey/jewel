@@ -52,49 +52,56 @@ int main()
 	Log::set_threshold(Log::trace);
 
 	#ifndef NDEBUG
-		cout << "Compiled in debugging mode (NDEBUG not defined)."
+		cout << "Compiled in debugging mode (NDEBUG not defined).\n"
 		     << endl;
 	#else
-		cout << "Compiled in release mode (NDEBUG is defined)."
+		cout << "Compiled in release mode (NDEBUG is defined).\n"
 		     << endl;
 	#endif
 
 	#ifdef JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
 		cout << "Compiled with JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST "
-		     << "defined. Normal tests for jewel::Decimal will be "
+		     << "defined.\n"
+			 << "Normal tests for jewel::Decimal will be "
 			 << "eschewed in order to test a sabotaged version of the "
 			 << "output function, to ensure it handles errors as expected.\n"
+			 << "DO NOT USE the library except for testing on this build. "
+			 << "(Rebuild with this macro undefined, before using the library.)\n"
 			 << endl;
 	#else
 		cout << "Compiled without JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST "
-		     << "defined. Define this to test error handling in stream output"
-			 << " operator for jewel::Decimal."
+		     << "defined.\n"
+			 << "To test error handling in stream output"
+			 << " operator for jewel::Decimal, rebuild the whole library and "
+			 << "test suite with this defined.\n"
 			 << endl;
 	#endif
 
 	# ifdef JEWEL_PERFORM_DECIMAL_CSV_TEST
 		decimal_csv_test();
 	# else
-		cout << "Compiled without JEWEL_PERFORM_DECIMAL_CSV_TEST defined. "
-		     << "Define this to perform a test involving reading and summing "
-			 << "large number of jewel::Decimal from a CSV file."
+		cout << "Compiled without JEWEL_PERFORM_DECIMAL_CSV_TEST defined.\n"
+		     << "To perform a test involving reading and summing "
+			 << "large number of jewel::Decimal from a CSV file, rebuild tests "
+			 << "with this defined.\n"
 			 << endl;
 	# endif
 
 	# ifdef JEWEL_PERFORM_DECIMAL_SPEED_TEST
 		decimal_speed_test();
 	# else
-		cout << "Compiled without JEWEL_PERFORM_DECIMAL_SPEED_TEST defined. "
-		     << "Define this to perform tests on the speed of various "
-			 << "operations involving jewel::Decimal."
+		cout << "Compiled without JEWEL_PERFORM_DECIMAL_SPEED_TEST defined.\n"
+		     << "To perform tests on the speed of various "
+			 << "operations involving jewel::Decimal, rebuild tests with this "
+			 << "defined.\n"
 			 << endl;
 	# endif
 	
-	cout << "\nNow running special tests of exception related macros."
+	cout << "\nNow running special tests of exception related macros.\n"
 	     << endl;
 	
 	test_exception_macros();
 
-	cout << "\nNow running various unit tests..." << endl;
+	cout << "\nNow running various unit tests...\n" << endl;
 	return UnitTest::RunAllTests();
 }
