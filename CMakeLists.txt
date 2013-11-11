@@ -54,7 +54,7 @@ if (Boost_FOUND)
 
 	set (
 		speed_trial_sources
-		trials/speed_trial.cpp
+		trials/decimal_speed_trial.cpp
 	)
 
 	add_definitions (
