@@ -159,7 +159,6 @@ if (Boost_FOUND)
 
 	add_custom_target (
 		docs
-		ALL
 		COMMAND doxygen Doxyfile
 	)
 
