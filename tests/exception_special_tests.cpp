@@ -247,7 +247,7 @@ int test_exception_macros()
 		cout << "There were "
 		     << num_failures
 			 << " failed tests in test_exception_macros() function.\n"
-			 << "Points of failure have been logged to the test log file.\n"
+			 << "Points of failure have been logged to the test log file."
 			 << endl;
 	}
 

@@ -62,19 +62,19 @@ int decimal_csv_test()
 	if (field_0_total != Decimal("0"))
 	{
 		cout << "Test failed. First column should have summed to 0, but "
-		        "instead summed to: " << field_0_total << endl << endl;
+		        "instead summed to: " << field_0_total << endl;
 		return 1;
 	}
 	if (field_1_total != Decimal("0"))
 	{
 		cout << "Test failed. Second column should have summed to 0, but "
-		        "instead summed to: " << field_1_total << endl << endl;
+		        "instead summed to: " << field_1_total << endl;
 		return 1;
 	}
 	if (field_0_total == Decimal("0") && field_1_total == Decimal("0"))
 	{
 		cout << "Test succeeded. Both columns of Decimals summed to 0, as "
-		        "expected.\n" << endl;
+		        "expected." << endl;
 		return 0;
 	}
 	JEWEL_HARD_ASSERT (false);

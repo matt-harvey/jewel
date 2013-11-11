@@ -54,13 +54,15 @@ int main()
 	Log::set_threshold(Log::trace);
 
 	#ifndef NDEBUG
-		cout << "Compiled in debugging mode (NDEBUG not defined).\n"
+		cout << "Compiled in debugging mode (NDEBUG not defined)."
 		     << endl;
 	#else
-		cout << "Compiled in release mode (NDEBUG is defined).\n"
+		cout << "Compiled in release mode (NDEBUG is defined)."
 		     << endl;
 	#endif
 
+	// TODO MEDIUM PRIORITY Find a better way of testing Decimal output
+	// failure handling.
 	#ifdef JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
 		cout << "Compiled with JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST "
 		     << "defined.\n"
@@ -68,30 +70,23 @@ int main()
 			 << "eschewed in order to test a sabotaged version of the "
 			 << "output function, to ensure it handles errors as expected.\n"
 			 << "DO NOT USE the library except for testing on this build. "
-			 << "(Rebuild with this macro undefined, before using the library.)\n"
-			 << endl;
-	#else
-		cout << "Compiled without JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST "
-		     << "defined.\n"
-			 << "To test error handling in stream output"
-			 << " operator for jewel::Decimal, rebuild the whole library and "
-			 << "test suite with this defined.\n"
+			 << "(Rebuild with this macro undefined, before using the library.)."
 			 << endl;
 	#endif
 
 	num_failures += decimal_csv_test();
 	num_failures += test_exception_macros();
-	cout << "\nNow running various unit tests using UnitTest++..." << endl;
+	cout << "Now running various unit tests using UnitTest++..." << endl;
 	num_failures += UnitTest::RunAllTests();
 
 	if (num_failures == 0)
 	{
-		cout << "\nSUCCESS. All tests passed." << endl;
+		cout << "SUCCESS. All tests passed." << endl;
 	}
 	else
 	{
 		JEWEL_HARD_ASSERT (num_failures > 0);
-		cout << "\nFAILURE. Number of failed tests: " << num_failures << endl;
+		cout << "FAILURE. Number of failed tests: " << num_failures << endl;
 	}
 	return num_failures;
 }
