@@ -122,6 +122,7 @@ if (Boost_FOUND)
 		NOTICE
 		README
 		overview.dox
+		coding_style
 	)
 
 	add_custom_target (
