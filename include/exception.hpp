@@ -31,8 +31,6 @@
  * @brief Exception related utilities.
  */
 
-
-
 namespace jewel
 {
 
@@ -41,7 +39,7 @@ namespace jewel
  * \c std::exception. It is intended in turn to be the base class
  * for further custom exception classes.
  * Instances of \c jewel::Exception
- * can be initialized with no parameters, with a \c char \c const* \c,
+ * can be initialized with no parameters, with a <tt> char const* </tt>,
  * representing
  * an error message, or with a range of other parameters.
  * The char const*, if lengthier

@@ -28,7 +28,7 @@
 /** @file assert.hpp
  *
  * @brief Contains assertion macro JEWEL_ASSERT which is like the
- * one in <cassert> except that it calls std::terminate rather than
+ * standard library assert except that it calls std::terminate rather than
  * std::abort.
  *
  * There is also a JEWEL_HARD_ASSERT macro, which is
@@ -41,12 +41,7 @@
  * the failed assertion, e.g. source file, line number and
  * function. Note that JEWEL_ENABLE_LOGGING does \e not need
  * to be defined in order for this to take effect.
- *
- * @author Matthew Harvey
- * @date 01 Sep 2013.
- *
  */
-
 
 #ifdef JEWEL_ENABLE_ASSERTION_LOGGING
 #	define JEWEL_LOG_ASSERTION_AUX(p) \

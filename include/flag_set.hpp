@@ -20,10 +20,6 @@
 /** @file flag_set.hpp
  *
  * @brief Provides facilities for working with sets of boolean flags.
- *
- * @author Matthew Harvey
- * @date 31 August 2013
- *
  */
 
 #include "assert.hpp"
@@ -80,10 +76,10 @@ struct EnumTraits
  * <tt>
  * Enum \n
  * { \n
- * \t red = 1, \n
- * \t blue = 2, \n
- * \t green = 4, \n
- * \t orange = 8 \n
+ * red = 1, \n
+ * blue = 2, \n
+ * green = 4, \n
+ * orange = 8 \n
  * }; \n
  * </tt>.
  *

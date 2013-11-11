@@ -20,10 +20,6 @@
 /** @file log.hpp
  *
  * @brief Logging facilities
- *
- * @author Matthew Harvey
- * @date 01 September 2013
- *
  */
 
 #include <boost/lexical_cast.hpp>

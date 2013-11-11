@@ -114,7 +114,7 @@ TO BUILD THE API DOCUMENTATION
 If you have Doxygen installed and want to generate API documentation, then
 enter the following at the project root:
 
-	doxygen
+	make docs
 
 HTML documentation will then be generated in the project root directory,
 under "html", and can be browsed by opening the following file in your
@@ -131,3 +131,12 @@ at the project root:
 	
 	make package
 
+
+TO BUILD EVERYTHING IN ONE GO
+
+To build the library, tests, documentation and tarball with one command,
+go to the project root, and enter:
+
+	make
+
+Note this will NOT actually install the library, however.

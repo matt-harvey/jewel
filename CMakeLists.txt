@@ -135,6 +135,16 @@ if (Boost_FOUND)
 		DEPENDS ${library_name}
 	)
 
-	set_directory_properties(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${tarball_name})
+	add_custom_target (
+		docs
+		ALL
+		COMMAND doxygen
+	)
+
+	set_directory_properties (
+		PROPERTIES
+			ADDITIONAL_MAKE_CLEAN_FILES ${tarball_name}
+			ADDITIONAL_MAKE_CLEAN_FILES "html"
+	)
 
 endif ()

@@ -20,11 +20,6 @@
 /** @file helper_macros.hpp
  *
  * @brief Macros for internal use within Jewel library.
- *
- * @author Matthew Harvey
- * @date 01 September 2013
- *
- *
  */
 
 
