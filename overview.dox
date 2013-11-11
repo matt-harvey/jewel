@@ -18,9 +18,9 @@
  *
  * @section sec_Overview Overview
  *
- * I created this library as a place for various reusable code.
- * The library is written in standards-conformant C++11.
- *
- * The library is named after the actress Jewel Staite, whom I met at a comic
- * convention shortly before creating the library.
+ * Jewel is software library written in standard C++, using C++11 features,
+ * containing classes, functions and macros which may be useful in a variety of
+ * C++ programs, but which have no particular common theme. The library was
+ * developed by Matthew Harvey, originally for use in his own projects, and is
+ * released in the hope that it will be useful to others.
  */
