@@ -25,14 +25,17 @@
 
 namespace jewel
 {
-
 namespace detail
 {
 
 /** Speed test for arithmetic operations using Decimal class
  * Outputs to std::cout results of test.
+ *
+ * @returns 0 on success, or 1 on failure. (Possibly this will always return 0,
+ * as the point of the test is to output information regarding execution time,
+ * however this is not guaranteed to be the case.)
  */
-void decimal_speed_test();
+int decimal_speed_test();
 
 /** Helper function used in decimal_csv_test.
  */
@@ -41,15 +44,12 @@ bool is_dagger(char c);
 /** Test processing of many Decimals from a csv file. These are two
  * digit decimals typical of accounting data, in two delimited columns,
  * which should sum to zero.
+ *
+ * @return 0 on success, or 1 on failure.
  */
-void decimal_csv_test();
-
-
+int decimal_csv_test();
 
 }  // namespace detail
-
 }  // namespace jewel
-
-
 
 #endif  // GUARD_decimal_special_tests_hpp_4550346198748027

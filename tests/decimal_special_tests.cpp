@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
+#include "assert.hpp"
 #include "decimal.hpp"
 #include "decimal_special_tests.hpp"
 #include "stopwatch.hpp"
 #include <boost/algorithm/string.hpp>
-
 #include <fstream>
 #include <iostream>
 #include <numeric>
@@ -49,7 +49,7 @@ namespace
 	}
 }
 
-void decimal_speed_test()
+int decimal_speed_test()
 {
 	int const lim = 1000000;
 	vector<Decimal> vec;
@@ -158,7 +158,7 @@ void decimal_speed_test()
 	     << " take " << sw_ctest.seconds_elapsed() - ctest_base_case
 		 << " seconds." << endl;
 
-	return;
+	return 0;
 }
 
 
@@ -168,7 +168,7 @@ bool is_dagger(char c)
 }
 
 
-void decimal_csv_test()
+int decimal_csv_test()
 {
 	cout << "Testing processing two columns of Decimals from a text file..."
 	     << endl;
@@ -188,19 +188,22 @@ void decimal_csv_test()
 	if (field_0_total != Decimal("0"))
 	{
 		cout << "Test failed. First column should have summed to 0, but "
-		        "instead summed to: " << field_0_total << endl;
+		        "instead summed to: " << field_0_total << endl << endl;
+		return 1;
 	}
 	if (field_1_total != Decimal("0"))
 	{
 		cout << "Test failed. Second column should have summed to 0, but "
-		        "instead summed to: " << field_1_total << endl;
+		        "instead summed to: " << field_1_total << endl << endl;
+		return 1;
 	}
 	if (field_0_total == Decimal("0") && field_1_total == Decimal("0"))
 	{
 		cout << "Test succeeded. Both columns of Decimals summed to 0, as "
-		        "expected." << endl;
+		        "expected.\n" << endl;
+		return 0;
 	}
-	return;
+	JEWEL_HARD_ASSERT (false);
 }
 
 }  // namespace detail

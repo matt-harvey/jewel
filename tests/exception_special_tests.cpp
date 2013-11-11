@@ -26,21 +26,26 @@ using std::endl;
 using std::strcmp;
 using std::string;
 
-
 namespace jewel
 {
-
 namespace detail
 {
 
-void test_exception_macros()
+int test_exception_macros()
 {
+	int num_failures = 0;
+
 	try
 	{
 		JEWEL_THROW(TrialException0, "Here's a TrialException0.");
 	}
 	catch (std::exception&)
 	{
+	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
 	}
 
 	try
@@ -50,7 +55,11 @@ void test_exception_macros()
 	catch (std::exception&)
 	{
 	}
-
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
+	}
 
 	try
 	{
@@ -59,6 +68,11 @@ void test_exception_macros()
 	catch (std::exception&)
 	{
 	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
+	}
 
 	try
 	{
@@ -66,24 +80,45 @@ void test_exception_macros()
 	}
 	catch (TrialException0& e)
 	{
-		JEWEL_HARD_ASSERT
-		(	strcmp(e.message(), "Here a TrialException0_0.") == 0
-		);
-		JEWEL_HARD_ASSERT(strcmp(e.type(), "TrialException0_0") == 0);
+		if (strcmp(e.message(), "Here a TrialException0_0.") != 0)
+		{
+			JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+			++num_failures;
+		}
+		if (strcmp(e.type(), "TrialException0_0") != 0)
+		{
+			JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+			++num_failures;
+		}
 		string const filepath(e.filepath());
 		string const expected_filename = "exception_special_tests.cpp";
-		JEWEL_HARD_ASSERT(expected_filename.size() - filepath.size());
+		JEWEL_HARD_ASSERT (filepath.size() > expected_filename.size());
 		string::const_iterator const it =
 			filepath.begin() + filepath.size() - expected_filename.size();
-		JEWEL_HARD_ASSERT(string(it, filepath.end()) == expected_filename);
+		if (string(it, filepath.end()) != expected_filename)
+		{
+			JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+			++num_failures;
+		}
+	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
 	}
 
 	try
 	{
 		throw TrialException1_0("Here's TrialException1_0.");
+		++num_failures;
 	}
 	catch (std::exception&)
 	{
+	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
 	}
 
 	try
@@ -92,6 +127,11 @@ void test_exception_macros()
 	}
 	catch (TrialException1&)
 	{
+	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
 	}
 
 	try
@@ -102,11 +142,17 @@ void test_exception_macros()
 	{
 		// This should not be reached as TrialException0 should not
 		// catch TrialException1_0.
-		JEWEL_HARD_ASSERT (false);
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
 	}
 	catch (TrialException1&)
 	{
 		// But this should catch it.
+	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
 	}
 
 	try
@@ -116,6 +162,11 @@ void test_exception_macros()
 	catch (TrialException1_0_1&)
 	{
 	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
+	}
 
 	try
 	{
@@ -124,6 +175,11 @@ void test_exception_macros()
 	catch (TrialException1_0&)
 	{
 	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
+	}
 
 	try
 	{
@@ -131,6 +187,11 @@ void test_exception_macros()
 	}
 	catch (TrialException1&)
 	{
+	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
 	}
 
 	try
@@ -141,6 +202,11 @@ void test_exception_macros()
 	{
 		JEWEL_ASSERT (string(e.what()) == string("Here's a TrialException1_0_1."));
 	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
+	}
 
 	try
 	{
@@ -148,6 +214,11 @@ void test_exception_macros()
 	}
 	catch (std::exception&)
 	{
+	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
 	}
 
 	try
@@ -157,16 +228,29 @@ void test_exception_macros()
 	catch (std::exception&)
 	{
 	}
+	catch (...)
+	{
+		JEWEL_LOG_MESSAGE(Log::error, "Failed test");
+		++num_failures;
+	}
 
-	cout << "Success! Exceptions classes created using these macros "
-	     << "behaved as expected." << endl;
+	if (num_failures == 0)
+	{
+		cout << "Success! Exceptions classes created using these macros "
+			 << "behaved as expected." << endl;
+	}
+	else
+	{
+		JEWEL_HARD_ASSERT (num_failures > 0);
+		cout << "There were "
+		     << num_failures
+			 << " failed tests in test_exception_macros() function.\n"
+			 << "Points of failure have been logged to the test log file.\n"
+			 << endl;
+	}
 
-	return;
+	return num_failures;
 }
 
-
-
-
 }  // namespace detail
-
 }  // namespace jewel

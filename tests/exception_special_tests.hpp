@@ -45,8 +45,10 @@ JEWEL_DERIVED_EXCEPTION(TrialException1_0_1, TrialException1_0);
  * exception_special_tests.hpp, and confirms that they can be handled in
  * various expected ways, given they were defined using the macros
  * in exception.hpp.
+ * 
+ * @returns the number of failures within the test.
  */
-void test_exception_macros();
+int test_exception_macros();
 
 
 

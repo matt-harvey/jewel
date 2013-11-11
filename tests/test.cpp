@@ -48,6 +48,8 @@ using std::string;
 
 int main()
 {
+	int num_failures = 0;
+
 	Log::set_filepath("test.log");
 	Log::set_threshold(Log::trace);
 
@@ -78,7 +80,7 @@ int main()
 	#endif
 
 	# ifdef JEWEL_PERFORM_DECIMAL_CSV_TEST
-		decimal_csv_test();
+		num_failures += decimal_csv_test();
 	# else
 		cout << "Compiled without JEWEL_PERFORM_DECIMAL_CSV_TEST defined.\n"
 		     << "To perform a test involving reading and summing "
@@ -88,7 +90,7 @@ int main()
 	# endif
 
 	# ifdef JEWEL_PERFORM_DECIMAL_SPEED_TEST
-		decimal_speed_test();
+		num_failures += decimal_speed_test();
 	# else
 		cout << "Compiled without JEWEL_PERFORM_DECIMAL_SPEED_TEST defined.\n"
 		     << "To perform tests on the speed of various "
@@ -97,11 +99,21 @@ int main()
 			 << endl;
 	# endif
 	
-	cout << "\nNow running special tests of exception related macros.\n"
+	cout << "\nNow running special tests of exception related macros."
 	     << endl;
 	
-	test_exception_macros();
+	num_failures += test_exception_macros();
 
-	cout << "\nNow running various unit tests...\n" << endl;
-	return UnitTest::RunAllTests();
+	cout << "\nNow running various unit tests using UnitTest++." << endl;
+	num_failures += UnitTest::RunAllTests();
+	if (num_failures == 0)
+	{
+		cout << "\nSUCCESS. All tests passed." << endl;
+	}
+	else
+	{
+		JEWEL_HARD_ASSERT (num_failures > 0);
+		cout << "\nFAILURE. Number of failed tests: " << num_failures << endl;
+	}
+	return num_failures;
 }

@@ -68,7 +68,7 @@ If you run into trouble with the build or have atypical requirements, you can
 return to this step and answer "y" to configure more detailed build options.
 
 
-STEP 2. BUILD THE LIBRARY
+STEP 2. BUILD AND THE LIBRARY
 
 At the project root, enter:
 
@@ -77,22 +77,17 @@ At the project root, enter:
 
 STEP 3. BUILD AND RUN THE TEST SUITE
 
-This step is optional, but recommended. At the project root, enter:
+At the project root, enter:
 
 	make test
 
-To run the tests, on a Unix-like system, enter:
-
-	./test
-
-On Windows, enter:
-
-	.\test.exe
-
 The result of the tests will then be displayed. If any tests fail,
-it would be appreciated if you would send the developer your test output along
-with details of your system and build environment. (See README for contact
-details.) If any tests fail, you should not install or use the library.
+it would be appreciated if you would send the developer your test output, the
+file "test.log" (which should appear in the project root), and the
+details of your system and build environment. (See README for contact
+details.)
+
+If any tests fail, you should not install or use the library.
 
 
 STEP 4. TO INSTALL THE LIBRARY

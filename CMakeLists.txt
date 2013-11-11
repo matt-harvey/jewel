@@ -64,6 +64,19 @@ if (Boost_FOUND)
 
 	add_executable (test ${test_sources})
 
+	if (WIN32)
+		set (test_execution_command ".\\test.exe")
+	else ()
+		set (test_execution_command "./test")
+	endif ()
+
+	add_custom_command (
+		TARGET test
+		POST_BUILD
+		COMMAND ${test_execution_command}
+		VERBATIM
+	)
+
 	target_link_libraries (test UnitTest++ ${library_name})
 
 	set (lib_installation_dir "${CMAKE_INSTALL_PREFIX}/lib")
@@ -133,7 +146,7 @@ if (Boost_FOUND)
 			cp -r ${packaged_items} ${package_name} &&
 			tar -sczf ${tarball_name} ${package_name} &&
 			rm -rf ${package_name}
-		DEPENDS ${library_name}
+		DEPENDS ${library_name} "test"
 	)
 
 	add_custom_target (
