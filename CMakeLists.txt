@@ -126,6 +126,7 @@ if (Boost_FOUND)
 
 	add_custom_target (
 		package
+		ALL
 		COMMAND
 			mkdir ${package_name} &&
 			cp -r ${packaged_items} ${package_name} &&
