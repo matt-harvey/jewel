@@ -62,21 +62,21 @@ if (Boost_FOUND)
 
 	add_library (${library_name} ${library_sources})
 
-	add_executable (run_tests ${test_sources})
+	add_executable (test_driver ${test_sources})
 
 	if (WIN32)
-		set (test_execution_command ".\\run_tests.exe")
+		set (test_execution_command ".\\test_driver.exe")
 	else ()
-		set (test_execution_command "./run_tests")
+		set (test_execution_command "./test_driver")
 	endif ()
 
-	target_link_libraries (run_tests UnitTest++ ${library_name})
+	target_link_libraries (test_driver UnitTest++ ${library_name})
 
 	add_custom_target (
 		test
 		ALL
 		COMMAND "${test_execution_command}"
-		DEPENDS ${library_name} run_tests
+		DEPENDS ${library_name} test_driver
 	)
 
 	set (lib_installation_dir "${CMAKE_INSTALL_PREFIX}/lib")
