@@ -18,6 +18,10 @@ cmake_minimum_required (VERSION 2.6)
 
 project (Jewel)
 
+set (version_major 1)
+set (version_minor 0)
+set (version_patch 0)
+
 find_package (Boost 1.53.0)
 
 if (Boost_FOUND)
@@ -28,6 +32,7 @@ if (Boost_FOUND)
 		library_sources
 		src/decimal.cpp
 		src/exception.cpp
+		src/info.cpp
 		src/log.cpp
 		src/num_digits.cpp
 		src/checked_arithmetic_detail.cpp
@@ -61,7 +66,9 @@ if (Boost_FOUND)
 		-DJEWEL_ENABLE_LOGGING
 		-DJEWEL_ENABLE_ASSERTION_LOGGING
 		-DJEWEL_ENABLE_EXCEPTION_LOGGING
-		# -DJEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
+		-DJEWEL_VERSION_MAJOR=${version_major}
+		-DJEWEL_VERSION_MINOR=${version_minor}
+		-DJEWEL_VERSION_PATCH=${version_patch}
 	)
 
 	set (library_name jewel)
@@ -105,12 +112,14 @@ if (Boost_FOUND)
 			include/decimal_fwd.hpp
 			include/exception.hpp
 			include/flag_set.hpp
+			include/info.hpp
 			include/num_digits.hpp
 			include/on_windows.hpp
 			include/optional.hpp
 			include/signature.hpp
 			include/stopwatch.hpp
 			include/version.hpp
+			include/version_fwd.hpp
 		DESTINATION
 			${header_installation_dir}
 	)
@@ -124,9 +133,6 @@ if (Boost_FOUND)
 			"${header_installation_dir}/detail"
 	)
 
-	set (version_major 1)
-	set (version_minor 0)
-	set (version_patch 0)
 	set (package_name "${library_name}-${version_major}.${version_minor}.${version_patch}-working")
 	set (tarball_name "${package_name}.tar.gz")
 
