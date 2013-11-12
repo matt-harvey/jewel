@@ -73,6 +73,8 @@ if (Boost_FOUND)
 
 	set (library_name jewel)
 
+	option (BUILD_SHARED_LIBS "Build shared (rather than static) library (ON/OFF)? ")
+
 	add_library (${library_name} ${library_sources})
 
 	add_executable (test_driver ${test_sources})
@@ -98,7 +100,11 @@ if (Boost_FOUND)
 
 	set (header_installation_dir "${CMAKE_INSTALL_PREFIX}/include/${library_name}")
 
-	install(TARGETS ${library_name} ARCHIVE DESTINATION ${lib_installation_dir})
+	install (
+		TARGETS ${library_name}
+		ARCHIVE DESTINATION ${lib_installation_dir}
+		LIBRARY DESTINATION ${lib_installation_dir}
+	)
 
 	install (
 		FILES
