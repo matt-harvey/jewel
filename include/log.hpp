@@ -37,8 +37,9 @@ namespace jewel
  * To fire logging events using the \e Log class, client code should use the
  * following macros.
  *
- * <b>JEWEL_ENABLE_LOGGING must be defined, otherwise the logging macros
- * will have no effect at all and will compile away to nothing.</b>
+ * <b>JEWEL_ENABLE_LOGGING must be defined in the client code, otherwise the
+ * logging macros will have no effect at all and will compile away to
+ * nothing.</b>
  *
  * JEWEL_LOG_TRACE() will fire a logging event that simply displays the name
  * of the function, file and line number where it appeared, with a severity

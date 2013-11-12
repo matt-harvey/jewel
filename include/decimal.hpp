@@ -902,7 +902,6 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 		JEWEL_ASSERT (si < str_end);
 		if (!detail::is_digit(*si))
 		{
-			JEWEL_LOG_TRACE();
 			JEWEL_THROW
 			(	DecimalFromStringException,
 				"Invalid string passed to Decimal constructor."
@@ -936,7 +935,6 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 			{
 				JEWEL_ASSERT (m_places == 0);
 				JEWEL_ASSERT (m_intval == 0);
-				JEWEL_LOG_TRACE();
 				JEWEL_THROW
 				(	DecimalFromStringException,
 					"Invalid string passed to Decimal constructor."

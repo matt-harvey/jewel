@@ -116,7 +116,6 @@ namespace
 
 	StreamHolder::~StreamHolder()
 	{
-		JEWEL_LOG_MESSAGE(Log::info, "Destroying logging StreamHolder.");
 		kill();
 	}
 

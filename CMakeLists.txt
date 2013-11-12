@@ -14,13 +14,33 @@
 # limitations under the License.
 ###
 
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8)
 
 project (Jewel)
 
 set (version_major 1)
 set (version_minor 0)
 set (version_patch 0)
+
+option (
+	BUILD_SHARED_LIBS
+	"Build shared (rather than static) library (ON/OFF)? "
+	OFF
+)
+
+option (
+	ENABLE_ASSERTION_LOGGING
+	"Enable logging of assertion failures within the compiled Jewel library itself (ON/OFF)? "
+	ON
+)
+
+option (
+	ENABLE_EXCEPTION_LOGGING
+	"Enable logging of exceptions thrown from within the compiled Jewel library itself (ON/OFF)? "
+	ON
+)
+
+add_definitions (-std=c++11)
 
 find_package (Boost 1.53.0)
 
@@ -63,17 +83,20 @@ if (Boost_FOUND)
 	)
 
 	add_definitions (
-		-DJEWEL_ENABLE_LOGGING
-		-DJEWEL_ENABLE_ASSERTION_LOGGING
-		-DJEWEL_ENABLE_EXCEPTION_LOGGING
 		-DJEWEL_VERSION_MAJOR=${version_major}
 		-DJEWEL_VERSION_MINOR=${version_minor}
 		-DJEWEL_VERSION_PATCH=${version_patch}
 	)
 
-	set (library_name jewel)
+	add_definitions (-DJEWEL_ENABLE_LOGGING)
+	if (ENABLE_ASSERTION_LOGGING)
+		add_definitions (-DJEWEL_ENABLE_ASSERTION_LOGGING)
+	endif ()
+	if (ENABLE_EXCEPTION_LOGGING)
+		add_definitions (-DJEWEL_ENABLE_EXCEPTION_LOGGING)
+	endif ()
 
-	option (BUILD_SHARED_LIBS "Build shared (rather than static) library (ON/OFF)? ")
+	set (library_name jewel)
 
 	add_library (${library_name} ${library_sources})
 
