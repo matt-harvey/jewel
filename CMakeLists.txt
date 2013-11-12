@@ -24,19 +24,19 @@ set (version_patch 0)
 
 option (
 	BUILD_SHARED_LIBS
-	"Build shared (rather than static) library (ON/OFF)? "
+	"Build shared (rather than static) library (ON/OFF)?"
 	OFF
 )
 
 option (
 	ENABLE_ASSERTION_LOGGING
-	"Enable logging of assertion failures within the compiled Jewel library itself (ON/OFF)? "
+	"Enable logging of assertion failures within the compiled Jewel library itself (ON/OFF)?"
 	ON
 )
 
 option (
 	ENABLE_EXCEPTION_LOGGING
-	"Enable logging of exceptions thrown from within the compiled Jewel library itself (ON/OFF)? "
+	"Enable logging of exceptions thrown from within the compiled Jewel library itself (ON/OFF)?"
 	ON
 )
 
