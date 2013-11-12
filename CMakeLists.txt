@@ -163,7 +163,6 @@ if (Boost_FOUND)
 
 	set_directory_properties (
 		PROPERTIES
-			ADDITIONAL_MAKE_CLEAN_FILES "html"
 			ADDITIONAL_MAKE_CLEAN_FILES "${tarball_name}"
 	)
 

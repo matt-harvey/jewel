@@ -145,8 +145,12 @@ Go to the project root and enter:
 	make clean
 
 This will clean all build targets from the project root, including
-HTML documentation and source tarball (see below) if present. This will NOT
-cause the library to be uninstalled from the host system, however,
+the source tarball (see below) if present, but NOT including the
+HTML documentation. This is due to a quirk of CMake. To remove the
+HTML documentation, simply manually delete the "html" directory from the
+project root.
+
+Note this will NOT cause the library to be uninstalled from the host system.
 
 
 TO BUILD THE LIBRARY WITHOUT INSTALLING OR TESTING
