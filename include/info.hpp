@@ -41,7 +41,7 @@ public:
 	Info(Info&& rhs) = delete;
 	Info& operator=(Info const& rhs) = delete;
 	Info& operator=(Info&& rhs) = delete;
-	virtual ~Info() = delete;
+	~Info() = delete;
 
 };  // class Info
 
