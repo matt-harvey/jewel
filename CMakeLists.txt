@@ -46,7 +46,7 @@ find_package (Boost 1.53.0)
 
 if (Boost_FOUND)
 
-	include_directories (include)
+	include_directories (include ${Boost_INCLUDE_DIRS})
 
 	set (
 		library_sources
