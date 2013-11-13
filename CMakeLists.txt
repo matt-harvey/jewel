@@ -14,39 +14,65 @@
 # limitations under the License.
 ###
 
+# Preliminaries
+
 cmake_minimum_required (VERSION 2.8)
 
-project (Jewel)
+# Specify project and version
 
+project (Jewel)
 set (version_major 1)
 set (version_minor 0)
 set (version_patch 0)
+
+# Custom configuration options
 
 option (
 	BUILD_SHARED_LIBS
 	"Build shared (rather than static) library (ON/OFF)?"
 	OFF
 )
-
 option (
 	ENABLE_ASSERTION_LOGGING
 	"Enable logging of assertion failures within the compiled Jewel library itself (ON/OFF)?"
 	ON
 )
-
 option (
 	ENABLE_EXCEPTION_LOGGING
 	"Enable logging of exceptions thrown from within the compiled Jewel library itself (ON/OFF)?"
 	ON
 )
 
-add_definitions (-std=c++11)
+# Definitions to be passed to the compiler
+
+add_definitions (
+	-DJEWEL_VERSION_MAJOR=${version_major}
+	-DJEWEL_VERSION_MINOR=${version_minor}
+	-DJEWEL_VERSION_PATCH=${version_patch}
+)
+add_definitions (-DJEWEL_ENABLE_LOGGING)
+if (ENABLE_ASSERTION_LOGGING)
+	add_definitions (-DJEWEL_ENABLE_ASSERTION_LOGGING)
+endif ()
+if (ENABLE_EXCEPTION_LOGGING)
+	add_definitions (-DJEWEL_ENABLE_EXCEPTION_LOGGING)
+endif ()
+if (CMAKE_COMPILER_IS_GNUCXX)
+	add_definitions (-std=c++0x)
+endif ()
+
+# Find dependencies
 
 find_package (Boost 1.53.0)
+find_library (UNIT_TEST_LIBRARY UnitTest++)
 
-if (Boost_FOUND)
+# Build instructions
 
-	include_directories (include ${Boost_INCLUDE_DIRS})
+if (Boost_FOUND AND NOT UNIT_TEST_LIBRARY-NOTFOUND)
+
+	include_directories (include ${Boost_INCLUDE_DIRS} ${UNIT_TEST_INCLUDES})
+
+	# Building the library
 
 	set (
 		library_sources
@@ -58,6 +84,10 @@ if (Boost_FOUND)
 		src/checked_arithmetic_detail.cpp
 		src/version.cpp
 	)
+	set (library_name jewel)
+	add_library (${library_name} ${library_sources})
+
+	# Building the tests
 
 	set (
 		test_sources
@@ -76,42 +106,13 @@ if (Boost_FOUND)
 		tests/stopwatch_tests.cpp
 		tests/version_tests.cpp
 	)
-
-	set (
-		speed_trial_sources
-		trials/decimal_speed_trial.cpp
-	)
-
-	add_definitions (
-		-DJEWEL_VERSION_MAJOR=${version_major}
-		-DJEWEL_VERSION_MINOR=${version_minor}
-		-DJEWEL_VERSION_PATCH=${version_patch}
-	)
-
-	add_definitions (-DJEWEL_ENABLE_LOGGING)
-	if (ENABLE_ASSERTION_LOGGING)
-		add_definitions (-DJEWEL_ENABLE_ASSERTION_LOGGING)
-	endif ()
-	if (ENABLE_EXCEPTION_LOGGING)
-		add_definitions (-DJEWEL_ENABLE_EXCEPTION_LOGGING)
-	endif ()
-
-	set (library_name jewel)
-
-	add_library (${library_name} ${library_sources})
-
 	add_executable (test_driver ${test_sources})
-	add_executable (decimal_speed_trial ${speed_trial_sources})
-
+	target_link_libraries (test_driver ${UNIT_TEST_LIBRARY} ${library_name})
 	if (WIN32)
 		set (test_execution_command ".\\test_driver.exe")
 	else ()
 		set (test_execution_command "./test_driver")
 	endif ()
-
-	target_link_libraries (test_driver UnitTest++ ${library_name})
-	target_link_libraries (decimal_speed_trial ${library_name})
-
 	add_custom_target (
 		test
 		ALL
@@ -119,16 +120,24 @@ if (Boost_FOUND)
 		DEPENDS ${library_name} test_driver
 	)
 
+	# Building the Decimal speed trial
+
+	set (
+		speed_trial_sources
+		trials/decimal_speed_trial.cpp
+	)
+	add_executable (decimal_speed_trial ${speed_trial_sources})
+	target_link_libraries (decimal_speed_trial ${library_name})
+
+	# Installation instructions
+
 	set (lib_installation_dir "${CMAKE_INSTALL_PREFIX}/lib")
-
 	set (header_installation_dir "${CMAKE_INSTALL_PREFIX}/include/${library_name}")
-
 	install (
 		TARGETS ${library_name}
 		ARCHIVE DESTINATION ${lib_installation_dir}
 		LIBRARY DESTINATION ${lib_installation_dir}
 	)
-
 	install (
 		FILES
 			include/assert.hpp
@@ -152,7 +161,6 @@ if (Boost_FOUND)
 		DESTINATION
 			${header_installation_dir}
 	)
-
 	install (
 		FILES
 			include/detail/checked_arithmetic_detail.hpp
@@ -162,43 +170,46 @@ if (Boost_FOUND)
 			"${header_installation_dir}/detail"
 	)
 
-	set (package_name "${library_name}-${version_major}.${version_minor}.${version_patch}-working")
-	set (tarball_name "${package_name}.tar.gz")
+	# Building the tarball source package
 
-	set (
-		packaged_items
-		include
-		src
-		tests
-		tools
-		trials
-		CMakeLists.txt
-		Doxyfile
-		LICENSE
-		NOTICE
-		README
-		overview.dox
-		coding_style
-	)
+	if (UNIX)
+		set (package_name "${library_name}-${version_major}.${version_minor}.${version_patch}-working")
+		set (tarball_name "${package_name}.tar.gz")
+		set (
+			packaged_items
+			include
+			src
+			tests
+			tools
+			trials
+			CMakeLists.txt
+			Doxyfile
+			LICENSE
+			NOTICE
+			README
+			overview.dox
+			coding_style
+		)
+		add_custom_target (
+			package
+			COMMAND
+				mkdir ${package_name} &&
+				cp -r ${packaged_items} ${package_name} &&
+				tar -sczf ${tarball_name} ${package_name} &&
+				rm -rf ${package_name}
+			DEPENDS ${library_name} test
+		)
+		set_directory_properties (
+			PROPERTIES
+				ADDITIONAL_MAKE_CLEAN_FILES "${tarball_name}"
+		)
+	endif ()
 
-	add_custom_target (
-		package
-		COMMAND
-			mkdir ${package_name} &&
-			cp -r ${packaged_items} ${package_name} &&
-			tar -sczf ${tarball_name} ${package_name} &&
-			rm -rf ${package_name}
-		DEPENDS ${library_name} test
-	)
+	# Building the documentation
 
 	add_custom_target (
 		docs
 		COMMAND doxygen Doxyfile
-	)
-
-	set_directory_properties (
-		PROPERTIES
-			ADDITIONAL_MAKE_CLEAN_FILES "${tarball_name}"
 	)
 
 endif ()
