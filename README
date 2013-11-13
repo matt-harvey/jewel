@@ -90,11 +90,11 @@ details.)
 You will be prompted with "Would you like to see the advanced options? [No]:".
 Answer "n". Then follow the prompts.
 
-If you run into trouble with the build or have atypical requirements, you can
-return to this step and answer "y" to configure more detailed build options.
+(If you run into trouble with the build or have atypical requirements, you can
+return to this step and answer "y" to configure more detailed build options.)
 
-If in doubt, it is generally best to simply hit enter and keep the default
-setting for the given option.
+If in doubt about a particular option, it is generally best simply to hit enter
+and keep the default setting for the option.
 
 Note the options ENABLE_ASSERTION_LOGGING and ENABLE_EXCEPTION_LOGGING. These
 determine whether the JEWEL_ENABLE_ASSERTION_LOGGING and
