@@ -30,7 +30,7 @@ Some (but not all) of the facilities contained in the Jewel library are:
 	A decimal number class;
 	A general base exception class;
 	A macro for succinctly creating further exception classes;
-	A class template for managing sets of boolen flags;
+	A class template for managing sets of boolean flags;
 	Logging facilities; and
 	A very simple stopwatch.
 
