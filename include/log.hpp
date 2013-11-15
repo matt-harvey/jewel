@@ -244,7 +244,7 @@ private:
 				); \
 			}
 #else
-#	define JEWEL_LOG_TRACE() 0
+#	define JEWEL_LOG_TRACE() do {} while (0)
 #	define JEWEL_LOG_MESSAGE(severity, message) \
 		if (false) { (void)(severity); (void)(message); }  // Silence compiler warnings re. unused variables, and prevent them from being evaluated.
 #	define JEWEL_LOG_VALUE(severity, expression) \
