@@ -63,8 +63,8 @@ endif ()
 
 # Find dependencies
 
-find_package (Boost 1.53.0)
-find_library (UNIT_TEST_LIBRARY UnitTest++)
+find_package (Boost 1.53.0 REQUIRED)
+find_library (UNIT_TEST_LIBRARY UnitTest++ REQUIRED)
 
 # Build instructions
 

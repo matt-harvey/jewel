@@ -53,8 +53,6 @@ To build and install the library, you will need:
 		- <boost/numeric/conversion/cast.hpp>
 		- <boost/lexical_cast.hpp>
 		- <boost/optional.hpp>
-
-To build and run the test suite for Jewel, you will need:
 	
 	- UnitTest++ (known to work with version 1.4)
 
