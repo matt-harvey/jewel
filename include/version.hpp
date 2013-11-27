@@ -86,7 +86,7 @@ bool operator>=(Version const& lhs, Version const& rhs);
 //@}
 
 /**
- * Write string representation of Version to a standard output stream as
+ * Write string representation of p_version to p_os as
  * "[major].[minor].[patch]", e.g. "2.0.1".
  */
 template <typename charT, typename traits>
