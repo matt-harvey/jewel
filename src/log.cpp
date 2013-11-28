@@ -177,31 +177,6 @@ Log::set_threshold(Level p_level)
 void
 Log::log
 (	Level p_severity,
-	string const& p_message,
-	string const& p_function,
-	string const& p_file,
-	int p_line,
-	string const& p_compilation_date,
-	string const& p_compilation_time,
-	string const& p_exception_type
-)
-{
-	log
-	(	p_severity,
-		p_message.c_str(),
-		p_function.c_str(),
-		p_file.c_str(),
-		p_line,
-		p_compilation_date.c_str(),
-		p_compilation_time.c_str(),
-		p_exception_type.c_str()
-	);
-	return;
-}
-
-void
-Log::log
-(	Level p_severity,
 	char const* p_message,
 	char const* p_function,
 	char const* p_file,

@@ -46,7 +46,7 @@ namespace jewel
  *
  * \b JEWEL_LOG_MESSAGE(severity, message) will fire a logging event with
  * severity of \e severity and with a message \e message, which should be
- * a string (either C-style, or std::string will do). The log will also show
+ * a C-style string. The log will also show
  * the function, file and line number in the source code where it appears.
  *
  * \b JEWEL_LOG_VALUE(severity, expression) will fire a logging event which
@@ -136,22 +136,6 @@ public:
 	 * equal to \e p_level. By default, the threshold is Log::info.
 	 */
 	static void set_threshold(Level p_level);
-
-	/**
-	 * Passes a logging event to the logging mechanism. Note this should
-	 * not normally be called by client code, which should instead use
-	 * the convenience macros provided (see class documentation for Log).
-	 */
-	static void log
-	(	Level p_severity,
-		std::string const& p_message,
-		std::string const& p_function,
-		std::string const& p_file,
-		int p_line,
-		std::string const& p_compilation_date,
-		std::string const& p_compilation_time,
-		std::string const& p_exception_type
-	);
 
 	/**
 	 * Passes a logging event to the logging mechanism. Note this should
