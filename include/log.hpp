@@ -30,56 +30,50 @@
 namespace jewel
 {
 
-
 /**
  * Class to facilitate logging.
  *
- * To fire logging events using the \e Log class, client code should use the
+ * To fire logging events using the Log class, client code should use the
  * following macros.
  *
  * <b>JEWEL_ENABLE_LOGGING must be defined in the client code, otherwise the
  * logging macros will have no effect at all and will compile away to
  * nothing.</b>
  *
- * JEWEL_LOG_TRACE() will fire a logging event that simply displays the name
+ * \b JEWEL_LOG_TRACE() will fire a logging event that simply displays the name
  * of the function, file and line number where it appeared, with a severity
  * level of \e trace.
  *
- * JEWEL_LOG_MESSAGE(severity, message) will fire a logging event with
+ * \b JEWEL_LOG_MESSAGE(severity, message) will fire a logging event with
  * severity of \e severity and with a message \e message, which should be
  * a string (either C-style, or std::string will do). The log will also show
  * the function, file and line number in the source code where it appears.
  *
- * JEWEL_LOG_VALUE(severity, expression) will fire a logging event which
+ * \b JEWEL_LOG_VALUE(severity, expression) will fire a logging event which
  * describes the value of \e expression, which should be C++ expression
  * that may be written to a std::ostream, e.g. "1 + 2" or "x" (assuming x
  * is defined). Do not include quotes around the expression when passing
  * it to the macro. The log will also show the function, file and line number
  * in the source code where is appears.
  *
- * JEWEL_HARD_LOGGING_THRESHOLD is by default defined as 0, which means that
+ * \b JEWEL_HARD_LOGGING_THRESHOLD is by default defined as 0, which means that
  * there is no
  * <em>compile-time</em> restriction on what is logged. If you want to
  * restrict which statements are logged at <em>compile-time</em>, so that
  * statements below a certain severity level are not logged regardless of
- * the runtime threshold passed to <em>Log::set_threshold(...)</em>, you can
- * do so by setting <em>JEWEL_HARD_LOGGING_THRESHOLD</em> to a higher
- * severity level, e.g. <em>jewel::Log::warning</em>. On most compilers,
+ * the runtime threshold passed to Log::set_threshold, you can
+ * do so by setting \b JEWEL_HARD_LOGGING_THRESHOLD to a higher
+ * severity level, e.g. jewel::Log::error. On most compilers,
  * with optimization on,
  * should mean that logging statements below this "hard" threshold are
- * compiled away to nothing. You should of course make sure that this is
- * defined prior to including <jewel/log.hpp>.
- *
- * <b>NOTE</b> These logging facilities are not thread-safe!
- *
- * @todo MEDIUM PRIORITY Write unit tests for this.
+ * compiled away to nothing.
  *
  * These logging facilities are guaranteed never to throw an exception, with
  * the following provisos...
  *
- * (a) set_filepath may throw std::bad_alloc.
+ * (a) Log::set_filepath may throw std::bad_alloc.
  *
- * (b) The JEWEL_LOG_VALUE macro makes use of
+ * (b) The \b JEWEL_LOG_VALUE macro makes use of
  * boost::lexical_cast, the implementation of which inserts the passed
  * expression onto a std::ostream during the casting process. If this process
  * of calling boost::lexical_cast results in either boost::bad_lexical_cast or
@@ -87,6 +81,25 @@ namespace jewel
  * than propagated. But if any other exception is thrown during the insertion
  * of the passed expression onto the std::ostream, then that exception will
  * not be caught.
+ *
+ * Note it is impossible to set the Log to point to a particular stream. We
+ * can only pass a filepath for the Log to write to
+ * a given file. This is a deliberate restriction that enables the Log class to
+ * provide the no-throw guarantee for all its member functions and associated
+ * macros (except as detailed above). If we enable a stream to be passed to
+ * Log, then it might be that exceptions are enabled on that stream, and it then
+ * becomes difficult/complicated if we still want to offer the no-throw
+ * guarantee. The main price paid for this policy is that logging cannot
+ * (at least, not easily) be directed to standard output / standard error - we
+ * can only easily direct it to a file.
+ *
+ * <b>NOTE These logging facilities are not thread-safe!</b>
+ *
+ * @todo MEDIUM PRIORITY Provide a way to direct logging to standard output
+ * streams without sacrificing exception safety and without complicating the
+ * API too much.
+ *
+ * @todo MEDIUM PRIORITY Write unit tests for this.
  */
 class Log
 {
@@ -102,10 +115,10 @@ public:
 	{
 		// Note if we add levels, we also need to update the
 		// severity_string function.
-		trace = 0,  // Must be zero.
-		info,
-		warning,
-		error
+		trace = 0,  /**< to signify "trace purposes only" */
+		info,       /**< to signify "information purposes only" */
+		warning,    /**< to signify something that might be an error */
+		error       /**< to signify something that is definitely an error */
 	};
 
 	/**
@@ -120,14 +133,14 @@ public:
 	/**
 	 * Sets the logging threshold so that logging events will be written
 	 * to the file if and only if their severity is greater than or
-	 * equal to \e p_level. By default, the threshold is \e info.
+	 * equal to \e p_level. By default, the threshold is Log::info.
 	 */
 	static void set_threshold(Level p_level);
 
 	/**
 	 * Passes a logging event to the logging mechanism. Note this should
 	 * not normally be called by client code, which should instead use
-	 * the convenience macros provided (below).
+	 * the convenience macros provided (see class documentation for Log).
 	 */
 	static void log
 	(	Level p_severity,
@@ -143,7 +156,7 @@ public:
 	/**
 	 * Passes a logging event to the logging mechanism. Note this should
 	 * not normally be called by client code, which should instead use
-	 * the convenience macros provided (below).
+	 * the convenience macros provided (see class documentation for Log).
 	 */
 	static void log
 	(	Level p_severity,
