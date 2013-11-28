@@ -103,16 +103,6 @@ If in doubt, it is recommended to leave these logging options ON.
 for jewel::Log.)
 
 
-	PATHS
-		/usr/lib
-		/usr/local/lib
-		/usr/lib64
-		/usr/local/lib64
-		C:/lib
-		C:/UnitTest++
-		C:/UnitTest++/lib
-)
-
 STEP 2. BUILD, TEST AND INSTALL
 
 At the project root, enter:
