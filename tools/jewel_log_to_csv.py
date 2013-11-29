@@ -17,10 +17,9 @@
 ###
 
 # Usage:
-# jewel_log_to_csv.py logfile
+# jewel_log_to_csv.py path_to_logfile
 
-# Takes a logfile produced by jewel::Log as input and
-# prints it in CSV form to stdout.
+# Takes a log file produced by jewel::Log and prints it in CSV form to stdout.
 
 # Dependencies:
 # a Python 3 interpreter
