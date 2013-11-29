@@ -93,6 +93,40 @@ namespace jewel
  * (at least, not easily) be directed to standard output / standard error - we
  * can only easily direct it to a file.
  *
+ * The format of the resulting log file is designed to be both readable for
+ * a human and easy to parse. In particular, if desired, it can be converted
+ * into CSV format using the Python utility script provided with this
+ * library (under "tools"). The CSV file can then be sorted, filtered and
+ * otherwise analysed using a spreadsheet program. Here is an example of a
+ * single logging entry:
+ * 
+ * <em>
+ * {R}\n
+ * {F}[id]198\n
+ * {F}[severity]warning\n
+ * {F}[message]Division by zero.\n
+ * {F}[function]operator/=\n
+ * {F}[file]/home/matthew/Workbench/versioned/git/jewel/src/decimal.cpp\n
+ * {F}[line]503\n
+ * {F}[compilation_date]Nov 29 2013\n
+ * {F}[compilation_time]09:41:57\n
+ * {F}[exception_type]DecimalDivisionByZeroException\n
+ * </em>
+ * 
+ * The "{R}" marks the start of each logging entry (i.e. record), and the
+ * "{F}" marks the begging of each field in a given entry. For reasons of
+ * efficiency and simplicity of implementation (including ease of providing
+ * the no-throw guarantee), there is no sophisticated formatting / escaping
+ * performed when the original logging entry is created. This means that if
+ * e.g. the "message" field contains the string
+ * "{R}", the formatting will be irregular and conversion to CSV via the
+ * Python script is likely to break (although the human-readability of the raw
+ * log file is unlikely to be compromised). This should be a
+ * rare enough occurrence, however, and it should be pretty obvious when it
+ * does occur. Assuming no such irregularity occurs, then
+ * conversion to CSV via the Python script is itself quite robust, with
+ * proper escaping etc. performed.
+ *
  * <b>NOTE These logging facilities are not thread-safe!</b>
  *
  * @todo MEDIUM PRIORITY Provide a way to direct logging to standard output
