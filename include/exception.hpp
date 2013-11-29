@@ -203,9 +203,14 @@ operator<<(std::basic_ostream<charT, traits>& os, Exception const& e);
 #endif
 
 
-/**
- * Macro to declare and define an exception class called \c DERIVED_CLASS,
- * inheriting from \c BASE_CLASS. The \c BASE_CLASS must have a constructor
+/** @def JEWEL_DERIVED_EXCEPTION(DERIVED_CLASS, BASE_CLASS)
+ *
+ * @relates Exception
+ *
+ * @hideinitializer
+ *  
+ * Macro to declare and define an exception class called \e DERIVED_CLASS,
+ * inheriting from \e BASE_CLASS. The \e BASE_CLASS must have a constructor
  * that takes the same parameters as jewel::Exception. This is most easily
  * achieved by actually deriving from jewel::Exception, either directly
  * or via another parent class or classes.
@@ -240,21 +245,28 @@ operator<<(std::basic_ostream<charT, traits>& os, Exception const& e);
 
 
 
-/**
+/** @def JEWEL_THROW(TYPE, MESSAGE)
+ *
+ * @relates Exception
+ *
+ * @hideinitializer
+ *
  * Macro to throw an exception of type \e TYPE, where \e TYPE inherits from
- * (or is) \e jewel::Exception. Pass a const char* to
+ * (or is) jewel::Exception. Pass a const char* to
  * \e MESSAGE, which will
  * determine the string returned by \e what() (and
  * thus displayed at the terminal). The macro also automatically populates
  * other fields in the exception, which can later be retrieved by calling
- * \e type(), \e function(), \e filepath() and
- * \e line() methods of the exception object.
+ * jewel::Exception::type, jewel::Exception::function,
+ * jewel::Exception::filepath and
+ * jewel::Exception::line methods of the exception object.
  *
- * If JEWEL_ENABLE_EXCEPTION_LOGGING is defined, then this macro will
+ * If \b JEWEL_ENABLE_EXCEPTION_LOGGING is defined, then this macro will
  * also invoke jewel::Log::log to write to the log with severity level
  * jewel::Log::warning, with details of the exception. Note this will have
- * effect even if JEWEL_ENABLE_LOGGING is not defined.
+ * effect even if \b JEWEL_ENABLE_LOGGING is not defined.
  */
+
 #ifdef JEWEL_ENABLE_EXCEPTION_LOGGING
 #	define JEWEL_THROW(TYPE, MESSAGE) \
 		jewel::Log::log \

@@ -17,6 +17,7 @@
 #ifndef GUARD_signature_hpp_897804761257863
 #define GUARD_signature_hpp_897804761257863
 
+/// @file
 
 namespace jewel
 {

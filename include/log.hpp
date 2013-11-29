@@ -34,27 +34,11 @@ namespace jewel
  * Class to facilitate logging.
  *
  * To fire logging events using the Log class, client code should use the
- * following macros.
+ * macros defined in log.hpp.
  *
  * <b>JEWEL_ENABLE_LOGGING must be defined in the client code, otherwise the
  * logging macros will have no effect at all and will compile away to
  * nothing.</b>
- *
- * \b JEWEL_LOG_TRACE() will fire a logging event that simply displays the name
- * of the function, file and line number where it appeared, with a severity
- * level of \e trace.
- *
- * \b JEWEL_LOG_MESSAGE(severity, message) will fire a logging event with
- * severity of \e severity and with a message \e message, which should be
- * a C-style string. The log will also show
- * the function, file and line number in the source code where it appears.
- *
- * \b JEWEL_LOG_VALUE(severity, expression) will fire a logging event which
- * describes the value of \e expression, which should be C++ expression
- * that may be written to a std::ostream, e.g. "1 + 2" or "x" (assuming x
- * is defined). Do not include quotes around the expression when passing
- * it to the macro. The log will also show the function, file and line number
- * in the source code where is appears.
  *
  * \b JEWEL_HARD_LOGGING_THRESHOLD is by default defined as 0, which means that
  * there is no
@@ -68,25 +52,11 @@ namespace jewel
  * should mean that logging statements below this "hard" threshold are
  * compiled away to nothing.
  *
- * These logging facilities are guaranteed never to throw an exception, with
- * the following provisos...
- *
- * (a) Log::set_filepath may throw std::bad_alloc.
- *
- * (b) The \b JEWEL_LOG_VALUE macro makes use of
- * boost::lexical_cast, the implementation of which inserts the passed
- * expression onto a std::ostream during the casting process. If this process
- * of calling boost::lexical_cast results in either boost::bad_lexical_cast or
- * std::bad_alloc being thrown, then that exception will be swallowed rather
- * than propagated. But if any other exception is thrown during the insertion
- * of the passed expression onto the std::ostream, then that exception will
- * not be caught.
- *
  * Note it is impossible to set the Log to point to a particular stream. We
  * can only pass a filepath for the Log to write to
- * a given file. This is a deliberate restriction that enables the Log class to
- * provide the no-throw guarantee for all its member functions and associated
- * macros (except as detailed above). If we enable a stream to be passed to
+ * a given file. This is a deliberate restriction that enables the Log::log
+ * function to provide the no-throw guarantee.
+ * If we were to enable a stream to be passed to
  * Log, then it might be that exceptions are enabled on that stream, and it then
  * becomes difficult/complicated if we still want to offer the no-throw
  * guarantee. The main price paid for this policy is that logging cannot
@@ -99,7 +69,7 @@ namespace jewel
  * library (under "tools"). The CSV file can then be sorted, filtered and
  * otherwise analysed using a spreadsheet program. Here is an example of a
  * single logging entry:
- * 
+ *
  * <em>
  * {R}\n
  * {F}[id]198\n
@@ -168,6 +138,8 @@ public:
 	 * Sets the logging threshold so that logging events will be written
 	 * to the file if and only if their severity is greater than or
 	 * equal to \e p_level. By default, the threshold is Log::info.
+	 *
+	 * Never throws.
 	 */
 	static void set_threshold(Level p_level);
 
@@ -175,6 +147,8 @@ public:
 	 * Passes a logging event to the logging mechanism. Note this should
 	 * not normally be called by client code, which should instead use
 	 * the convenience macros provided (see class documentation for Log).
+	 *
+	 * Never throws.
 	 */
 	static void log
 	(	Level p_severity,
@@ -208,6 +182,52 @@ private:
 
 // MACROS
 
+/** @def JEWEL_LOG_TRACE()
+ * @hideinitializer
+ * @see jewel::Log
+ *
+ * Creates a logging entry that simply displays the name
+ * of the function, file and line number where it appeared, with a severity
+ * level of \e trace.
+ *
+ * Never throws.
+ */
+
+/** @def JEWEL_LOG_MESSAGE(severity, message)
+ * @hideinitializer
+ * @see jewel::Log
+ *
+ * Creates a logging entry with severity of \e severity and with a
+ * message \e message, which should be
+ * a C-style string. The log will also show
+ * the function, file and line number in the source code where it appears.
+ *
+ * Never throws.
+ */
+
+/** @def JEWEL_LOG_VALUE(severity, expression)
+ * @hideinitializer
+ * @see jewel::Log
+ *
+ * Creates a logging entry that
+ * describes the value of \e expression, which should be C++ expression
+ * that may be written to a std::ostream, e.g. "1 + 2" or "x" (assuming x
+ * is defined). Do not include quotes around the expression when passing
+ * it to the macro. The log will also show the function, file and line number
+ * in the source code where is appears.
+ *
+ * Note the definition of this macro makes use of
+ * boost::lexical_cast, the implementation of which inserts the passed
+ * expression onto a std::ostream during the casting process. If this process
+ * of calling boost::lexical_cast results in either boost::bad_lexical_cast or
+ * std::bad_alloc being thrown, then that exception will be swallowed rather
+ * than propagated. But if any other exception is thrown during the insertion
+ * of the passed expression onto the std::ostream, then that exception will
+ * not be caught.
+ */
+
+
+/// @cond
 
 #ifdef JEWEL_ENABLE_LOGGING
 
@@ -282,6 +302,8 @@ private:
 		if (false) { (void)(severity); (void)(expression); } // Silence compiler warnings re. unused variables, and prevent them from being evaluated.
 		
 #endif  // JEWEL_ENABLE_LOGGING
+
+/// @endcond
 
 
 // INLINE FUNCTION DEFINITIONS

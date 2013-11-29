@@ -17,31 +17,85 @@
 #ifndef GUARD_decimal_exceptions_hpp_7516391215620745
 #define GUARD_decimal_exceptions_hpp_7516391215620745
 
-/** \file decimal_exceptions.hpp
- *
- * \brief Exceptions to be used with jewel::Decimal class
- */
-
 #include "exception.hpp"
 
 namespace jewel
 {
 
+/// @class jewel::DecimalException
+/// @extends jewel::Exception
+/// @cond
 JEWEL_DERIVED_EXCEPTION(DecimalException, Exception);
+/// @endcond
+
+	/// @class jewel::DecimalRangeException
+	/// @extends jewel::DecimalException
+	/// @cond
 	JEWEL_DERIVED_EXCEPTION(DecimalRangeException, DecimalException);
+	/// @endcond
+
+	/// @class jewel::DecimalAdditionException
+	/// @extends jewel::DecimalException
+	/// @cond
 	JEWEL_DERIVED_EXCEPTION(DecimalAdditionException, DecimalException);
+	/// @endcond
+
+	/// @class jewel::DecimalSubtractionException
+	/// @extends jewel::DecimalException
+	/// @cond
 	JEWEL_DERIVED_EXCEPTION(DecimalSubtractionException, DecimalException);
+	/// @endcond
+
+	/// @class jewel::DecimalMultiplicationException
+	/// @extends jewel::DecimalException
+	/// @cond
 	JEWEL_DERIVED_EXCEPTION(DecimalMultiplicationException, DecimalException);
+	/// @endcond
+
+	/// @class jewel::DecimalDivisionException
+	/// @extends jewel::DecimalException
+	/// @cond
 	JEWEL_DERIVED_EXCEPTION(DecimalDivisionException, DecimalException);
+	/// @endcond
+
+		/// @class jewel::DecimalDivisionByZeroException
+		/// @extends jewel::DecimalDivisionException
+		/// @cond
 		JEWEL_DERIVED_EXCEPTION
 		(	DecimalDivisionByZeroException,
 			DecimalDivisionException
 		);
+		/// @endcond
+
+	/// @class jewel::DecimalIncrementationException
+	/// @extends jewel::DecimalException
+	/// @cond
 	JEWEL_DERIVED_EXCEPTION(DecimalIncrementationException, DecimalException);
+	/// @endcond
+
+	/// @class jewel::DecimalDecrementationException
+	/// @extends jewel::DecimalException
+	/// @cond
 	JEWEL_DERIVED_EXCEPTION(DecimalDecrementationException, DecimalException);
+	/// @endcond
+
+	/// @class jewel::DecimalUnaryMinusException
+	/// @extends jewel::DecimalException
+	/// @cond
 	JEWEL_DERIVED_EXCEPTION(DecimalUnaryMinusException, DecimalException);
+	/// @endcond
+
+	/// @class jewel::DecimalFromStringException
+	/// @extends jewel::DecimalException
+	/// @cond
 	JEWEL_DERIVED_EXCEPTION(DecimalFromStringException, DecimalException);
+	/// @endcond
+
+	/// @class jewel::DecimalStreamReadException
+	/// @extends jewel::DecimalException
+	/// @cond
 	JEWEL_DERIVED_EXCEPTION(DecimalStreamReadException, DecimalException);
+	/// @endcond
 
 }  // namespace jewel
 

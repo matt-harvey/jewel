@@ -17,6 +17,8 @@
 #ifndef GUARD_version_hpp_3250343414605755
 #define GUARD_version_hpp_3250343414605755
 
+/// @file
+
 #include <cstddef>
 #include <ostream>
 

@@ -17,6 +17,8 @@
 #ifndef GUARD_info_hpp_6414792601212297
 #define GUARD_info_hpp_6414792601212297
 
+/// @file
+
 #include "version_fwd.hpp"
 
 namespace jewel

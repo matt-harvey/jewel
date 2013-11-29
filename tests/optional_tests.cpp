@@ -26,7 +26,7 @@ using jewel::value;
 using std::string;
 using std::vector;
 
-// @cond (to hide this from Doxygen)
+/// @cond (to hide this from Doxygen)
 
 class Dummy
 {
@@ -54,7 +54,7 @@ private:
 	string m_b;
 	vector<string> m_c;	
 };
-// @endcond
+/// @endcond
 
 TEST(value)
 {

@@ -20,6 +20,8 @@
 /** @file flag_set.hpp
  *
  * @brief Provides facilities for working with sets of boolean flags.
+ *
+ * @see jewel::InvalidFlagException
  */
 
 #include "assert.hpp"
@@ -29,11 +31,17 @@
 namespace jewel
 {
 
-/**
+/** @class jewel::InvalidFlagException
+ *
+ * @extends jewel::Exception
+ *
  * Defines an exception type to be thrown when a boolean / bit flag is
  * invalid is some context.
  */
+
+/// @cond
 JEWEL_DERIVED_EXCEPTION(InvalidFlagException, jewel::Exception);
+/// @endcond
 
 /**
  * Provides traits used in FlagSet class template. Specialize this
@@ -61,46 +69,35 @@ struct EnumTraits
  * specify that their options must be of a given instantiation
  * of FlagSet.
  *
- *
- * TEMPLATE PARAMETERS:
- *
- * \e EnumT is an enum defined in client code, in which the enumerators are
+ * @tparam EnumT is an enum defined in client code, in which the enumerators are
  * initialized with progressive powers of 2, i.e.: 1, 2, 4 etc.. Each
  * enumerator represents a boolean flag. EnumT should be a plain enum,
- * not an enum class.
+ * not an enum class.\n\n
  *
- * \e mask is an integer mask of those enumerators in EnumT that are
+ * @tparam mask is an integer mask of those enumerators in EnumT that are
  * considered relevant for this
- * instantiation of \e FlagSet. E.g. suppose \e EnumT is: \n
- *
- * <tt>
- * Enum \n
- * { \n
- * red = 1, \n
- * blue = 2, \n
- * green = 4, \n
- * orange = 8 \n
- * }; \n
- * </tt>.
- *
+ * instantiation of FlagSet. E.g. suppose \e EnumT is: \n
+ * <b><tt> enum Color { red = 1, blue = 2, green = 4, orange = 8 };</tt></b>\n
  * Then \e mask might be <em>(red | green)</em>, which
  * expresses that only red and green are relevant for this instantiation
- * of \e FlagSet.
+ * of FlagSet.\n\n
  *
- * \e default_value determines the set of flags which an instance of this
+ * @tparam default_value determines the set of flags which an instance of this
  * instantiation of FlagSet
  * will hold if it is constructed with the default constructor. This must
  * either
  * be 0, or else be some combination of the flags in EnumT such that
  * all flags are in \e mask (compilation will fail if not). If this
  * template parameter is not specified, it will default to 0, so
- * that a default-constructed instance will have no flags set.
+ * that a default-constructed instance will have no flags set.\n
  *
  * By default, the underlying integer value holding the flags is stored in
  * an <em>unsigned int</em>. An alternative underlying integral type can
- * be supplied be specializing \e EnumTraits for \e EnumT. It is the
+ * be supplied be specializing EnumTraits for \e EnumT. It is the
  * client's responsibility to ensure that this type will be sufficiently
  * large.
+ *
+ * @see jewel::InvalidFlagException
  */
 template
 <	typename EnumT,

@@ -25,25 +25,34 @@
 #include <exception>
 #include <iostream>
 
-/** @file assert.hpp
+/** @file */
+
+/** @def JEWEL_ASSERT(p)
  *
- * @brief Contains assertion macro JEWEL_ASSERT which is like the
- * standard library assert except that it calls std::terminate rather than
- * std::abort.
+ * @hideinitializer
  *
- * There is also a JEWEL_HARD_ASSERT macro, which is
- * like JEWEL_ASSERT except that it is always "on",
- * even in release builds.
+ * Behaves just like the standard library \e assert, except that it calls \e
+ * std::terminate instead of \e std::abort. Also, if
+ * \b JEWEL_ENABLE_ASSERTION_LOGGING is defined, then failure of a JEWEL_ASSERT
+ * will also cause a message to be logged via jewel::Log::log, with a severity
+ * level of Log::error, containing
+ * details of the failed assertion, e.g. source file, line number and
+ * function. Note that \b JEWEL_ENABLE_LOGGING does \e not need to be
+ * defined in order for this to take effect (but Log class must still have
+ * had filepath set via Log::set_filepath in order for logging actually to
+ * occur).
+ */
+
+/** @def JEWEL_HARD_ASSERT(false)
  *
- * If JEWEL_ENABLE_ASSERTION_LOGGING is defined, then failure of an
- * assertion via one of these macros will also cause a message
- * to be logged via jewel::Log::log, containing details of
- * the failed assertion, e.g. source file, line number and
- * function. Note that JEWEL_ENABLE_LOGGING does \e not need
- * to be defined in order for this to take effect.
+ * @hideinitializer
+ *
+ * Behaves just like JEWEL_ASSERT, except it is always "on", even if
+ * \e NDEBUG is defined. See also notes for JEWEL_ASSERT re. logging.
  */
 
 #ifdef JEWEL_ENABLE_ASSERTION_LOGGING
+/// @hideinitializer
 #	define JEWEL_LOG_ASSERTION_AUX(p) \
 		jewel::Log::log \
 		(	jewel::Log::error, \
@@ -61,7 +70,6 @@
 #	define JEWEL_LOG_ASSERTION_AUX(p) if (false) { }
 #endif  // JEWEL_ENABLE_ASSERTION_LOGGING
 
-
 #define JEWEL_HARD_ASSERT(p) \
 	if (!(p)) \
 	{ \
@@ -78,6 +86,5 @@
 #else
 #	define JEWEL_ASSERT(p) if (false) { }
 #endif  // NDEBUG
-	
 
 #endif  // GUARD_assert_hpp_3948190120956018

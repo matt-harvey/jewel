@@ -17,6 +17,7 @@
 #ifndef GUARD_capped_string_hpp_6740592125216774
 #define GUARD_capped_string_hpp_6740592125216774
 
+/// @file
 
 #include "detail/smallest_sufficient_unsigned_type.hpp"
 #include "log.hpp"
@@ -30,18 +31,17 @@
 namespace jewel
 {
 
-
-/**
- * @class CappedString.
+/** @class CappedString.
  *
  * @brief Provides for a limited length string of char that avoids heap
  * allocation.
  *
+ * @tparam N the maximum length of the string.
+ *
  * A template for string classes encapsulating a limited length string of
  * \e char, which is safer than a C-style string, more convenient than a
  * boost::array<char, N> or a std::array<char, N>, and can be copied
- * safely. The string is limited to a certain maximum length, which is
- * provided to the template parameter N.
+ * safely.
  *
  * No heap allocation is performed by CappedString. This avoids the
  * possibility of std::bad_alloc being thrown during construction or

@@ -17,6 +17,8 @@
 #ifndef GUARD_version_fwd_hpp_15573084687615318
 #define GUARD_version_fwd_hpp_15573084687615318
 
+/// @file
+
 namespace jewel
 {
 

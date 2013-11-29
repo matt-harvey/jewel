@@ -39,7 +39,10 @@ namespace jewel
 class NumDigits
 {
 public:
-	/**Counts the number of digits in a given number of integral type.
+
+	//@{
+	/**
+	 * Counts the number of digits in a given number of integral type.
 	 *
 	 * (The negative sign is not counted as a digit.)
 	 *@param x the number whose digits we want to count
@@ -47,8 +50,7 @@ public:
 	 *
 	 * Precondition: Base must be greater than 1.
 	 *
-	 * Exception safety: the <em>nothrow guarantee</em> is offered by
-	 * all the public functions in NumDigits.
+	 * Exception safety: the <em>nothrow guarantee</em>.
 	 */
 	static std::size_t num_digits(int x, int base = 10);
 	static std::size_t num_digits(short x, short base = 10);
@@ -63,6 +65,8 @@ public:
 		unsigned long long base = 10
 	);
 	static std::size_t num_digits(unsigned char x, unsigned char base = 10);
+	//@}
+
 private:
 	
 	// Constructor is private and unimplemented, to prevent this class

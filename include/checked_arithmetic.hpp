@@ -54,7 +54,7 @@
  * Exception safety: <em>nothrow guarantee</em> is offered by all compilable
  * instantiations of the function templates in this header.
  *
- * @todo LOW PRIORITY Write functions to test the safety of unary minus,
+ * @todo LOW PRIORITY Write functions that check the safety of unary minus,
  * increment and decrement.
  */
 
@@ -67,8 +67,8 @@ namespace jewel
 
 // INTERFACE
 
-/// \name Check addition, subtraction, multiplication and division
-/// operations for or overflow other unsafe conditions.
+/// @name Check addition, subtraction, multiplication and division
+/// operations for overflow or other unsafe conditions.
  //@{
 /** 
  * @returns true if and only if it is unsafe to perform the

@@ -18,7 +18,7 @@
 #define GUARD_decimal_fwd_hpp_2789620325336987
 
 
-// Contains forward declaration of Decimal class.
+/// @file
 
 namespace jewel
 {
