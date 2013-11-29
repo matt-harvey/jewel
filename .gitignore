@@ -1,0 +1,11 @@
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+decimal_speed_trial
+html/
+install_manifest.txt
+libjewel.a
+test.log
+test_driver
+tmp
