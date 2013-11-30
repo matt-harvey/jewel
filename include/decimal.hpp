@@ -43,24 +43,18 @@ namespace jewel
 
 /**
  * @class Decimal
- * @brief A "constrained floating point" decimal number class.
+ * @brief A floating point decimal number class, with a somewhat limited
+ * range, suited to use in accounting and financial applications.
  *
- * Each number is represented as an integer (of int_type), and a number of
- * decimal places (of places_type).
+ * Each number is represented as an integer (of jewel::Decimal::int_type), and a
+ * number of decimal places (of jewel::Decimal::places_type).
  *
  * The number of decimal places can be changed at runtime. As such this is a
- * floating point class. However the range of magnitudes is deliberately
- * restricted.
+ * floating rather than fixed point arithmetic type. However the range of
+ * magnitudes is quite restricted compared to e.g. \e double.
  *
- * @todo LOW PRIORITY
- * I think I should change places_type to a signed and then just do
- * away with arbitrary restrictions. This would free me up a bit w.r.t.
- * the implementation of multiplication and division. Although it would
- * complicate output and input. I would also need to change things
- * everywhere where it relies on m_places always being positive.
- *
- * There are two concepts of precision in regards to this Decimal class. The
- * \e total \e precision of an instance of this class is the total number of
+ * There are two concepts of precision for this Decimal class. The
+ * <em>total precision</em> of an instance of this class is the total number of
  * decimal digits, to either the left or the right of the decimal point,
  * stored in the instance. The \e fractional \e precision is the number of
  * digits stored to the right of the decimal point, i.e. the number of
