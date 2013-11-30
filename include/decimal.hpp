@@ -36,6 +36,7 @@
 #include <ostream>
 #include <sstream>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 namespace jewel
@@ -193,10 +194,9 @@ public:
 
 	/** Constructs a Decimal from a string.
 	 *
-	 * <em>This is only known to work with std::string and std::wstring.</em>
-	 *
-	 * @param str is the string representation of a Decimal
-	 * number.
+	 * @param str is the string representation of a Decimal number. Must
+	 * be either a \e std::string or a \e std::wstring, or else
+	 * compilation will fail.
 	 *
 	 * Currently str must be a non-empty series of digits
 	 * between 0 and 9 inclusive, possibly preceded by a minus
@@ -837,6 +837,13 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	m_places(0),
 	m_intval(0)
 {
+	static_assert
+	(	std::is_same<decltype(str), std::string const&>::value ||
+		std::is_same<decltype(str), std::wstring const&>::value,
+		"Decimal constructor expected either std::string or std::wstring, but "
+		"received some other type."
+	);
+
 	typedef typename std::basic_string<charT> stringT;
 	typedef typename stringT::size_type sz_t;
 
