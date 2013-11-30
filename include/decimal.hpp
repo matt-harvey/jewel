@@ -63,7 +63,14 @@ namespace jewel
  *
  * The maximum total precision of any given Decimal is equal to the number
  * of decimal digits in the largest possible Decimal. This
- * number is implementation-dependent, and is the number returned by
+ * number is implementation-dependent, and is the number  * @todo LOW PRIORITY
+ * I think I should change places_type to a signed and then just do
+ * away with arbitrary restrictions. This would free me up a bit w.r.t.
+ * the implementation of multiplication and division. Although it would
+ * complicate output and input. I would also need to change things
+ * everywhere where it relies on m_places always being positive.
+ *
+returned by
  * Decimal::maximum_precision().
  * Regardless of any of the behaviour
  * outlined below, the total precision of a Decimal will never exceed this
@@ -140,7 +147,6 @@ namespace jewel
  * actually referring to the Decimal::s_rounding_threshold constant to achieve
  * this. This is a kind of code repetition and so is bad.
  */
-
 class Decimal
 {
 public:
@@ -195,16 +201,16 @@ public:
 	/** Constructs a Decimal from a string.
 	 *
 	 * @param str is the string representation of a Decimal number. Must
-	 * be either a \e std::string or a \e std::wstring, or else
-	 * compilation will fail.
+	 * be either a <em>std::string const&</em> or a
+	 * <em>std::wstring const&</em>, or else compilation will fail.
 	 *
 	 * Currently str must be a non-empty series of digits
 	 * between 0 and 9 inclusive, possibly preceded by a minus
 	 * sign, possibly followed by a decimal point character, possibly
 	 * followed by further digits between 0 and 9 inclusive. There must be
 	 * at least one digit in the string. The spot character is
-	 * determined by the current global std::locale (whatever std::locale
-	 * is created by the default constructor for std::locale). It could be
+	 * determined by the current global \e std::locale (whatever \e std::locale
+	 * is created by the default constructor for \e std::locale). It could be
 	 * be ".", "," or some other character - whatever represents a
 	 * decimal point in that locale.
 	 *
@@ -837,11 +843,16 @@ Decimal::Decimal(std::basic_string<charT, traits, Alloc> const& str):
 	m_places(0),
 	m_intval(0)
 {
+	// NOTE In regards to the restriction enforced by this static_assert,
+	// the ONLY reason this restriction is in place is that types other
+	// than std::string and std::wstring are UNTESTED. It may well be
+	// that the ONLY action required to make this work perfectly well with other
+	// types is to get rid of the static_assert.
 	static_assert
 	(	std::is_same<decltype(str), std::string const&>::value ||
 		std::is_same<decltype(str), std::wstring const&>::value,
-		"Decimal constructor expected either std::string or std::wstring, but "
-		"received some other type."
+		"Decimal constructor expected either std::string const& or "
+		"std::wstring const&, but received some other type."
 	);
 
 	typedef typename std::basic_string<charT> stringT;
