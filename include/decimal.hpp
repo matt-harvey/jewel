@@ -63,16 +63,8 @@ namespace jewel
  *
  * The maximum total precision of any given Decimal is equal to the number
  * of decimal digits in the largest possible Decimal. This
- * number is implementation-dependent, and is the number  * @todo LOW PRIORITY
- * I think I should change places_type to a signed and then just do
- * away with arbitrary restrictions. This would free me up a bit w.r.t.
- * the implementation of multiplication and division. Although it would
- * complicate output and input. I would also need to change things
- * everywhere where it relies on m_places always being positive.
- *
-returned by
- * Decimal::maximum_precision().
- * Regardless of any of the behaviour
+ * number is implementation-dependent, and is the number returned by
+ * Decimal::maximum_precision(). Regardless of any of the behaviour
  * outlined below, the total precision of a Decimal will never exceed this
  * level. Note we cannot end up with a number that has more than this many
  * digits in its whole part, even if all but one of these digits are zero.
