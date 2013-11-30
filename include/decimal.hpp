@@ -54,16 +54,16 @@ namespace jewel
  * magnitudes is quite restricted compared to e.g. \e double.
  *
  * There are two concepts of precision for this Decimal class. The
- * <em>total precision</em> of an instance of this class is the total number of
+ * <em>total precision</em> of a Decimal is the total number of
  * decimal digits, to either the left or the right of the decimal point,
- * stored in the instance. The \e fractional \e precision is the number of
+ * stored in the instance. The <em>fractional precision</em> is the number of
  * digits stored to the right of the decimal point, i.e. the number of
  * digits in the fractional part.
  *
  * The maximum total precision of any given Decimal is equal to the number
  * of decimal digits in the largest possible Decimal. This
- * number is implementation dependent, and is the number returned by the
- * Decimal::maximum_precision() static function.
+ * number is implementation-dependent, and is the number returned by
+ * Decimal::maximum_precision().
  * Regardless of any of the behaviour
  * outlined below, the total precision of a Decimal will never exceed this
  * level. Note we cannot end up with a number that has more than this many
@@ -126,7 +126,7 @@ namespace jewel
  * But it doesn't support Boost.Locale. If the client uses Boost.Locale
  * instead of the standard library facilities, Decimal will
  * not do any formatting. Considering that
- * Boost.Locale _seems_ to be necessary to get things working on Windows
+ * Boost.Locale \e seems to be necessary to get things working on Windows
  * properly, do I want to provide support for Boost.Locale in
  * jewel::Decimal?
  *
