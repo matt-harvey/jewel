@@ -1,4 +1,6 @@
-****************************************************************************
+Copying
+=======
+
 Copyright 2013 Matthew Harvey
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,9 +14,9 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-****************************************************************************
 
-*** OVERVIEW ***
+Overview
+========
 
 Jewel is software library written in standard C++, using C++11 features,
 containing classes, functions and macros which may be useful in a variety of
@@ -24,18 +26,18 @@ released in the hope that it will be useful to others.
 
 Some (but not all) of the facilities contained in the Jewel library are:
 
-	Assertion macros;
-	A static string class template;
-	Functions for testing the safety of arithmetic operations;
-	A decimal number class;
-	A general base exception class;
-	A macro for succinctly creating further exception classes;
-	A class template for managing sets of boolean flags;
-	Logging facilities; and
-	A very simple stopwatch.
+	- Assertion macros
+	- A static string class template
+	- Functions for testing the safety of arithmetic operations
+	- A decimal number class
+	- A general base exception class
+	- A macro for succinctly creating further exception classes
+	- A class template for managing sets of boolean flags
+	- Logging facilities
+	- A very simple stopwatch
 
-
-*** DEPENDENCIES ***
+Dependencies
+============
 
 Jewel is written in standard C++, and utilizes some C++11 features.
 To build and install the library, you will need:
@@ -47,12 +49,12 @@ To build and install the library, you will need:
 	- CMake (version 2.8 or later)
 
 	- The following headers from the Boost C++ libraries (compiled Boost
-	  binaries are not required) (version 1.53.0 or later)
+	  binaries are not required) (version 1.53.0 or later)::
 		
-		- <boost/algorithm/string.hpp>
-		- <boost/numeric/conversion/cast.hpp>
-		- <boost/lexical_cast.hpp>
-		- <boost/optional.hpp>
+		<boost/algorithm/string.hpp>
+		<boost/numeric/conversion/cast.hpp>
+		<boost/lexical_cast.hpp>
+		<boost/optional.hpp>
 	
 	- UnitTest++ (known to work with version 1.4)
 
@@ -63,53 +65,54 @@ To build the API documentation, you will need:
 At the time of writing, these dependencies can be obtained from the following
 locations:
 	
-	CMake: 		http://www.cmake.org
-	Boost:		http://www.boost.org
-	UnitTest++:	http://unittest-cpp.sourceforge.net
-	Doxygen:	http://www.stack.nl/~dimitri/doxygen
+	:CMake: 		http://www.cmake.org
+	:Boost:		http://www.boost.org
+	:UnitTest++:	http://unittest-cpp.sourceforge.net
+	:Doxygen:	http://www.stack.nl/~dimitri/doxygen
 
 
+How to build, test and install
+==============================
 
-*** HOW TO BUILD, TEST AND INSTALL THE LIBRARY ***
-
-
-STEP 1. INITIAL BUILD CONFIGURATION
+Step 1. Initial build configuration
+-----------------------------------
 
 Open a command line and "cd" to the project root.
 
-On Unix-like systems, enter:
+On Unix-like systems, enter::
 
 	cmake -i
 
-(On Windows, you will need to use the -G option to choose a Makefile
-generator, or else run "cmake-gui.exe .". See CMake documentation for further
+(On Windows, you will need to use the ``-G`` option to choose a Makefile
+generator, or else run ``cmake-gui.exe .``. See CMake documentation for further
 details.)
 
-You will be prompted with "Would you like to see the advanced options? [No]:".
-Answer "n". Then follow the prompts.
+You will be prompted with ``Would you like to see the advanced options? [No]:``.
+Enter ``n``. Then follow the prompts.
 
 (If you run into trouble with the build or have atypical requirements, you can
-return to this step and answer "y" to configure more detailed build options.)
+return to this step and answer ``y`` to configure more detailed build options.)
 
 If in doubt about a particular option, it is generally best simply to hit enter
 and keep the default setting for the option.
 
-Note the options ENABLE_ASSERTION_LOGGING and ENABLE_EXCEPTION_LOGGING. These
-determine whether the JEWEL_ENABLE_ASSERTION_LOGGING and
-JEWEL_ENABLE_EXCEPTION_LOGGING macros will be defined within the compiled
+Note the options ``ENABLE_ASSERTION_LOGGING`` and ``ENABLE_EXCEPTION_LOGGING``.
+These determine whether the ``JEWEL_ENABLE_ASSERTION_LOGGING`` and
+``JEWEL_ENABLE_EXCEPTION_LOGGING`` macros will be defined within the compiled
 Jewel library itself (regardless of whether they are defined in client code).
-If in doubt, it is recommended to leave these logging options ON.
+If in doubt, it is recommended to leave these logging options ``ON``.
 (For more information on the significance of these macros, see the documentation
 for jewel::Log.)
 
 
-STEP 2. BUILD, TEST AND INSTALL
+Step 2. Build, test and install
+-------------------------------
 
-At the project root, enter:
+At the project root, enter::
 	
 	make install
 
-If on a Unix-like system, you may need to run this as root, i.e.:
+If on a Unix-like system, you may need to run this as root, i.e.::
 
 	sudo make install
 
@@ -127,16 +130,17 @@ project root), and the details of your system and build environment. (See
 "CONTACT" below for contact details.)
 
 
-*** DOCUMENTATION ***
+Documentation
+=============
 
 If you have Doxygen installed and want to generate the API documentation, then
-enter the following at the project root:
+enter the following at the project root::
 
 	make docs
 
 HTML documentation will then be generated in the project root directory,
 under "html", and can be browsed by opening the following file in your
-web browser:
+web browser::
 
 	[project root]/html/index.html
 
@@ -145,11 +149,13 @@ C++ headers; so an alternative source of information on the Jewel API, is
 simply to examine the headers directly.
 
 
-*** OTHER BUILD TARGETS ***
+Other build targets
+===================
 
-TO CLEAN BUILD TARGETS
+To clean build
+--------------
 
-Go to the project root and enter:
+Go to the project root and enter::
 	
 	make clean
 
@@ -162,16 +168,18 @@ project root.
 Note this will NOT cause the library to be uninstalled from the host system.
 
 
-TO BUILD THE LIBRARY WITHOUT INSTALLING OR TESTING
+To build without installing or testing
+--------------------------------------
 
-At the project root, enter:
+At the project root, enter::
 
 	make jewel
 
 
-TO BUILD AND RUN THE TEST SUITE WITHOUT INSTALLING
+To build and run the test suite without installing
+--------------------------------------------------
 
-At the project root, enter:
+At the project root, enter::
 
 	make test
 
@@ -184,11 +192,12 @@ project root), and the details of your system and build environment. (See
 below for contact details.)
 
 
-TO BUILD A SOURCE PACKAGE FOR DISTRIBUTION
+To build a source package for distribution
+------------------------------------------
 
 If you are running a Unix-like system, and have a "tar" program installed,
 you can build a tarball of the library sources by entering the following
-at the project root:
+at the project root::
 	
 	make package
 
@@ -200,28 +209,30 @@ and run, prior to the package being built. The package will not be built unless
 all the tests pass.
 
 
-TO BUILD AND RUN THE DECIMAL SPEED TRIAL
+To build and run the Decimal speed trial
+----------------------------------------
 
 A "Decimal speed trial" executable can be built which, when run, will
 execute a large number of arithmethic operations using the Decimal class
 provided by the library. The results of measuring the CPU time taken by these
-operations are then output to the console. To build this executable, enter
+operations are then output to the console. To build this executable, enter::
 
 	make decimal_speed_trial
 
-To run the trial, on a Unix-like system, enter
+To run the trial, on a Unix-like system, enter::
 
 	./decimal_speed_trial
 
-or on Windows, enter:
+or on Windows, enter::
 
 	.\decimal_speed_trial.exe
 
 
-TO BUILD MULTIPLE TARGETS IN ONE GO
+To build multiple targets in one go
+-----------------------------------
 
 To build the library, build the tests, run the tests, and build the
-Decimal speed trial with one command, go to the project root, and enter:
+Decimal speed trial with one command, go to the project root, and enter::
 
 	make
 
@@ -230,16 +241,18 @@ will NOT build a source tarball. Also it will NOT run decimal_speed_trial, but
 will only build the executable.
 
 
-*** TOOLS ***
+Tools
+=====
 
 The source distribution comes with a "tools" directory, containing one
 or more standalone scripts which may be useful in connection with the library.
 These are not part of the "core library", are not required in order to use the
 library, and will NOT be installed by "make install". (Library users can
 install these if desired simply by copying them to a location in their
-PATH.) The documentation on each script is contained in the script file itself.
+```PATH```.) The documentation on each script is contained in the script file itself.
 
 
-*** CONTACT ***
+Contact
+=======
 
 jewel@matthewharvey.net
