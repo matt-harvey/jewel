@@ -65,10 +65,10 @@ To build the API documentation, you will need:
 At the time of writing, these dependencies can be obtained from the following
 locations:
 	
-:CMake: 		http://www.cmake.org
-:Boost:		http://www.boost.org
+:CMake: 	    http://www.cmake.org
+:Boost:		    http://www.boost.org
 :UnitTest++:	http://unittest-cpp.sourceforge.net
-:Doxygen:	http://www.stack.nl/~dimitri/doxygen
+:Doxygen:	    http://www.stack.nl/~dimitri/doxygen
 
 
 How to build, test and install
@@ -127,7 +127,7 @@ project root.
 If any tests fail, you are strongly encouraged to send the library developer
 your test output, along with the file "test.log" (which should appear in the
 project root), and the details of your system and build environment. (See
-"CONTACT" below for contact details.)
+Contact_ for contact details.)
 
 
 Documentation
