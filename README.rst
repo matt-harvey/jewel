@@ -26,15 +26,15 @@ released in the hope that it will be useful to others.
 
 Some (but not all) of the facilities contained in the Jewel library are:
 
-	- Assertion macros
-	- A static string class template
-	- Functions for testing the safety of arithmetic operations
-	- A decimal number class
-	- A general base exception class
-	- A macro for succinctly creating further exception classes
-	- A class template for managing sets of boolean flags
-	- Logging facilities
-	- A very simple stopwatch
+- Assertion macros
+- A static string class template
+- Functions for testing the safety of arithmetic operations
+- A decimal number class
+- A general base exception class
+- A macro for succinctly creating further exception classes
+- A class template for managing sets of boolean flags
+- Logging facilities
+- A very simple stopwatch
 
 Dependencies
 ============
@@ -42,33 +42,33 @@ Dependencies
 Jewel is written in standard C++, and utilizes some C++11 features.
 To build and install the library, you will need:
 
-	- A reasonably conformant C++ compiler and standard library implementation
-	  (Jewel has been successfully built with GCC 4.6.1 and with later
-	  versions; it has not been tested with other compilers)
+- A reasonably conformant C++ compiler and standard library implementation
+  (Jewel has been successfully built with GCC 4.6.1 and with later
+  versions; it has not been tested with other compilers)
 
-	- CMake (version 2.8 or later)
+- CMake (version 2.8 or later)
 
-	- The following headers from the Boost C++ libraries (compiled Boost
-	  binaries are not required) (version 1.53.0 or later)::
-		
-		<boost/algorithm/string.hpp>
-		<boost/numeric/conversion/cast.hpp>
-		<boost/lexical_cast.hpp>
-		<boost/optional.hpp>
-	
-	- UnitTest++ (known to work with version 1.4)
+- The following headers from the Boost C++ libraries (compiled Boost
+  binaries are not required) (version 1.53.0 or later)::
+    
+    <boost/algorithm/string.hpp>
+    <boost/numeric/conversion/cast.hpp>
+    <boost/lexical_cast.hpp>
+    <boost/optional.hpp>
+
+- UnitTest++ (known to work with version 1.4)
 
 To build the API documentation, you will need:
 
-	- Doxygen (known to work with version 1.8.3.1)
+- Doxygen (known to work with version 1.8.3.1)
 
 At the time of writing, these dependencies can be obtained from the following
 locations:
 	
-	:CMake: 		http://www.cmake.org
-	:Boost:		http://www.boost.org
-	:UnitTest++:	http://unittest-cpp.sourceforge.net
-	:Doxygen:	http://www.stack.nl/~dimitri/doxygen
+:CMake: 		http://www.cmake.org
+:Boost:		http://www.boost.org
+:UnitTest++:	http://unittest-cpp.sourceforge.net
+:Doxygen:	http://www.stack.nl/~dimitri/doxygen
 
 
 How to build, test and install
@@ -249,7 +249,8 @@ or more standalone scripts which may be useful in connection with the library.
 These are not part of the "core library", are not required in order to use the
 library, and will NOT be installed by "make install". (Library users can
 install these if desired simply by copying them to a location in their
-```PATH```.) The documentation on each script is contained in the script file itself.
+```PATH```.) The documentation on each script is contained in the script file
+itself.
 
 
 Contact
