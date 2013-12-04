@@ -71,11 +71,8 @@ locations:
 :Doxygen:	    http://www.stack.nl/~dimitri/doxygen
 
 
-How to build, test and install
-==============================
-
-Step 1. Initial build configuration
------------------------------------
+Initial build configuration
+===========================
 
 Open a command line and "cd" to the project root.
 
@@ -105,8 +102,8 @@ If in doubt, it is recommended to leave these logging options ``ON``.
 for jewel::Log.)
 
 
-Step 2. Build, test and install
--------------------------------
+To build, test and install in one go
+====================================
 
 At the project root, enter::
 	
@@ -120,9 +117,12 @@ This will cause the library and tests to be built (if not built already), and
 will cause the tests to be run, with the results output to the console.
 
 If and only if all the tests succeed, installation of the library and headers
-will then proceed. For your information, a list of
-the installed files will be saved in the file "install_manifest.txt", in the
-project root.
+will then proceed.
+
+A list of the installed files will be saved in the
+file "install_manifest.txt", in the project root. As there is no
+"uninstall" target, this may be helpful in future for locating files to be
+removed manually should you ever wish to uninstall the library.
 
 If any tests fail, you are strongly encouraged to send the library developer
 your test output, along with the file "test.log" (which should appear in the
@@ -130,8 +130,19 @@ project root), and the details of your system and build environment. (See
 Contact_ for contact details.)
 
 
-Documentation
-=============
+To uninstall
+============
+
+There is no "make uninstall" target. However, it is straightforward to
+uninstall the library manually. Locate the
+file "install_manifest.txt" file that was created in the project directory
+during installation.
+This lists the files that were created during installation. Uninstalling the
+library is a matter of removing these files.
+
+
+To generate the documentation
+=============================
 
 If you have Doxygen installed and want to generate the API documentation, then
 enter the following at the project root::
@@ -189,7 +200,7 @@ and the results displayed.
 If any tests fail, you are strongly encouraged to send the library developer
 your test output, along with the file "test.log" (which should appear in the
 project root), and the details of your system and build environment. (See
-below for contact details.)
+Contact_ for contact details.)
 
 
 To build a source package for distribution
