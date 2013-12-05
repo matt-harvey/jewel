@@ -247,9 +247,9 @@ Decimal speed trial with one command, go to the project root, and enter::
 
 	make
 
-Note this will NOT install the library, will NOT generate the documentation and
-will NOT build a source tarball. Also it will NOT run decimal_speed_trial, but
-will only build the executable.
+Note this will *not* install the library, will *not* generate the documentation
+and will *not* build a source tarball. Also it will *not* run
+``decimal_speed_trial``, but will only build the executable.
 
 
 Tools
