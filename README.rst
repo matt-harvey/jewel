@@ -150,7 +150,7 @@ enter the following at the project root::
 	make docs
 
 HTML documentation will then be generated in the project root directory,
-under "html", and can be browsed by opening the following file in your
+under ``html``, and can be browsed by opening the following file in your
 web browser::
 
 	[project root]/html/index.html
@@ -171,12 +171,12 @@ Go to the project root and enter::
 	make clean
 
 This will clean all build targets from the project root, including
-the source tarball (see below) if present, but NOT including the
+the source tarball (see below) if present, but *not* including the
 HTML documentation. This is due to a quirk of CMake. To remove the
-HTML documentation, simply manually delete the "html" directory from the
+HTML documentation, simply manually delete the ``html`` directory from the
 project root.
 
-Note this will NOT cause the library to be uninstalled from the host system.
+Note this will *not* cause the library to be uninstalled from the host system.
 
 
 To build without installing or testing
@@ -258,7 +258,7 @@ Tools
 The source distribution comes with a "tools" directory, containing one
 or more standalone scripts which may be useful in connection with the library.
 These are not part of the "core library", are not required in order to use the
-library, and will NOT be installed by "make install". (Library users can
+library, and will *not* be installed by "make install". (Library users can
 install these if desired simply by copying them to a location in their
 ```PATH```.) The documentation on each script is contained in the script file
 itself.
