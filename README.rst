@@ -215,9 +215,9 @@ at the project root::
 The tarball will appear in the project root directory, and will overwrite any
 existing tarball with the same name.
 
-As a safety measure, running "make package" always causes the tests to be built
-and run, prior to the package being built. The package will not be built unless
-all the tests pass.
+As a safety measure, running ``make package`` always causes the tests to be
+built and run, prior to the package being built. The package will not be built
+unless all the tests pass.
 
 
 To build and run the Decimal speed trial
