@@ -446,15 +446,6 @@ public:
 	/**
 	 * Less-than operator. Compares Decimals by value.
 	 *
-	 * In virtue of operator<(Decimal) and operator==(Decimal) being defined,
-	 * the following operators are also defined (through the magic of
-	 * Boost): \n
-	 * \b operator>(Decimal) \b const \n
-	 * \b operator<=(Decimal) \b const \n
-	 * \b operator>=(Decimal) \b const \n
-	 *
-	 * These all behave as you would expect.
-	 *
 	 * Exception safety: <em>nothrow guarantee</em>.
 	 */
 	bool operator<(Decimal) const;
@@ -709,41 +700,62 @@ std::basic_istream<charT, traits>&
 operator>>(std::basic_istream<charT, traits>&, Decimal&);
 
 /**
+ * @relates Decimal
+ *
  * Behaves as would be expected given the behaviour of operator+=, and
  * throws under the same circumstances.
  */
 Decimal const operator+(Decimal lhs, Decimal const& rhs);
 
 /**
+ * @relates Decimal
+ *
  * Behaves as would be expected given the behaviour of operator-=, and
  * throws under the same circumstances.
  */
 Decimal const operator-(Decimal lhs, Decimal const& rhs);
 
 /**
+ * @relates Decimal
+ *
  * Behaves as would be expected given the behaviour of operator*=, and
  * throws under the same circumstances.
  */
 Decimal const operator*(Decimal lhs, Decimal const& rhs);
 
 /**
+ * @relates Decimal
+ *
  * Behaves as would be expected given the behaviour of operator/=, and
  * throws under the same circumstances.
  */
 Decimal const operator/(Decimal lhs, Decimal const& rhs);
 
 /**
+ * @relates Decimal
+ *
  * Behaves as would be expected given the behaviour of operator==.
  */
 bool operator!=(Decimal const& lhs, Decimal const& rhs);
 
 /**
+ * @relates Decimal
+ *
  * Behaves as would be expected given the behaviour of operator< and
  * of operator==.
  */
 bool operator<=(Decimal const& lhs, Decimal const& rhs);
 
 /**
+ * @relates Decimal
+ *
+ * Behaves as would be expected given the behaviour of operator<.
+ */
+bool operator>(Decimal const& lhs, Decimal const& rhs);
+
+/**
+ * @relates Decimal
+ *
  * Behaves as would be expected given the behaviour of operator> and
  * of operator==.
  */
