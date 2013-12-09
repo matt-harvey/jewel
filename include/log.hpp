@@ -101,7 +101,8 @@ namespace jewel
  *
  * @todo MEDIUM PRIORITY Provide a way to direct logging to standard output
  * streams without sacrificing exception safety and without complicating the
- * API too much.
+ * API too much. Note on Unix-like systems the client can pass "/dev/tty" to
+ * set_filepath(). Is there an equivalent on Windows?
  *
  * @todo MEDIUM PRIORITY Write unit tests for this.
  */
