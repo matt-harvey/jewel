@@ -54,7 +54,7 @@
  * Exception safety: <em>nothrow guarantee</em> is offered by all compilable
  * instantiations of the function templates in this header.
  *
- * TODO LOW PRIORITY Write functions that check the safety of unary minus,
+ * @todo LOW PRIORITY Write functions that check the safety of unary minus,
  * increment and decrement.
  */
 

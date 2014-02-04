@@ -187,7 +187,7 @@ private:
  * flushed. The user of this function should flush the stream manually after
  * calling this function if they want to make sure it is flushed.
  *
- * TODO MEDIUM PRIORITY Write a test for this.
+ * @todo MEDIUM PRIORITY Write a test for this.
  */
 template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
