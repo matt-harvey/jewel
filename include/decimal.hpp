@@ -94,7 +94,7 @@ namespace jewel
  * precision as possible. So "1/3" will result in "0.333...." with as many
  * trailing '3's as are permitted by the implementation.
  *
- * @todo LOW PRIORITY
+ * TODO LOW PRIORITY
  * Multiplication and division throw exceptions in some cases where
  * they should be able to calculate an answer. I have documented these
  * behaviours in the API docs. I don't believe this is a \e very serious
@@ -112,7 +112,7 @@ namespace jewel
  * "messy" situation until there's a clear need to reimplement things
  * in light of actual use cases.
  *
- * @todo LOW PRIORITY
+ * TODO LOW PRIORITY
  * Make it work as expected with standard library stream precision
  * manipulators and formatting. Create a function that takes a string
  * representation of a number, and the set of all the formatting flags
@@ -121,7 +121,7 @@ namespace jewel
  * I should probably define this in a separate file. Note this is different
  * from the internationalization task which is separately noted.
  *
- * @todo MEDIUM PRIORITY
+ * TODO MEDIUM PRIORITY
  * Internationalized output is working using the std::numpunct facilities.
  * But it doesn't support Boost.Locale. If the client uses Boost.Locale
  * instead of the standard library facilities, Decimal will
@@ -130,10 +130,10 @@ namespace jewel
  * properly, do I want to provide support for Boost.Locale in
  * jewel::Decimal?
  *
- * @todo MEDIUM PRIORITY
+ * TODO MEDIUM PRIORITY
  * Support internationalization of input.
  *
- * @todo LOW PRIORITY
+ * TODO LOW PRIORITY
  * Division now incorporates rounding but: (a) it is a bit inefficient;
  * and (b) it contains a "hard-wired" behaviour of rounding up at 5, while not
  * actually referring to the Decimal::s_rounding_threshold constant to achieve

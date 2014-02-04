@@ -60,11 +60,11 @@ namespace jewel
  * null-terminate its internal char array, even if it is truncated
  * relative to the original string.)
  *
- * @todo LOW PRIORITY Allow a CappedString<N> to be initialized and/or copied
+ * TODO LOW PRIORITY Allow a CappedString<N> to be initialized and/or copied
  * from a CappedString<M> where M != N. We might also allow two such strings
  * to be compared.
  *
- * @todo LOW PRIORITY implement at().
+ * TODO LOW PRIORITY implement at().
  */
 template <std::size_t N>
 class CappedString
