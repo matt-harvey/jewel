@@ -31,38 +31,36 @@
 namespace jewel
 {
 
-/** @class CappedString.
- *
+/**
  * @brief Provides for a limited length string of char that avoids heap
  * allocation.
  *
  * @tparam N the maximum length of the string.
  *
  * A template for string classes encapsulating a limited length string of
- * \e char, which is safer than a C-style string, more convenient than a
- * boost::array<char, N> or a std::array<char, N>, and can be copied
- * safely.
+ * \b char, which is safer than a C-style string, more convenient than a
+ * <b>boost::array<char, N></b> or a <b>std::array<char, N></b>, and can be
+ * copied safely.
  *
- * No heap allocation is performed by CappedString. This avoids the
- * possibility of std::bad_alloc being thrown during construction or
- * copying. This allows most or all member functions to offer the
- * no-throw guarantee (see documentation of individual functions to confirm
- * specific exception guarantees). Thus CappedString may be preferred over
- * std::string in situations where the no-throw guarantee is important, and
- * where there is reasonable upper limit to the size of the string
- * (and this limit is not so large as to risk blowing the stack).
+ * No heap allocation is performed by CappedString. This avoids the possibility
+ * of <b>std::bad_alloc</b> being thrown during construction or copying. This
+ * allows most or all member functions to offer the no-throw guarantee (see
+ * documentation of individual functions to confirm specific exception
+ * guarantees). Thus CappedString may be preferred over std::string in
+ * situations where the no-throw guarantee is important, and where there is
+ * reasonable upper limit to the size of the string (and this limit is not so
+ * large as to risk blowing the stack).
  *
- * If an attempt is made to initialize a CappedString<N> from a built-in
+ * If an attempt is made to initialize a <b>CappedString<N></b> from a built-in
  * string or std::string that exceeds N in length, then the resulting
- * CappedString will be truncated relative to that original string.
- * You can tell whether a CappedString is thus truncated by calling its
- * \e is_truncated() member. (Internally, CappedString will always
- * null-terminate its internal char array, even if it is truncated
- * relative to the original string.)
+ * CappedString will be truncated relative to that original string. You can
+ * tell whether a CappedString is thus truncated by calling its is_truncated()
+ * member.  (Internally, CappedString will always null-terminate its internal
+ * char array, even if it is truncated relative to the original string.)
  *
  * @todo LOW PRIORITY Allow a CappedString<N> to be initialized and/or copied
- * from a CappedString<M> where M != N. We might also allow two such strings
- * to be compared.
+ * from a CappedString<M> where M != N. We might also allow two such strings to
+ * be compared.
  *
  * @todo LOW PRIORITY implement at().
  */

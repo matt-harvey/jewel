@@ -17,9 +17,9 @@
 #ifndef GUARD_stopwatch_hpp_021388252275711044
 #define GUARD_stopwatch_hpp_021388252275711044
 
-/** \file stopwatch.hpp
+/** @file
  *
- * \brief Stopwatch class for timing intervals
+ * @brief Stopwatch class for timing intervals
  */
 
 #include <ctime>

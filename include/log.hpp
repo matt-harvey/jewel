@@ -17,7 +17,7 @@
 #ifndef GUARD_log_hpp_778298908902
 #define GUARD_log_hpp_778298908902
 
-/** @file log.hpp
+/** @file
  *
  * @brief Logging facilities
  */

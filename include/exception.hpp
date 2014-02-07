@@ -26,7 +26,7 @@
 #include <stdexcept>
 #include <utility>
 
-/** @file exception.hpp
+/** @file
  *
  * @brief Exception related utilities.
  */

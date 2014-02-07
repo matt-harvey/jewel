@@ -17,10 +17,12 @@
 #ifndef GUARD_checked_arithmetic_hpp_7987160937854629
 #define GUARD_checked_arithmetic_hpp_7987160937854629
 
-/** \file checked_arithmetic.hpp
+/** @file
  *
- * \brief Provides functions that check the safety of arithmetic
- * operations. In the case of signed arithmetic, we are checking
+ * @brief Provides functions that check the safety of arithmetic
+ * operations.
+ *
+ * In the case of signed arithmetic, we are checking
  * for overflow; in the case of unsigned arithmetic, we are
  * checking for wrap-around. In the case of division and remainder
  * operations, we are also checking for divide-by-zero.

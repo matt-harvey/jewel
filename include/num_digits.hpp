@@ -17,9 +17,9 @@
 #ifndef GUARD_num_digits_hpp_48970041167442707
 #define GUARD_num_digits_hpp_48970041167442707
 
-/** \file num_digits.hpp
+/** @file
  *
- * \brief Facility to count the number of digits in a number of integral type 
+ * @brief Facility to count the number of digits in a number of integral type 
  */
 
 
@@ -29,8 +29,8 @@
 namespace jewel
 {
 
-/**\class NumDigits
- * \brief Wrapper class for static num_digits function.
+/**
+ * @brief Wrapper class for static num_digits function.
  *
  * Only the parameter types specifically provided for in the overloads can be
  * passed to the num_digits function. Passing other types will cause

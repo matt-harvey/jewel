@@ -17,7 +17,7 @@
 #ifndef GUARD_decimal_hpp_0809249049429432
 #define GUARD_decimal_hpp_0809249049429432
 
-/** @file decimal.hpp
+/** @file
  *
  * @brief Decimal number class 
  *
@@ -43,7 +43,6 @@ namespace jewel
 {
 
 /**
- * @class Decimal
  * @brief A floating point decimal number class, with a somewhat limited
  * range, suited to use in accounting and financial applications.
  *

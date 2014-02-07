@@ -17,9 +17,9 @@
 #ifndef GUARD_checked_arithmetic_detail_hpp_8232921365756971
 #define GUARD_checked_arithmetic_detail_hpp_8232921365756971
 
-/** \file checked_arithmetic_detail.hpp
+/** @file
  *
- * \brief Provides implementations of functions that check the
+ * @brief Provides implementations of functions that check the
  * safety of arithmetic operations.
  *
  * This file provides implementation detail for the non-member functions in
@@ -41,8 +41,7 @@ namespace detail
 {
 
 /**
- * \class CheckedArithmetic
- * \brief Provides static functions that implement checking
+ * @brief Provides static functions that implement checking
  * the safety of arithmetic operations.
  *
  * CheckedArithmetic and its static member functions should

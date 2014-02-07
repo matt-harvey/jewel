@@ -17,7 +17,7 @@
 #ifndef GUARD_flag_set_hpp_4153674614687299
 #define GUARD_flag_set_hpp_4153674614687299
 
-/** @file flag_set.hpp
+/** @file
  *
  * @brief Provides facilities for working with sets of boolean flags.
  *
