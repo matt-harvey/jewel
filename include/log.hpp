@@ -148,7 +148,7 @@ public:
 	/**
 	 * Passes a logging event to the logging mechanism. Note this should
 	 * not normally be called by client code, which should instead use
-	 * the convenience macros provided (see class documentation for Log).
+	 * the convenience macros provided (see class documentation for log.hpp).
 	 *
 	 * Never throws.
 	 */
