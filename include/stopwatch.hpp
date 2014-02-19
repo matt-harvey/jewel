@@ -18,8 +18,6 @@
 #define GUARD_stopwatch_hpp_021388252275711044
 
 /** @file
- *
- * @brief Stopwatch class for timing intervals
  */
 
 #include <ctime>

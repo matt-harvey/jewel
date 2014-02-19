@@ -18,10 +18,6 @@
 #define GUARD_decimal_hpp_0809249049429432
 
 /** @file
- *
- * @brief Decimal number class 
- *
- * @author Matthew Harvey
  */
 
 #include <boost/lexical_cast.hpp>
