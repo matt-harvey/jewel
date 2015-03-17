@@ -1841,7 +1841,7 @@ TEST(checked_arithmetic_division_is_unsafe_unsigned_unsigned_long)
 
 TEST(checked_arithmetic_division_is_unsafe_unsigned_unsigned_long_long)
 {
-	unsigned long long ullmax = numeric_limits<long long>::max();
+	unsigned long long ullmax = numeric_limits<unsigned long long>::max();
 	
 	// Test reaction to unsafe operations
 	unsigned long long i0 = 23;
@@ -2250,7 +2250,7 @@ TEST(checked_arithmetic_remainder_is_unsafe_unsigned_unsigned_long)
 
 TEST(checked_arithmetic_remainder_is_unsafe_unsigned_unsigned_long_long)
 {
-	unsigned long long ullmax = numeric_limits<long long>::max();
+	unsigned long long ullmax = numeric_limits<unsigned long long>::max();
 	
 	// Test reaction to unsafe operations
 	unsigned long long i0 = 23;
