@@ -27,7 +27,7 @@
 
 /// @cond
 #if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
-#	define JEWEL_ON_WINDOWS
+#   define JEWEL_ON_WINDOWS
 #endif
 /// @endcond
 

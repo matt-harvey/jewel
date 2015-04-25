@@ -41,36 +41,36 @@ namespace jewel
 class Stopwatch
 {
 public:
-	/**
-	 * The Stopwatch will start counting immediately upon creation
-	 */
-	Stopwatch();
+    /**
+     * The Stopwatch will start counting immediately upon creation
+     */
+    Stopwatch();
 
-	Stopwatch(Stopwatch const&) = delete;
-	Stopwatch(Stopwatch&&) = delete;
-	Stopwatch& operator=(Stopwatch const&) = delete;
-	Stopwatch& operator=(Stopwatch&&) = delete;
-	~Stopwatch() = default;
+    Stopwatch(Stopwatch const&) = delete;
+    Stopwatch(Stopwatch&&) = delete;
+    Stopwatch& operator=(Stopwatch const&) = delete;
+    Stopwatch& operator=(Stopwatch&&) = delete;
+    ~Stopwatch() = default;
 
-	/** Write a message to an output stream re. the number of seconds of CPU
-	 * time elapsed on the Stopwatch.
-	 *
-	 * The message is in the form: \n <tt> n seconds elapsed. </tt>
-	 *
-	 * The message ends in a newline.
-	 * @param os stream to write message to (std::clog by default).
-	 * @return the same stream, by reference.
-	 */
-	std::ostream& log(std::ostream& os = std::clog) const;
+    /** Write a message to an output stream re. the number of seconds of CPU
+     * time elapsed on the Stopwatch.
+     *
+     * The message is in the form: \n <tt> n seconds elapsed. </tt>
+     *
+     * The message ends in a newline.
+     * @param os stream to write message to (std::clog by default).
+     * @return the same stream, by reference.
+     */
+    std::ostream& log(std::ostream& os = std::clog) const;
 
-	/**
-	 * @return the number of seconds CPU time elapsed since the Stopwatch was
-	 * created, or returns -1 if this can't be calculated.
-	 */
-	long double seconds_elapsed() const;
+    /**
+     * @return the number of seconds CPU time elapsed since the Stopwatch was
+     * created, or returns -1 if this can't be calculated.
+     */
+    long double seconds_elapsed() const;
 private:
 
-	std::clock_t const m_start_time;
+    std::clock_t const m_start_time;
 };
 
 // IMPLEMENTATION OF INLINE FUNCTIONS
@@ -84,26 +84,26 @@ inline
 long double Stopwatch::seconds_elapsed() const
 {
 
-	if (m_start_time == -1)
-	{
-		return -1;
-	}
-	return
-		static_cast<long double>(std::clock() - m_start_time) /
-		static_cast<long double>(CLOCKS_PER_SEC);
+    if (m_start_time == -1)
+    {
+        return -1;
+    }
+    return
+        static_cast<long double>(std::clock() - m_start_time) /
+        static_cast<long double>(CLOCKS_PER_SEC);
 }
 
 inline
 std::ostream& Stopwatch::log(std::ostream& os) const
 {
-	std::streamsize const prec = os.precision();
-	os << std::setprecision(6) << seconds_elapsed()
-	   << " seconds CPU time."
-	   << std::setprecision(prec) << std::endl;
-	return os;
+    std::streamsize const prec = os.precision();
+    os << std::setprecision(6) << seconds_elapsed()
+       << " seconds CPU time."
+       << std::setprecision(prec) << std::endl;
+    return os;
 }
 
-	
+    
 
 
 

@@ -18,7 +18,7 @@
 #define GUARD_assert_hpp_3948190120956018
 
 #ifdef JEWEL_ENABLE_ASSERTION_LOGGING
-#	include "log.hpp"
+#   include "log.hpp"
 #endif
 
 #include "detail/helper_macros.hpp"
@@ -53,38 +53,38 @@
 
 #ifdef JEWEL_ENABLE_ASSERTION_LOGGING
 /// @hideinitializer
-#	define JEWEL_LOG_ASSERTION_AUX(p) \
-		jewel::Log::log \
-		(	jewel::Log::error, \
-			"Failed assertion", \
-			__func__, \
-			__FILE__, \
-			__LINE__, \
-			__DATE__, \
-			__TIME__, \
-			0, \
-			"static_cast<bool>(" #p ")", \
-			"false" \
-		);
+#   define JEWEL_LOG_ASSERTION_AUX(p) \
+        jewel::Log::log \
+        (   jewel::Log::error, \
+            "Failed assertion", \
+            __func__, \
+            __FILE__, \
+            __LINE__, \
+            __DATE__, \
+            __TIME__, \
+            0, \
+            "static_cast<bool>(" #p ")", \
+            "false" \
+        );
 #else
-#	define JEWEL_LOG_ASSERTION_AUX(p) if (false) { }
+#   define JEWEL_LOG_ASSERTION_AUX(p) if (false) { }
 #endif  // JEWEL_ENABLE_ASSERTION_LOGGING
 
 #define JEWEL_HARD_ASSERT(p) \
-	if (!(p)) \
-	{ \
-		JEWEL_LOG_ASSERTION_AUX(p); \
-		std::cerr << \
-			"Failed assertion (" #p ") " \
-			"in file \"" __FILE__ "\" at line " \
-			JEWEL_DETAIL_MAKE_STRING_B(__LINE__) ".\n"; \
-		std::terminate(); \
-	}
+    if (!(p)) \
+    { \
+        JEWEL_LOG_ASSERTION_AUX(p); \
+        std::cerr << \
+            "Failed assertion (" #p ") " \
+            "in file \"" __FILE__ "\" at line " \
+            JEWEL_DETAIL_MAKE_STRING_B(__LINE__) ".\n"; \
+        std::terminate(); \
+    }
 
 #ifndef NDEBUG
-#	define JEWEL_ASSERT(p) JEWEL_HARD_ASSERT(p)
+#   define JEWEL_ASSERT(p) JEWEL_HARD_ASSERT(p)
 #else
-#	define JEWEL_ASSERT(p) if (false) { }
+#   define JEWEL_ASSERT(p) if (false) { }
 #endif  // NDEBUG
 
 #endif  // GUARD_assert_hpp_3948190120956018

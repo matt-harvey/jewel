@@ -62,110 +62,110 @@ class Exception: public virtual std::exception
 {
 public:
 
-	/**
-	 * Constructs a throwable exception object containing various
-	 * information. The parameters are all optional. The string
-	 * parameters may be passed either 0 or the empty string to
-	 * indicate that this particular piece of information is not
-	 * being supplied. The \e p_line parameter may be passed -1 to
-	 * indicate that the line number is not being supplied.
-	 *
-	 * See class documentation re. possibility of the string parameters
-	 * being truncated.
-	 *
-	 * @param p_message Message to be stored in Exception object explaining
-	 * the reason for the exception. May be later retrieved via call to
-	 * \e what() or \e message(). Typically displayed in console if exception
-	 * not caught.
-	 *
-	 * @param p_type The type of the exception, i.e. the name of the class
-	 * of which the exception is an instance.
-	 *
-	 * @param p_function The function from which the exception is being
-	 * thrown.
-	 *
-	 * @param p_filepath The filepath name of the source file from which the
-	 * exception is being thrown.
-	 *
-	 * @param p_line The line number in the source file where the exception
-	 * is being thrown. If passed -1, this indicates that the line number
-	 * is not being supplied.
-	 */
-	explicit Exception
-	(	char const* p_message = 0,
-		char const* p_type = 0,
-		char const* p_function = 0,
-		char const* p_filepath = 0,
-		long p_line = -1  // -1 means not provided
-	) noexcept;
+    /**
+     * Constructs a throwable exception object containing various
+     * information. The parameters are all optional. The string
+     * parameters may be passed either 0 or the empty string to
+     * indicate that this particular piece of information is not
+     * being supplied. The \e p_line parameter may be passed -1 to
+     * indicate that the line number is not being supplied.
+     *
+     * See class documentation re. possibility of the string parameters
+     * being truncated.
+     *
+     * @param p_message Message to be stored in Exception object explaining
+     * the reason for the exception. May be later retrieved via call to
+     * \e what() or \e message(). Typically displayed in console if exception
+     * not caught.
+     *
+     * @param p_type The type of the exception, i.e. the name of the class
+     * of which the exception is an instance.
+     *
+     * @param p_function The function from which the exception is being
+     * thrown.
+     *
+     * @param p_filepath The filepath name of the source file from which the
+     * exception is being thrown.
+     *
+     * @param p_line The line number in the source file where the exception
+     * is being thrown. If passed -1, this indicates that the line number
+     * is not being supplied.
+     */
+    explicit Exception
+    (   char const* p_message = 0,
+        char const* p_type = 0,
+        char const* p_function = 0,
+        char const* p_filepath = 0,
+        long p_line = -1  // -1 means not provided
+    ) noexcept;
 
-	Exception(Exception const&) noexcept;
+    Exception(Exception const&) noexcept;
 
-	Exception(Exception&& rhs) noexcept;
+    Exception(Exception&& rhs) noexcept;
 
-	Exception& operator=(Exception const&) = delete;
+    Exception& operator=(Exception const&) = delete;
 
-	Exception& operator=(Exception&&) = delete;
+    Exception& operator=(Exception&&) = delete;
 
-	virtual ~Exception() noexcept;
+    virtual ~Exception() noexcept;
 
-	virtual char const* what() const noexcept;
+    virtual char const* what() const noexcept;
 
-	static size_t max_message_size() noexcept;
+    static size_t max_message_size() noexcept;
 
-	/**
-	 * Retrieve the diagnostic message associated with the exception.
-	 * This is equivalent to calling \e what(). Appears as \e message()
-	 * for consistency with the pattern for retrieving the other
-	 * attributes passed to the constructor. If the \e p_message parameter
-	 * was passed 0, this will return an empty string.
-	 *
-	 * See class documetation re. possibility of truncation.
-	 */
-	char const* message() const noexcept;
+    /**
+     * Retrieve the diagnostic message associated with the exception.
+     * This is equivalent to calling \e what(). Appears as \e message()
+     * for consistency with the pattern for retrieving the other
+     * attributes passed to the constructor. If the \e p_message parameter
+     * was passed 0, this will return an empty string.
+     *
+     * See class documetation re. possibility of truncation.
+     */
+    char const* message() const noexcept;
 
-	/**
-	 * Retrieve the name of the string passed to \e p_type in the constructor.
-	 * Returns empty string if this was passed 0.
-	 *
-	 * See class documentation re. possibility of truncation.
-	 */
-	char const* type() const noexcept;
+    /**
+     * Retrieve the name of the string passed to \e p_type in the constructor.
+     * Returns empty string if this was passed 0.
+     *
+     * See class documentation re. possibility of truncation.
+     */
+    char const* type() const noexcept;
 
-	/**
-	 * Retrieve the function name passed to \e p_function in the constructor.
-	 * Returns the empty string if this was passed 0.
-	 *
-	 * See class documentation re. possibility of truncation.
-	 */
-	char const* function() const noexcept;
+    /**
+     * Retrieve the function name passed to \e p_function in the constructor.
+     * Returns the empty string if this was passed 0.
+     *
+     * See class documentation re. possibility of truncation.
+     */
+    char const* function() const noexcept;
 
-	/**
-	 * Retrieve the string passed to \e p_filepath in the constructor.
-	 * Returns the empty string if this was passed 0.
-	 */
-	char const* filepath() const noexcept;
+    /**
+     * Retrieve the string passed to \e p_filepath in the constructor.
+     * Returns the empty string if this was passed 0.
+     */
+    char const* filepath() const noexcept;
 
-	/**
-	 * Return the line number in the source file from which the exception
-	 * was thrown (or whatever was passed to \e p_line in the constructor).
-	 * A return value of -1 indicates that this information was not supplied
-	 * to the constructor.
-	 */
-	long line() const noexcept;
+    /**
+     * Return the line number in the source file from which the exception
+     * was thrown (or whatever was passed to \e p_line in the constructor).
+     * A return value of -1 indicates that this information was not supplied
+     * to the constructor.
+     */
+    long line() const noexcept;
 
 private:
-	enum
-	{
-		string_capacity = 211
-	};
+    enum
+    {
+        string_capacity = 211
+    };
 
-	typedef CappedString<string_capacity> String;
-	String m_message;
-	String m_type;
-	String m_function;
-	String m_filepath;
-	long m_line;	
+    typedef CappedString<string_capacity> String;
+    String m_message;
+    String m_type;
+    String m_function;
+    String m_filepath;
+    long m_line;    
 };
 
 
@@ -199,7 +199,7 @@ operator<<(std::basic_ostream<charT, traits>& os, Exception const& e);
 #include "assert.hpp"
 
 #ifdef JEWEL_ENABLE_EXCEPTION_LOGGING
-#	include "log.hpp"
+#   include "log.hpp"
 #endif
 
 
@@ -219,29 +219,29 @@ operator<<(std::basic_ostream<charT, traits>& os, Exception const& e);
  * always be appended when the macro is invoked.
  */
 #define JEWEL_DERIVED_EXCEPTION(DERIVED_CLASS, BASE_CLASS)\
-	class DERIVED_CLASS: public BASE_CLASS\
-	{\
-	public:\
-		explicit DERIVED_CLASS \
-		(	char const* p_message = 0, \
-			char const* p_type = 0, \
-			char const* p_function = 0, \
-			char const* p_filepath = 0, \
-			long p_line = -1 \
-		) noexcept: \
-			BASE_CLASS \
-			(	p_message, \
-				p_type, \
-				p_function, \
-				p_filepath, \
-				p_line \
-			) \
-		{\
-		}\
-		virtual ~DERIVED_CLASS() noexcept \
-		{\
-		}\
-	}\
+    class DERIVED_CLASS: public BASE_CLASS\
+    {\
+    public:\
+        explicit DERIVED_CLASS \
+        (   char const* p_message = 0, \
+            char const* p_type = 0, \
+            char const* p_function = 0, \
+            char const* p_filepath = 0, \
+            long p_line = -1 \
+        ) noexcept: \
+            BASE_CLASS \
+            (   p_message, \
+                p_type, \
+                p_function, \
+                p_filepath, \
+                p_line \
+            ) \
+        {\
+        }\
+        virtual ~DERIVED_CLASS() noexcept \
+        {\
+        }\
+    }\
 
 
 
@@ -268,33 +268,33 @@ operator<<(std::basic_ostream<charT, traits>& os, Exception const& e);
  */
 
 #ifdef JEWEL_ENABLE_EXCEPTION_LOGGING
-#	define JEWEL_THROW(TYPE, MESSAGE) \
-		jewel::Log::log \
-		(	jewel::Log::warning, \
-			MESSAGE, \
-			__func__, \
-			__FILE__, \
-			__LINE__, \
-			__DATE__, \
-			__TIME__, \
-			#TYPE \
-		); \
-		throw TYPE \
-		(	MESSAGE, \
-			#TYPE, \
-			__func__, \
-			__FILE__, \
-			__LINE__ \
-		);
+#   define JEWEL_THROW(TYPE, MESSAGE) \
+        jewel::Log::log \
+        (   jewel::Log::warning, \
+            MESSAGE, \
+            __func__, \
+            __FILE__, \
+            __LINE__, \
+            __DATE__, \
+            __TIME__, \
+            #TYPE \
+        ); \
+        throw TYPE \
+        (   MESSAGE, \
+            #TYPE, \
+            __func__, \
+            __FILE__, \
+            __LINE__ \
+        );
 #else
-#	define JEWEL_THROW(TYPE, MESSAGE) \
-		throw TYPE \
-		(	MESSAGE, \
-			#TYPE, \
-			__func__, \
-			__FILE__, \
-			__LINE__ \
-		);
+#   define JEWEL_THROW(TYPE, MESSAGE) \
+        throw TYPE \
+        (   MESSAGE, \
+            #TYPE, \
+            __func__, \
+            __FILE__, \
+            __LINE__ \
+        );
 #endif  // JEWEL_ENABLE_EXCEPTION_LOGGING
 
 
@@ -308,36 +308,36 @@ template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
 operator<<(std::basic_ostream<charT, traits>& os, Exception const& e)
 {
-	using std::endl;
-	using std::make_pair;
-	using std::pair;
-	using std::strlen;
-	if (!os)
-	{
-		return os;
-	}
-	pair<char const* const, char const* const> const data[] =
-	{	make_pair("Message", e.message()),
-		make_pair("Exception type", e.type()),
-		make_pair("Function in which exception was thrown", e.function()),
-		make_pair("Filepath", e.filepath())
-	};
-	os << "BEGIN EXCEPTION DESCRIPTION" << '\n';
-	char const* const sep = ": ";
-	for (auto const& datum: data)
-	{
-		if (strlen(datum.second) != 0)
-		{
-			JEWEL_ASSERT (strlen(datum.second) > 0);
-			os << datum.first << sep << datum.second << '\n';
-		}
-	}
-	if (e.line() >= 0)
-	{
-		os << "Line" << sep << e.line() << '\n';
-	}
-	os << "END EXCEPTION DESCRIPTION" << '\n';
-	return os;
+    using std::endl;
+    using std::make_pair;
+    using std::pair;
+    using std::strlen;
+    if (!os)
+    {
+        return os;
+    }
+    pair<char const* const, char const* const> const data[] =
+    {   make_pair("Message", e.message()),
+        make_pair("Exception type", e.type()),
+        make_pair("Function in which exception was thrown", e.function()),
+        make_pair("Filepath", e.filepath())
+    };
+    os << "BEGIN EXCEPTION DESCRIPTION" << '\n';
+    char const* const sep = ": ";
+    for (auto const& datum: data)
+    {
+        if (strlen(datum.second) != 0)
+        {
+            JEWEL_ASSERT (strlen(datum.second) > 0);
+            os << datum.first << sep << datum.second << '\n';
+        }
+    }
+    if (e.line() >= 0)
+    {
+        os << "Line" << sep << e.line() << '\n';
+    }
+    os << "END EXCEPTION DESCRIPTION" << '\n';
+    return os;
 }
 
 }  // namespace jewel

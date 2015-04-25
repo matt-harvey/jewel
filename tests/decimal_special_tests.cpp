@@ -39,45 +39,45 @@ namespace detail
 
 bool is_dagger(char c)
 {
-	return c == '|';
+    return c == '|';
 }
 
 int decimal_csv_test()
 {
-	cout << "Testing processing two columns of Decimals from a text file..."
-	     << endl;
-	ifstream data("testdata");
-	string current_record;
-	Decimal field_0_total("0");
-	Decimal field_1_total("0");
-	while (getline(data, current_record))
-	{
-		vector<string> record_vec;
-		split(record_vec, current_record, is_dagger);
-		Decimal const d0(record_vec[0]);
-		Decimal const d1(record_vec[1]);
-		field_0_total += d0;
-		field_1_total += d1; 
-	}
-	if (field_0_total != Decimal("0"))
-	{
-		cout << "Test failed. First column should have summed to 0, but "
-		        "instead summed to: " << field_0_total << endl;
-		return 1;
-	}
-	if (field_1_total != Decimal("0"))
-	{
-		cout << "Test failed. Second column should have summed to 0, but "
-		        "instead summed to: " << field_1_total << endl;
-		return 1;
-	}
-	if (field_0_total == Decimal("0") && field_1_total == Decimal("0"))
-	{
-		cout << "Test succeeded. Both columns of Decimals summed to 0, as "
-		        "expected." << endl;
-		return 0;
-	}
-	JEWEL_HARD_ASSERT (false);
+    cout << "Testing processing two columns of Decimals from a text file..."
+         << endl;
+    ifstream data("testdata");
+    string current_record;
+    Decimal field_0_total("0");
+    Decimal field_1_total("0");
+    while (getline(data, current_record))
+    {
+        vector<string> record_vec;
+        split(record_vec, current_record, is_dagger);
+        Decimal const d0(record_vec[0]);
+        Decimal const d1(record_vec[1]);
+        field_0_total += d0;
+        field_1_total += d1; 
+    }
+    if (field_0_total != Decimal("0"))
+    {
+        cout << "Test failed. First column should have summed to 0, but "
+                "instead summed to: " << field_0_total << endl;
+        return 1;
+    }
+    if (field_1_total != Decimal("0"))
+    {
+        cout << "Test failed. Second column should have summed to 0, but "
+                "instead summed to: " << field_1_total << endl;
+        return 1;
+    }
+    if (field_0_total == Decimal("0") && field_1_total == Decimal("0"))
+    {
+        cout << "Test succeeded. Both columns of Decimals summed to 0, as "
+                "expected." << endl;
+        return 0;
+    }
+    JEWEL_HARD_ASSERT (false);
 }
 
 }  // namespace detail

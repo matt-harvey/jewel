@@ -111,71 +111,71 @@ class Log
 {
 public:
 
-	/**
-	 * @enum Level
-	 *
-	 * Represents a series of increasing severity levels for
-	 * logging events.
-	 */
-	enum Level
-	{
-		// Note if we add levels, we also need to update the
-		// severity_string function.
-		trace = 0,  /**< to signify "trace purposes only" */
-		info,       /**< to signify "information purposes only" */
-		warning,    /**< to signify something that might be an error */
-		error       /**< to signify something that is definitely an error */
-	};
+    /**
+     * @enum Level
+     *
+     * Represents a series of increasing severity levels for
+     * logging events.
+     */
+    enum Level
+    {
+        // Note if we add levels, we also need to update the
+        // severity_string function.
+        trace = 0,  /**< to signify "trace purposes only" */
+        info,       /**< to signify "information purposes only" */
+        warning,    /**< to signify something that might be an error */
+        error       /**< to signify something that is definitely an error */
+    };
 
-	/**
-	 * Tell the logging engine the file you want log messages written to.
-	 * This must be called or logging will not occur at all.
-	 *
-	 * @throws std::bad_alloc in the unlikely event of memory allocation
-	 * failure while creating the underlying logging stream.
-	 */
-	static void set_filepath(std::string const& p_filepath);
+    /**
+     * Tell the logging engine the file you want log messages written to.
+     * This must be called or logging will not occur at all.
+     *
+     * @throws std::bad_alloc in the unlikely event of memory allocation
+     * failure while creating the underlying logging stream.
+     */
+    static void set_filepath(std::string const& p_filepath);
 
-	/**
-	 * Sets the logging threshold so that logging events will be written
-	 * to the file if and only if their severity is greater than or
-	 * equal to \e p_level. By default, the threshold is Log::info.
-	 *
-	 * Never throws.
-	 */
-	static void set_threshold(Level p_level);
+    /**
+     * Sets the logging threshold so that logging events will be written
+     * to the file if and only if their severity is greater than or
+     * equal to \e p_level. By default, the threshold is Log::info.
+     *
+     * Never throws.
+     */
+    static void set_threshold(Level p_level);
 
-	/**
-	 * Passes a logging event to the logging mechanism. Note this should
-	 * not normally be called by client code, which should instead use
-	 * the convenience macros provided (see class documentation for log.hpp).
-	 *
-	 * Never throws.
-	 */
-	static void log
-	(	Level p_severity,
-		char const* p_message,
-		char const* p_function,
-		char const* p_file,
-		int p_line,
-		char const* p_compilation_date = 0,
-		char const* p_compilation_time = 0,
-		char const* p_exception_type = 0,
-		char const* p_expression = 0,
-		char const* p_value = 0
-	);
+    /**
+     * Passes a logging event to the logging mechanism. Note this should
+     * not normally be called by client code, which should instead use
+     * the convenience macros provided (see class documentation for log.hpp).
+     *
+     * Never throws.
+     */
+    static void log
+    (   Level p_severity,
+        char const* p_message,
+        char const* p_function,
+        char const* p_file,
+        int p_line,
+        char const* p_compilation_date = 0,
+        char const* p_compilation_time = 0,
+        char const* p_exception_type = 0,
+        char const* p_expression = 0,
+        char const* p_value = 0
+    );
 
 private:
 
-	Log();  // private and unimplemented - we don't want instances.
+    Log();  // private and unimplemented - we don't want instances.
 
-	static char const* severity_string(Level p_level);
+    static char const* severity_string(Level p_level);
 
-	// Pass a stream pointer to set the static stream pointer that lives
-	// inside the function. Pass nothing to simply retrieve that pointer.
-	static std::ostream* stream_aux(std::ostream* p_stream = 0);
+    // Pass a stream pointer to set the static stream pointer that lives
+    // inside the function. Pass nothing to simply retrieve that pointer.
+    static std::ostream* stream_aux(std::ostream* p_stream = 0);
 
-	static Level& threshold_aux();
+    static Level& threshold_aux();
 
 };
 
@@ -233,76 +233,76 @@ private:
 
 #ifdef JEWEL_ENABLE_LOGGING
 
-#	ifndef JEWEL_HARD_LOGGING_THRESHOLD
-#		define JEWEL_HARD_LOGGING_THRESHOLD 0
-#	endif
-#	define JEWEL_LOG_TRACE() \
-		if (jewel::Log::trace < JEWEL_HARD_LOGGING_THRESHOLD) ; \
-		else \
-			jewel::Log::log \
-			(	jewel::Log::trace, \
-				0, \
-				__func__, \
-				__FILE__, \
-				__LINE__, \
-				__DATE__, \
-				__TIME__ \
-			)
-#	define JEWEL_LOG_MESSAGE(severity, message) \
-		if (severity < JEWEL_HARD_LOGGING_THRESHOLD) ; \
-		else \
-			jewel::Log::log \
-			(	severity, \
-				message, \
-				__func__, \
-				__FILE__, \
-				__LINE__, \
-				__DATE__, \
-				__TIME__ \
-			)
-#	define JEWEL_LOG_VALUE(severity, expression) \
-		if (severity < JEWEL_HARD_LOGGING_THRESHOLD) ; \
-		else \
-			try \
-			{ \
-				jewel::Log::log \
-				(	severity, \
-					0, \
-					__func__, \
-					__FILE__, \
-					__LINE__, \
-					__DATE__, \
-					__TIME__, \
-					0, \
-					#expression, \
-					boost::lexical_cast<std::string>(expression).c_str() \
-				); \
-			} \
-			catch (boost::bad_lexical_cast) \
-			{ \
-				JEWEL_LOG_MESSAGE \
-				( \
-					severity, \
-					"Could not log value of expression (" #expression "): " \
-					"caught boost::bad_lexical_cast." \
-				); \
-			} \
-			catch (std::bad_alloc) \
-			{ \
-				JEWEL_LOG_MESSAGE \
-				( \
-					severity, \
-					"Could not log value of expression (" #expression "): " \
-					"caught std::bad_alloc." \
-				); \
-			}
+#   ifndef JEWEL_HARD_LOGGING_THRESHOLD
+#       define JEWEL_HARD_LOGGING_THRESHOLD 0
+#   endif
+#   define JEWEL_LOG_TRACE() \
+        if (jewel::Log::trace < JEWEL_HARD_LOGGING_THRESHOLD) ; \
+        else \
+            jewel::Log::log \
+            (   jewel::Log::trace, \
+                0, \
+                __func__, \
+                __FILE__, \
+                __LINE__, \
+                __DATE__, \
+                __TIME__ \
+            )
+#   define JEWEL_LOG_MESSAGE(severity, message) \
+        if (severity < JEWEL_HARD_LOGGING_THRESHOLD) ; \
+        else \
+            jewel::Log::log \
+            (   severity, \
+                message, \
+                __func__, \
+                __FILE__, \
+                __LINE__, \
+                __DATE__, \
+                __TIME__ \
+            )
+#   define JEWEL_LOG_VALUE(severity, expression) \
+        if (severity < JEWEL_HARD_LOGGING_THRESHOLD) ; \
+        else \
+            try \
+            { \
+                jewel::Log::log \
+                (   severity, \
+                    0, \
+                    __func__, \
+                    __FILE__, \
+                    __LINE__, \
+                    __DATE__, \
+                    __TIME__, \
+                    0, \
+                    #expression, \
+                    boost::lexical_cast<std::string>(expression).c_str() \
+                ); \
+            } \
+            catch (boost::bad_lexical_cast) \
+            { \
+                JEWEL_LOG_MESSAGE \
+                ( \
+                    severity, \
+                    "Could not log value of expression (" #expression "): " \
+                    "caught boost::bad_lexical_cast." \
+                ); \
+            } \
+            catch (std::bad_alloc) \
+            { \
+                JEWEL_LOG_MESSAGE \
+                ( \
+                    severity, \
+                    "Could not log value of expression (" #expression "): " \
+                    "caught std::bad_alloc." \
+                ); \
+            }
 #else
-#	define JEWEL_LOG_TRACE() do {} while (0)
-#	define JEWEL_LOG_MESSAGE(severity, message) \
-		if (false) { (void)(severity); (void)(message); }  // Silence compiler warnings re. unused variables, and prevent them from being evaluated.
-#	define JEWEL_LOG_VALUE(severity, expression) \
-		if (false) { (void)(severity); (void)(expression); } // Silence compiler warnings re. unused variables, and prevent them from being evaluated.
-		
+#   define JEWEL_LOG_TRACE() do {} while (0)
+#   define JEWEL_LOG_MESSAGE(severity, message) \
+        if (false) { (void)(severity); (void)(message); }  // Silence compiler warnings re. unused variables, and prevent them from being evaluated.
+#   define JEWEL_LOG_VALUE(severity, expression) \
+        if (false) { (void)(severity); (void)(expression); } // Silence compiler warnings re. unused variables, and prevent them from being evaluated.
+        
 #endif  // JEWEL_ENABLE_LOGGING
 
 /// @endcond
@@ -318,8 +318,8 @@ inline
 Log::Level&
 Log::threshold_aux()
 {
-	static Level ret = info;
-	return ret;
+    static Level ret = info;
+    return ret;
 }
 
 

@@ -23,11 +23,11 @@ namespace jewel
 Version
 Info::version()
 {
-	return Version
-	(	JEWEL_VERSION_MAJOR,
-		JEWEL_VERSION_MINOR,
-		JEWEL_VERSION_PATCH
-	);
+    return Version
+    (   JEWEL_VERSION_MAJOR,
+        JEWEL_VERSION_MINOR,
+        JEWEL_VERSION_PATCH
+    );
 }
 
 }  // namespace jewel

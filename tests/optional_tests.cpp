@@ -31,80 +31,80 @@ using std::vector;
 class Dummy
 {
 public:
-	Dummy():
-		m_a(0),
-		m_b("")
-	{
-	}
+    Dummy():
+        m_a(0),
+        m_b("")
+    {
+    }
 
-	Dummy(int p_a, string const& p_b):
-		m_a(p_a),
-		m_b(p_b)
-	{
-	}
-	
-	bool
-	operator==(Dummy const& rhs) const
-	{
-		return m_a == rhs.m_a && m_b == rhs.m_b && m_c == rhs.m_c;
-	}
+    Dummy(int p_a, string const& p_b):
+        m_a(p_a),
+        m_b(p_b)
+    {
+    }
+    
+    bool
+    operator==(Dummy const& rhs) const
+    {
+        return m_a == rhs.m_a && m_b == rhs.m_b && m_c == rhs.m_c;
+    }
 
 private:
-	int m_a;
-	string m_b;
-	vector<string> m_c;	
+    int m_a;
+    string m_b;
+    vector<string> m_c;    
 };
 /// @endcond
 
 TEST(value)
 {
-	optional<int> x = 3;
-	CHECK_EQUAL(*x, 3);
-	CHECK_EQUAL(value(x), 3);
-	CHECK_EQUAL(value(x), *x);
+    optional<int> x = 3;
+    CHECK_EQUAL(*x, 3);
+    CHECK_EQUAL(value(x), 3);
+    CHECK_EQUAL(value(x), *x);
 
-	optional<int> y;
-	CHECK_THROW(value(y), UninitializedOptionalException);
+    optional<int> y;
+    CHECK_THROW(value(y), UninitializedOptionalException);
 
-	string const sentence("There's a whole sentence in here!");
-	optional<string> s(sentence);
-	CHECK_EQUAL(*s, sentence);
-	CHECK_EQUAL(value(s), sentence);
-	CHECK_EQUAL(*s, value(s));
+    string const sentence("There's a whole sentence in here!");
+    optional<string> s(sentence);
+    CHECK_EQUAL(*s, sentence);
+    CHECK_EQUAL(value(s), sentence);
+    CHECK_EQUAL(*s, value(s));
 
-	optional<string> j;
-	CHECK_THROW(value(j), UninitializedOptionalException);
+    optional<string> j;
+    CHECK_THROW(value(j), UninitializedOptionalException);
 
-	optional<Dummy> d;
-	Dummy e;
-	CHECK_THROW(e = value(d), UninitializedOptionalException);
-	
-	optional<Dummy> d2(Dummy(3, "Hello"));
-	CHECK(*d2 == value(d2));
+    optional<Dummy> d;
+    Dummy e;
+    CHECK_THROW(e = value(d), UninitializedOptionalException);
+    
+    optional<Dummy> d2(Dummy(3, "Hello"));
+    CHECK(*d2 == value(d2));
 }
 
 TEST(clear)
 {
-	optional<int> x = 3;
-	CHECK_EQUAL(*x, 3);
-	CHECK_EQUAL(value(x), 3);
-	clear(x);
-	CHECK_THROW(value(x), UninitializedOptionalException);
-	x = 4;
-	CHECK_EQUAL(value(x), 4);
+    optional<int> x = 3;
+    CHECK_EQUAL(*x, 3);
+    CHECK_EQUAL(value(x), 3);
+    clear(x);
+    CHECK_THROW(value(x), UninitializedOptionalException);
+    x = 4;
+    CHECK_EQUAL(value(x), 4);
 
-	string const sentence("Hello.");
-	optional<string> s(sentence);
-	CHECK_EQUAL(value(s), "Hello.");
-	clear(s);
-	CHECK_THROW(value(s), UninitializedOptionalException);
-	s = "Yes";
-	CHECK_EQUAL(value(s), "Yes");
+    string const sentence("Hello.");
+    optional<string> s(sentence);
+    CHECK_EQUAL(value(s), "Hello.");
+    clear(s);
+    CHECK_THROW(value(s), UninitializedOptionalException);
+    s = "Yes";
+    CHECK_EQUAL(value(s), "Yes");
 
-	optional<Dummy> d(Dummy(3, "Yo!"));
-	CHECK(*d == value(d));
-	clear(d);
-	CHECK_THROW(value(d), UninitializedOptionalException);
+    optional<Dummy> d(Dummy(3, "Yo!"));
+    CHECK(*d == value(d));
+    clear(d);
+    CHECK_THROW(value(d), UninitializedOptionalException);
 }
 
 

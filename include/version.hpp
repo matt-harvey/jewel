@@ -39,22 +39,22 @@ class Version
 {
 public:
 
-	Version(unsigned p_major, unsigned p_minor, unsigned p_patch);
-	
-	Version(Version const& rhs) = default;
-	Version(Version&& rhs) = default;
-	Version& operator=(Version const& rhs) = default;
-	Version& operator=(Version&& rhs) = default;
-	~Version() = default;
+    Version(unsigned p_major, unsigned p_minor, unsigned p_patch);
+    
+    Version(Version const& rhs) = default;
+    Version(Version&& rhs) = default;
+    Version& operator=(Version const& rhs) = default;
+    Version& operator=(Version&& rhs) = default;
+    ~Version() = default;
 
-	unsigned major() const;
-	unsigned minor() const;
-	unsigned patch() const;
+    unsigned major() const;
+    unsigned minor() const;
+    unsigned patch() const;
 
 private:
-	unsigned m_major;
-	unsigned m_minor;
-	unsigned m_patch;
+    unsigned m_major;
+    unsigned m_minor;
+    unsigned m_patch;
 
 };  // class Version
 
@@ -100,9 +100,9 @@ operator<<(std::basic_ostream<charT, traits>& p_os, Version const& p_version);
 
 inline
 Version::Version(unsigned p_major, unsigned p_minor, unsigned p_patch):
-	m_major(p_major),
-	m_minor(p_minor),
-	m_patch(p_patch)
+    m_major(p_major),
+    m_minor(p_minor),
+    m_patch(p_patch)
 {
 }
 
@@ -110,21 +110,21 @@ inline
 unsigned
 Version::major() const
 {
-	return m_major;
+    return m_major;
 }
 
 inline
 unsigned
 Version::minor() const
 {
-	return m_minor;
+    return m_minor;
 }
 
 inline
 unsigned
 Version::patch() const
 {
-	return m_patch;
+    return m_patch;
 }
 
 
@@ -134,13 +134,13 @@ template <typename charT, typename traits>
 std::basic_ostream<charT, traits>&
 operator<<(std::basic_ostream<charT, traits>& p_os, Version const& p_version)
 {
-	charT const dot('.');
-	p_os << p_version.major()
-	     << dot
-	     << p_version.minor()
-	     << dot
-	     << p_version.patch();
-	return p_os;
+    charT const dot('.');
+    p_os << p_version.major()
+         << dot
+         << p_version.minor()
+         << dot
+         << p_version.patch();
+    return p_os;
 }
 
 

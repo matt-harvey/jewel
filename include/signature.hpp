@@ -40,14 +40,14 @@ template <class T>
 class Signature
 {
 public:
-	friend T;
-	Signature(Signature const&) = delete;
-	Signature(Signature&&) = delete;
-	Signature& operator=(Signature const&) = delete;
-	Signature& operator=(Signature&&) = delete;
-	~Signature() = default;
+    friend T;
+    Signature(Signature const&) = delete;
+    Signature(Signature&&) = delete;
+    Signature& operator=(Signature const&) = delete;
+    Signature& operator=(Signature&&) = delete;
+    ~Signature() = default;
 private:
-	Signature() = default;
+    Signature() = default;
 };
 
 

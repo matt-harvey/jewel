@@ -39,47 +39,47 @@ struct UnsignedTypeTraits
 template <>
 struct UnsignedTypeTraits<unsigned char>
 {
-	enum { max = UCHAR_MAX };
-	typedef unsigned short NextLargestType;
+    enum { max = UCHAR_MAX };
+    typedef unsigned short NextLargestType;
 };
 
 template <>
 struct UnsignedTypeTraits<unsigned short>
 {
-	enum { max = USHRT_MAX };
-	typedef unsigned int NextLargestType;
+    enum { max = USHRT_MAX };
+    typedef unsigned int NextLargestType;
 };
 
 template <>
 struct UnsignedTypeTraits<unsigned int>
 {
-	enum { max = UINT_MAX };
-	typedef unsigned long NextLargestType;
+    enum { max = UINT_MAX };
+    typedef unsigned long NextLargestType;
 };
 
 template <>
 struct UnsignedTypeTraits<unsigned long>
 {
-	enum { max = ULONG_MAX };
-	typedef unsigned long long NextLargestType;
+    enum { max = ULONG_MAX };
+    typedef unsigned long long NextLargestType;
 };
 
 template <>
 struct UnsignedTypeTraits<unsigned long long>
 {
-	enum { max = ULLONG_MAX };
+    enum { max = ULLONG_MAX };
 };
 
 template <bool test, typename ResultIfTrue, typename ResultIfFalse>
 struct Ternary
 {
-	typedef ResultIfTrue Result;
+    typedef ResultIfTrue Result;
 };
 
 template <typename ResultIfTrue, typename ResultIfFalse>
 struct Ternary<false, ResultIfTrue, ResultIfFalse>
 {
-	typedef ResultIfFalse Result;
+    typedef ResultIfFalse Result;
 };
 
 /**
@@ -93,21 +93,21 @@ struct Ternary<false, ResultIfTrue, ResultIfFalse>
 template <size_t N, typename Begin = unsigned char>
 struct SmallestSufficientUnsignedType
 {
-	typedef typename detail::Ternary
-		<	(N <= detail::UnsignedTypeTraits<Begin>::max),
-			Begin,
-			typename SmallestSufficientUnsignedType
-			<	N,
-				typename detail::UnsignedTypeTraits<Begin>::NextLargestType
-			>::Result
-		>::Result
-		Result;
+    typedef typename detail::Ternary
+        <    (N <= detail::UnsignedTypeTraits<Begin>::max),
+            Begin,
+            typename SmallestSufficientUnsignedType
+            <    N,
+                typename detail::UnsignedTypeTraits<Begin>::NextLargestType
+            >::Result
+        >::Result
+        Result;
 };
 
 template <size_t N>
 struct SmallestSufficientUnsignedType<N, size_t>
 {
-	typedef size_t Result;
+    typedef size_t Result;
 };
 
 }  // namespace detail

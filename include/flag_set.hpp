@@ -51,7 +51,7 @@ JEWEL_DERIVED_EXCEPTION(InvalidFlagException, jewel::Exception);
 template <typename EnumT>
 struct EnumTraits
 {
-	typedef unsigned int IntT;
+    typedef unsigned int IntT;
 };
 
 /**
@@ -100,97 +100,97 @@ struct EnumTraits
  * @see jewel::InvalidFlagException
  */
 template
-<	typename EnumT,
-	typename EnumTraits<EnumT>::IntT mask,
-	typename EnumTraits<EnumT>::IntT default_value = 0
+<    typename EnumT,
+    typename EnumTraits<EnumT>::IntT mask,
+    typename EnumTraits<EnumT>::IntT default_value = 0
 >
 class FlagSet
 {
 // typedefs
 public:
 
-	typedef typename EnumTraits<EnumT>::IntT IntT;
+    typedef typename EnumTraits<EnumT>::IntT IntT;
 
 // constructors, assignment and destructor
 public:
 
-	/**
-	 * By default the flags are initialized with \e default_value.
-	 */
-	FlagSet();
+    /**
+     * By default the flags are initialized with \e default_value.
+     */
+    FlagSet();
 
-	FlagSet(FlagSet const&) = default;
-	FlagSet(FlagSet&&) = default;
-	FlagSet& operator=(FlagSet const&) = default;
-	FlagSet& operator=(FlagSet&&) = default;
+    FlagSet(FlagSet const&) = default;
+    FlagSet(FlagSet&&) = default;
+    FlagSet& operator=(FlagSet const&) = default;
+    FlagSet& operator=(FlagSet&&) = default;
 
 // setters
 public:
 
-	/**
-	 * Set the flag given by p_flag. Only one flag should be set at a time.
-	 * If \e p_flag is not in \e mask, then InvalidFlagException will be
-	 * thrown.
-	 * 
-	 * Note that if we want to pass multiple flags simultaneously (having
-	 * ORed them together), we can still
-	 * do so by explicitly casting from an integer to an \e EnumT. This will
-	 * \e not throw an exception, providing all of the ORed flags lie within
-	 * the \e mask.
-	 *
-	 * @returns a reference to \e *this, which enables calls to this function
-	 * to be chained.
-	 */
-	FlagSet& set(EnumT p_flag);
+    /**
+     * Set the flag given by p_flag. Only one flag should be set at a time.
+     * If \e p_flag is not in \e mask, then InvalidFlagException will be
+     * thrown.
+     * 
+     * Note that if we want to pass multiple flags simultaneously (having
+     * ORed them together), we can still
+     * do so by explicitly casting from an integer to an \e EnumT. This will
+     * \e not throw an exception, providing all of the ORed flags lie within
+     * the \e mask.
+     *
+     * @returns a reference to \e *this, which enables calls to this function
+     * to be chained.
+     */
+    FlagSet& set(EnumT p_flag);
 
-	/**
-	 * Clear the flag given by p_flag.
-	 *
-	 * Exception throwing behaviour is exactly the same as for the \e set
-	 * function: the caller cannot clear p_flag that is not in \e mask.
-	 *
-	 * @returns a reference to \e *this, which enables calls to this function
-	 * to be chained.
-	 */
-	FlagSet& clear(EnumT p_flag);
+    /**
+     * Clear the flag given by p_flag.
+     *
+     * Exception throwing behaviour is exactly the same as for the \e set
+     * function: the caller cannot clear p_flag that is not in \e mask.
+     *
+     * @returns a reference to \e *this, which enables calls to this function
+     * to be chained.
+     */
+    FlagSet& clear(EnumT p_flag);
 
 // getters
 public:
 
-	/**
-	 * @returns \e true if e\ p_flag is set; otherwise, returns \e false.
-	 *
-	 * Note exception throwing behaviour is exactly the same as for the \e set
-	 * function: the caller cannot test a flag that is not in \e mask.
-	 */
-	bool test(EnumT p_flag) const;
+    /**
+     * @returns \e true if e\ p_flag is set; otherwise, returns \e false.
+     *
+     * Note exception throwing behaviour is exactly the same as for the \e set
+     * function: the caller cannot test a flag that is not in \e mask.
+     */
+    bool test(EnumT p_flag) const;
 
-	/**
-	 * @returns the underlying integral representation. This could be useful
-	 * for serialization, for example.
-	 */
-	IntT underlying() const;
+    /**
+     * @returns the underlying integral representation. This could be useful
+     * for serialization, for example.
+     */
+    IntT underlying() const;
 
 // helper functions
 private:
 
-	void check_flag_acceptance(EnumT p_flag) const;
+    void check_flag_acceptance(EnumT p_flag) const;
 
 // data members
 private:
 
-	IntT m_value;
+    IntT m_value;
 
 // compile-time assertions
 private:
 
-	/**
-	 * Ensure \e default_value is consistent with \e mask.
-	 */
-	static_assert
-	(	(default_value & mask) || !default_value,
-		"default_value for FlagSet is inconconsistent with mask."
-	);
+    /**
+     * Ensure \e default_value is consistent with \e mask.
+     */
+    static_assert
+    (   (default_value & mask) || !default_value,
+        "default_value for FlagSet is inconconsistent with mask."
+    );
 
 };
 
@@ -201,9 +201,9 @@ private:
 
 
 template
-<	typename EnumT,
-	typename EnumTraits<EnumT>::IntT mask,
-	typename EnumTraits<EnumT>::IntT default_value
+<    typename EnumT,
+    typename EnumTraits<EnumT>::IntT mask,
+    typename EnumTraits<EnumT>::IntT default_value
 >
 inline
 FlagSet<EnumT, mask, default_value>::FlagSet(): m_value(default_value)
@@ -212,75 +212,75 @@ FlagSet<EnumT, mask, default_value>::FlagSet(): m_value(default_value)
 
 
 template
-<	typename EnumT,
-	typename EnumTraits<EnumT>::IntT mask,
-	typename EnumTraits<EnumT>::IntT default_value
+<    typename EnumT,
+    typename EnumTraits<EnumT>::IntT mask,
+    typename EnumTraits<EnumT>::IntT default_value
 >
 FlagSet<EnumT, mask, default_value>&
 FlagSet<EnumT, mask, default_value>::set(EnumT p_flag)
 {
-	check_flag_acceptance(p_flag);
-	m_value |= p_flag;
-	return *this;
+    check_flag_acceptance(p_flag);
+    m_value |= p_flag;
+    return *this;
 }
 
 
 template
-<	typename EnumT,
-	typename EnumTraits<EnumT>::IntT mask,
-	typename EnumTraits<EnumT>::IntT default_value
+<    typename EnumT,
+    typename EnumTraits<EnumT>::IntT mask,
+    typename EnumTraits<EnumT>::IntT default_value
 >
 FlagSet<EnumT, mask, default_value>&
 FlagSet<EnumT, mask, default_value>::clear(EnumT p_flag)
 {
-	check_flag_acceptance(p_flag);
-	m_value &= ~p_flag;
-	return *this;
+    check_flag_acceptance(p_flag);
+    m_value &= ~p_flag;
+    return *this;
 }
 
 
 template
-<	typename EnumT,
-	typename EnumTraits<EnumT>::IntT mask,
-	typename EnumTraits<EnumT>::IntT default_value
+<    typename EnumT,
+    typename EnumTraits<EnumT>::IntT mask,
+    typename EnumTraits<EnumT>::IntT default_value
 >
 bool
 FlagSet<EnumT, mask, default_value>::test(EnumT p_flag) const
 {
-	check_flag_acceptance(p_flag);
-	return (m_value & p_flag) != 0;
+    check_flag_acceptance(p_flag);
+    return (m_value & p_flag) != 0;
 }
 
 
 template
-<	typename EnumT,
-	typename EnumTraits<EnumT>::IntT mask,
-	typename EnumTraits<EnumT>::IntT default_value
+<    typename EnumT,
+    typename EnumTraits<EnumT>::IntT mask,
+    typename EnumTraits<EnumT>::IntT default_value
 >
 void
 FlagSet<EnumT, mask, default_value>::check_flag_acceptance(EnumT p_flag) const
 {
-	if ((p_flag | mask) != mask)
-	{
-		JEWEL_THROW
-		(	InvalidFlagException,
-			"Flag not recognized by this instantiation of FlagSet."
-		);
-	}
-	return;
+    if ((p_flag | mask) != mask)
+    {
+        JEWEL_THROW
+        (   InvalidFlagException,
+            "Flag not recognized by this instantiation of FlagSet."
+        );
+    }
+    return;
 }
 
 
 template
-<	typename EnumT,
-	typename EnumTraits<EnumT>::IntT mask,
-	typename EnumTraits<EnumT>::IntT default_value
+<    typename EnumT,
+    typename EnumTraits<EnumT>::IntT mask,
+    typename EnumTraits<EnumT>::IntT default_value
 >
 inline
 typename EnumTraits<EnumT>::IntT
 FlagSet<EnumT, mask, default_value>::underlying() const
 {
-	return m_value;
+    return m_value;
 }
 
 

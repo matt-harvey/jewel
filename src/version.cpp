@@ -23,65 +23,65 @@ namespace jewel
 bool
 operator==(Version const& lhs, Version const& rhs)
 {
-	return
-		(lhs.major() == rhs.major()) &&
-		(lhs.minor() == rhs.minor()) &&
-		(lhs.patch() == rhs.patch());
+    return
+        (lhs.major() == rhs.major()) &&
+        (lhs.minor() == rhs.minor()) &&
+        (lhs.patch() == rhs.patch());
 }
 
 bool
 operator!=(Version const& lhs, Version const& rhs)
 {
-	return !(lhs == rhs);
+    return !(lhs == rhs);
 }
 
 bool
 operator<(Version const& lhs, Version const& rhs)
 {
-	if (lhs.major() < rhs.major())
-	{
-		return true;
-	}
-	if (lhs.major() > rhs.major())
-	{
-		return false;
-	}
-	JEWEL_ASSERT (lhs.major() == rhs.major());
-	if (lhs.minor() < rhs.minor())
-	{
-		return true;
-	}
-	if (lhs.minor() > rhs.minor())
-	{
-		return false;
-	}
-	JEWEL_ASSERT (lhs.minor() == rhs.minor());
-	if (lhs.patch() < rhs.patch())
-	{
-		return true;
-	}
-	JEWEL_ASSERT (lhs.major() == rhs.major());
-	JEWEL_ASSERT (lhs.minor() == rhs.minor());
-	JEWEL_ASSERT (lhs.patch() >= rhs.patch());
-	return false;	
+    if (lhs.major() < rhs.major())
+    {
+        return true;
+    }
+    if (lhs.major() > rhs.major())
+    {
+        return false;
+    }
+    JEWEL_ASSERT (lhs.major() == rhs.major());
+    if (lhs.minor() < rhs.minor())
+    {
+        return true;
+    }
+    if (lhs.minor() > rhs.minor())
+    {
+        return false;
+    }
+    JEWEL_ASSERT (lhs.minor() == rhs.minor());
+    if (lhs.patch() < rhs.patch())
+    {
+        return true;
+    }
+    JEWEL_ASSERT (lhs.major() == rhs.major());
+    JEWEL_ASSERT (lhs.minor() == rhs.minor());
+    JEWEL_ASSERT (lhs.patch() >= rhs.patch());
+    return false;    
 }
 
 bool
 operator<=(Version const& lhs, Version const& rhs)
 {
-	return (lhs < rhs) || (lhs == rhs);
+    return (lhs < rhs) || (lhs == rhs);
 }
 
 bool
 operator>(Version const& lhs, Version const& rhs)
 {
-	return rhs < lhs;	
+    return rhs < lhs;    
 }
 
 bool
 operator>=(Version const& lhs, Version const& rhs)
 {
-	return (rhs < lhs) || (rhs == lhs);
+    return (rhs < lhs) || (rhs == lhs);
 }
 
 }  // namespace jewel

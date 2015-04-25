@@ -31,19 +31,19 @@ class Info
 {
 public:
 
-	/**
-	 * @returns a Version object representing the library version.
-	 *
-	 * Exception safety: <em>nothrow guarantee</em>.
-	 */
-	static Version version();
+    /**
+     * @returns a Version object representing the library version.
+     *
+     * Exception safety: <em>nothrow guarantee</em>.
+     */
+    static Version version();
 
-	Info() = delete;
-	Info(Info const& rhs) = delete;
-	Info(Info&& rhs) = delete;
-	Info& operator=(Info const& rhs) = delete;
-	Info& operator=(Info&& rhs) = delete;
-	~Info() = delete;
+    Info() = delete;
+    Info(Info const& rhs) = delete;
+    Info(Info&& rhs) = delete;
+    Info& operator=(Info const& rhs) = delete;
+    Info& operator=(Info&& rhs) = delete;
+    ~Info() = delete;
 
 };  // class Info
 

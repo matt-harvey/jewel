@@ -28,26 +28,26 @@ namespace weird_punct
 // Class to test robustness of Decimal output
 // in respecting even bizarre numpunct facets
 class WeirdPunct:
-	public std::numpunct_byname<char>
+    public std::numpunct_byname<char>
 {
 public:
-	WeirdPunct(char const* name):
-		std::numpunct_byname<char>(name)
-	{
-	}
+    WeirdPunct(char const* name):
+        std::numpunct_byname<char>(name)
+    {
+    }
 protected:
-	virtual std::string do_grouping() const
-	{
-		return "\1\2\3";
-	}
-	virtual char do_decimal_point() const
-	{
-		return '^';
-	}
-	virtual char do_thousands_sep() const
-	{
-		return 'w';
-	}
+    virtual std::string do_grouping() const
+    {
+        return "\1\2\3";
+    }
+    virtual char do_decimal_point() const
+    {
+        return '^';
+    }
+    virtual char do_thousands_sep() const
+    {
+        return 'w';
+    }
 };
 // @endcond
 

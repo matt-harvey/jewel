@@ -65,14 +65,14 @@ inline
 T
 value(boost::optional<T> const& x)
 {
-	if (x)
-	{
-		return *x;
-	}
-	JEWEL_THROW
-	(	UninitializedOptionalException,
-		"Attempted to access unitialized boost::optional."
-	);
+    if (x)
+    {
+        return *x;
+    }
+    JEWEL_THROW
+    (   UninitializedOptionalException,
+        "Attempted to access unitialized boost::optional."
+    );
 }
 
 template <typename T>
@@ -80,8 +80,8 @@ inline
 void
 clear(boost::optional<T>& x)
 {
-	x = boost::optional<T>();
-	return;
+    x = boost::optional<T>();
+    return;
 }
 
 }  // namespace jewel

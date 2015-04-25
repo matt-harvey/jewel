@@ -48,45 +48,45 @@ using std::string;
 
 int main()
 {
-	int num_failures = 0;
+    int num_failures = 0;
 
-	Log::set_filepath("test.log");
-	Log::set_threshold(Log::trace);
+    Log::set_filepath("test.log");
+    Log::set_threshold(Log::trace);
 
-	#ifndef NDEBUG
-		cout << "Compiled in debugging mode (NDEBUG not defined)."
-		     << endl;
-	#else
-		cout << "Compiled in release mode (NDEBUG is defined)."
-		     << endl;
-	#endif
+    #ifndef NDEBUG
+        cout << "Compiled in debugging mode (NDEBUG not defined)."
+             << endl;
+    #else
+        cout << "Compiled in release mode (NDEBUG is defined)."
+             << endl;
+    #endif
 
-	// TODO MEDIUM PRIORITY Find a better way of testing Decimal output
-	// failure handling.
-	#ifdef JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
-		cout << "Compiled with JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST "
-		     << "defined.\n"
-			 << "Normal tests for jewel::Decimal will be "
-			 << "eschewed in order to test a sabotaged version of the "
-			 << "output function, to ensure it handles errors as expected.\n"
-			 << "DO NOT USE the library except for testing on this build. "
-			 << "(Rebuild with this macro undefined, before using the library.)."
-			 << endl;
-	#endif
+    // TODO MEDIUM PRIORITY Find a better way of testing Decimal output
+    // failure handling.
+    #ifdef JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST
+        cout << "Compiled with JEWEL_PERFORM_DECIMAL_OUTPUT_FAILURE_TEST "
+             << "defined.\n"
+             << "Normal tests for jewel::Decimal will be "
+             << "eschewed in order to test a sabotaged version of the "
+             << "output function, to ensure it handles errors as expected.\n"
+             << "DO NOT USE the library except for testing on this build. "
+             << "(Rebuild with this macro undefined, before using the library.)."
+             << endl;
+    #endif
 
-	num_failures += decimal_csv_test();
-	num_failures += test_exception_macros();
-	cout << "Now running various unit tests using UnitTest++..." << endl;
-	num_failures += UnitTest::RunAllTests();
+    num_failures += decimal_csv_test();
+    num_failures += test_exception_macros();
+    cout << "Now running various unit tests using UnitTest++..." << endl;
+    num_failures += UnitTest::RunAllTests();
 
-	if (num_failures == 0)
-	{
-		cout << "SUCCESS. All tests passed." << endl;
-	}
-	else
-	{
-		JEWEL_HARD_ASSERT (num_failures > 0);
-		cout << "FAILURE. Number of failed tests: " << num_failures << endl;
-	}
-	return num_failures;
+    if (num_failures == 0)
+    {
+        cout << "SUCCESS. All tests passed." << endl;
+    }
+    else
+    {
+        JEWEL_HARD_ASSERT (num_failures > 0);
+        cout << "FAILURE. Number of failed tests: " << num_failures << endl;
+    }
+    return num_failures;
 }
