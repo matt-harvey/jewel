@@ -158,11 +158,11 @@ public:
         char const* p_function,
         char const* p_file,
         int p_line,
-        char const* p_compilation_date = 0,
-        char const* p_compilation_time = 0,
-        char const* p_exception_type = 0,
-        char const* p_expression = 0,
-        char const* p_value = 0
+        char const* p_compilation_date = nullptr,
+        char const* p_compilation_time = nullptr,
+        char const* p_exception_type = nullptr,
+        char const* p_expression = nullptr,
+        char const* p_value = nullptr
     );
 
 private:

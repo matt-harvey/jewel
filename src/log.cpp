@@ -99,7 +99,7 @@ namespace
 
     struct StreamHolder
     {
-        explicit StreamHolder(ostream* p_os);
+        explicit StreamHolder(ostream* p_os = nullptr);
         StreamHolder(StreamHolder const&) = delete;
         StreamHolder(StreamHolder&&) = delete;
         StreamHolder& operator=(StreamHolder const&) = delete;
@@ -131,9 +131,9 @@ namespace
             {
                 delete os;
             }
-            os = 0;
+            os = nullptr;
         }
-        assert (0 == os);
+        assert (nullptr == os);
         return;
     }
 
@@ -154,11 +154,8 @@ Log::set_filepath(string const& p_filepath)
             ostream* const osp = stream_aux();
             if (osp)
             {
-                *osp << "{R}\n{F}[id]" << next_id()
-                        << "\n{F}[message]"
-                     << "Commenced logging to "
-                     << filepath
-                     << ".";
+                *osp << "{R}\n{F}[id]" << next_id() << "\n{F}[message]"
+                     << "Commenced logging to " << filepath << ".";
                 write_date_time_now(*osp);
                 *osp << '\n' << endl;
             }
@@ -198,8 +195,8 @@ Log::log
         assert (!osp->bad());  // guaranteed by stream_aux().
         assert (!osp->exceptions());  // guaranteed by stream_aux().
         *osp << "{R}\n"
-            << "{F}[id]" << next_id() << '\n'
-            << "{F}[severity]" << severity_string(p_severity) << '\n';
+             << "{F}[id]" << next_id() << '\n'
+             << "{F}[severity]" << severity_string(p_severity) << '\n';
         if (p_message)
         {
             *osp << "{F}[message]" << p_message << '\n';
@@ -252,9 +249,9 @@ Log::severity_string(Level p_level)
 std::ostream*
 Log::stream_aux(std::ostream* p_stream)
 {
-    static StreamHolder holder(0);
+    static StreamHolder holder;
 
-    if (p_stream != 0)
+    if (p_stream != nullptr)
     {
         // Then set the stream.
         holder.kill();    
@@ -265,16 +262,15 @@ Log::stream_aux(std::ostream* p_stream)
     if (holder.os && holder.os->bad())
     {
         holder.kill();
-        assert (0 == holder.os);
+        assert (nullptr == holder.os);
     }
 
     assert
-    (   (0 == holder.os) ||
+    (   (nullptr == holder.os) ||
         (!holder.os->bad() && !holder.os->exceptions())
     );
 
     return holder.os;
 }
-
 
 }  // namespace jewel
