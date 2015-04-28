@@ -106,6 +106,13 @@ namespace jewel
  * Windows?
  *
  * @todo MEDIUM PRIORITY Write unit tests for this.
+ *
+ * <em>Important:</em> To avoid complications involving the destruction order
+ * of function-local static objects, it is best to set up logging facilities
+ * before calling any other functions in a client application in which jewel::Log
+ * is intended to be used. To configure logging, call Log::set_threshold to set
+ * the logging threshold, and Log::set_filepath to set the path to the file you'll
+ * be logging to.
  */
 class Log
 {
