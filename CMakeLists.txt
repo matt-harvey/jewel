@@ -64,11 +64,11 @@ endif ()
 # Find dependencies
 
 find_package (Boost 1.53.0 REQUIRED)
-find_library (UNIT_TEST_LIBRARY UnitTest++ REQUIRED)
+find_library (UNIT_TEST_LIBRARY UnitTest++)
 
 # Build instructions
 
-if (Boost_FOUND AND NOT UNIT_TEST_LIBRARY-NOTFOUND)
+if (Boost_FOUND)
 
     include_directories (include ${Boost_INCLUDE_DIRS} ${UNIT_TEST_INCLUDES})
 
@@ -87,38 +87,39 @@ if (Boost_FOUND AND NOT UNIT_TEST_LIBRARY-NOTFOUND)
     set (library_name jewel)
     add_library (${library_name} ${library_sources})
 
-    # Building the tests
-
-    set (
-        test_sources
-        tests/test.cpp
-        tests/capped_string_tests.cpp
-        tests/checked_arithmetic_tests.cpp
-        tests/decimal_special_tests.cpp
-        tests/decimal_tests.cpp
-        tests/exception_special_tests.cpp
-        tests/exception_tests.cpp
-        tests/flag_set_tests.cpp
-        tests/num_digits_tests.cpp
-        tests/on_windows_tests.cpp
-        tests/optional_tests.cpp
-        tests/smallest_sufficient_unsigned_type_tests.cpp
-        tests/stopwatch_tests.cpp
-        tests/version_tests.cpp
-    )
-    add_executable (test_driver ${test_sources})
-    target_link_libraries (test_driver ${UNIT_TEST_LIBRARY} ${library_name})
-    if (WIN32)
-        set (test_execution_command ".\\test_driver.exe")
-    else ()
-        set (test_execution_command "./test_driver")
-    endif ()
-    add_custom_target (
-        test
-        ALL
-        COMMAND "${test_execution_command}"
-        DEPENDS ${library_name} test_driver
-    )
+    if (UNIT_TEST_LIBRARY_FOUND)
+      # Building the tests
+      set (
+          test_sources
+          tests/test.cpp
+          tests/capped_string_tests.cpp
+          tests/checked_arithmetic_tests.cpp
+          tests/decimal_special_tests.cpp
+          tests/decimal_tests.cpp
+          tests/exception_special_tests.cpp
+          tests/exception_tests.cpp
+          tests/flag_set_tests.cpp
+          tests/num_digits_tests.cpp
+          tests/on_windows_tests.cpp
+          tests/optional_tests.cpp
+          tests/smallest_sufficient_unsigned_type_tests.cpp
+          tests/stopwatch_tests.cpp
+          tests/version_tests.cpp
+      )
+      add_executable (test_driver ${test_sources})
+      target_link_libraries (test_driver ${UNIT_TEST_LIBRARY} ${library_name})
+      if (WIN32)
+          set (test_execution_command ".\\test_driver.exe")
+      else ()
+          set (test_execution_command "./test_driver")
+      endif ()
+      add_custom_target (
+          test
+          ALL
+          COMMAND "${test_execution_command}"
+          DEPENDS ${library_name} test_driver
+      )
+    endif()
 
     # Building the Decimal speed trial
 

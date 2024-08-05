@@ -50,7 +50,7 @@ To build and install the library, you will need:
 
 - The following headers from the Boost C++ libraries (compiled Boost
   binaries are not required) (version 1.53.0 or later)::
-    
+
     <boost/algorithm/string.hpp>
     <boost/numeric/conversion/cast.hpp>
     <boost/lexical_cast.hpp>
@@ -64,7 +64,7 @@ To build the API documentation, you will need:
 
 At the time of writing, these dependencies can be obtained from the following
 locations:
-    
+
 :CMake:         http://www.cmake.org
 :Boost:            http://www.boost.org
 :UnitTest++:    http://unittest-cpp.sourceforge.net
@@ -76,22 +76,17 @@ Initial build configuration
 
 Open a command line and "cd" to the project root.
 
-On Unix-like systems, enter::
+On Unix-like systems, enter the following for a basic build::
 
-    cmake -i
+    cmake .
+
+Or enter additional flags e.g. for release build enter::
+
+    cmake -D CMAKE_BUILD_TYPE=Release .
 
 (On Windows, you will need to use the ``-G`` option to choose a Makefile
 generator, or else run ``cmake-gui.exe .``. See CMake documentation for further
 details.)
-
-You will be prompted with ``Would you like to see the advanced options? [No]:``.
-Enter ``n``. Then follow the prompts.
-
-(If you run into trouble with the build or have atypical requirements, you can
-return to this step and answer ``y`` to configure more detailed build options.)
-
-If in doubt about a particular option, it is generally best simply to hit enter
-and keep the default setting for the option.
 
 Note the options ``ENABLE_ASSERTION_LOGGING`` and ``ENABLE_EXCEPTION_LOGGING``.
 These determine whether the ``JEWEL_ENABLE_ASSERTION_LOGGING`` and
@@ -101,12 +96,16 @@ If in doubt, it is recommended to leave these logging options ``ON``.
 (For more information on the significance of these macros, see the documentation
 for jewel::Log.)
 
+Jewel currently uses UnitTest++ (https://github.com/unittest-cpp/unittest-cpp) for
+its testing framework. There is an open issue to change to a maintained testing
+library. If you run ``cmake .`` it will look for this library and simply build
+without testing enabled if it doesn't find it.
 
 To build, test and install in one go
 ====================================
 
 At the project root, enter::
-    
+
     make install
 
 If on a Unix-like system, you may need to run this as root, i.e.::
@@ -167,7 +166,7 @@ To clean build
 --------------
 
 Go to the project root and enter::
-    
+
     make clean
 
 This will clean all build targets from the project root, including
@@ -194,6 +193,8 @@ At the project root, enter::
 
     make test
 
+See above re. build requirements for unit testing.
+
 After the test driver executable is built, the tests will automatically be run
 and the results displayed.
 
@@ -209,7 +210,7 @@ To build a source package for distribution
 If you are running a Unix-like system, and have a "tar" program installed,
 you can build a tarball of the library sources by entering the following
 at the project root::
-    
+
     make package
 
 The tarball will appear in the project root directory, and will overwrite any
